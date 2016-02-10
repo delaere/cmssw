@@ -1,0 +1,9 @@
+import FWCore.ParameterSet.Config as cms
+
+from SimTracker.TrackTriggerAssociation.TTClusterAssociation_cfi import *
+from SimTracker.TrackTriggerAssociation.TTStubAssociation_cfi import *
+
+TrackTriggerAssociatorClustersStubs = cms.Sequence(TTClusterAssociatorFromPhase2TrackerDigis*TTStubAssociatorFromPhase2TrackerDigis)
+TrackTriggerAssociatorTracks = cms.Sequence()
+TrackTriggerAssociatorComplete = cms.Sequence(TTClusterAssociatorFromPhase2TrackerDigis*TTStubAssociatorFromPhase2TrackerDigis*TTTrackAssociatorFromPhase2TrackerDigis)
+
