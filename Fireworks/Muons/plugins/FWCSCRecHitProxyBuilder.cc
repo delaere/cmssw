@@ -3,7 +3,6 @@
 // Package:     Muons
 // Class  :     FWCSCRecHitProxyBuilder
 //
-// $Id: FWCSCRecHitProxyBuilder.cc,v 1.13 2010/09/07 15:46:48 yana Exp $
 //
 
 #include "TEvePointSet.h"
@@ -28,7 +27,7 @@ private:
   FWCSCRecHitProxyBuilder( const FWCSCRecHitProxyBuilder& );
   const FWCSCRecHitProxyBuilder& operator=( const FWCSCRecHitProxyBuilder& );
 
-  void build( const CSCRecHit2D& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext* );
+  void build( const CSCRecHit2D& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext* ) override;
 };
 
 void

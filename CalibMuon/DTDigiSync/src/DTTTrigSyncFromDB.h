@@ -35,8 +35,6 @@
  *   
  *  NOTE: this should approximate what is seen online by the BTI
  *
- *  $Date: 2009/12/07 17:22:18 $
- *  $Revision: 1.5 $
  *  \author G. Cerminara - INFN Torino
  */
 
@@ -98,7 +96,7 @@ public:
   const DTT0 *tZeroMap;
   const DTTtrig *tTrigMap;
   // Set the verbosity level
-  static bool debug;
+  const bool debug;
   // The velocity of signal propagation along the wire (cm/ns)
   double theVPropWire;
   // Switch on/off the T0 correction from pulses

@@ -2,8 +2,6 @@
 //
 // Class which computes 
 //
-// last change : $Date: 2012/02/09 10:07:33 $
-// by          : $Author: eulisse $
 //
 
 #ifndef PulseFit_H

@@ -1,8 +1,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2009/10/21 17:05:47 $
- *  $Revision: 1.6 $
  *  \author G. Cerminara - INFN Torino
  */
 
@@ -22,8 +20,9 @@ using namespace std;
 using namespace edm;
 
 
-DTTTrigSyncT0Only::DTTTrigSyncT0Only(const ParameterSet& config){
-  debug = config.getUntrackedParameter<bool>("debug");
+DTTTrigSyncT0Only::DTTTrigSyncT0Only(const ParameterSet& config)
+ :debug(config.getUntrackedParameter<bool>("debug"))
+{
 }
 
 
@@ -77,10 +76,6 @@ double DTTTrigSyncT0Only::offset(const DTWireId& wireId) {
 
   return t0;
 }
-
-
-// Set the verbosity level
-bool DTTTrigSyncT0Only::debug;
 
 
 double DTTTrigSyncT0Only::emulatorOffset(const DTWireId& wireId,

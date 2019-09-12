@@ -1,7 +1,5 @@
 /** \class DTTPAnalyzer
  *
- *  $Date: 2011/02/10 20:38:59 $
- *  $Revision: 1.1 $
  *  \author A. Vilela Pereira
  */
 
@@ -25,9 +23,9 @@ public:
   virtual ~DTTPAnalyzer();
 
   //void beginJob();
-  void beginRun( const edm::Run& , const edm::EventSetup& );
-  void analyze( const edm::Event& , const edm::EventSetup& );
-  void endJob();
+  void beginRun( const edm::Run& , const edm::EventSetup& ) override;
+  void analyze( const edm::Event& , const edm::EventSetup& ) override;
+  void endJob() override;
   
 private:
   std::string getHistoName( const DTLayerId& ); 

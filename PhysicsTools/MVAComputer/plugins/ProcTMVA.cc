@@ -12,7 +12,6 @@
 //
 // Author:      Christophe Saout
 // Created:     Sat Apr 24 15:18 CEST 2007
-// $Id: ProcTMVA.cc,v 1.8 2013/01/22 16:46:08 chrjones Exp $
 //
 
 #include <sstream>
@@ -51,8 +50,8 @@ class ProcTMVA : public VarProcessor {
 	         const MVAComputer *computer);
 	virtual ~ProcTMVA() {}
 
-	virtual void configure(ConfIterator iter, unsigned int n);
-	virtual void eval(ValueIterator iter, unsigned int n) const;
+	virtual void configure(ConfIterator iter, unsigned int n) override;
+	virtual void eval(ValueIterator iter, unsigned int n) const override;
 
     private:
   std::auto_ptr<TMVA::Reader>     reader;

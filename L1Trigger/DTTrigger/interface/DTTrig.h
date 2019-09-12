@@ -4,8 +4,6 @@
  *     Steering routine for L1 trigger simulation in a muon barrel station
  *
  *
- *   $Date: 2010/11/11 16:29:29 $
- *   $Revision: 1.14 $
  *
  *   \author C.Grandi
  */

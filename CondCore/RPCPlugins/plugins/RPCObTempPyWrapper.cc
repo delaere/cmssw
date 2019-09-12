@@ -165,7 +165,7 @@ namespace cond {
       // ask to make average on selected channels...
     }
 
-    void compute(Class const & it){
+    void compute(Class const & it) override{
       std::vector<float> res;
       extractor(m_what.how())(it,m_what.which(),res,m_what.startTime(),m_what.endTime());
       swap(res);
@@ -241,7 +241,7 @@ namespace cond {
 						std::string const &, std::vector<int> const&, std::vector<float> const& ) const {
 
     std::map<std::string,std::pair<float,float> > geoMap;
-    std::ifstream mapFile("/afs/cern.ch/user/s/stupputi/public/barDetPositions.txt",ifstream::in);
+    std::ifstream mapFile("/afs/cern.ch/user/s/stupputi/public/barDetPositions.txt",std::ifstream::in);
     std::string chamb;
     float xPos,yPos;
     while(mapFile >> chamb >> xPos >> yPos)

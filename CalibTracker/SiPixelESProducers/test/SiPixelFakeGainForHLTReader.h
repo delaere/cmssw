@@ -15,7 +15,6 @@
 //
 // Original Author:  Vincenzo CHIOCHIA
 //         Created:  Tue Oct 17 17:40:56 CEST 2006
-// $Id: SiPixelFakeGainForHLTReader.h,v 1.3 2010/01/13 16:25:39 ursl Exp $
 //
 //
 #include "FWCore/Framework/interface/Frameworkfwd.h"

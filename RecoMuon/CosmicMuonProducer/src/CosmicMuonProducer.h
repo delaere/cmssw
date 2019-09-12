@@ -3,12 +3,11 @@
 
 /** \file CosmicMuonProducer
  *
- *  $Date: 2006/09/01 13:11:53 $
- *  $Revision: 1.3 $
  *  \author Chang Liu
  */
 
 #include "FWCore/Framework/interface/EDProducer.h"
+#include "DataFormats/TrajectorySeed/interface/TrajectorySeedCollection.h"
 
 class MuonTrackFinder;
 class MuonServiceProxy;
@@ -22,11 +21,12 @@ public:
   virtual void produce(edm::Event&, const edm::EventSetup&);
 
 private:
-  std::string theSeedCollectionLabel;
   MuonTrackFinder* theTrackFinder;
 
   /// the event setup proxy, it takes care the services update
   MuonServiceProxy *theService;
+  edm::EDGetTokenT<edm::View<TrajectorySeed> > theSeedCollectionToken;
+
 };
 
 #endif

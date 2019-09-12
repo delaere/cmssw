@@ -1,8 +1,6 @@
 /*
  * \file HcalMonitorClient.cc
  * 
- * $Date: 2012/11/12 23:26:19 $
- * $Revision: 1.104 $
  * \author J. Temple
  * 
  */
@@ -480,7 +478,7 @@ void HcalMonitorClient::writeHtml()
 
   ++htmlcounter_;
 
-  ofstream htmlFile;
+  std::ofstream htmlFile;
   htmlFile.open((htmlDir + "index.html").c_str());
 
   // html page header

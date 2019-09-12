@@ -7,8 +7,6 @@
 //
 //   Author List: S. Valuev, UCLA.
 //
-//   $Date: 2012/09/27 15:47:22 $
-//   $Revision: 1.3 $
 //
 //   Modifications:
 //

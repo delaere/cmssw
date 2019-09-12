@@ -6,8 +6,6 @@
  *  The single EDProduct to be saved for events (RAW case)
  *  describing the details of the (HLT) trigger table
  *
- *  $Date: 2012/01/30 08:47:27 $
- *  $Revision: 1.24 $
  *
  *  \author Martin Grunewald
  *

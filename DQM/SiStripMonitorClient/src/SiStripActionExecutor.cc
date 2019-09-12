@@ -144,7 +144,7 @@ void SiStripActionExecutor::fillStatusAtLumi(DQMStore* dqm_store) {
 // -- 
 //
 void SiStripActionExecutor::createDummyShiftReport(){
-  ofstream report_file;
+  std::ofstream report_file;
   report_file.open("sistrip_shift_report.txt", std::ios::out);
   report_file << " Nothing to report!!" << std::endl;
   report_file.close();
@@ -203,7 +203,7 @@ void SiStripActionExecutor::createShiftReport(DQMStore * dqm_store){
   shift_summary << std::endl;
   printShiftHistoParameters(dqm_store, layout_map, shift_summary);
   
-  ofstream report_file;
+  std::ofstream report_file;
   report_file.open("sistrip_shift_report.txt", std::ios::out);
   report_file << shift_summary.str() << std::endl;
   report_file.close();
@@ -278,10 +278,10 @@ void SiStripActionExecutor::printFaultyModuleList(DQMStore * dqm_store, std::ost
   std::vector<std::string> subdet_folder;
   subdet_folder.push_back("TIB");
   subdet_folder.push_back("TOB");
-  subdet_folder.push_back("TEC/side_1");
-  subdet_folder.push_back("TEC/side_2");
-  subdet_folder.push_back("TID/side_1");
-  subdet_folder.push_back("TID/side_2");
+  subdet_folder.push_back("TEC/MINUS");
+  subdet_folder.push_back("TEC/PLUS");
+  subdet_folder.push_back("TID/MINUS");
+  subdet_folder.push_back("TID/PLUS");
   
   int nDetsTotal = 0;
   int nDetsWithErrorTotal = 0;

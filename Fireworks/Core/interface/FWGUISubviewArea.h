@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Fri Feb 15 14:13:29 EST 2008
-// $Id: FWGUISubviewArea.h,v 1.27 2010/11/11 19:45:49 amraktad Exp $
 //
 
 #include "TGFrame.h"

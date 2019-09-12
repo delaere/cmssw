@@ -13,7 +13,6 @@
 //
 // Original Author:  Douglas Ryan Berry,512 1-008,+41227670494,
 //         Created:  Mon Jul 26 10:02:34 CEST 2010
-// $Id: PhotonEnrichmentFilter.cc,v 1.2 2011/01/19 14:22:13 drberry Exp $
 //
 //
 
@@ -47,9 +46,9 @@ public:
   ~PhotonEnrichmentFilter();
   
 private:
-  virtual void beginJob() ;
-  virtual bool filter(edm::Event&, const edm::EventSetup&);
-  virtual void endJob() ;
+  virtual void beginJob() override ;
+  virtual bool filter(edm::Event&, const edm::EventSetup&) override;
+  virtual void endJob() override ;
   // ----------member data ---------------------------
   bool Debug_;
   //bool Report_;

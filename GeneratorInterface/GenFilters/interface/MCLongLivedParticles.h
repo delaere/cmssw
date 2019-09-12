@@ -15,7 +15,6 @@
 //
 // Original Author:  Filip Moortgat
 //         Created:  Mon Sept 11 10:57:54 CET 2006
-// $Id: MCLongLivedParticles.h,v 1.3 2012/08/23 21:51:21 wdd Exp $
 //
 //
 

@@ -1,6 +1,4 @@
 // F. Cossutti
-// $Date: 2013/03/01 21:45:29 $
-// $Revision: 1.4 $//
 
 // Dump in standard ascii format the LHE file stored as string lumi product
 

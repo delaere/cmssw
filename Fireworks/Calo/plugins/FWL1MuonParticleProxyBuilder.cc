@@ -8,7 +8,6 @@
 //
 // Original Author:
 //         Created:  Sun Jan  6 23:57:00 EST 2008
-// $Id: FWL1MuonParticleProxyBuilder.cc,v 1.10 2010/09/16 15:42:20 yana Exp $
 //
 
 #include "Fireworks/Core/interface/FWSimpleProxyBuilderTemplate.h"

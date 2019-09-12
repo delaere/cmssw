@@ -6,7 +6,6 @@ from RecoEcal.EgammaClusterProducers.hybridSuperClusters_cfi import *
 from RecoEcal.EgammaClusterProducers.multi5x5BasicClusters_cfi import *
 #
 # producer for photons
-# $Id: photons_cfi.py,v 1.45 2012/04/26 21:09:43 sani Exp $
 #
 photons = cms.EDProducer("PhotonProducer",
     photonCoreProducer = cms.InputTag("photonCore"),
@@ -23,7 +22,7 @@ photons = cms.EDProducer("PhotonProducer",
     isolationSumsCalculatorSet = cms.PSet(isolationSumsCalculator),
     mipVariableSet = cms.PSet(mipVariable), 
     usePrimaryVertex = cms.bool(True),
-    primaryVertexProducer = cms.string('offlinePrimaryVerticesWithBS'),
+    primaryVertexProducer = cms.InputTag('offlinePrimaryVerticesWithBS'),
     posCalc_t0_endcPresh = cms.double(3.6),
     posCalc_logweight = cms.bool(True),
     posCalc_w0 = cms.double(4.2),

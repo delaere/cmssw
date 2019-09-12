@@ -8,7 +8,6 @@
 //
 // Original Author:  
 //         Created:  Wed Jan  4 20:31:32 CET 2012
-// $Id: FWOverlapTableManager.cc,v 1.9 2013/04/14 20:41:06 amraktad Exp $
 //
 
 // system include files
@@ -16,7 +15,7 @@
 // user include files
 #include "Fireworks/Core/src/FWOverlapTableManager.h"
 #include "Fireworks/Core/src/FWOverlapTableView.h"
-#include "Fireworks/Core/src/FWEveDigitSetScalableMarker.cc"
+#include "Fireworks/Core/src/FWEveDigitSetScalableMarker.h"
 #include "Fireworks/Core/interface/FWGeometryTableViewManager.h"
 #include "Fireworks/Core/interface/fwLog.h"
 

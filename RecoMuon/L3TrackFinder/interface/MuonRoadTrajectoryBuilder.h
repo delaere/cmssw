@@ -6,8 +6,6 @@
  *  inner layer of the tracker detector, no RecHit is required on the TrajectorySeed.
  *  Combinatorics between RecHits is made. RecHits are accessed via the MeasurementTracker
  *  
- *  $Date: 2012/12/26 21:32:53 $
- *  $Revision: 1.6 $
  *  \author Adam Evertt, Jean-Roch Vlimant
  */
 
@@ -24,7 +22,7 @@
 #include <DataFormats/GeometrySurface/interface/BoundDisk.h>
 
 #include <Geometry/TrackerGeometryBuilder/interface/TrackerGeometry.h>
-#include <RecoTracker/MeasurementDet/interface/MeasurementTracker.h>
+#include <RecoTracker/MeasurementDet/interface/MeasurementTrackerEvent.h>
 
 #include <TrackingTools/TrajectoryState/interface/TrajectoryStateOnSurface.h>
 #include <TrackingTools/TrajectoryState/interface/FreeTrajectoryState.h>
@@ -106,20 +104,19 @@ class MuonRoadTrajectoryBuilder :public TrajectoryBuilder {
    ////internal method that use how grown trajectory builder
    void makeTrajectories_0(const TrajectorySeed & seed, std::vector<Trajectory> & result) const ;
    ////internal method to grow trajectories on one tracker layer
-   int GatherHits(const TrajectoryStateOnSurface & step,const DetLayer * thislayer, TrajectoryCollectionFPair & Trajectories) const ;
+   int GatherHits(const TrajectoryStateOnSurface & step,const DetLayer * thislayer, TrajectoryCollectionFPair & Trajectories,
+                  bool & firstLayer, unsigned int theNumberOfHitPerModule) const;
    ////internal method not yet implemented
    void makeTrajectories_1(const TrajectorySeed & seed, std::vector<Trajectory> & result) const ;
 	  
    ////check and reduce the trajectory according to number of trajectories found
-   bool checkStep(TrajectoryCollection & collection) const ;
+   bool checkStep(TrajectoryCollection & collection, unsigned int& theNumberOfHitPerModule) const ;
    ////check an remove trajectories subset of each other. keeping the longest
    void checkDuplicate(TrajectoryCollection & collection) const ;
 	      
    Trajectory smooth(Trajectory &) const ;
    void cleanTrajectory(Trajectory & traj) const ;
 	      
-   //only global scope variable
-   mutable bool theFirstlayer;
    //algorithm options
    //limit the total number of possible trajectories taken into account for a single seed
    unsigned int theMaxTrajectories;
@@ -130,7 +127,6 @@ class MuonRoadTrajectoryBuilder :public TrajectoryBuilder {
    ////the number of trajectory is more than theMaxTrajectoriesThreshold[0]. and so on ...
    bool theDynamicMaxNumberOfHitPerModule;
    unsigned int theNumberOfHitPerModuleDefault;
-   mutable unsigned int theNumberOfHitPerModule;
    std::vector<unsigned int> theMaxTrajectoriesThreshold;
    std::vector<unsigned int> theNumberOfHitPerModuleThreshold;
   
@@ -149,6 +145,7 @@ class MuonRoadTrajectoryBuilder :public TrajectoryBuilder {
    //tools and usefull pointers
    ////measurement tracke handle
    const MeasurementTracker * theMeasurementTracker;
+   const MeasurementTrackerEvent * theMeasurementTrackerEvent;
     
    //kalman tools
    ////chi2 governed in by cfg file, Nsig = sqrt(chi2)

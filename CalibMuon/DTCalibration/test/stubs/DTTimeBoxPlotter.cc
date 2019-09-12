@@ -1,8 +1,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2008/01/22 19:00:30 $
- *  $Revision: 1.5 $
  *  \author G. Cerminara - INFN Torino
  */
 
@@ -12,7 +10,7 @@
 
 
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 #include <sstream>
 #include <string>
 

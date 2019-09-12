@@ -1,7 +1,7 @@
 /** \file FrameToFrameDerivative.cc
  *
- *  $Date: 2010/12/14 01:02:34 $
- *  $Revision: 1.6 $
+ *  $Date: 2007/03/12 21:28:48 $
+ *  $Revision: 1.5 $
  */
 
 #include "Alignment/CommonAlignmentParametrization/interface/FrameToFrameDerivative.h"
@@ -96,8 +96,7 @@ FrameToFrameDerivative::getDerivative(const align::RotationType &objectRot,
   derivative[5][4] = derivBB[2][1];
   derivative[5][5] = derivBB[2][2];
   
-  return(derivative.T());
-
+  return derivative;
 }
 
 

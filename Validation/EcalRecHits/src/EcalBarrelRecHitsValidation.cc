@@ -1,7 +1,6 @@
 /*
  * \file EcalBarrelRecHitsValidation.cc
  *
- * $Date: 2011/10/31 16:09:19 $
  * \author C. Rovelli
  *
  */
@@ -17,8 +16,8 @@ using namespace std;
 EcalBarrelRecHitsValidation::EcalBarrelRecHitsValidation(const ParameterSet& ps){
   
   // ---------------------- 
-  EBdigiCollection_          = ps.getParameter<edm::InputTag>("EBdigiCollection");
-  EBuncalibrechitCollection_ = ps.getParameter<edm::InputTag>("EBuncalibrechitCollection");
+  EBdigiCollection_token_          = consumes< EBDigiCollection > (ps.getParameter<edm::InputTag>("EBdigiCollection") );
+  EBuncalibrechitCollection_token_ = consumes< EBUncalibratedRecHitCollection > (ps.getParameter<edm::InputTag>("EBuncalibrechitCollection") );
   
   // ---------------------- 
   // verbosity switch 
@@ -138,7 +137,7 @@ void EcalBarrelRecHitsValidation::analyze(const Event& e, const EventSetup& c){
   
   const EBUncalibratedRecHitCollection *EBUncalibRecHit = 0;
   Handle< EBUncalibratedRecHitCollection > EcalUncalibRecHitEB;
-  e.getByLabel( EBuncalibrechitCollection_, EcalUncalibRecHitEB);
+  e.getByToken( EBuncalibrechitCollection_token_, EcalUncalibRecHitEB);
   if (EcalUncalibRecHitEB.isValid()) {
     EBUncalibRecHit = EcalUncalibRecHitEB.product();
   } else {
@@ -148,7 +147,7 @@ void EcalBarrelRecHitsValidation::analyze(const Event& e, const EventSetup& c){
   bool skipDigis = false;
   const EBDigiCollection *EBDigi = 0;
   Handle< EBDigiCollection > EcalDigiEB;
-  e.getByLabel( EBdigiCollection_, EcalDigiEB);
+  e.getByToken( EBdigiCollection_token_, EcalDigiEB);
   if (EcalDigiEB.isValid()) {
     EBDigi = EcalDigiEB.product();    
   } else {

@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripDbParams.cc,v 1.14 2010/11/29 20:42:01 wmtan Exp $
 
 #include "OnlineDB/SiStripConfigDb/interface/SiStripDbParams.h"
 #include "DataFormats/SiStripCommon/interface/SiStripEnumsAndStrings.h"

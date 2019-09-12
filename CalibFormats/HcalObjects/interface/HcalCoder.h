@@ -14,8 +14,6 @@
     Abstract interface of a coder/decoder which converts ADC values to
     and from femtocolumbs of collected charge.
 
-   $Date: 2013/04/15 12:24:12 $
-   $Revision: 1.6 $
 */
 class HcalCoder {
 public:

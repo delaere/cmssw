@@ -5,8 +5,6 @@
  *
  * Digi for Rsisitive Plate Chamber
  *  
- *  $Date: 2008/10/29 18:41:18 $
- *  $Revision: 1.9 $
  *
  * \author I. Segoni -- CERN & M. Maggi -- INFN Bari
  *

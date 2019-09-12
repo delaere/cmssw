@@ -13,7 +13,6 @@
 //
 // Original Author:  Thomas Nummy,Bld. 32 Room 4-C21,+41227671337,
 //         Created:  Thu Oct 29 13:55:15 CET 2009
-// $Id: Compare.cc,v 1.4 2010/06/24 13:59:34 boeriu Exp $
 //
 //
 //////////////////////////////////READ THIS FIRST//////////////////////////////////////////////////////////

@@ -1,6 +1,7 @@
 #ifndef CALIBCALORIMETRY_HCALALGOS_HCALPULSESHAPES_H
 #define CALIBCALORIMETRY_HCALALGOS_HCALPULSESHAPES_H 1
 
+#include <map>
 #include <vector>
 #include "CalibCalorimetry/HcalAlgos/interface/HcalPulseShape.h"
 #include "DataFormats/HcalDetId/interface/HcalDetId.h"
@@ -8,8 +9,6 @@
 
 /** \class HcalPulseShapes
   *  
-  * $Date: 2012/11/12 20:40:39 $
-  * $Revision: 1.7 $
   * \author J. Mans - Minnesota
   */
 class HcalMCParams;

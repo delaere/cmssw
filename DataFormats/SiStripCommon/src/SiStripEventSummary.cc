@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripEventSummary.cc,v 1.11 2008/11/26 16:47:10 bainbrid Exp $
 
 #include "DataFormats/SiStripCommon/interface/SiStripEventSummary.h"
 #include "DataFormats/SiStripCommon/interface/SiStripEnumsAndStrings.h"

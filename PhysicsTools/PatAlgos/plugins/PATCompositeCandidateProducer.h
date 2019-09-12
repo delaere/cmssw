@@ -1,5 +1,4 @@
 //
-// $Id: PATCompositeCandidateProducer.h,v 1.4 2013/02/27 23:26:56 wmtan Exp $
 //
 
 #ifndef PhysicsTools_PatAlgos_PATCompositeCandidateProducer_h
@@ -13,7 +12,7 @@
    any collection of Candidates
 
   \author   Salvatore Rappoccio
-  \version  $Id: PATCompositeCandidateProducer.h,v 1.4 2013/02/27 23:26:56 wmtan Exp $
+  \version  $Id: PATCompositeCandidateProducer.h,v 1.3 2009/06/25 23:49:35 gpetrucc Exp $
 */
 
 
@@ -50,14 +49,14 @@ namespace pat {
     private:
 
       // configurables
-      edm::InputTag src_;     // list of reco::CompositeCandidates
+      edm::EDGetTokenT<edm::View<reco::CompositeCandidate> > srcToken_;     // list of reco::CompositeCandidates
 
       bool useUserData_;
       pat::PATUserDataHelper<pat::CompositeCandidate> userDataHelper_;
 
       bool addEfficiencies_;
       pat::helper::EfficiencyLoader efficiencyLoader_;
-      
+
       bool addResolutions_;
       pat::helper::KinResolutionsLoader resolutionLoader_;
   };

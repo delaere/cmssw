@@ -14,7 +14,6 @@
 //
 // Original Author:  Michel Della Negra
 //         Created:  Wed Jan 23 10:11:13 CET 2008
-// $Id: PFJetBenchmarkAnalyzer.cc,v 1.3 2010/02/20 21:02:43 wmtan Exp $
 // Extensions by Joanna Weng
 //
 
@@ -40,6 +39,8 @@
 #include "RecoParticleFlow/Benchmark/interface/PFJetBenchmark.h"
 #include "FWCore/ServiceRegistry/interface/Service.h" 
 #include "FWCore/Utilities/interface/InputTag.h"
+#include "DQMServices/Core/interface/DQMStore.h"
+#include "DQMServices/Core/interface/MonitorElement.h"
 using namespace edm;
 using namespace reco;
 using namespace std;
@@ -55,18 +56,18 @@ public:
 
 
 private:
-  virtual void beginJob() ;
-  virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  virtual void endJob() ;
+  virtual void beginJob() override ;
+  virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+  virtual void endJob() override ;
   // ----------member data ---------------------------
-
+  edm::EDGetTokenT<reco::GenJetCollection> sGenJetAlgo_tok_;
+  edm::EDGetTokenT<reco::PFJetCollection> sJetAlgo_tok_;
+  
 };
 /// PFJet Benchmark
 
 //neuhaus - comment
 PFJetBenchmark PFJetBenchmark_;
-InputTag sGenJetAlgo;
-InputTag sJetAlgo;
 string outjetfilename;
 bool pfjBenchmarkDebug;
 bool plotAgainstReco;
@@ -91,26 +92,16 @@ PFJetBenchmarkAnalyzer::PFJetBenchmarkAnalyzer(const edm::ParameterSet& iConfig)
 
 {
   //now do what ever initialization is needed
-  sGenJetAlgo = 
-    iConfig.getParameter<InputTag>("InputTruthLabel");
-  sJetAlgo = 
-    iConfig.getParameter<InputTag>("InputRecoLabel");
-  outjetfilename = 
-    iConfig.getUntrackedParameter<string>("OutputFile");
-  pfjBenchmarkDebug = 
-    iConfig.getParameter<bool>("pfjBenchmarkDebug");
-  plotAgainstReco = 
-    iConfig.getParameter<bool>("PlotAgainstRecoQuantities");
-  onlyTwoJets = 
-    iConfig.getParameter<bool>("OnlyTwoJets");
-  deltaRMax = 
-    iConfig.getParameter<double>("deltaRMax");	  
-  benchmarkLabel_  = 
-    iConfig.getParameter<string>("BenchmarkLabel"); 
-  recPt  = 
-    iConfig.getParameter<double>("recPt"); 
-  maxEta = 
-    iConfig.getParameter<double>("maxEta"); 
+  sGenJetAlgo_tok_ = consumes<reco::GenJetCollection> (iConfig.getParameter<edm::InputTag>("InputTruthLabel") );
+  sJetAlgo_tok_ = consumes<reco::PFJetCollection> (iConfig.getParameter<edm::InputTag>("InputRecoLabel") );
+  outjetfilename = iConfig.getUntrackedParameter<string>("OutputFile");
+  pfjBenchmarkDebug = iConfig.getParameter<bool>("pfjBenchmarkDebug");
+  plotAgainstReco = iConfig.getParameter<bool>("PlotAgainstRecoQuantities");
+  onlyTwoJets = iConfig.getParameter<bool>("OnlyTwoJets");
+  deltaRMax = iConfig.getParameter<double>("deltaRMax");	  
+  benchmarkLabel_  = iConfig.getParameter<string>("BenchmarkLabel"); 
+  recPt  = iConfig.getParameter<double>("recPt"); 
+  maxEta = iConfig.getParameter<double>("maxEta"); 
   
   dbe_ = edm::Service<DQMStore>().operator->();
 
@@ -145,7 +136,7 @@ PFJetBenchmarkAnalyzer::analyze(const edm::Event& iEvent,
 {
  // get gen jet collection
   Handle<GenJetCollection> genjets;
-  bool isGen = iEvent.getByLabel(sGenJetAlgo, genjets);
+  bool isGen = iEvent.getByToken(sGenJetAlgo_tok_, genjets);
   if (!isGen) { 
     std::cout << "Warning : no Gen jets in input !" << std::endl;
     return;
@@ -153,7 +144,7 @@ PFJetBenchmarkAnalyzer::analyze(const edm::Event& iEvent,
 
   // get rec PFJet collection
   Handle<PFJetCollection> pfjets;
-  bool isReco = iEvent.getByLabel(sJetAlgo, pfjets);   
+  bool isReco = iEvent.getByToken(sJetAlgo_tok_, pfjets);   
   if (!isReco) { 
     std::cout << "Warning : no PF jets in input !" << std::endl;
     return;

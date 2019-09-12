@@ -12,9 +12,7 @@
  *
  * \author Christian Veelken, LLR
  *
- * \version $Revision: 1.5 $
  *
- * $Id: JetCorrExtractorT.h,v 1.5 2012/04/19 17:55:52 veelken Exp $
  *
  */
 

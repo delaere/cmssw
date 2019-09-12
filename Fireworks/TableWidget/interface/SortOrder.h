@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Mon Feb  2 19:10:26 EST 2009
-// $Id: SortOrder.h,v 1.1 2009/02/03 20:33:03 chrjones Exp $
 //
 
 // system include files

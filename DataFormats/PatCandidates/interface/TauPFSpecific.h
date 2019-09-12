@@ -1,5 +1,4 @@
 //
-// $Id: TauPFSpecific.h,v 1.7 2011/09/29 16:34:56 veelken Exp $
 //
 
 #ifndef DataFormats_PatCandidates_Tau_PFSpecific_h
@@ -10,11 +9,12 @@
   \brief    Structure to hold information specific to a PFTau inside a pat::Tau
 
   \author   Giovanni Petrucciani
-  \version  $Id: TauPFSpecific.h,v 1.7 2011/09/29 16:34:56 veelken Exp $
 */
 
 #include "DataFormats/TauReco/interface/PFTau.h"
+#include "DataFormats/TauReco/interface/PFTauTransverseImpactParameter.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
 
 namespace pat { namespace tau {
 
@@ -25,19 +25,21 @@ struct TauPFSpecific {
   TauPFSpecific(const reco::PFTau& tau);
 // datamembers 
   reco::PFJetRef pfJetRef_;
-  reco::PFCandidateRef leadPFChargedHadrCand_;
+  reco::PFCandidatePtr leadPFChargedHadrCand_;
   float leadPFChargedHadrCandsignedSipt_;
-  reco::PFCandidateRef leadPFNeutralCand_;
-  reco::PFCandidateRef leadPFCand_;
-  reco::PFCandidateRefVector selectedSignalPFCands_;
-  reco::PFCandidateRefVector selectedSignalPFChargedHadrCands_;
-  reco::PFCandidateRefVector selectedSignalPFNeutrHadrCands_;
-  reco::PFCandidateRefVector selectedSignalPFGammaCands_;
+  reco::PFCandidatePtr leadPFNeutralCand_;
+  reco::PFCandidatePtr leadPFCand_;
+  std::vector<reco::PFCandidatePtr> selectedSignalPFCands_;
+  std::vector<reco::PFCandidatePtr> selectedSignalPFChargedHadrCands_;
+  std::vector<reco::PFCandidatePtr> selectedSignalPFNeutrHadrCands_;
+  std::vector<reco::PFCandidatePtr> selectedSignalPFGammaCands_;
+  std::vector<reco::PFRecoTauChargedHadron> signalTauChargedHadronCandidates_;
   std::vector<reco::RecoTauPiZero> signalPiZeroCandidates_;
-  reco::PFCandidateRefVector selectedIsolationPFCands_;
-  reco::PFCandidateRefVector selectedIsolationPFChargedHadrCands_;
-  reco::PFCandidateRefVector selectedIsolationPFNeutrHadrCands_;
-  reco::PFCandidateRefVector selectedIsolationPFGammaCands_;
+  std::vector<reco::PFCandidatePtr> selectedIsolationPFCands_;
+  std::vector<reco::PFCandidatePtr> selectedIsolationPFChargedHadrCands_;
+  std::vector<reco::PFCandidatePtr> selectedIsolationPFNeutrHadrCands_;
+  std::vector<reco::PFCandidatePtr> selectedIsolationPFGammaCands_;
+  std::vector<reco::PFRecoTauChargedHadron> isolationTauChargedHadronCandidates_;
   std::vector<reco::RecoTauPiZero> isolationPiZeroCandidates_;
   float isolationPFChargedHadrCandsPtSum_;
   float isolationPFGammaCandsEtSum_;
@@ -57,12 +59,11 @@ struct TauPFSpecific {
   float segComp_;
   bool muonDecision_;
   
-  reco::Candidate::LorentzVector p4Jet_;
   float etaetaMoment_;
   float phiphiMoment_;
   float etaphiMoment_;
   
-  int decayMode_;
+  
 };
 
 } }

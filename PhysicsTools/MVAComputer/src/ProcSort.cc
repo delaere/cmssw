@@ -12,7 +12,6 @@
 //
 // Author:      Christophe Saout
 // Created:     Sun Sep 16 14:52 CEST 2007
-// $Id: ProcSort.cc,v 1.3 2009/06/03 09:50:14 saout Exp $
 //
 
 #include <stdlib.h>
@@ -40,10 +39,10 @@ class ProcSort : public VarProcessor {
 	         const MVAComputer *computer);
 	virtual ~ProcSort() {}
 
-	virtual void configure(ConfIterator iter, unsigned int n);
-	virtual void eval(ValueIterator iter, unsigned int n) const;
+	virtual void configure(ConfIterator iter, unsigned int n) override;
+	virtual void eval(ValueIterator iter, unsigned int n) const override;
 	virtual std::vector<double> deriv(
-				ValueIterator iter, unsigned int n) const;
+				ValueIterator iter, unsigned int n) const override;
 
     private:
 	unsigned int	leader;

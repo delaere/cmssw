@@ -13,7 +13,6 @@
 //
 // Original Author:  Benedikt Hegner 
 //         Created:  Tue Mar 09 01:32:51 CET 2010
-// $Id: JetCorrectorDBReader.cc,v 1.7 2011/12/07 18:58:42 srappocc Exp $
 //
 //
 
@@ -43,9 +42,9 @@ public:
   
   
 private:
-  virtual void beginJob() ;
-  virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  virtual void endJob() ;
+  virtual void beginJob() override ;
+  virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+  virtual void endJob() override ;
  
   std::string mPayloadName,mGlobalTag;
   bool mCreateTextFile,mPrintScreen;

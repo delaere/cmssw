@@ -4,13 +4,13 @@
  *
  *  \author Ian Tomalin, RAL
  *
- *  $Date: 2010/02/25 00:28:56 $
- *  $Revision: 1.2 $
+ *  $Date: 2009/10/13 12:07:49 $
+ *  $Revision: 1.1 $
  */
 
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "CommonTools/UtilAlgos/interface/SingleObjectSelector.h"
-#include "CommonTools/RecoAlgos/interface/TrackingParticleSelector.h"
+#include "SimTracker/Common/interface/TrackingParticleSelector.h"
 #include "SimDataFormats/TrackingAnalysis/interface/TrackingParticleFwd.h"
 
 namespace reco {

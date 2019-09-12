@@ -2,7 +2,6 @@
 #define GENFILTEREFFICIENCYPRODUCER_H
 
 // F. Cossutti
-// $Date: 2013/05/17 18:35:02 $
 // $Revision://
 
 // producer of a summary information product on filter efficiency for a user specified path

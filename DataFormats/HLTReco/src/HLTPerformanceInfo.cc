@@ -1,4 +1,3 @@
-// $Id: HLTPerformanceInfo.cc,v 1.17 2009/01/30 23:32:35 elmer Exp $
 
 #include "DataFormats/Common/interface/HLTenums.h"
 #include "DataFormats/HLTReco/interface/HLTPerformanceInfo.h"

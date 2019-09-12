@@ -15,12 +15,18 @@ from DQMOffline.Muon.muonIsolationDQM_cff import *
 from DQMOffline.Muon.muonQualityTests_cff import *
 
 dqmInfoMuons = cms.EDAnalyzer("DQMEventInfo",
-                            subSystemFolder = cms.untracked.string('Muons')
-                            )
+                              subSystemFolder = cms.untracked.string('Muons')
+                              )
 
 muonTrackAnalyzers = cms.Sequence(MonitorTrackSTAMuons*MonitorTrackGLBMuons)
 
-muonMonitors = cms.Sequence(muonTrackAnalyzers*dtSegmentsMonitor*cscMonitor*muonAnalyzer*muonIdDQM*dqmInfoMuons*muIsoDQM_seq)
+muonMonitors = cms.Sequence(muonTrackAnalyzers*
+                            dtSegmentsMonitor*
+                            cscMonitor*
+                            muonAnalyzer*
+                            muonIdDQM*
+                            dqmInfoMuons*
+                            muIsoDQM_seq)
 
 muonMonitorsAndQualityTests = cms.Sequence(muonMonitors*muonQualityTests)
 

@@ -8,7 +8,6 @@
 //
 // Original Author:
 //         Created:  Sun Jan  6 23:57:00 EST 2008
-// $Id: FWCSCSegmentProxyBuilder.cc,v 1.19 2011/10/18 12:40:56 yana Exp $
 //
 
 #include "TEveGeoNode.h"
@@ -34,7 +33,7 @@ private:
   FWCSCSegmentProxyBuilder( const FWCSCSegmentProxyBuilder& );   
   const FWCSCSegmentProxyBuilder& operator=( const FWCSCSegmentProxyBuilder& );
 
-  void build( const CSCSegment& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext* );
+  void build( const CSCSegment& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext* ) override;
 };
 
 void

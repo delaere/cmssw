@@ -13,7 +13,7 @@
 //
 // Original Author:  Werner Man-Li Sun
 //         Created:  Wed Apr  1 20:23:43 CEST 2009
-// $Id: L1RPCConeDefinitionOnlineProd.cc,v 1.1 2009/04/01 18:33:58 wsun Exp $
+// $Id$
 //
 //
 
@@ -39,7 +39,7 @@ class L1RPCConeDefinitionOnlineProd : public L1ConfigOnlineProdBase<
       ~L1RPCConeDefinitionOnlineProd();
 
   virtual boost::shared_ptr< L1RPCConeDefinition > newObject(
-    const std::string& objectKey ) ;
+    const std::string& objectKey ) override ;
 
    private:
       // ----------member data ---------------------------

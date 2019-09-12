@@ -14,7 +14,6 @@
 // Original Author:  Evan Klose Friis
 //    additions by:  Freya Blekman
 //         Created:  Tue Nov  6 17:27:19 CET 2007
-// $Id: SiPixelOfflineCalibAnalysisBase.h,v 1.19 2011/06/29 10:29:35 eulisse Exp $
 //
 //
 
@@ -126,6 +125,8 @@ private:
   std::map<uint32_t, std::string> detIdNames_;
   
   edm::InputTag siPixelCalibDigiProducer_;
+
+  edm::EDGetTokenT<edm::DetSetVector<SiPixelCalibDigi> > tPixelCalibDigi;
   
   //the beginJob is used to load the calib database.  It then calls the pure
   //virtual calibrationSetup() function.  Derived classes should put beginJob functionality there.

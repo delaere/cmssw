@@ -8,7 +8,6 @@
 //
 // Original Author:  Alja Mrak-Tadel
 //         Created:  Fri Sep 10 14:50:32 CEST 2010
-// $Id: CmsShowCommon.cc,v 1.16 2012/05/11 20:36:33 amraktad Exp $
 //
 
 // system include files

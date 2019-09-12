@@ -5,8 +5,6 @@
 //   Description: Assignment Unit
 //
 //
-//   $Date: 2010/09/10 12:26:35 $
-//   $Revision: 1.11 $
 //
 //   Author :
 //   N. Neumeister            CERN EP

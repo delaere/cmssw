@@ -1,5 +1,4 @@
 //
-// $Id: Muon.h,v 1.39 2012/09/27 09:14:38 bellan Exp $
 //
 
 #ifndef DataFormats_PatCandidates_Muon_h
@@ -17,7 +16,6 @@
 
   \author   Steven Lowette, Giovanni Petrucciani, Frederic Ronga, Colin Bernet
 
-  \version  $Id: Muon.h,v 1.39 2012/09/27 09:14:38 bellan Exp $
 */
 
 #include "DataFormats/MuonReco/interface/Muon.h"
@@ -47,6 +45,7 @@ namespace reco {
 // Class definition
 namespace pat {
 
+  class PATMuonSlimmer;
 
   class Muon : public Lepton<reco::Muon> {
 
@@ -80,9 +79,19 @@ namespace pat {
       reco::TrackRef combinedMuon() const;
       /// reference to Track reconstructed in both tracked and muon detector (reimplemented from reco::Muon)
       reco::TrackRef globalTrack() const { return combinedMuon(); }
+      /// Track selected to be the best measurement of the muon parameters (including PFlow global information)
+      const reco::Track * bestTrack() const { return muonBestTrack().get(); }
+      /// Track selected to be the best measurement of the muon parameters (including PFlow global information)
+      reco::TrackRef      muonBestTrack() const ; 
+      /// Track selected to be the best measurement of the muon parameters (from muon information alone)
+      virtual reco::TrackRef tunePMuonBestTrack() const ;
 
       /// set reference to Track selected to be the best measurement of the muon parameters (reimplemented from reco::Muon)
-      void embedMuonBestTrack();
+      /// if force == false, do not embed this track if it's embedded already (e.g. ig it's a tracker track, and that's already embedded)
+      void embedMuonBestTrack(bool force=false);
+      /// set reference to Track selected to be the best measurement of the muon parameters (reimplemented from reco::Muon)
+      /// if force == false, do not embed this track if it's embedded already (e.g. ig it's a tracker track, and that's already embedded)
+      void embedTunePMuonBestTrack(bool force=false);
       /// set reference to Track reconstructed in the tracker only (reimplemented from reco::Muon)
       void embedTrack();
       /// set reference to Track reconstructed in the muon detector only (reimplemented from reco::Muon)
@@ -128,7 +137,10 @@ namespace pat {
       void embedPFCandidate();
       /// get the number of non-null PF candidates
       size_t numberOfSourceCandidatePtrs() const { 
-	return pfCandidateRef_.isNonnull() ? 1 : 0;
+	size_t res=0;
+        if(pfCandidateRef_.isNonnull()) res++;
+        if(refToOrig_.isNonnull()) res++;
+	return res;
       }
       /// get the candidate pointer with index i
       reco::CandidatePtr sourceCandidatePtr( size_type i ) const;
@@ -225,13 +237,18 @@ namespace pat {
       /// pipe operator (introduced to use pat::Muon with PFTopProjectors)
       friend std::ostream& reco::operator<<(std::ostream& out, const Muon& obj);
 
+      friend class PATMuonSlimmer;
+
     protected:
 
       // ---- for content embedding ----
 
-      /// best muon track
+      /// best muon track (global pflow)
       bool embeddedMuonBestTrack_;
       std::vector<reco::Track> muonBestTrack_;
+      /// best muon track (muon only)
+      bool embeddedTunePMuonBestTrack_;
+      std::vector<reco::Track> tunePMuonBestTrack_;
       /// track of inner track detector
       bool embeddedTrack_;
       std::vector<reco::Track> track_;

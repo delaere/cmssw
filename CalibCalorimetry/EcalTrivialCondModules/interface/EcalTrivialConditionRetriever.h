@@ -1,5 +1,4 @@
 //
-// $Id: EcalTrivialConditionRetriever.h,v 1.36 2013/04/28 05:49:04 davidlt Exp $
 // Created: 2 Mar 2006
 //          Shahram Rahatlou, University of Rome & INFN
 //
@@ -101,6 +100,8 @@
 #include "CondFormats/EcalObjects/interface/EcalSampleMask.h"
 #include "CondFormats/DataRecord/interface/EcalSampleMaskRcd.h"
 
+#include "CondFormats/EcalObjects/interface/EcalTimeBiasCorrections.h"
+#include "CondFormats/DataRecord/interface/EcalTimeBiasCorrectionsRcd.h"
 
 #include "SimG4CMS/Calo/interface/EnergyResolutionVsLumi.h"
 #include "SimG4CMS/Calo/interface/EvolutionECAL.h"
@@ -171,6 +172,8 @@ public:
   virtual std::auto_ptr<Alignments> produceEcalAlignmentES( const ESAlignmentRcd& );
 
   virtual std::auto_ptr<EcalSampleMask> produceEcalSampleMask( const EcalSampleMaskRcd& );
+
+  virtual std::auto_ptr<EcalTimeBiasCorrections> produceEcalTimeBiasCorrections( const EcalTimeBiasCorrectionsRcd& );
 
 protected:
   //overriding from ContextRecordIntervalFinder
@@ -286,6 +289,10 @@ private:
   std::string EELaserAlphaFile_;
   unsigned int sampleMaskEB_;      // Mask to discard sample in barrel
   unsigned int sampleMaskEE_;      // Mask to discard sample in endcaps
+  std::vector<double> EBtimeCorrAmplitudeBins_;
+  std::vector<double> EBtimeCorrShiftBins_;
+  std::vector<double> EEtimeCorrAmplitudeBins_;
+  std::vector<double> EEtimeCorrShiftBins_;
 
   int nTDCbins_;
 
@@ -323,6 +330,7 @@ private:
   bool getESAlignmentFromFile_;
   bool getLaserAlphaFromFile_;
   bool producedEcalSampleMask_;
+  bool producedEcalTimeBiasCorrections_;
 
   int    verbose_; // verbosity
 

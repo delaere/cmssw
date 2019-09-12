@@ -1,4 +1,3 @@
-// $Id: LogicImp.h,v 1.3 2009/08/09 11:11:36 aosorio Exp $
 #ifndef LOGICIMP_H 
 #define LOGICIMP_H 1
 

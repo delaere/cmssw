@@ -13,7 +13,7 @@
 //
 // Original Author:  Werner Man-Li Sun
 //         Created:  Thu Oct  2 19:40:12 CEST 2008
-// $Id: RPCConfigOnlineProd.cc,v 1.1 2008/10/13 02:41:02 wsun Exp $
+// $Id$
 //
 //
 
@@ -39,7 +39,7 @@ class RPCConfigOnlineProd : public L1ConfigOnlineProdBase< L1RPCConfigRcd,
       ~RPCConfigOnlineProd();
 
   virtual boost::shared_ptr< L1RPCConfig > newObject(
-    const std::string& objectKey ) ;
+    const std::string& objectKey ) override ;
 
    private:
       // ----------member data ---------------------------

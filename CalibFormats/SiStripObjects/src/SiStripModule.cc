@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripModule.cc,v 1.19 2009/10/27 09:50:29 lowette Exp $
 
 #include "CalibFormats/SiStripObjects/interface/SiStripModule.h"
 #include "DataFormats/SiStripCommon/interface/SiStripConstants.h"

@@ -163,6 +163,7 @@ class GsfElectron : public RecoCandidate
 
     // accessors
     virtual GsfElectronCoreRef core() const ;
+    void setCore(const reco::GsfElectronCoreRef &core) { core_ = core; }
 
     // forward core methods
     virtual SuperClusterRef superCluster() const { return core()->superCluster() ; }
@@ -171,7 +172,7 @@ class GsfElectron : public RecoCandidate
     float ctfGsfOverlap() const { return core()->ctfGsfOverlap() ; }
     bool ecalDrivenSeed() const { return core()->ecalDrivenSeed() ; }
     bool trackerDrivenSeed() const { return core()->trackerDrivenSeed() ; }
-    SuperClusterRef pflowSuperCluster() const { return core()->pflowSuperCluster() ; }
+    SuperClusterRef parentSuperCluster() const { return core()->parentSuperCluster() ; }
 
     // backward compatibility
     struct ClosestCtfTrack
@@ -275,6 +276,9 @@ class GsfElectron : public RecoCandidate
     math::XYZVectorF trackMomentumAtEleClus() const { return trackExtrapolations_.momentumAtEleClus ; }
     math::XYZVectorF trackMomentumAtVtxWithConstraint() const { return trackExtrapolations_.momentumAtVtxWithConstraint ; }
     const TrackExtrapolations & trackExtrapolations() const { return trackExtrapolations_ ; }
+
+    // setter (if you know what you're doing)
+    void setTrackExtrapolations(const TrackExtrapolations &te) { trackExtrapolations_ = te; }
 
     // for backward compatibility
     math::XYZPointF TrackPositionAtVtx() const { return trackPositionAtVtx() ; }
@@ -393,6 +397,9 @@ class GsfElectron : public RecoCandidate
     float hcalDepth2OverEcalBc() const { return showerShape_.hcalDepth2OverEcalBc ; }
     float hcalOverEcalBc() const { return hcalDepth1OverEcalBc() + hcalDepth2OverEcalBc() ; }
     const ShowerShape & showerShape() const { return showerShape_ ; }
+
+    // setters (if you know what you're doing)
+    void setShowerShape(const ShowerShape &s) { showerShape_ = s; }
 
     // for backward compatibility
     float scSigmaEtaEta() const { return sigmaEtaEta() ; }
@@ -514,12 +521,19 @@ class GsfElectron : public RecoCandidate
 
     struct PflowIsolationVariables
       {
-       float chargedHadronIso ;
-       float neutralHadronIso ;
-       float photonIso ;
-       PflowIsolationVariables()
-        : chargedHadronIso(0.), neutralHadronIso(0.), photonIso(0.)
-        {}
+       //first three data members that changed names, according to DataFormats/MuonReco/interface/MuonPFIsolation.h
+       float sumChargedHadronPt; //!< sum-pt of charged Hadron    // old float chargedHadronIso ;
+       float sumNeutralHadronEt;  //!< sum pt of neutral hadrons  // old float neutralHadronIso ;
+       float sumPhotonEt;  //!< sum pt of PF photons              // old float photonIso ;
+       //then four new data members, corresponding to DataFormats/MuonReco/interface/MuonPFIsolation.h
+       float sumChargedParticlePt; //!< sum-pt of charged Particles(inludes e/mu) 
+       float sumNeutralHadronEtHighThreshold;  //!< sum pt of neutral hadrons with a higher threshold
+       float sumPhotonEtHighThreshold;  //!< sum pt of PF photons with a higher threshold
+       float sumPUPt;  //!< sum pt of charged Particles not from PV  (for Pu corrections)
+
+       PflowIsolationVariables() :
+        sumChargedHadronPt(0),sumNeutralHadronEt(0),sumPhotonEt(0),sumChargedParticlePt(0),
+        sumNeutralHadronEtHighThreshold(0),sumPhotonEtHighThreshold(0),sumPUPt(0) {}; 
       } ;
 
     struct MvaInput
@@ -718,6 +732,9 @@ class GsfElectron : public RecoCandidate
     float p4Error( P4Kind kind ) const ;
     P4Kind candidateP4Kind() const { return corrections_.candidateP4Kind ; }
     const Corrections & corrections() const { return corrections_ ; }
+    
+    // bare setter (if you know what you're doing)
+    void setCorrections(const Corrections &c) { corrections_ = c; }
 
     // for backward compatibility
     void setEcalEnergyError( float energyError ) { setCorrectedEcalEnergyError(energyError) ; }

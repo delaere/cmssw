@@ -1,8 +1,6 @@
 /** \file
  *  A simple program to print field value.
  *
- *  $Date: 2009/03/19 10:30:20 $
- *  $Revision: 1.2 $
  *  \author N. Amapane - CERN
  */
 

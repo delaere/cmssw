@@ -9,8 +9,6 @@
  * 13.03.2007: R.Ofierzynski
  *  - implemented event weighting
  *
- * $Date: 2010/08/06 20:24:06 $
- * $Revision: 1.5 $
  * \author R.Ofierzynski, CERN
  */
 

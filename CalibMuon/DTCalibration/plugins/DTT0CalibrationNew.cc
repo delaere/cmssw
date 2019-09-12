@@ -1,8 +1,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2012/05/11 17:17:17 $
- *  $Revision: 1.6 $
  *  \author S. Bolognesi - INFN Torino
  *  06/08/2008 Mofified by Antonio.Vilela.Pereira@cern.ch
  */
@@ -19,8 +17,8 @@
 #include "DataFormats/DTDigi/interface/DTDigiCollection.h"
 #include "CondFormats/DTObjects/interface/DTT0.h"
 
-#include <CondFormats/DTObjects/interface/DTTtrig.h>
-#include <CondFormats/DataRecord/interface/DTTtrigRcd.h>
+#include "CondFormats/DTObjects/interface/DTTtrig.h"
+#include "CondFormats/DataRecord/interface/DTTtrigRcd.h"
 
 #include "TH1I.h"
 #include "TFile.h"

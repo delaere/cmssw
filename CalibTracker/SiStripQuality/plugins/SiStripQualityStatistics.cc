@@ -13,7 +13,6 @@
 //
 // Original Author:  Domenico GIORDANO
 //         Created:  Wed Oct  3 12:11:10 CEST 2007
-// $Id: SiStripQualityStatistics.cc,v 1.16 2013/01/11 05:01:23 wmtan Exp $
 //
 //
 #include "CalibTracker/Records/interface/SiStripQualityRcd.h"

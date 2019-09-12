@@ -4,7 +4,6 @@
 *
 * \author Igor Volobouev, TTU
 *
-* \version  $Id: FFTJetPileupSummary.h,v 1.1 2011/04/26 22:57:31 igv Exp $
 ************************************************************/
 
 #ifndef DataFormats_JetReco_FFTJetPileupSummary_h

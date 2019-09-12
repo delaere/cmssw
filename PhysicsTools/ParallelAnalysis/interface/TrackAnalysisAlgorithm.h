@@ -7,7 +7,6 @@
  *
  * \author Luca Lista, INFN
  *
- * \version $Revision: 1.2 $
  */
 
 class TH1F;

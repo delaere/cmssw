@@ -6,8 +6,6 @@
  * wrapper class to handle numbering schemes for the different
  * MuonSubDetector's
  *  
- *  $Date: 2006/10/12 19:54:05 $
- *  $Revision: 1.2 $
  * \author Arno Straessner, CERN <arno.straessner@cern.ch>
  *
  */
@@ -25,7 +23,7 @@ class MuonSimHitNumberingScheme : public MuonNumberingScheme {
   MuonSimHitNumberingScheme(MuonSubDetector*, const DDCompactView& cpv);
   ~MuonSimHitNumberingScheme();
   
-  virtual int baseNumberToUnitNumber(const MuonBaseNumber);
+  virtual int baseNumberToUnitNumber(const MuonBaseNumber&);
   
  private:
 

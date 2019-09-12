@@ -6,14 +6,20 @@
 
 #include "MixingModule.h"
 #include "MixingWorker.h"
+#include "Adjuster.h"
 
 #include "CondFormats/RunInfo/interface/MixingModuleConfig.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "FWCore/Utilities/interface/EDMException.h"
 #include "FWCore/Utilities/interface/Algorithms.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Framework/interface/EventSetup.h"
+#include "FWCore/Framework/interface/ModuleContextSentry.h"
 #include "FWCore/Framework/interface/TriggerNamesService.h"
+#include "FWCore/ServiceRegistry/interface/InternalContext.h"
+#include "FWCore/ServiceRegistry/interface/ModuleCallingContext.h"
+#include "FWCore/ServiceRegistry/interface/ParentContext.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/Provenance/interface/Provenance.h"
@@ -50,7 +56,10 @@ namespace edm {
     if (labelPlayback.empty()) {
       labelPlayback = ps_mix.getParameter<std::string>("@module_label");
     }
-    inputTagPlayback_ = InputTag(labelPlayback, "");
+    if (playback_) {
+      inputTagPlayback_ = InputTag(labelPlayback, "", edm::InputTag::kSkipCurrentProcess);
+      consumes<CrossingFramePlaybackInfoExtended>(inputTagPlayback_);
+    }
 
     ParameterSet ps=ps_mix.getParameter<ParameterSet>("mixObjects");
     std::vector<std::string> names = ps.getParameterNames();
@@ -71,10 +80,12 @@ namespace edm {
             std::string label;
 
             branchesActivate(TypeID(typeid(std::vector<SimTrack>)).friendlyClassName(),std::string(""),tag,label);
+            adjustersObjects_.push_back(new Adjuster<SimTrack>(tag));
             bool makeCrossingFrame = pset.getUntrackedParameter<bool>("makeCrossingFrame", false);
             if(makeCrossingFrame) {
               workersObjects_.push_back(new MixingWorker<SimTrack>(minBunch_,maxBunch_,bunchSpace_,std::string(""),label,labelCF,maxNbSources_,tag,tagCF));
               produces<CrossingFrame<SimTrack> >(label);
+              consumes<std::vector<SimTrack> >(tag);
             }
 
             LogInfo("MixingModule") <<"Will mix "<<object<<"s with InputTag= "<<tag.encode()<<", label will be "<<label;
@@ -97,10 +108,12 @@ namespace edm {
             std::string label;
 
             branchesActivate(TypeID(typeid(std::vector<SimVertex>)).friendlyClassName(),std::string(""),tag,label);
+            adjustersObjects_.push_back(new Adjuster<SimVertex>(tag));
             bool makeCrossingFrame = pset.getUntrackedParameter<bool>("makeCrossingFrame", false);
             if(makeCrossingFrame) {
               workersObjects_.push_back(new MixingWorker<SimVertex>(minBunch_,maxBunch_,bunchSpace_,std::string(""),label,labelCF,maxNbSources_,tag,tagCF));
               produces<CrossingFrame<SimVertex> >(label);
+              consumes<std::vector<SimVertex> >(tag);
             }
 
             LogInfo("MixingModule") <<"Will mix "<<object<<"s with InputTag "<<tag.encode()<<", label will be "<<label;
@@ -116,6 +129,7 @@ namespace edm {
             if(makeCrossingFrame) {
               workersObjects_.push_back(new MixingWorker<HepMCProduct>(minBunch_,maxBunch_,bunchSpace_,std::string(""),label,labelCF,maxNbSources_,tag,tagCF));
               produces<CrossingFrame<HepMCProduct> >(label);
+              consumes<HepMCProduct>(tag);
             }
 
             LogInfo("MixingModule") <<"Will mix "<<object<<"s with InputTag= "<<tag.encode()<<", label will be "<<label;
@@ -132,9 +146,11 @@ namespace edm {
               std::string label;
 
               branchesActivate(TypeID(typeid(std::vector<PCaloHit>)).friendlyClassName(),subdets[ii],tag,label);
+              adjustersObjects_.push_back(new Adjuster<PCaloHit>(tag));
               if(binary_search_all(crossingFrames, tag.instance())) {
                 workersObjects_.push_back(new MixingWorker<PCaloHit>(minBunch_,maxBunch_,bunchSpace_,subdets[ii],label,labelCF,maxNbSources_,tag,tagCF));
                 produces<CrossingFrame<PCaloHit> >(label);
+                consumes<std::vector<PCaloHit> >(tag);
               }
 
               LogInfo("MixingModule") <<"Will mix "<<object<<"s with InputTag= "<<tag.encode()<<", label will be "<<label;
@@ -153,9 +169,11 @@ namespace edm {
               std::string label;
 
               branchesActivate(TypeID(typeid(std::vector<PSimHit>)).friendlyClassName(),subdets[ii],tag,label);
+              adjustersObjects_.push_back(new Adjuster<PSimHit>(tag));
               if(binary_search_all(crossingFrames, tag.instance())) {
                 workersObjects_.push_back(new MixingWorker<PSimHit>(minBunch_,maxBunch_,bunchSpace_,subdets[ii],label,labelCF,maxNbSources_,tag,tagCF));
                 produces<CrossingFrame<PSimHit> >(label);
+                consumes<std::vector<PSimHit> >(tag);
               }
 
               LogInfo("MixingModule") <<"Will mix "<<object<<"s with InputTag= "<<tag.encode()<<", label will be "<<label;
@@ -169,23 +187,25 @@ namespace edm {
 
     sort_all(wantedBranches_);
     for (unsigned int branch=0;branch<wantedBranches_.size();++branch) LogDebug("MixingModule")<<"Will keep branch "<<wantedBranches_[branch]<<" for mixing ";
-dropUnwantedBranches(wantedBranches_);
+
+    dropUnwantedBranches(wantedBranches_);
 
     produces<PileupMixingContent>();
 
     produces<CrossingFramePlaybackInfoExtended>();
 
+    edm::ConsumesCollector iC(consumesCollector());
     // Create and configure digitizers
-    createDigiAccumulators(ps_mix);
+    createDigiAccumulators(ps_mix, iC);
   }
 
 
-  void MixingModule::createDigiAccumulators(const edm::ParameterSet& mixingPSet) {
+  void MixingModule::createDigiAccumulators(const edm::ParameterSet& mixingPSet, edm::ConsumesCollector& iC) {
     ParameterSet const& digiPSet = mixingPSet.getParameterSet("digitizers");
     std::vector<std::string> digiNames = digiPSet.getParameterNames();
     for(auto const& digiName : digiNames) {
         ParameterSet const& pset = digiPSet.getParameterSet(digiName);
-        std::auto_ptr<DigiAccumulatorMixMod> accumulator = std::auto_ptr<DigiAccumulatorMixMod>(DigiAccumulatorMixModFactory::get()->makeDigiAccumulator(pset, *this));
+        std::auto_ptr<DigiAccumulatorMixMod> accumulator = std::auto_ptr<DigiAccumulatorMixMod>(DigiAccumulatorMixModFactory::get()->makeDigiAccumulator(pset, *this, iC));
         // Create appropriate DigiAccumulator
         if(accumulator.get() != 0) {
           digiAccumulators_.push_back(accumulator.release());
@@ -221,10 +241,17 @@ dropUnwantedBranches(wantedBranches_);
   }
 
   void MixingModule::checkSignal(const edm::Event &e){
+    if (adjusters_.empty()){
+      for (auto const& adjuster : adjustersObjects_) {
+        if (adjuster->checkSignal(e)){
+          adjusters_.push_back(adjuster);
+        }
+      }
+    }
     if (workers_.empty()){
-      for (unsigned int ii=0;ii<workersObjects_.size();++ii){
-        if (workersObjects_[ii]->checkSignal(e)){
-          workers_.push_back(workersObjects_[ii]);
+      for (auto const& worker : workersObjects_) {
+        if (worker->checkSignal(e)){
+          workers_.push_back(worker);
         }
       }
     }
@@ -241,14 +268,16 @@ dropUnwantedBranches(wantedBranches_);
 
   // Virtual destructor needed.
   MixingModule::~MixingModule() {
-    for (unsigned int ii=0;ii<workersObjects_.size();++ii){
-      delete workersObjects_[ii];
+    for (auto& worker : workersObjects_) {
+      delete worker;
     }
 
-    std::vector<DigiAccumulatorMixMod*>::const_iterator accItr = digiAccumulators_.begin();
-    std::vector<DigiAccumulatorMixMod*>::const_iterator accEnd = digiAccumulators_.end();
-    for (; accItr != accEnd; ++accItr) {
-        delete *accItr;
+    for (auto& adjuster : adjustersObjects_) {
+      delete adjuster;
+    }
+
+    for (auto& digiAccumulator : digiAccumulators_) {
+      delete digiAccumulator;
     }
   }
 
@@ -264,17 +293,27 @@ dropUnwantedBranches(wantedBranches_);
   }
 
   void MixingModule::pileAllWorkers(EventPrincipal const& eventPrincipal,
+                                    ModuleCallingContext const* mcc,
                                     int bunchCrossing, int eventId,
                                     int& vertexOffset,
                                     const edm::EventSetup& setup) {
-    PileUpEventPrincipal pep(eventPrincipal, bunchCrossing, bunchSpace_, eventId, vertexOffset);
+
+    InternalContext internalContext(eventPrincipal.id(), mcc);
+    ParentContext parentContext(&internalContext);
+    ModuleCallingContext moduleCallingContext(&moduleDescription());
+    ModuleContextSentry moduleContextSentry(&moduleCallingContext, parentContext);
+
+    for (auto const& adjuster : adjusters_) {
+      adjuster->doOffset(bunchSpace_, bunchCrossing, eventPrincipal, &moduleCallingContext, eventId, vertexOffset);
+    }
+    PileUpEventPrincipal pep(eventPrincipal, &moduleCallingContext, bunchCrossing);
     accumulateEvent(pep, setup);
 
-    for (unsigned int ii=0;ii<workers_.size();++ii) {
+    for (auto const& worker : workers_) {
       LogDebug("MixingModule") <<" merging Event:  id " << eventPrincipal.id();
       //      std::cout <<"PILEALLWORKERS merging Event:  id " << eventPrincipal.id() << std::endl;
 
-        workers_[ii]->addPileups(bunchCrossing,eventPrincipal, eventId, vertexoffset);
+      worker->addPileups(eventPrincipal, &moduleCallingContext, eventId);
     }
   }
 
@@ -345,10 +384,11 @@ dropUnwantedBranches(wantedBranches_);
         //        int eventId = 0;
         int vertexOffset = 0;
 
+        ModuleCallingContext const* mcc = e.moduleCallingContext(); 
         if (!playback_) {
           inputSources_[readSrcIdx]->readPileUp(e.id(), recordEventID,
-            boost::bind(&MixingModule::pileAllWorkers, boost::ref(*this), _1, bunchIdx,
-                        _2, vertexOffset, boost::ref(setup)), NumPU_Events
+                                                boost::bind(&MixingModule::pileAllWorkers, boost::ref(*this), _1, mcc, bunchIdx,
+                                                            _2, vertexOffset, boost::ref(setup)), NumPU_Events
             );
           playbackInfo_->setStartEventId(recordEventID, readSrcIdx, bunchIdx, KeepTrackOfPileup);
           KeepTrackOfPileup+=NumPU_Events;
@@ -362,7 +402,7 @@ dropUnwantedBranches(wantedBranches_);
           }
           inputSources_[readSrcIdx]->playPileUp(
             playEventID,
-            boost::bind(&MixingModule::pileAllWorkers, boost::ref(*this), _1, bunchIdx,
+            boost::bind(&MixingModule::pileAllWorkers, boost::ref(*this), _1, mcc, bunchIdx,
                         dummyId, vertexOffset, boost::ref(setup))
             );
         }
@@ -419,24 +459,28 @@ dropUnwantedBranches(wantedBranches_);
     for(Accumulators::const_iterator accItr = digiAccumulators_.begin(), accEnd = digiAccumulators_.end(); accItr != accEnd; ++accItr) {
       (*accItr)->beginRun(run, setup);
     }
+    BMixingModule::beginRun( run, setup);
   }
 
   void MixingModule::endRun(edm::Run const& run, edm::EventSetup const& setup) {
     for(Accumulators::const_iterator accItr = digiAccumulators_.begin(), accEnd = digiAccumulators_.end(); accItr != accEnd; ++accItr) {
       (*accItr)->endRun(run, setup);
     }
+    BMixingModule::endRun( run, setup);
   }
 
   void MixingModule::beginLuminosityBlock(edm::LuminosityBlock const& lumi, edm::EventSetup const& setup) {
     for(Accumulators::const_iterator accItr = digiAccumulators_.begin(), accEnd = digiAccumulators_.end(); accItr != accEnd; ++accItr) {
       (*accItr)->beginLuminosityBlock(lumi, setup);
     }
+    BMixingModule::beginLuminosityBlock(lumi, setup);
   }
 
   void MixingModule::endLuminosityBlock(edm::LuminosityBlock const & lumi, edm::EventSetup const& setup) {
     for(Accumulators::const_iterator accItr = digiAccumulators_.begin(), accEnd = digiAccumulators_.end(); accItr != accEnd; ++accItr) {
       (*accItr)->endLuminosityBlock(lumi, setup);
     }
+    BMixingModule::endLuminosityBlock(lumi, setup);
   }
 
   void

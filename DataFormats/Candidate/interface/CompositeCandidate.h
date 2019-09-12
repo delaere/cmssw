@@ -9,7 +9,6 @@
  *
  * \author Luca Lista, INFN
  *
- * \version $Id: CompositeCandidate.h,v 1.30 2012/10/14 07:31:36 innocent Exp $
  *
  */
 

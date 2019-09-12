@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Tue Mar 24 10:07:58 CET 2009
-// $Id: FWColorManager.h,v 1.25 2010/09/21 11:39:03 amraktad Exp $
 //
 
 // system include files

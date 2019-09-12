@@ -1,7 +1,5 @@
 /** \file
  *
- *  $Date: 2013/05/28 06:00:27 $
- *  $Revision: 1.12 $
  *  \author M. Maggi -- INFN Bari
 */
 
@@ -11,8 +9,6 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Framework/interface/ESHandle.h"
-
-#include "DataFormats/RPCDigi/interface/RPCDigiCollection.h"
 
 #include "Geometry/RPCGeometry/interface/RPCRoll.h"
 #include "Geometry/RPCGeometry/interface/RPCGeometry.h"
@@ -43,7 +39,7 @@ RPCRecHitProducer::RPCRecHitProducer(const ParameterSet& config){
 
   produces<RPCRecHitCollection>();
 
-  theRPCDigiLabel = config.getParameter<InputTag>("rpcDigiLabel");
+  theRPCDigiLabel = consumes<RPCDigiCollection>(config.getParameter<InputTag>("rpcDigiLabel"));
   
   // Get the concrete reconstruction algo from the factory
 
@@ -158,7 +154,7 @@ void RPCRecHitProducer::produce(Event& event, const EventSetup& setup) {
   // Get the digis from the event
 
   Handle<RPCDigiCollection> digis; 
-  event.getByLabel(theRPCDigiLabel,digis);
+  event.getByToken(theRPCDigiLabel,digis);
 
   // Pass the EventSetup to the algo
 

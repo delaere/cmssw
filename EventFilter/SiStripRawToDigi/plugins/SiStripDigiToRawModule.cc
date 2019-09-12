@@ -1,7 +1,7 @@
-// Last commit: $Id: SiStripDigiToRawModule.cc,v 1.11 2009/11/10 15:10:00 nc302 Exp $
 
-#include "EventFilter/SiStripRawToDigi/plugins/SiStripDigiToRawModule.h"
-#include "EventFilter/SiStripRawToDigi/interface/SiStripDigiToRaw.h"
+#include "SiStripDigiToRawModule.h"
+#include "SiStripDigiToRaw.h"
+
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/Framework/interface/ESHandle.h"
@@ -34,10 +34,12 @@ namespace sistrip {
 	<< "[sistrip::DigiToRawModule::DigiToRawModule]"
 	<< " Constructing object...";
     }  
+
     
     switch(mode_) {
     case READOUT_MODE_ZERO_SUPPRESSED_LITE: rawdigi_ = false; break;
     case READOUT_MODE_ZERO_SUPPRESSED:      rawdigi_ = false; break;
+    case READOUT_MODE_PREMIX_RAW:      rawdigi_ = false; break; 
     case READOUT_MODE_VIRGIN_RAW:      rawdigi_ = true; break;
     case READOUT_MODE_PROC_RAW:        rawdigi_ = true; break;
     case READOUT_MODE_SCOPE:           rawdigi_ = true; break;

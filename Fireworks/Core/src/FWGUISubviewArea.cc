@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Fri Feb 15 14:13:33 EST 2008
-// $Id: FWGUISubviewArea.cc,v 1.38 2011/02/22 18:37:31 amraktad Exp $
 //
 
 // system include files
@@ -40,7 +39,7 @@ namespace
       XXXButton(const TGWindow* p, const TGPicture* pic) :
          TGPictureButton(p, pic), fXState(kButtonUp) {}
 
-      virtual void SetState(EButtonState state, Bool_t emit=kFALSE)
+      virtual void SetState(EButtonState state, Bool_t emit=kFALSE) override
       {
          TGPictureButton::SetState(state, kFALSE);
          if ((fXState == kButtonUp && fState  == kButtonEngaged) ||

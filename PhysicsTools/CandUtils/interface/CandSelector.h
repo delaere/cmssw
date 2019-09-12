@@ -6,9 +6,7 @@
  *
  * \author Luca Lista, INFN
  *
- * \version $Revision: 1.3 $
  *
- * $Id: CandSelector.h,v 1.3 2006/03/03 10:09:18 llista Exp $
  *
  */
 

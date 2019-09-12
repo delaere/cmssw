@@ -1,4 +1,3 @@
-// $Id: EcalLogicID.cc,v 1.2 2008/05/08 13:14:37 fra Exp $
 
 #include <string>
 

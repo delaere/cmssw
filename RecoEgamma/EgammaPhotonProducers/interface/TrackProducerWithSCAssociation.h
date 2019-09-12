@@ -3,9 +3,6 @@
 /** \class  TrackProducerWithSCAssociation
  **  
  **
- **  $Id: TrackProducerWithSCAssociation.h,v 1.5 2010/09/29 12:20:16 mangano Exp $ 
- **  $Date: 2010/09/29 12:20:16 $ 
- **  $Revision: 1.5 $
  **  \author Nancy Marinelli, U. of Notre Dame, US
  **   Modified version of TrackProducer by Giuseppe Cerati
  **   to have super cluster - conversion track association
@@ -16,6 +13,7 @@
 #include "RecoTracker/TrackProducer/interface/TrackProducerAlgorithm.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "TrackingTools/TransientTrack/interface/TransientTrack.h"
+#include "DataFormats/EgammaTrackReco/interface/TrackCandidateCaloClusterAssociation.h"
 
 class TrackProducerWithSCAssociation : public TrackProducerBase<reco::Track>, public edm::EDProducer {
 public:
@@ -33,6 +31,7 @@ private:
   std::string conversionTrackCandidateProducer_;
   std::string trackCSuperClusterAssociationCollection_;
   std::string trackSuperClusterAssociationCollection_;
+  edm::EDGetTokenT<reco::TrackCandidateCaloClusterPtrAssociation> assoc_token;
   edm::OrphanHandle<reco::TrackCollection> rTracks_;
   bool myTrajectoryInEvent_;
   bool validTrackCandidateSCAssociationInput_;

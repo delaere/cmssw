@@ -7,8 +7,6 @@
     
     coder which uses DB services to convert to fC
     $Author: ratnikov
-    $Date: 2013/04/19 07:36:50 $
-    $Revision: 1.7 $
 */
 
 class HcalQIECoder;

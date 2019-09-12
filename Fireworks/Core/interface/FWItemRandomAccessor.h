@@ -7,7 +7,6 @@
 //
 // Original Author:  Giulio Eulisse
 //         Created:  Thu Feb 18 15:19:44 EDT 2008
-// $Id: FWItemRandomAccessor.h,v 1.10 2012/08/03 18:20:27 wmtan Exp $
 //
 
 // system include files

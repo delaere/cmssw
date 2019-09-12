@@ -5,8 +5,6 @@
  * \file testChannel.h
  * \class testChannel
  * \brief calculate the best DAC value to obtain a pedestal = 200
- * $Date: 2011/05/20 17:17:23 $
- * $Revision: 1.7 $
  * \author P. Govoni (testChannel.govoni@cernNOSPAM.ch)
  *
 */

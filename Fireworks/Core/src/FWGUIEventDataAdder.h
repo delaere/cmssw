@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Fri Jun 13 09:12:36 EDT 2008
-// $Id: FWGUIEventDataAdder.h,v 1.16 2010/12/02 09:22:26 matevz Exp $
 //
 
 // system include files

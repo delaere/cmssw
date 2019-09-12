@@ -13,7 +13,6 @@
 //
 // Original Author:  Yetkin Yilmaz
 //         Created:  Tue Dec 18 09:44:41 EST 2007
-// $Id: HydjetAnalyzer.cc,v 1.25 2012/08/23 21:51:21 wdd Exp $
 //
 //
 

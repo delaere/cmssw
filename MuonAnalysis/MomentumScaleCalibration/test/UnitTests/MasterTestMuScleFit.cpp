@@ -6,7 +6,6 @@
  * class description:
  *
  *
- * Version: $Id: MasterTestMuScleFit.cpp,v 1.1 2010/01/11 09:32:33 demattia Exp $
  */
 
 // In case this does not work anymore uncomment the rest

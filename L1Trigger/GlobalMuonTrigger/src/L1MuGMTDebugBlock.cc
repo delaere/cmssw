@@ -3,8 +3,6 @@
 //   Class: L1MuGMTDebugBlock
 //
 //
-//   $Date: 2013/04/22 17:03:01 $
-//   $Revision: 1.7 $
 //
 //   Author :
 //   H. Sakulin                HEPHY Vienna

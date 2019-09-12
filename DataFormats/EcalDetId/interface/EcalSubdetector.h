@@ -5,7 +5,6 @@
  *  Enumeration for Ecal Subdetectors
  *
  *
- *  $Id: EcalSubdetector.h,v 1.3 2005/10/07 15:34:59 meridian Exp $
  */
 
 

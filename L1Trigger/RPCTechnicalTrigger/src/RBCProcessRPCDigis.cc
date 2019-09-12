@@ -1,4 +1,3 @@
-// $Id: RBCProcessRPCDigis.cc,v 1.6 2013/03/20 15:45:25 wdd Exp $
 // Include files 
 
 

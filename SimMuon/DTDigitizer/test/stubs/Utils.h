@@ -9,8 +9,6 @@
  * Bwire = By in ORCA r.f.
  * Bnorm = Bz in ORCA r.f.
  *
- *  $Date: 2006/03/09 16:56:34 $
- *  $Revision: 1.1 $
  *  \author N. Amapane - INFN Torino
  */
 

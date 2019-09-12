@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Tue Dec  8 23:10:10 CST 2009
-// $Id: fwLog.cc,v 1.2 2009/12/11 20:25:45 amraktad Exp $
 //
 
 // system include files

@@ -13,7 +13,6 @@
 //
 // Original Author:  Chris D Jones
 //         Created:  Wed Sep 26 08:27:23 EDT 2007
-// $Id: DumpSimGeometry.cc,v 1.3 2012/08/01 04:09:50 amraktad Exp $
 //
 //
 
@@ -56,7 +55,7 @@ private:
   // virtual void beginJob();
   // virtual void endJob();
 
-  virtual void analyze(const edm::Event&, const edm::EventSetup&);
+  virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
 };
 
 

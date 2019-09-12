@@ -3,7 +3,6 @@
  * test_funcs.php
  *
  * Scratch space to see that functions are behaving
- * $Id: test_funcs.php,v 1.5 2007/04/12 11:04:42 fra Exp $
  */
 -->
 

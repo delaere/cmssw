@@ -16,7 +16,6 @@
 //
 // Original Author:  Michael Segala
 //         Created:  Thu Jun 23 09:33:08 CDT 2011
-// $Id: ClusterSummaryProducer.h,v 1.4 2012/12/26 19:56:28 wmtan Exp $
 //
 //
 
@@ -78,9 +77,10 @@ class ClusterSummaryProducer : public edm::EDProducer {
       
       // ----------member data ---------------------------
       
-      edm::InputTag stripClustersLabel;
-      edm::InputTag pixelClustersLabel;
+      edm::EDGetTokenT<edmNew::DetSetVector<SiPixelCluster> > pixelClusters_;
+      edm::EDGetTokenT<edmNew::DetSetVector<SiStripCluster> > stripClusters_;
       std::string stripModules;
+
       std::vector<std::string> v_stripModuleTypes;
       std::string pixelModules;
       std::vector<std::string> v_pixelModuleTypes;

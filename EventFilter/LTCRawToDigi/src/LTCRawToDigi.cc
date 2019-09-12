@@ -13,7 +13,6 @@
 //
 // Original Author:  Peter Wittich
 //         Created:  Tue May  9 07:47:59 CDT 2006
-// $Id: LTCRawToDigi.cc,v 1.4 2006/10/27 01:35:24 wmtan Exp $
 //
 //
 
@@ -46,7 +45,7 @@ class LTCRawToDigi : public edm::EDProducer {
       ~LTCRawToDigi();
 
 
-      virtual void produce(edm::Event&, const edm::EventSetup&);
+      virtual void produce(edm::Event&, const edm::EventSetup&) override;
    private:
       // ----------member data ---------------------------
 };

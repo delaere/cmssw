@@ -15,8 +15,7 @@
 
    \brief A base class to handle the shape of preshower strips.
 
-$Date: 2011/09/27 09:10:38 $
-$Revision: 1.13 $
+$Revision: 1.12 $
 \author F. Cossutti
    
 */
@@ -40,7 +39,7 @@ public:
   PreshowerStrip( const GlobalPoint& po   ,
 		  const CornersMgr*  mgr  ,
 		  const CCGFloat*    parm  ) :
-    CaloCellGeometry ( po , mgr, parm ) {}
+    CaloCellGeometry ( po , mgr, parm ) {initSpan();}
 
   virtual ~PreshowerStrip();
 

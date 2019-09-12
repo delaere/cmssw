@@ -1,9 +1,4 @@
 *
-* $Id: locatr.f,v 1.1 2007/02/06 14:40:25 eperez Exp $
-*
-* $Log: locatr.f,v $
-* Revision 1.1  2007/02/06 14:40:25  eperez
-* first version
 *
 * Revision 1.2  1996/05/24 10:56:52  jamie
 * add locatr entry for consistency with wrup

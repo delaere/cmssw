@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Mon Jan 21 19:30:17 EST 2008
-// $Id: FWModelChangeSignal.h,v 1.3 2009/01/23 21:35:41 amraktad Exp $
 //
 
 // system include files

@@ -16,7 +16,7 @@
 // Original Author:  Vincenzo Chiochia
 //         Created:  Tue 8 12:31:25 CEST 2007
 //         Modified: Evan Friis
-// $Id: SiPixelGainCalibration.h,v 1.9 2009/02/17 19:03:38 rougny Exp $
+// $Id: SiPixelGainCalibration.h,v 1.8 2009/02/10 17:25:42 rougny Exp $
 //
 //
 #include<vector>
@@ -54,7 +54,9 @@ class SiPixelGainCalibration {
   // Constructors
   SiPixelGainCalibration();
   SiPixelGainCalibration(float minPed, float maxPed, float minGain, float maxGain);
-  virtual ~SiPixelGainCalibration(){};
+  ~SiPixelGainCalibration(){}
+
+  void initialize() const{}
 
   bool  put(const uint32_t& detID,Range input, const int& nCols);
   const Range getRange(const uint32_t& detID) const;

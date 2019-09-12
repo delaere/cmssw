@@ -1,4 +1,3 @@
-// $Id: RecoStandAloneMuonCandidate.cc,v 1.1 2007/12/14 12:39:00 llista Exp $
 #include "DataFormats/RecoCandidate/interface/RecoStandAloneMuonCandidate.h"
 
 using namespace reco;

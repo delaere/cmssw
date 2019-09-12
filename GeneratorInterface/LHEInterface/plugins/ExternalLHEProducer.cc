@@ -13,7 +13,6 @@ Implementation:
 //
 // Original Author:  Brian Paul Bockelman,8 R-018,+41227670861,
 //         Created:  Fri Oct 21 11:37:26 CEST 2011
-// $Id: ExternalLHEProducer.cc,v 1.10 2013/05/17 19:00:53 chrjones Exp $
 //
 //
 
@@ -155,7 +154,10 @@ ExternalLHEProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   if (!partonLevel)
     return;
 
-  std::auto_ptr<LHEEventProduct> product(new LHEEventProduct(*partonLevel->getHEPEUP()));
+  std::auto_ptr<LHEEventProduct> product(
+	       new LHEEventProduct(*partonLevel->getHEPEUP(),
+				   partonLevel->originalXWGTUP())
+	       );
   if (partonLevel->getPDF())
     product->setPDF(*partonLevel->getPDF());
   std::for_each(partonLevel->getComments().begin(),

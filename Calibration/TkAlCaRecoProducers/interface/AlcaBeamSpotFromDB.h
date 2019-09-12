@@ -9,7 +9,6 @@
 
  author: Francisco Yumiceva, Fermilab (yumiceva@fnal.gov)
 
- version $Id: AlcaBeamSpotFromDB.h,v 1.2 2013/05/17 20:25:10 chrjones Exp $
 
 ________________________________________________________________**/
 

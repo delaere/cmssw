@@ -1,4 +1,4 @@
- /*
+/**
  * \class L1TBeamConfiguration
  *
  *
@@ -14,8 +14,6 @@
  *
  * Todo: see header file
  *
- * $Date: 2012/12/10 14:10:21 $
- * $Revision: 1.2 $
  *
  */
 

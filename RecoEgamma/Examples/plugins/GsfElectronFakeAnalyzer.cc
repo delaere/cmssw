@@ -13,7 +13,6 @@
 //
 // Original Author:  Ursula Berthon
 //         Created:  Mon Mar 27 13:22:06 CEST 2006
-// $Id: GsfElectronFakeAnalyzer.cc,v 1.33 2012/09/13 20:08:32 wdd Exp $
 //
 //
 
@@ -1382,7 +1381,7 @@ GsfElectronFakeAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
 
 	// supercluster related distributions
 	reco::SuperClusterRef sclRef = bestGsfElectron.superCluster();
-	if (!bestGsfElectron.ecalDrivenSeed()&&bestGsfElectron.trackerDrivenSeed()) sclRef = bestGsfElectron.pflowSuperCluster();
+	if (!bestGsfElectron.ecalDrivenSeed()&&bestGsfElectron.trackerDrivenSeed()) sclRef = bestGsfElectron.parentSuperCluster();
         histSclEn_->Fill(sclRef->energy());
         double R=TMath::Sqrt(sclRef->x()*sclRef->x() + sclRef->y()*sclRef->y() +sclRef->z()*sclRef->z());
         double Rt=TMath::Sqrt(sclRef->x()*sclRef->x() + sclRef->y()*sclRef->y());

@@ -1,8 +1,6 @@
 /*
  * \file EBOccupancyTask.cc
  *
- * $Date: 2012/04/27 13:46:02 $
- * $Revision: 1.101 $
  * \author G. Della Ricca
  * \author G. Franzoni
  *
@@ -48,11 +46,11 @@ EBOccupancyTask::EBOccupancyTask(const edm::ParameterSet& ps){
 
   mergeRuns_ = ps.getUntrackedParameter<bool>("mergeRuns", false);
 
-  EcalRawDataCollection_ = ps.getParameter<edm::InputTag>("EcalRawDataCollection");
-  EBDigiCollection_ = ps.getParameter<edm::InputTag>("EBDigiCollection");
-  EcalPnDiodeDigiCollection_ = ps.getParameter<edm::InputTag>("EcalPnDiodeDigiCollection");
-  EcalRecHitCollection_ = ps.getParameter<edm::InputTag>("EcalRecHitCollection");
-  EcalTrigPrimDigiCollection_ = ps.getParameter<edm::InputTag>("EcalTrigPrimDigiCollection");
+  EcalRawDataCollection_ = consumes<EcalRawDataCollection>(ps.getParameter<edm::InputTag>("EcalRawDataCollection"));
+  EBDigiCollection_ = consumes<EBDigiCollection>(ps.getParameter<edm::InputTag>("EBDigiCollection"));
+  EcalPnDiodeDigiCollection_ = consumes<EcalPnDiodeDigiCollection>(ps.getParameter<edm::InputTag>("EcalPnDiodeDigiCollection"));
+  EcalRecHitCollection_ = consumes<EcalRecHitCollection>(ps.getParameter<edm::InputTag>("EcalRecHitCollection"));
+  EcalTrigPrimDigiCollection_ = consumes<EcalTrigPrimDigiCollection>(ps.getParameter<edm::InputTag>("EcalTrigPrimDigiCollection"));
 
   for (int i = 0; i < 36; i++) {
     meOccupancy_[i]    = 0;
@@ -374,7 +372,7 @@ void EBOccupancyTask::analyze(const edm::Event& e, const edm::EventSetup& c){
 
   edm::Handle<EcalRawDataCollection> dcchs;
 
-  if (  e.getByLabel(EcalRawDataCollection_, dcchs) ) {
+  if (  e.getByToken(EcalRawDataCollection_, dcchs) ) {
 
     for ( EcalRawDataCollection::const_iterator dcchItr = dcchs->begin(); dcchItr != dcchs->end(); ++dcchItr ) {
 
@@ -400,12 +398,12 @@ void EBOccupancyTask::analyze(const edm::Event& e, const edm::EventSetup& c){
     }
 
   } else {
-    edm::LogWarning("EBOccupancyTask") << EcalRawDataCollection_ << " not available";
+    edm::LogWarning("EBOccupancyTask") << "EcalRawDataCollection not available";
   }
 
   edm::Handle<EBDigiCollection> digis;
 
-  if ( e.getByLabel(EBDigiCollection_, digis) ) {
+  if ( e.getByToken(EBDigiCollection_, digis) ) {
 
     int nebd = digis->size();
     LogDebug("EBOccupancyTask") << "event " << ievt_ << " digi collection size " << nebd;
@@ -467,13 +465,13 @@ void EBOccupancyTask::analyze(const edm::Event& e, const edm::EventSetup& c){
 
   } else {
 
-    edm::LogWarning("EBOccupancyTask") << EBDigiCollection_ << " not available";
+    edm::LogWarning("EBOccupancyTask") << "EBDigiCollection not available";
 
   }
 
   edm::Handle<EcalPnDiodeDigiCollection> PNs;
 
-  if ( e.getByLabel(EcalPnDiodeDigiCollection_, PNs) ) {
+  if ( e.getByToken(EcalPnDiodeDigiCollection_, PNs) ) {
 
     // filling mem occupancy only for the 5 channels belonging
     // to a fully reconstructed PN's
@@ -500,7 +498,7 @@ void EBOccupancyTask::analyze(const edm::Event& e, const edm::EventSetup& c){
 
   } else {
 
-    edm::LogWarning("EBOccupancyTask") << EcalPnDiodeDigiCollection_ << " not available";
+    edm::LogWarning("EBOccupancyTask") << "EcalPnDiodeDigiCollection not available";
 
   }
 
@@ -509,7 +507,7 @@ void EBOccupancyTask::analyze(const edm::Event& e, const edm::EventSetup& c){
 
   edm::Handle<EcalRecHitCollection> rechits;
 
-  if ( e.getByLabel(EcalRecHitCollection_, rechits) ) {
+  if ( e.getByToken(EcalRecHitCollection_, rechits) ) {
 
     int nebrh = rechits->size();
     LogDebug("EBOccupancyTask") << "event " << ievt_ << " rec hits collection size " << nebrh;
@@ -564,13 +562,13 @@ void EBOccupancyTask::analyze(const edm::Event& e, const edm::EventSetup& c){
 
   } else {
 
-    edm::LogWarning("EBOccupancyTask") << EcalRecHitCollection_ << " not available";
+    edm::LogWarning("EBOccupancyTask") << "EcalRecHitCollection not available";
 
   }
 
   edm::Handle<EcalTrigPrimDigiCollection> trigPrimDigis;
 
-  if ( e.getByLabel(EcalTrigPrimDigiCollection_, trigPrimDigis) ) {
+  if ( e.getByToken(EcalTrigPrimDigiCollection_, trigPrimDigis) ) {
 
     int nebtpg = trigPrimDigis->size();
     LogDebug("EBOccupancyTask") << "event " << ievt_ << " trigger primitives digis collection size " << nebtpg;
@@ -610,9 +608,8 @@ void EBOccupancyTask::analyze(const edm::Event& e, const edm::EventSetup& c){
 
   } else {
 
-    edm::LogWarning("EBOccupancyTask") << EcalTrigPrimDigiCollection_ << " not available";
+    edm::LogWarning("EBOccupancyTask") << "EcalTrigPrimDigiCollection not available";
 
   }
 
 }
-

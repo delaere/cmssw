@@ -13,7 +13,6 @@
 //
 // Original Author:  Gordon KAUSSEN
 //         Created:  Wed Jan 28 09:11:10 CEST 2009
-// $Id: SiStripBadAPVAlgorithmFromClusterOccupancy.h,v 1.7 2013/01/11 04:57:47 wmtan Exp $
 //
 //
 
@@ -70,7 +69,7 @@ public:
     double apvabsoluteOccupancy[6];
   };
 
-  void CalculateMeanAndRMS(std::vector<Apv>, std::pair<double,double>*, int);
+  void CalculateMeanAndRMS(const std::vector<Apv>&, std::pair<double,double>*, int);
 
   void AnalyzeOccupancy(SiStripQuality*, std::vector<Apv>&, std::pair<double,double>*, std::vector<unsigned int>&, edm::ESHandle<SiStripQuality>&);
 

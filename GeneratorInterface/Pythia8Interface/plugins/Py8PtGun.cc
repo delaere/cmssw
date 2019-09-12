@@ -3,7 +3,6 @@
 #include "GeneratorInterface/ExternalDecays/interface/ExternalDecayDriver.h"
 
 #include "GeneratorInterface/Pythia8Interface/interface/Py8GunBase.h"
-#include "GeneratorInterface/Pythia8Interface/interface/RandomP8.h"
 
 namespace gen {
 
@@ -14,8 +13,8 @@ class Py8PtGun : public Py8GunBase {
       Py8PtGun( edm::ParameterSet const& );
       ~Py8PtGun() {}
 	 
-      bool generatePartonsAndHadronize();
-      const char* classname() const;
+      bool generatePartonsAndHadronize() override;
+      const char* classname() const override;
 	 
    private:
       
@@ -55,18 +54,13 @@ bool Py8PtGun::generatePartonsAndHadronize()
 
       int particleID = fPartIDs[i]; // this is PDG - need to convert to Py8 ???
 
-      // FIXME !!!
-      // Ouch, it's using bare randomEngine pointer - that's NOT safe.
-      // Need to hold a pointer somewhere properly !!!
-      //
-      double phi = (fMaxPhi-fMinPhi) * randomEngine->flat() + fMinPhi;
-      double eta  = (fMaxEta-fMinEta) * randomEngine->flat() + fMinEta;                                                      
-      double the  = 2.*atan(exp(-eta));                                                                          
+      double phi = (fMaxPhi-fMinPhi) * randomEngine().flat() + fMinPhi;
+      double eta  = (fMaxEta-fMinEta) * randomEngine().flat() + fMinEta;
+      double the  = 2.*atan(exp(-eta));
 
-      double pt   = (fMaxPt-fMinPt) * randomEngine->flat() + fMinPt;
+      double pt   = (fMaxPt-fMinPt) * randomEngine().flat() + fMinPt;
       
-      double mass = (fMasterGen->particleData).mass( particleID );
-//      double mass = (pythia->particleData).m0( particleID );
+      double mass = (fMasterGen->particleData).m0( particleID );
 
       double pp = pt / sin(the); // sqrt( ee*ee - mass*mass );
       double ee = sqrt( pp*pp + mass*mass );

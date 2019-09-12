@@ -5,8 +5,6 @@
  *  A sector of volumes in a barrel layer (i.e. only 1 element in R)
  *  One sector is composed of 1 or more rods.
  *
- *  $Date: 2005/09/27 15:15:52 $
- *  $Revision: 1.2 $
  *  \author N. Amapane - INFN Torino
  */
 

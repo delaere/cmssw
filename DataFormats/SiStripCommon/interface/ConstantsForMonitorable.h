@@ -1,4 +1,3 @@
-// Last commit: $Id: ConstantsForMonitorable.h,v 1.14 2010/02/22 14:10:22 wto Exp $
 
 #ifndef DataFormats_SiStripCommon_ConstantsForMonitorable_H
 #define DataFormats_SiStripCommon_ConstantsForMonitorable_H

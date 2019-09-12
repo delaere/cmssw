@@ -5,7 +5,7 @@
  * 
  * Implementation of muon chamber residuals for axial DT layers
  * 
- * $Id: MuonDT13ChamberResidual.h,v 1.3 2011/10/12 23:40:24 khotilov Exp $
+ * $Id: $
  */
 
 #include "Alignment/MuonAlignmentAlgorithms/interface/MuonHitsChamberResidual.h"
@@ -14,7 +14,7 @@ class MuonDT13ChamberResidual: public MuonHitsChamberResidual
 {
 public:
   MuonDT13ChamberResidual(edm::ESHandle<GlobalTrackingGeometry> globalGeometry, AlignableNavigator *navigator,
-                          DetId chamberId, AlignableDetOrUnitPtr chamberAlignable);
+                          DetId chamberId, const AlignableDetOrUnitPtr& chamberAlignable);
   
   // for DT13, the residual is chamber local x
   // for DT13, the resslope is dresx/dz, or tan(phi_y)

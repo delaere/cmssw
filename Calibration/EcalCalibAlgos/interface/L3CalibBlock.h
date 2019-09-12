@@ -20,10 +20,6 @@
  
     \brief interface to the L3Univ class for testing  
 
-    $Date: 2009/02/11 15:46:48 $
-    $Revision: 1.4 $
-    $Id: L3CalibBlock.h,v 1.4 2009/02/11 15:46:48 presotto Exp $ 
-    \author $Author: presotto $
 */
 class L3CalibBlock : public VEcalCalibBlock
 {

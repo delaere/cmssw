@@ -4,7 +4,6 @@
 /** \class CSCRangeMapAccessor
  *  Comparator to retrieve CSCrechits by chamber. 
  *
- *  $Date: 2006/07/18 08:36:37 $
  *  \author Matteo Sani
  */
 

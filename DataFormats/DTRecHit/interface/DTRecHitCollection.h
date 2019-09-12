@@ -4,8 +4,6 @@
 /** \class DTRecHitCollection
  *  Collection of 1DDTRecHitPair for storage in the event. See \ref DTRecHitCollection.h for details
  *
- *  $Date: 2006/06/29 17:18:27 $
- *  $Revision: 1.7 $
  *  \author G. Cerminara - INFN Torino
  */
 

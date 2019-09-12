@@ -7,8 +7,7 @@
 
 /** \class ZDCTopology
 
-   $Date: 2007/08/28 18:10:10 $
-   $Revision: 1.1 $
+   $Revision: 1.0 $
    \author E. Garcia - UIC
 */
 

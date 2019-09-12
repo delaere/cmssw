@@ -1,5 +1,5 @@
 /* 
- * $Id: MuonCSCChamberResidual.cc,v 1.3 2011/10/12 23:40:24 khotilov Exp $
+ * $Id: $
  */
 
 #include "Alignment/MuonAlignmentAlgorithms/interface/MuonCSCChamberResidual.h"
@@ -7,7 +7,7 @@
 
 
 MuonCSCChamberResidual::MuonCSCChamberResidual(edm::ESHandle<GlobalTrackingGeometry> globalGeometry, AlignableNavigator *navigator,
-                                               DetId chamberId, AlignableDetOrUnitPtr chamberAlignable)
+                                               DetId chamberId, const AlignableDetOrUnitPtr& chamberAlignable)
   : MuonHitsChamberResidual(globalGeometry, navigator, chamberId, chamberAlignable)
 {
   m_type = MuonChamberResidual::kCSC;

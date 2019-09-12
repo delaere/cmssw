@@ -5,8 +5,6 @@
  *
  * Algo for reconstructing 4d segment in DT using a Meantimer approach
  *  
- * $Date: 2012/10/25 12:45:37 $
- * $Revision: 1.4 $
  * \author Stefano Lacaprara - INFN Legnaro <stefano.lacaprara@pd.infn.it>
  * \author Riccardo Bellan - INFN TO <riccardo.bellan@cern.ch>
  *
@@ -35,6 +33,7 @@ class DTSegmentUpdator;
 // ====================================================================== 
 class DTSegmentCand;
 class DTMeantimerPatternReco;
+class DTHitPairForFit;
 
 // Class DTMeantimerPatternReco4D Interface 
 
@@ -62,7 +61,7 @@ class DTMeantimerPatternReco4D : public DTRecSegment4DBaseAlgo {
   protected:
 
   private:
-    std::vector<DTSegmentCand*> buildPhiSuperSegmentsCandidates();
+    std::vector<DTSegmentCand*> buildPhiSuperSegmentsCandidates(std::vector<DTHitPairForFit*> &pairPhiOwned);
     DTRecSegment4D* segmentSpecialZed(DTRecSegment4D* seg);
 
 

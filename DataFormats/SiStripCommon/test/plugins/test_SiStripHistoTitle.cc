@@ -1,4 +1,3 @@
-// Last commit: $Id: test_SiStripHistoTitle.cc,v 1.5 2010/01/07 11:21:03 lowette Exp $
 
 #include "DataFormats/SiStripCommon/test/plugins/test_SiStripHistoTitle.h"
 #include "FWCore/Framework/interface/Event.h" 

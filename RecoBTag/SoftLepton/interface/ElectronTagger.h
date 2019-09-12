@@ -8,9 +8,6 @@
 
 /** \class ElectronTagger
  *
- *  $Id: ElectronTagger.h,v 1.6 2010/02/26 18:16:18 saout Exp $
- *  $Date: 2010/02/26 18:16:18 $
- *  $Revision: 1.6 $
  *
  *  \author P. Demin - UCL, Louvain-la-Neuve - Belgium
  *
@@ -21,7 +18,6 @@ public:
 
   /// explicit ctor 
   explicit ElectronTagger(const edm::ParameterSet & configuration) : 
-    theNet(),
     m_selector(configuration)
   { 
     uses("seTagInfos"); 
@@ -34,8 +30,6 @@ public:
   virtual float discriminator(const TagInfoHelper & tagInfo) const;
 
 private:
-
-  mutable ElectronTaggerMLP theNet;
 
   btag::LeptonSelector m_selector;
 

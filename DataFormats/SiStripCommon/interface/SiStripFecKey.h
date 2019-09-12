@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripFecKey.h,v 1.16 2008/02/21 16:51:55 bainbrid Exp $
 
 #ifndef DataFormats_SiStripCommon_SiStripFecKey_H
 #define DataFormats_SiStripCommon_SiStripFecKey_H

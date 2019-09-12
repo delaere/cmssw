@@ -20,7 +20,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.EventContent.EventContent_cff')
 
 process.configurationMetadata = cms.untracked.PSet(
-    version = cms.untracked.string('$Revision: 1.2 $'),
+    version = cms.untracked.string('$Revision: 1.1.2.1 $'),
     annotation = cms.untracked.string('step2/Phase1/R34F16 nevts:100'),
     name = cms.untracked.string('PyReleaseValidation')
 )
@@ -135,7 +135,7 @@ process.multiTrackValidator.skipHistoFit = False
 
 ##### with John's changes ##############################
 process.load("SLHCUpgradeSimulations.Geometry.oldTracking_wtriplets")
-process.pixellayertriplets.layerList = cms.vstring('BPix1+BPix2+BPix3',
+process.PixelLayerTriplets.layerList = cms.vstring('BPix1+BPix2+BPix3',
         'BPix1+BPix3+BPix4',
         'BPix2+BPix3+BPix4',
         'BPix1+BPix2+BPix4',

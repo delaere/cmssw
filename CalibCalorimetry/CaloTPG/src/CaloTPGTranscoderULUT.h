@@ -11,8 +11,6 @@
 
 /** \class CaloTPGTranscoderULUT
   *  
-  * $Date: 2012/08/28 13:40:07 $
-  * $Revision: 1.17 $
   * \author J. Mans - Minnesota
   */
 

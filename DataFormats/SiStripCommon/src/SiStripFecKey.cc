@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripFecKey.cc,v 1.23 2012/07/04 19:04:51 eulisse Exp $
 
 #include "DataFormats/SiStripCommon/interface/SiStripFecKey.h"
 #include "DataFormats/SiStripCommon/interface/SiStripNullKey.h"

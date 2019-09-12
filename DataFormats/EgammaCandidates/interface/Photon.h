@@ -7,7 +7,6 @@
  * stores isolation, shower shape and additional info
  * needed for identification
  * 
- * \version $Id: Photon.h,v 1.48 2012/03/26 16:44:27 nancy Exp $
  *
  */
 #include "DataFormats/RecoCandidate/interface/RecoCandidate.h"
@@ -36,7 +35,7 @@ namespace reco {
 
     /// constructor from values
     Photon( const LorentzVector & p4, 
-	    Point caloPos, 
+	    const Point& caloPos, 
 	    const PhotonCoreRef & core,  
 	    const Point & vtx = Point( 0, 0, 0 ) );
 
@@ -48,6 +47,8 @@ namespace reco {
 
     /// returns a reference to the core photon object
     reco::PhotonCoreRef photonCore() const { return photonCore_;}
+    void setPhotonCore(const reco::PhotonCoreRef &photonCore) { photonCore_ = photonCore; }
+    
     //
     /// Retrieve photonCore attributes
     //
@@ -57,7 +58,7 @@ namespace reco {
     /// Ref to SuperCluster
     reco::SuperClusterRef superCluster() const;
     /// Ref to PFlow SuperCluster
-    reco::SuperClusterRef pfSuperCluster() const {return this->photonCore()->pfSuperCluster();}
+    reco::SuperClusterRef parentSuperCluster() const {return this->photonCore()->parentSuperCluster();}
     /// vector of references to  Conversion's
     reco::ConversionRefVector conversions() const {return this->photonCore()->conversions() ;}  
     enum ConversionProvenance {egamma=0, 
@@ -81,6 +82,7 @@ namespace reco {
     void setVertex(const Point & vertex);
     /// Implement Candidate method for particle species
     bool isPhoton() const { return true ; }
+ 
 
     //=======================================================
     // Fiducial Flags
@@ -388,18 +390,27 @@ namespace reco {
     struct PflowIsolationVariables
     {
 
-      float chargedHadronIso;
-      float neutralHadronIso;
-      float photonIso ;
+      float chargedHadronIso; //  equivalent to sumChargedHadronPt in  DataFormats/MuonReco/interface/MuonPFIsolation.h
+      float chargedHadronIsoWrongVtx; //  equivalent to sumChargedHadronPt in  DataFormats/MuonReco/interface/MuonPFIsolation.h
+      float neutralHadronIso; //  equivalent to sumNeutralHadronPt in  DataFormats/MuonReco/interface/MuonPFIsolation.h
+      float photonIso ;       //  equivalent to sumPhotonPt in  DataFormats/MuonReco/interface/MuonPFIsolation.h
       float modFrixione ;      
-      
+      float sumChargedParticlePt; //!< sum-pt of charged Particles(inludes e/mu) 
+      float sumNeutralHadronEtHighThreshold;  //!< sum pt of neutral hadrons with a higher threshold
+      float sumPhotonEtHighThreshold;  //!< sum pt of PF photons with a higher threshold
+      float sumPUPt;  //!< sum pt of charged Particles not from PV  (for Pu corrections)
+
       PflowIsolationVariables():
 	
 	chargedHadronIso(0),
+	chargedHadronIsoWrongVtx(0),
 	neutralHadronIso(0),
 	photonIso(0),
-        modFrixione(0)
-      		   
+        modFrixione(0),
+	sumChargedParticlePt(0),
+      	sumNeutralHadronEtHighThreshold(0),
+	sumPhotonEtHighThreshold(0),
+	sumPUPt(0)	   
       {}
       
       
@@ -407,8 +418,13 @@ namespace reco {
 
     /// Accessors for Particle Flow Isolation variables 
     float chargedHadronIso() const {return  pfIsolation_.chargedHadronIso;}
+    float chargedHadronIsoWrongVtx() const {return  pfIsolation_.chargedHadronIsoWrongVtx;}
     float neutralHadronIso() const {return  pfIsolation_.neutralHadronIso;}
     float photonIso() const {return  pfIsolation_.photonIso;}
+    float sumChargedParticlePt() const {return pfIsolation_.sumChargedParticlePt;}
+    float sumNeutralHadronEtHighThreshold() const {return pfIsolation_.sumNeutralHadronEtHighThreshold;}
+    float sumPhotonEtHighThreshold() const {return pfIsolation_.sumPhotonEtHighThreshold;}
+    float sumPUPt() const {return pfIsolation_.sumPUPt;}
 
     /// Set Particle Flow Isolation variables
     void setPflowIsolationVariables ( const PflowIsolationVariables& pfisol ) {  pfIsolation_ = pfisol;} 

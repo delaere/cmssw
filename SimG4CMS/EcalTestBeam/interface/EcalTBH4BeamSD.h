@@ -5,7 +5,6 @@
 // Description: Stores hits of TBH4 hodoscope fibers in appropriate
 //              container
 // Use in your sensitive detector builder:
-// $Id: EcalTBH4BeamSD.h,v 1.4 2008/05/12 09:28:41 sunanda Exp $
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "SimG4CMS/Calo/interface/CaloSD.h"

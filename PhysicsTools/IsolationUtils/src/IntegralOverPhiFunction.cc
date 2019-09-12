@@ -16,7 +16,6 @@
 //
 // Original Author:  Christian Veelken, UC Davis
 //         Created:  Thu Nov  2 13:47:40 CST 2006
-// $Id: IntegralOverPhiFunction.cc,v 1.3 2009/01/14 10:53:15 hegner Exp $
 //
 //
 

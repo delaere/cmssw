@@ -1,8 +1,6 @@
 /** \class StandAloneMuonFilter
  *  The inward-outward fitter (starts from seed state).
  *
- *  $Date: 2009/09/17 20:02:50 $
- *  $Revision: 1.10 $
  *  \author R. Bellan - INFN Torino <riccardo.bellan@cern.ch>
  *          D. Trocino - INFN Torino <daniele.trocino@to.infn.it>
  */
@@ -39,7 +37,8 @@ using namespace edm;
 using namespace std;
 
 StandAloneMuonFilter::StandAloneMuonFilter(const ParameterSet& par,
-					       const MuonServiceProxy* service)
+					   const MuonServiceProxy* service,
+					   edm::ConsumesCollector& iC)
 :theService(service),
  theOverlappingChambersFlag(true)
 {
@@ -92,6 +91,7 @@ StandAloneMuonFilter::StandAloneMuonFilter(const ParameterSet& par,
   theMeasurementExtractor = new MuonDetLayerMeasurements(par.getParameter<InputTag>("DTRecSegmentLabel"),
 							 par.getParameter<InputTag>("CSCRecSegmentLabel"),
 							 par.getParameter<InputTag>("RPCRecSegmentLabel"),
+							 iC,
 							 enableDTMeasurement,
 							 enableCSCMeasurement,
 							 enableRPCMeasurement);
@@ -166,7 +166,7 @@ void StandAloneMuonFilter::incrementCompatibleChamberCounters(const DetLayer *la
 
 
 vector<const DetLayer*> StandAloneMuonFilter::compatibleLayers(const DetLayer *initialLayer,
-								 FreeTrajectoryState& fts,
+								 const FreeTrajectoryState& fts,
 								 PropagationDirection propDir){
   vector<const DetLayer*> detLayers;
 

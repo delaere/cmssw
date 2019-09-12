@@ -1,4 +1,3 @@
-// $Id: RBCConfiguration.h,v 1.2 2012/05/11 06:01:08 eulisse Exp $
 #ifndef INTERFACE_RBCCONFIGURATION_H 
 #define INTERFACE_RBCCONFIGURATION_H 1
 

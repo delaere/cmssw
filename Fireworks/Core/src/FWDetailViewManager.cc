@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Wed Mar  5 09:13:47 EST 2008
-// $Id: FWDetailViewManager.cc,v 1.65 2013/01/25 19:44:03 wmtan Exp $
 //
 
 #include <stdio.h>

@@ -1,6 +1,3 @@
-// Last commit: $Id: testSiStripConfigDb.h,v 1.3 2010/01/07 11:26:05 lowette Exp $
-// Latest tag:  $Name: V07-01-13 $
-// Location:    $Source: /local/reps/CMSSW/CMSSW/OnlineDB/SiStripConfigDb/test/plugins/testSiStripConfigDb.h,v $
 
 #ifndef OnlineDB_SiStripConfigDb_testSiStripConfigDb_H
 #define OnlineDB_SiStripConfigDb_testSiStripConfigDb_H

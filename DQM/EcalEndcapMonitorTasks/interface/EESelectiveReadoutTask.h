@@ -4,8 +4,6 @@
 /*
  * \file EESelectiveReadoutTask.h
  *
- * $Date: 2011/03/03 22:05:50 $
- * $Revision: 1.22 $
  * \author P. Gras
  * \author E. Di Marco
  *
@@ -16,6 +14,10 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "DataFormats/EcalDetId/interface/EcalScDetId.h"
 #include "DataFormats/EcalDetId/interface/EcalTrigTowerDetId.h"
+
+#include "DataFormats/FEDRawData/interface/FEDRawDataCollection.h"
+#include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
+#include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
 
 class MonitorElement;
 class DQMStore;
@@ -257,7 +259,7 @@ int dccIndex(int iDet, int i, int j) const;
  * the hardware representation.
  * @param weightsForZsFIR weights from configuration file
  */
-void configFirWeights(std::vector<double> weightsForZsFIR);
+void configFirWeights(const std::vector<double>& weightsForZsFIR);
 
 /** Emulates the DCC zero suppression FIR filter. If one of the time sample
  * is not in gain 12, numeric_limits<int>::max() is returned.
@@ -337,12 +339,11 @@ bool enableCleanup_;
 
 bool mergeRuns_;
 
-edm::InputTag EEDigiCollection_;
-edm::InputTag EEUnsuppressedDigiCollection_;
-edm::InputTag EcalRecHitCollection_;
-edm::InputTag EESRFlagCollection_;
-edm::InputTag EcalTrigPrimDigiCollection_;
-edm::InputTag FEDRawDataCollection_;
+edm::EDGetTokenT<EEDigiCollection> EEDigiCollection_;
+edm::EDGetTokenT<EcalRecHitCollection> EcalRecHitCollection_;
+edm::EDGetTokenT<EESrFlagCollection> EESRFlagCollection_;
+edm::EDGetTokenT<EcalTrigPrimDigiCollection> EcalTrigPrimDigiCollection_;
+edm::EDGetTokenT<FEDRawDataCollection> FEDRawDataCollection_;
 
 float xbins[19];
 float ybins[133];

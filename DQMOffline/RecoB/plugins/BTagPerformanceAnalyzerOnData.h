@@ -39,6 +39,8 @@ class BTagPerformanceAnalyzerOnData : public edm::EDAnalyzer {
 
       ~BTagPerformanceAnalyzerOnData();
 
+      void beginRun(const edm::Run & run, const edm::EventSetup & es);
+
       virtual void analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup);
 
       void endRun(const edm::Run & run, const edm::EventSetup & es);
@@ -53,7 +55,7 @@ class BTagPerformanceAnalyzerOnData : public edm::EDAnalyzer {
   };
 
   // Get histogram plotting options from configuration.
-  void bookHistos(const edm::ParameterSet& pSet);
+  void bookHistos();
   EtaPtBin getEtaPtBin(const int& iEta, const int& iPt);
 
   std::vector<std::string> tiDataFormatType;
@@ -79,6 +81,12 @@ class BTagPerformanceAnalyzerOnData : public edm::EDAnalyzer {
   std::map<BaseTagInfoPlotter*, size_t> binTagInfoPlottersToModuleConfig;
 
   unsigned int mcPlots_;
+
+  //add consumes
+  edm::EDGetTokenT<reco::SoftLeptonTagInfoCollection> slInfoToken;
+  std::vector< edm::EDGetTokenT<reco::JetTagCollection> > jetTagToken;
+  std::vector< std::pair<edm::EDGetTokenT<reco::JetTagCollection>, edm::EDGetTokenT<reco::JetTagCollection>> > tagCorrelationToken;
+  std::vector<std::vector <edm::EDGetTokenT<edm::View<reco::BaseTagInfo>> >> tagInfoToken;
 
 };
 

@@ -1,4 +1,3 @@
-// $Id: TTUConfigurator.cc,v 1.3 2009/12/25 06:24:34 elmer Exp $
 // Include files 
 
 

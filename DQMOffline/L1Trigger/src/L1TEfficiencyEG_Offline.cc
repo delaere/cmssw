@@ -1,9 +1,7 @@
-/*
+/**
  * \file L1TEfficiencyEG_Offline.cc
  *
- * $Date: 2012/11/22 17:10:19 $
- * $Revision: 1.1 $
- * \author J. Pela, P. Musella
+ * \author J. Pela
  *
  */
 

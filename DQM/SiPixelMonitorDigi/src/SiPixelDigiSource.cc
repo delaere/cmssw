@@ -14,7 +14,6 @@
 //
 // Original Author:  Vincenzo Chiochia
 //         Created:  
-// $Id: SiPixelDigiSource.cc,v 1.56 2012/08/03 09:03:10 duggan Exp $
 //
 //
 #include "DQM/SiPixelMonitorDigi/interface/SiPixelDigiSource.h"
@@ -64,6 +63,9 @@ SiPixelDigiSource::SiPixelDigiSource(const edm::ParameterSet& iConfig) :
   diskOn( conf_.getUntrackedParameter<bool>("diskOn",false) ),
   bigEventSize( conf_.getUntrackedParameter<int>("bigEventSize",1000) )
 {
+   //set Token(-s)
+   srcToken_ = consumes<edm::DetSetVector<PixelDigi> >(conf_.getParameter<edm::InputTag>( "src" ));
+
    theDMBE = edm::Service<DQMStore>().operator->();
    LogInfo ("PixelDQM") << "SiPixelDigiSource::SiPixelDigiSource: Got DQM BackEnd interface"<<endl;
 }
@@ -180,7 +182,7 @@ void SiPixelDigiSource::analyze(const edm::Event& iEvent, const edm::EventSetup&
 
   // get input data
   edm::Handle< edm::DetSetVector<PixelDigi> >  input;
-  iEvent.getByLabel( src_, input );
+  iEvent.getByToken(srcToken_, input);
   if (!input.isValid()) return; 
   // Get DQM interface
   DQMStore* theDMBE = edm::Service<DQMStore>().operator->();

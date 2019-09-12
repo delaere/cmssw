@@ -1,7 +1,7 @@
 #ifndef DQMOffline_L1Trigger_L1TLSBlock_h
 #define DQMOffline_L1Trigger_L1TLSBlock_h
 
-/*
+/**
  * \class L1TLSBlock
  *
  *
@@ -23,8 +23,6 @@
  *  - Add other blocking methods
  *  - 
  *
- * $Date: 2012/11/27 14:56:18 $
- * $Revision: 1.1 $
  *
  */
 
@@ -86,8 +84,8 @@ class L1TLSBlock {
   L1TLSBlock();   
   // Destructor
   virtual ~L1TLSBlock();                     
-  LumiRangeList doBlocking(LumiTestDoubleList, double, BLOCKBY);
-  LumiRangeList doBlocking(LumiTestIntList, int,    BLOCKBY);
+  LumiRangeList doBlocking(const LumiTestDoubleList&, double, BLOCKBY);
+  LumiRangeList doBlocking(const LumiTestIntList&, int,    BLOCKBY);
   
   // Private Methods
  private:

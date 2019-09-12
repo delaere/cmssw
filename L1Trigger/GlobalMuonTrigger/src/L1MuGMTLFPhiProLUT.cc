@@ -3,8 +3,6 @@
 //   Class: L1MuGMTLFPhiProLUT
 //
 // 
-//   $Date: 2008/04/21 17:22:41 $
-//   $Revision: 1.5 $
 //
 //   Author :
 //   H. Sakulin            HEPHY Vienna

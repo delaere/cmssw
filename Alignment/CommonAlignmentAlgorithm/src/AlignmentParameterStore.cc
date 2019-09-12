@@ -1,9 +1,9 @@
 /**
  * \file AlignmentParameterStore.cc
  *
- *  $Revision: 1.32 $
- *  $Date: 2013/01/07 20:56:26 $
- *  (last update by $Author: wmtan $)
+ *  $Revision: 1.31 $
+ *  $Date: 2011/05/23 20:50:32 $
+ *  (last update by $Author: mussgill $)
  */
 
 // This class's header should be first
@@ -250,8 +250,9 @@ align::Alignables AlignmentParameterStore::validAlignables(void) const
 }
 
 //__________________________________________________________________________________________________
-Alignable* AlignmentParameterStore::alignableFromAlignableDet( AlignableDetOrUnitPtr alignableDet ) const
+Alignable* AlignmentParameterStore::alignableFromAlignableDet( const AlignableDetOrUnitPtr& _alignableDet ) const
 {
+  AlignableDetOrUnitPtr alignableDet = _alignableDet;
   Alignable *mother = alignableDet;
   while (mother) {
     if (mother->alignmentParameters()) return mother;

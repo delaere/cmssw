@@ -4,8 +4,6 @@
 /** \class MagELayer
  *  A layer of volumes in an endcap sector.
  *
- *  $Date: 2013/05/30 21:57:40 $
- *  $Revision: 1.3 $
  *  \author N. Amapane - INFN Torino
  */
 

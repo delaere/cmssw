@@ -18,9 +18,9 @@ class PhysicsPerformanceDBWriterFromFile_WPandPayload : public edm::EDAnalyzer
 {
 public:
   PhysicsPerformanceDBWriterFromFile_WPandPayload(const edm::ParameterSet&);
-  virtual void beginJob();
-  virtual void analyze(const edm::Event&, const edm::EventSetup&) {}
-  virtual void endJob() {}
+  virtual void beginJob() override;
+  virtual void analyze(const edm::Event&, const edm::EventSetup&) override {}
+  virtual void endJob() override {}
   ~PhysicsPerformanceDBWriterFromFile_WPandPayload() {}
 
 private:
@@ -82,6 +82,11 @@ void PhysicsPerformanceDBWriterFromFile_WPandPayload::beginJob()
   std::cout <<" Results: " << nres<<" Binning variables: "<<nbin<<std::endl;
 
   stride = nres+nbin*2;
+  if (! stride)
+  {
+    std::cout << " Malformed input file" << std::endl;
+    exit(1);
+  }
   
   int number=0;
   

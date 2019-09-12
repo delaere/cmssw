@@ -12,8 +12,6 @@
 
 /** \class HcalHotCellMonitor
   *
-  * $Date: 2012/06/27 13:20:29 $
-  * $Revision: 1.45 $
   * \author J. Temple - Univ. of Maryland
   */
 
@@ -128,6 +126,9 @@ class HcalHotCellMonitor: public HcalBaseDQMonitor {
   hotNeighborParams HBHENeighborParams_, HONeighborParams_, HFNeighborParams_;
 
   edm::InputTag hbheRechitLabel_, hoRechitLabel_, hfRechitLabel_;
+  edm::EDGetTokenT<HBHERecHitCollection> tok_hbhe_;
+  edm::EDGetTokenT<HORecHitCollection> tok_ho_;
+  edm::EDGetTokenT<HFRecHitCollection> tok_hf_;
 };
 
 #endif

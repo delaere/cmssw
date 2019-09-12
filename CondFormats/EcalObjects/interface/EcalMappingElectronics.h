@@ -3,12 +3,13 @@
 
 /**
  * Author: Emmanuelle Perez & Paolo Meridiani
- * $Id: EcalMappingElectronics.h,v 1.1 2008/03/06 14:43:57 meridian Exp $
+ * $Id: $
  **/
 #include "CondFormats/EcalObjects/interface/EcalCondObjectContainer.h"
 
 struct EcalMappingElement
 {
+  EcalMappingElement() : electronicsid(0), triggerid(0) {}
   uint32_t electronicsid;
   uint32_t triggerid;
 };

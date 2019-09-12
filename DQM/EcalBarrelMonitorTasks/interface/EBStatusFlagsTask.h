@@ -4,8 +4,6 @@
 /*
  * \file EBStatusFlagsTask.h
  *
- * $Date: 2012/04/27 13:46:00 $
- * $Revision: 1.12 $
  * \author G. Della Ricca
  *
 */
@@ -13,6 +11,8 @@
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
 
 class MonitorElement;
 class DQMStore;
@@ -73,7 +73,7 @@ bool enableCleanup_;
 
 bool mergeRuns_;
 
-edm::InputTag EcalRawDataCollection_;
+edm::EDGetTokenT<EcalRawDataCollection> EcalRawDataCollection_;
 
 MonitorElement* meEvtType_[36];
 

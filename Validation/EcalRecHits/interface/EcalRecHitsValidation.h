@@ -4,7 +4,6 @@
 /*
  * \file EcalRecHitsValidation.h
  *
- * $Date: 2009/12/14 22:24:43 $
  * \author C. Rovelli
  *
 */
@@ -88,7 +87,17 @@ private:
  edm::InputTag ESrechitCollection_;
  edm::InputTag EBuncalibrechitCollection_;
  edm::InputTag EEuncalibrechitCollection_;
- 
+ // fix for consumes
+ edm::EDGetTokenT<edm::HepMCProduct> HepMCLabel_Token_;
+ edm::EDGetTokenT<EBRecHitCollection> EBrechitCollection_Token_;
+ edm::EDGetTokenT<EERecHitCollection> EErechitCollection_Token_;
+ edm::EDGetTokenT<ESRecHitCollection> ESrechitCollection_Token_;
+ edm::EDGetTokenT<EBUncalibratedRecHitCollection> EBuncalibrechitCollection_Token_;
+ edm::EDGetTokenT<EEUncalibratedRecHitCollection> EEuncalibrechitCollection_Token_;
+ edm::EDGetTokenT<CrossingFrame<PCaloHit>> EBHits_Token_;
+ edm::EDGetTokenT<CrossingFrame<PCaloHit>> EEHits_Token_;
+ edm::EDGetTokenT<CrossingFrame<PCaloHit>> ESHits_Token_;
+
  MonitorElement* meGunEnergy_;
  MonitorElement* meGunEta_;
  MonitorElement* meGunPhi_;   

@@ -2,7 +2,6 @@
    implementation of class FedRawData
 
    \author Stefano ARGIRO
-   \version $Id: FEDRawData.cc,v 1.6 2005/10/18 13:29:53 meschi Exp $
    \date 28 Jun 2005
 */
 

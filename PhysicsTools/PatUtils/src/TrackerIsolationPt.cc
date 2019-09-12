@@ -1,5 +1,4 @@
 //
-// $Id: TrackerIsolationPt.cc,v 1.6 2010/02/11 00:13:22 wmtan Exp $
 //
 
 #include "PhysicsTools/PatUtils/interface/TrackerIsolationPt.h"

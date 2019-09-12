@@ -1,8 +1,6 @@
 /** \file
  * 
  * 
- * $Date: 2010/04/26 16:00:37 $
- * $Revision: 1.7 $
  * \author N. Amapane - S. Argiro'
  *
 */

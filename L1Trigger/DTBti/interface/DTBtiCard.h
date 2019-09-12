@@ -4,8 +4,6 @@
  *     Contains active DTBtiChips
  *
  *
- *   $Date: 2010/11/11 16:26:54 $
- *   $Revision: 1.12 $
  *
  *   \author C. Grandi, S. Vanini
  *
@@ -135,7 +133,7 @@ class DTBtiCard : public BTICache, public DTGeomSupplier {
     std::vector<DTDigi*> _digis; 
 
     bool _debug;
-    DTConfigPedestals* _pedestals;
+    const DTConfigPedestals* _pedestals;
 
     bool _flag_acc;
 };

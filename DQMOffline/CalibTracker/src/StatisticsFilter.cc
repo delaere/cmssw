@@ -13,7 +13,7 @@
 //
 // Original Author:  Gordon Kaussen,40 1-A15,+41227671647,
 //         Created:  Mon Nov 15 10:48:54 CET 2010
-// $Id: StatisticsFilter.cc,v 1.1 2010/11/15 17:16:31 kaussen Exp $
+// $Id$
 //
 //
 
@@ -45,9 +45,9 @@ class StatisticsFilter : public edm::EDFilter {
       ~StatisticsFilter();
 
    private:
-      virtual void beginJob() ;
-      virtual bool filter(edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
+      virtual void beginJob() override ;
+      virtual bool filter(edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
       
       // ----------member data ---------------------------
 

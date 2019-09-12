@@ -1,5 +1,4 @@
 // F.R.
-// $Id: PFJetCollection.h,v 1.5 2010/04/13 20:29:52 srappocc Exp $
 #ifndef JetReco_PFJetCollection_h
 #define JetReco_PFJetCollection_h
 

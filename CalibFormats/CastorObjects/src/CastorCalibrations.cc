@@ -5,8 +5,6 @@
     
     Container for retrieved calibration constants for Castor
    $Author: katsas
-   $Date: 2011/10/13 09:37:52 $
-   $Revision: 1.2 $
 */
 
 CastorCalibrations::CastorCalibrations (const float fGain [4], const float fPedestal [4]) {

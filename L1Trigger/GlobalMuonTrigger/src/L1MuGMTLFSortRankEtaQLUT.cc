@@ -3,8 +3,6 @@
 //   Class: L1MuGMTLFSortRankEtaQLUT
 //
 // 
-//   $Date: 2011/02/03 16:47:44 $
-//   $Revision: 1.5 $
 //
 //   Author :
 //   H. Sakulin            HEPHY Vienna

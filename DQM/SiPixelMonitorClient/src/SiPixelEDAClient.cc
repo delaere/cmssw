@@ -29,18 +29,10 @@
 #include "DQMServices/Core/interface/DQMStore.h"
 #include "DQMServices/Core/interface/MonitorElement.h"
 
-#include "DQM/SiPixelMonitorClient/interface/SiPixelWebInterface.h"
 #include "DQM/SiPixelMonitorClient/interface/SiPixelActionExecutor.h"
 #include "DQM/SiPixelMonitorClient/interface/SiPixelInformationExtractor.h"
 #include "DQM/SiPixelMonitorClient/interface/SiPixelDataQuality.h"
 #include "DQM/SiPixelMonitorClient/interface/SiPixelUtility.h"
-
-#include "xgi/Method.h"
-#include "xgi/Utils.h"
-
-#include "cgicc/Cgicc.h"
-#include "cgicc/FormEntry.h"
-#include "cgicc/HTMLClasses.h"
 
 #include <iostream>
 #include <iomanip>
@@ -56,8 +48,7 @@ using namespace std;
 //
 // -- Constructor
 //
-SiPixelEDAClient::SiPixelEDAClient(const edm::ParameterSet& ps) :
-  ModuleWeb("SiPixelEDAClient"){
+SiPixelEDAClient::SiPixelEDAClient(const edm::ParameterSet& ps) {
 // cout<<"Entering  SiPixelEDAClient::SiPixelEDAClient: "<<endl;
  
   edm::LogInfo("SiPixelEDAClient") <<  " Creating SiPixelEDAClient " << "\n" ;
@@ -80,7 +71,7 @@ SiPixelEDAClient::SiPixelEDAClient(const edm::ParameterSet& ps) :
   
   if(!Tier0Flag_){
     string localPath = string("DQM/SiPixelMonitorClient/test/loader.html");
-    ifstream fin(edm::FileInPath(localPath).fullPath().c_str(), ios::in);
+    std::ifstream fin(edm::FileInPath(localPath).fullPath().c_str(), ios::in);
     char buf[BUF_SIZE];
   
     if (!fin) {
@@ -96,12 +87,14 @@ SiPixelEDAClient::SiPixelEDAClient(const edm::ParameterSet& ps) :
   }
   
   // instantiate web interface
-  sipixelWebInterface_ = new SiPixelWebInterface(bei_,offlineXMLfile_,Tier0Flag_);
+  //sipixelWebInterface_ = new SiPixelWebInterface(bei_,offlineXMLfile_,Tier0Flag_);
   //instantiate the three work horses of the client:
   sipixelInformationExtractor_ = new SiPixelInformationExtractor(offlineXMLfile_);
   sipixelActionExecutor_ = new SiPixelActionExecutor(offlineXMLfile_, Tier0Flag_);
   sipixelDataQuality_ = new SiPixelDataQuality(offlineXMLfile_);
-  
+
+  //set Token(-s)
+  inputSourceToken_ = consumes<FEDRawDataCollection>(ps.getUntrackedParameter<string>("inputSource", "source")); 
 // cout<<"...leaving  SiPixelEDAClient::SiPixelEDAClient. "<<endl;
 }
 //
@@ -111,10 +104,12 @@ SiPixelEDAClient::~SiPixelEDAClient(){
 //  cout<<"Entering SiPixelEDAClient::~SiPixelEDAClient: "<<endl;
   
   edm::LogInfo("SiPixelEDAClient") <<  " Deleting SiPixelEDAClient " << "\n" ;
+  /* Removing xdaq deps
   if (sipixelWebInterface_) {
      delete sipixelWebInterface_;
      sipixelWebInterface_ = 0;
   }
+  */
   if (sipixelInformationExtractor_) {
      delete sipixelInformationExtractor_;
      sipixelInformationExtractor_ = 0;
@@ -146,14 +141,15 @@ void SiPixelEDAClient::beginRun(Run const& run, edm::EventSetup const& eSetup) {
   if(firstRun){
   
   // Read the summary configuration file
-  if (!sipixelWebInterface_->readConfiguration(tkMapFrequency_,summaryFrequency_)) {
-     edm::LogInfo ("SiPixelEDAClient") <<"[SiPixelEDAClient]: Error to read configuration file!! Summary will not be produced!!!";
-     summaryFrequency_ = -1;
-     tkMapFrequency_ = -1;
-     actionOnLumiSec_ = false;
-     actionOnRunEnd_ = true;
-     evtOffsetForInit_ = -1;
-  }
+    //if (!sipixelWebInterface_->readConfiguration(tkMapFrequency_,summaryFrequency_)) {
+    // edm::LogInfo ("SiPixelEDAClient") <<"[SiPixelEDAClient]: Error to read configuration file!! Summary will not be produced!!!";
+    //}
+    summaryFrequency_ = -1;
+    tkMapFrequency_ = -1;
+    actionOnLumiSec_ = false;
+    actionOnRunEnd_ = true;
+    evtOffsetForInit_ = -1;
+
   nLumiSecs_ = 0;
   nEvents_   = 0;
   if(Tier0Flag_) nFEDs_ = 40;
@@ -217,7 +213,7 @@ void SiPixelEDAClient::analyze(const edm::Event& e, const edm::EventSetup& eSetu
     if(nEvents_==1){
       // check if any Pixel FED is in readout:
       edm::Handle<FEDRawDataCollection> rawDataHandle;
-      e.getByLabel(inputSource_, rawDataHandle);
+      e.getByToken(inputSourceToken_, rawDataHandle);
       if(!rawDataHandle.isValid()){
         edm::LogInfo("SiPixelEDAClient") << inputSource_ << " is empty";
 	return;
@@ -230,8 +226,8 @@ void SiPixelEDAClient::analyze(const edm::Event& e, const edm::EventSetup& eSetu
     }
     
     // This is needed for plotting with the Pixel Expert GUI (interactive client):
-    sipixelWebInterface_->setActionFlag(SiPixelWebInterface::CreatePlots);
-    sipixelWebInterface_->performAction();
+    //sipixelWebInterface_->setActionFlag(SiPixelWebInterface::CreatePlots);
+    //sipixelWebInterface_->performAction();
   }
   
 }
@@ -250,13 +246,13 @@ void SiPixelEDAClient::endLuminosityBlock(edm::LuminosityBlock const& lumiSeg, e
   
   //if(actionOnLumiSec_ && !Tier0Flag_ && nLumiSecs_ % 1 == 0 ){
   if(actionOnLumiSec_ && nLumiSecs_ % 1 == 0 ){
-    sipixelWebInterface_->setActionFlag(SiPixelWebInterface::Summary);
-    sipixelWebInterface_->performAction();
+    //sipixelWebInterface_->setActionFlag(SiPixelWebInterface::Summary);
+    //sipixelWebInterface_->performAction();
      //cout << " Updating efficiency plots" << endl;
     if(doHitEfficiency_) sipixelActionExecutor_->createEfficiency(bei_);
     //cout << " Checking QTest results " << endl;
-    sipixelWebInterface_->setActionFlag(SiPixelWebInterface::QTestResult);
-    sipixelWebInterface_->performAction();
+    //sipixelWebInterface_->setActionFlag(SiPixelWebInterface::QTestResult);
+    //sipixelWebInterface_->performAction();
      //cout << " Updating occupancy plots" << endl;
     sipixelActionExecutor_->createOccupancy(bei_);
     //cout  << " Checking Pixel quality flags " << endl;;
@@ -291,13 +287,14 @@ void SiPixelEDAClient::endRun(edm::Run const& run, edm::EventSetup const& eSetup
   
   if(actionOnRunEnd_){
     //cout << " Updating Summary " << endl;
-    sipixelWebInterface_->setActionFlag(SiPixelWebInterface::Summary);
-    sipixelWebInterface_->performAction();
+    //sipixelWebInterface_->setActionFlag(SiPixelWebInterface::Summary);
+    //sipixelWebInterface_->performAction();
+    sipixelActionExecutor_->createSummary(bei_);
      //cout << " Updating efficiency plots" << endl;
     if(doHitEfficiency_) sipixelActionExecutor_->createEfficiency(bei_);
     //cout << " Checking QTest results " << endl;
-    sipixelWebInterface_->setActionFlag(SiPixelWebInterface::QTestResult);
-    sipixelWebInterface_->performAction();
+    //sipixelWebInterface_->setActionFlag(SiPixelWebInterface::QTestResult);
+    //sipixelWebInterface_->performAction();
     //cout << " Updating occupancy plots" << endl;
     sipixelActionExecutor_->createOccupancy(bei_);
     //cout  << " Checking Pixel quality flags " << endl;;
@@ -338,6 +335,7 @@ void SiPixelEDAClient::endJob(){
 //
 // -- Create default web page
 //
+/* removing xdaq deps
 void SiPixelEDAClient::defaultWebPage(xgi::Input *in, xgi::Output *out)
 {
 //  cout<<"Entering SiPixelEDAClient::defaultWebPage: "<<endl;
@@ -360,4 +358,4 @@ void SiPixelEDAClient::defaultWebPage(xgi::Input *in, xgi::Output *out)
 
 //  cout<<"...leaving SiPixelEDAClient::defaultWebPage. "<<endl;
 }
-
+*/

@@ -8,7 +8,6 @@
 //
 // Original Author:  Matevz Tadel
 //         Created:  Mon Jun 28 18:17:47 CEST 2010
-// $Id: DummyEvelyser.cc,v 1.7 2010/07/15 13:02:04 matevz Exp $
 //
 
 // system include files
@@ -58,13 +57,13 @@ protected:
    
 
 private:
-   virtual void beginJob();
-   virtual void endJob();
+   virtual void beginJob() override;
+   virtual void endJob() override;
 
-   virtual void beginRun(const edm::Run&, const edm::EventSetup&);
-   virtual void endRun  (const edm::Run&, const edm::EventSetup&);
+   virtual void beginRun(const edm::Run&, const edm::EventSetup&) override;
+   virtual void endRun  (const edm::Run&, const edm::EventSetup&) override;
 
-   virtual void analyze(const edm::Event&, const edm::EventSetup&);
+   virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
 
    edm::Service<EveService>  m_eve;
 

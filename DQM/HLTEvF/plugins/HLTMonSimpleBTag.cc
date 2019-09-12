@@ -1,4 +1,3 @@
-// $Id: HLTMonSimpleBTag.cc,v 1.4 2011/04/15 10:15:36 fblekman Exp $
 // See header file for information. 
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "DataFormats/Common/interface/Handle.h"
@@ -77,6 +76,9 @@ HLTMonSimpleBTag::HLTMonSimpleBTag(const edm::ParameterSet& iConfig):
   }
   triggerSummaryLabel_ = 
     iConfig.getParameter<edm::InputTag>("triggerSummaryLabel");
+
+  //set Token(-s)
+  triggerSummaryToken_ = consumes<trigger::TriggerEvent>(iConfig.getParameter<edm::InputTag>("triggerSummaryLabel"));
 }
 
 
@@ -103,7 +105,7 @@ HLTMonSimpleBTag::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   LogDebug("Status")<< "analyze" ;
   
   edm::Handle<TriggerEvent> triggerObj;
-  iEvent.getByLabel(triggerSummaryLabel_,triggerObj); 
+  iEvent.getByToken(triggerSummaryToken_, triggerObj);
   if(!triggerObj.isValid()) { 
     edm::LogInfo("Status") << "Summary HLT object (TriggerEvent) not found, "
       "skipping event"; 

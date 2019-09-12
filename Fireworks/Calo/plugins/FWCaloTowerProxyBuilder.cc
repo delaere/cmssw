@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Wed Dec  3 11:28:28 EST 2008
-// $Id: FWCaloTowerProxyBuilder.cc,v 1.25 2011/02/23 11:34:52 amraktad Exp $
 //
 
 // system includes

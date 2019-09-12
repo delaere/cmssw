@@ -16,7 +16,6 @@
 //
 // Original Author:  Gena Kukartsev
 //         Created:  Fri Jul 10 16:59:15 CEST 2009
-// $Id: HcalChannelIterator.h,v 1.3 2013/05/23 15:17:36 gartung Exp $
 //
 
 #include <iostream>

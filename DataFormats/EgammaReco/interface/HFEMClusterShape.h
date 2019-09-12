@@ -12,7 +12,6 @@
  *
  * \author Kevin Klapoetke, University of Minnesota
  *
- * \version $Id: HFEMClusterShape.h,v 1.3 2007/10/08 18:52:13 futyand Exp $
  *
  */
 

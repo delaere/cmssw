@@ -13,12 +13,12 @@
 //
 // Original Author:  Werner Man-Li Sun
 //         Created:  Thu Nov  6 23:00:43 CET 2008
-// $Id: L1O2OTestAnalyzer.cc,v 1.7 2010/02/16 21:59:24 wsun Exp $
 //
 //
 
 
 // system include files
+#include <iostream>
 #include <memory>
 #include <sstream>
 
@@ -52,9 +52,9 @@ class L1O2OTestAnalyzer : public edm::EDAnalyzer {
 
 
    private:
-      virtual void beginJob() ;
-      virtual void analyze(const edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
+      virtual void beginJob() override ;
+      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
 
       // ----------member data ---------------------------
   bool m_printL1TriggerKey ;

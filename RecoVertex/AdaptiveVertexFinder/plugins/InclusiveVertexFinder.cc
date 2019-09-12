@@ -34,15 +34,15 @@ class InclusiveVertexFinder : public edm::EDProducer {
     public:
 	InclusiveVertexFinder(const edm::ParameterSet &params);
 
-	virtual void produce(edm::Event &event, const edm::EventSetup &es);
+	virtual void produce(edm::Event &event, const edm::EventSetup &es) override;
 
     private:
 	bool trackFilter(const reco::TrackRef &track) const;
         std::pair<std::vector<reco::TransientTrack>,GlobalPoint> nearTracks(const reco::TransientTrack &seed, const std::vector<reco::TransientTrack> & tracks, const reco::Vertex & primaryVertex) const;
 
-	edm::InputTag				beamSpotCollection;
-	edm::InputTag				primaryVertexCollection;
-	edm::InputTag				trackCollection;
+	edm::EDGetTokenT<reco::BeamSpot> 	token_beamSpot; 
+	edm::EDGetTokenT<reco::VertexCollection> token_primaryVertex;
+	edm::EDGetTokenT<reco::TrackCollection>	token_tracks; 
 	unsigned int				minHits;
 	unsigned int				maxNTracks;
 	double					maxLIP;
@@ -50,16 +50,17 @@ class InclusiveVertexFinder : public edm::EDProducer {
         double 					vertexMinAngleCosine;
         double 					vertexMinDLen2DSig;
         double 					vertexMinDLenSig;
-
+	double					fitterSigmacut;
+	double  				fitterTini;
+	double 					fitterRatio;
+	bool 					useVertexFitter;
+	bool 					useVertexReco;
 	std::auto_ptr<VertexReconstructor>	vtxReco;
 	std::auto_ptr<TracksClusteringFromDisplacedSeed>	clusterizer;
 
 };
 
 InclusiveVertexFinder::InclusiveVertexFinder(const edm::ParameterSet &params) :
-	beamSpotCollection(params.getParameter<edm::InputTag>("beamSpot")),
-	primaryVertexCollection(params.getParameter<edm::InputTag>("primaryVertices")),
-	trackCollection(params.getParameter<edm::InputTag>("tracks")),
 	minHits(params.getParameter<unsigned int>("minHits")),
 	maxNTracks(params.getParameter<unsigned int>("maxNTracks")),
        	maxLIP(params.getParameter<double>("maximumLongitudinalImpactParameter")),
@@ -67,10 +68,18 @@ InclusiveVertexFinder::InclusiveVertexFinder(const edm::ParameterSet &params) :
         vertexMinAngleCosine(params.getParameter<double>("vertexMinAngleCosine")), //0.98
         vertexMinDLen2DSig(params.getParameter<double>("vertexMinDLen2DSig")), //2.5
         vertexMinDLenSig(params.getParameter<double>("vertexMinDLenSig")), //0.5
+        fitterSigmacut(params.getParameter<double>("fitterSigmacut")),
+        fitterTini(params.getParameter<double>("fitterTini")),
+        fitterRatio(params.getParameter<double>("fitterRatio")),
+	useVertexFitter(params.getParameter<bool>("useDirectVertexFitter")),
+	useVertexReco(params.getParameter<bool>("useVertexReco")),
 	vtxReco(new ConfigurableVertexReconstructor(params.getParameter<edm::ParameterSet>("vertexReco"))),
         clusterizer(new TracksClusteringFromDisplacedSeed(params.getParameter<edm::ParameterSet>("clusterizer")))
 
 {
+	token_beamSpot = consumes<reco::BeamSpot>(params.getParameter<edm::InputTag>("beamSpot"));
+	token_primaryVertex = consumes<reco::VertexCollection>(params.getParameter<edm::InputTag>("primaryVertices"));
+	token_tracks = consumes<reco::TrackCollection>(params.getParameter<edm::InputTag>("tracks"));
 	produces<reco::VertexCollection>();
 	//produces<reco::VertexCollection>("multi");
 }
@@ -90,14 +99,11 @@ void InclusiveVertexFinder::produce(edm::Event &event, const edm::EventSetup &es
 {
 	using namespace reco;
 
-  double sigmacut = 3.0;
-  double Tini = 256.;
-  double ratio = 0.25;
   VertexDistance3D vdist;
   VertexDistanceXY vdist2d;
   MultiVertexFitter theMultiVertexFitter;
   AdaptiveVertexFitter theAdaptiveFitter(
-                                            GeometricAnnealing(sigmacut, Tini, ratio),
+                                            GeometricAnnealing(fitterSigmacut, fitterTini, fitterRatio),
                                             DefaultLinearizationPointFinder(),
                                             KalmanVertexUpdator<5>(),
                                             KalmanVertexTrackCompatibilityEstimator<5>(),
@@ -105,13 +111,13 @@ void InclusiveVertexFinder::produce(edm::Event &event, const edm::EventSetup &es
 
 
 	edm::Handle<BeamSpot> beamSpot;
-	event.getByLabel(beamSpotCollection, beamSpot);
+	event.getByToken(token_beamSpot,beamSpot);
 
 	edm::Handle<VertexCollection> primaryVertices;
-	event.getByLabel(primaryVertexCollection, primaryVertices);
+	event.getByToken(token_primaryVertex, primaryVertices);
 
 	edm::Handle<TrackCollection> tracks;
-	event.getByLabel(trackCollection, tracks);
+	event.getByToken(token_tracks, tracks);
 
 	edm::ESHandle<TransientTrackBuilder> trackBuilder;
 	es.get<TransientTrackRecord>().get("TransientTrackBuilder",
@@ -160,16 +166,18 @@ void InclusiveVertexFinder::produce(edm::Event &event, const edm::EventSetup &es
 	for(std::vector<TracksClusteringFromDisplacedSeed::Cluster>::iterator cluster = clusters.begin();
 	    cluster != clusters.end(); ++cluster,++i)
         {
-                if(cluster->tracks.size() == 0 || cluster->tracks.size() > maxNTracks ) 
+                if(cluster->tracks.size() < 2 || cluster->tracks.size() > maxNTracks ) 
 		     continue;
-        
- 	        cluster->tracks.push_back(cluster->seedingTrack); //add the seed to the list of tracks to fit
 	 	std::vector<TransientVertex> vertices;
-		vertices = vtxReco->vertices(cluster->tracks, bs);  // attempt with config given reconstructor
+		if(useVertexReco) {
+			vertices = vtxReco->vertices(cluster->tracks, bs);  // attempt with config given reconstructor
+		}
                 TransientVertex singleFitVertex;
-                singleFitVertex = theAdaptiveFitter.vertex(cluster->tracks,cluster->seedPoint); //attempt with direct fitting
-                if(singleFitVertex.isValid())
-                          vertices.push_back(singleFitVertex);
+		if(useVertexFitter) {
+			singleFitVertex = theAdaptiveFitter.vertex(cluster->tracks,cluster->seedPoint); //attempt with direct fitting
+			if(singleFitVertex.isValid())
+				vertices.push_back(singleFitVertex);
+		}
 		for(std::vector<TransientVertex>::const_iterator v = vertices.begin();
 		    v != vertices.end(); ++v) {
 //			if(v->degreesOfFreedom() > 0.2)

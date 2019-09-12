@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Thu May 29 20:58:11 CDT 2008
-// $Id: CSGAction.cc,v 1.29 2012/07/26 06:07:18 amraktad Exp $
 //
 
 // system include files

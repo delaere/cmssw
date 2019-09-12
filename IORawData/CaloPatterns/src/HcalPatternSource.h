@@ -7,8 +7,6 @@
 
 /** \class HcalPatternSource
   *  
-  * $Date: 2010/02/17 16:55:37 $
-  * $Revision: 1.2 $
   * \author J. Mans - Minnesota
   */
 class HcalPatternSource : public edm::EDProducer {

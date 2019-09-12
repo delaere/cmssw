@@ -1,4 +1,3 @@
-// $Id: RBCBasicConfig.cc,v 1.4 2009/06/07 21:18:50 aosorio Exp $
 // Include files 
 
 

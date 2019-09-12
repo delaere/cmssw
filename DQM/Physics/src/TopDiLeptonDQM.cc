@@ -815,3 +815,8 @@ void TopDiLeptonDQM::endJob() {
   if(fileOutput_)  outfile.close();
 
 }
+
+// Local Variables:
+// show-trailing-whitespace: t
+// truncate-lines: t
+// End:

@@ -4,24 +4,23 @@
 /** \class AlcaBeamSpotManager
  *  No description available.
  *
- *  $Date: 2010/06/30 20:49:56 $
- *  $Revision: 1.2 $
  *  \author L. Uplegger F. Yumiceva - Fermilab
  */
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "DataFormats/BeamSpot/interface/BeamSpot.h"
 #include "FWCore/Framework/interface/LuminosityBlock.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 //#include "DataFormats/Provenance/interface/LuminosityBlockID.h"
 #include <string>
 #include <map>
 #include <utility>
 
 
-class AlcaBeamSpotManager{
+class AlcaBeamSpotManager {
  public:
   AlcaBeamSpotManager         (void);
-  AlcaBeamSpotManager         (const edm::ParameterSet&);
+  AlcaBeamSpotManager         (const edm::ParameterSet&, edm::ConsumesCollector&&);
   virtual ~AlcaBeamSpotManager(void);
 
   void reset(void);   
@@ -41,6 +40,9 @@ class AlcaBeamSpotManager{
   std::string beamSpotOutputBase_;
   std::string beamSpotModuleName_;
   std::string beamSpotLabel_;
+  
+  edm::InputTag beamSpotTag_;
+  edm::EDGetTokenT<reco::BeamSpot> beamSpotToken_;
 
 };
 

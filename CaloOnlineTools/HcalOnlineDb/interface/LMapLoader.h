@@ -16,7 +16,6 @@
 //
 // Original Author:  Aram Avetisyan avetisya@fnal.gov
 //         Created:  Tue Nov 14 15:05:33 CDT 2007
-// $Id: LMapLoader.h,v 1.3 2010/08/06 20:24:10 wmtan Exp $
 //
 
 // system include files

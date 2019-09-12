@@ -5,8 +5,6 @@
  *  A Standard Kalman smoother. The forward fit is not redone,
  *  only the backward smoothing. Ported from ORCA
  *
- *  $Date: 2012/09/01 11:08:33 $
- *  $Revision: 1.10 $
  *  \author todorov, cerati
  */
 

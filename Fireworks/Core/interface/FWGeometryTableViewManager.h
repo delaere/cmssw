@@ -16,7 +16,6 @@
 //
 // Original Author:  Alja Mrak-Tadel
 //         Created:  Fri Jul  8 00:40:50 CEST 2011
-// $Id: FWGeometryTableViewManager.h,v 1.8 2012/04/21 00:30:21 amraktad Exp $
 //
 
 class FWViewBase;

@@ -4,9 +4,6 @@
 /** \class InOutConversionSeedFinder
  **  
  **
- **  $Id: InOutConversionSeedFinder.h,v 1.15 2012/05/29 08:23:53 muzaffar Exp $ 
- **  $Date: 2012/05/29 08:23:53 $ 
- **  $Revision: 1.15 $
  **  \author Nancy Marinelli, U. of Notre Dame, US
  **
  ***/
@@ -67,7 +64,7 @@ class InOutConversionSeedFinder : public ConversionSeedFinder {
 
   edm::ParameterSet conf_;
   virtual void fillClusterSeeds(  ) const ;
-  void startSeed(FreeTrajectoryState * fts, const TrajectoryStateOnSurface & stateAtPreviousLayer, int charge, int layer) const ;
+  void startSeed(const FreeTrajectoryState * fts, const TrajectoryStateOnSurface & stateAtPreviousLayer, int charge, int layer) const ;
   virtual void findSeeds(const TrajectoryStateOnSurface & startingState,
 			 float signedpt, unsigned int startingLayer) const ;
   

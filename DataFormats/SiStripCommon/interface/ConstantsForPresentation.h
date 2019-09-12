@@ -1,4 +1,3 @@
-// Last commit: $Id: ConstantsForPresentation.h,v 1.4 2009/02/10 21:45:54 lowette Exp $
 
 #ifndef DataFormats_SiStripCommon_ConstantsForPresentation_H
 #define DataFormats_SiStripCommon_ConstantsForPresentation_H

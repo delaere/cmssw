@@ -1,6 +1,5 @@
 /** \class HcalText2DetIdConverter
     \author F.Ratnikov, UMd
-    $Id: HcalText2DetIdConverter.cc,v 1.10 2009/05/09 00:31:10 elmer Exp $
 */
 #include <stdlib.h>
 #include <iostream>

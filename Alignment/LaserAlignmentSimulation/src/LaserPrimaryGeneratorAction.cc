@@ -1,8 +1,8 @@
 /** \file LaserPrimaryGeneratorAction.cc
  *  
  *
- *  $Date: 2007/06/11 14:44:29 $
- *  $Revision: 1.3 $
+ *  $Date: 2007/03/20 12:01:01 $
+ *  $Revision: 1.2 $
  *  \author Maarten Thomas
  */
 
@@ -10,6 +10,8 @@
 #include "SimG4Core/Notification/interface/GenParticleInfo.h"
 
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
+
+#include "G4SystemOfUnits.hh"
 
 LaserPrimaryGeneratorAction::LaserPrimaryGeneratorAction(edm::ParameterSet const& theConf) 
   : thePhotonEnergy(0),

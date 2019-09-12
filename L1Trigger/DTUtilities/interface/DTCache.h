@@ -7,8 +7,6 @@
  *    
  *
  *
- *   $Date: 2006/07/19 10:32:51 $
- *   $Revision: 1.1 $
  *
  *   \author  C. Battilana
  *

@@ -2,7 +2,6 @@
 //
 // Package:     Core
 // Class  :     FWHLTValidator
-// $Id: FWHLTValidator.cc,v 1.8 2011/02/18 17:38:42 amraktad Exp $
 //
 
 // system include files

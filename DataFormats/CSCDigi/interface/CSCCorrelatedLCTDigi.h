@@ -5,8 +5,6 @@
  *
  * Digi for Correlated LCT trigger primitives. 
  *
- * $Date: 2011/02/02 13:27:20 $
- * $Revision: 1.17 $
  *
  * \author L. Gray, UF
  */

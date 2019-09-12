@@ -18,10 +18,6 @@
  
     \brief element for the single ECAL block intercalibration  
 
-    $Date: 2009/02/11 15:46:48 $
-    $Revision: 1.4 $
-    $Id: IMACalibBlock.h,v 1.4 2009/02/11 15:46:48 presotto Exp $ 
-    \author $Author: presotto $
 */
 class IMACalibBlock : public VEcalCalibBlock
 {

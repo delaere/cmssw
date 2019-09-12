@@ -3,7 +3,7 @@
 
 /** \class HLTMuonL3PreFilter
  *
- *  
+ *
  *  This class is an HLTFilter (-> EDFilter) implementing a first
  *  filtering for HLT muons
  *
@@ -16,6 +16,7 @@
 #include "DataFormats/RecoCandidate/interface/RecoChargedCandidateFwd.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "DataFormats/MuonReco/interface/MuonFwd.h"
+#include "DataFormats/BeamSpot/interface/BeamSpot.h"
 
 namespace edm {
    class ConfigurationDescriptions;
@@ -27,13 +28,17 @@ class HLTMuonL3PreFilter : public HLTFilter {
       explicit HLTMuonL3PreFilter(const edm::ParameterSet&);
       ~HLTMuonL3PreFilter();
       static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
-      virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct);
-      bool triggeredByLevel2(const reco::TrackRef& track,std::vector<reco::RecoChargedCandidateRef>& vcands);
-   private:
+      virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct) const override;
 
-      edm::InputTag beamspotTag_ ;
-      edm::InputTag candTag_;  // input tag identifying product contains muons
-      edm::InputTag previousCandTag_;  // input tag identifying product contains muons passing the previous level
+   private:
+      bool triggeredByLevel2(const reco::TrackRef& track,std::vector<reco::RecoChargedCandidateRef>& vcands) const;
+
+      edm::InputTag                    beamspotTag_ ;
+      edm::EDGetTokenT<reco::BeamSpot> beamspotToken_ ;
+      edm::InputTag                                          candTag_;   // input tag identifying product contains muons
+      edm::EDGetTokenT<reco::RecoChargedCandidateCollection> candToken_; // token identifying product contains muons
+      edm::InputTag                                          previousCandTag_;   // input tag identifying product contains muons passing the previous level
+      edm::EDGetTokenT<trigger::TriggerFilterObjectWithRefs> previousCandToken_; // token identifying product contains muons passing the previous level
       int    min_N_;            // minimum number of muons to fire the trigger
       double max_Eta_;          // Eta cut
       int    min_Nhits_;        // threshold on number of hits on muon
@@ -41,7 +46,7 @@ class HLTMuonL3PreFilter : public HLTFilter {
       double min_Dr_;           // minimum impact parameter cut
       double max_Dz_;           // dz cut
       double min_DxySig_;       // dxy significance cut
-      double min_Pt_;           // pt threshold in GeV 
+      double min_Pt_;           // pt threshold in GeV
       double nsigma_Pt_;        // pt uncertainty margin (in number of sigmas)
       double max_NormalizedChi2_; // cutoff in normalized chi2
       double max_DXYBeamSpot_; // cutoff in dxy from the beamspot
@@ -50,7 +55,7 @@ class HLTMuonL3PreFilter : public HLTFilter {
   double min_TrackPt_; //cutoff in tracker track pt
 
   bool devDebug_;
-  
+
 
 };
 

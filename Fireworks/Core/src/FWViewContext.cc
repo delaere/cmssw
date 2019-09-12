@@ -8,7 +8,6 @@
 //
 // Original Author:  Alja Mrak-Tadel
 //         Created:  Wed Apr 14 18:31:58 CEST 2010
-// $Id: FWViewContext.cc,v 1.8 2011/02/22 18:37:31 amraktad Exp $
 //
 
 // system include files

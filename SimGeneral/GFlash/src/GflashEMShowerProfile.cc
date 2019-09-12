@@ -1,5 +1,4 @@
 //
-// $Id: GflashEMShowerProfile.cc,v 1.5 2010/04/30 19:10:11 dwjang Exp $
 // initial setup : Soon Jun & Dongwook Jang
 // Translated from Fortran code.
 //
@@ -18,7 +17,7 @@
 #include <CLHEP/Random/Randomize.h>
 #include <CLHEP/Random/RandGaussQ.h>
 
-GflashEMShowerProfile::GflashEMShowerProfile(edm::ParameterSet parSet) : theParSet(parSet)
+GflashEMShowerProfile::GflashEMShowerProfile(const edm::ParameterSet& parSet) : theParSet(parSet)
 {
   theBField = parSet.getParameter<double>("bField");
   theEnergyScaleEB = parSet.getParameter<double>("energyScaleEB");

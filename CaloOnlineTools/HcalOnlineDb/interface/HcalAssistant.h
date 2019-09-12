@@ -16,7 +16,6 @@
 //
 // Original Author:  Gena Kukartsev, kukarzev@fnal.gov
 //         Created:  Thu Jul 16 11:39:31 CEST 2009
-// $Id: HcalAssistant.h,v 1.5 2009/08/11 14:23:31 kukartse Exp $
 //
 
 #include <iostream>

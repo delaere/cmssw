@@ -1,7 +1,6 @@
 /*
  * \file TBHodoActiveVolumeRawInfoProducer.cc
  *
- * $Id: TBHodoActiveVolumeRawInfoProducer.cc,v 1.4 2008/03/07 11:55:36 fabiocos Exp $
  *
  */
 

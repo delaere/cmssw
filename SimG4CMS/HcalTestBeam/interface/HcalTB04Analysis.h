@@ -14,7 +14,6 @@
 //
 // Original Author:  Sunanda Banerjee
 //         Created:  Thu May 18 10:14:34 CEST 2006
-// $Id: HcalTB04Analysis.h,v 1.4 2006/11/13 10:32:14 sunanda Exp $
 //
   
 // system include files

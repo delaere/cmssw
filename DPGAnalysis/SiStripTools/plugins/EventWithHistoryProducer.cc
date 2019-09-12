@@ -13,7 +13,7 @@
 //
 // Original Author:  Andrea Venturi
 //         Created:  Sun Nov 30 19:05:41 CET 2008
-// $Id: EventWithHistoryProducer.cc,v 1.3 2013/02/27 19:49:46 wmtan Exp $
+// $Id: EventWithHistoryProducer.cc,v 1.2 2010/01/12 09:13:04 venturia Exp $
 //
 //
 
@@ -44,9 +44,9 @@ class EventWithHistoryProducer : public edm::EDProducer {
       ~EventWithHistoryProducer();
 
    private:
-      virtual void beginJob() ;
+      virtual void beginJob() override ;
       virtual void produce(edm::Event&, const edm::EventSetup&) override;
-      virtual void endJob() ;
+      virtual void endJob() override ;
       
       // ----------member data ---------------------------
 

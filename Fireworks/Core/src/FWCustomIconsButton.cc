@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Thu Oct 23 13:05:35 EDT 2008
-// $Id: FWCustomIconsButton.cc,v 1.8 2012/11/16 02:15:25 amraktad Exp $
 //
 
 // system include files

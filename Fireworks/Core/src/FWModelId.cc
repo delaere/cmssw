@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Wed Mar  5 11:00:48 EST 2008
-// $Id: FWModelId.cc,v 1.4 2009/01/23 21:35:43 amraktad Exp $
 //
 
 // system include files

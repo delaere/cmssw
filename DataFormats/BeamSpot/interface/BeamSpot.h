@@ -7,7 +7,6 @@
  *
  * \author Francisco Yumiceva, Fermilab (yumiceva@fnal.gov)
  *
- * \version $Id: BeamSpot.h,v 1.12 2011/04/06 20:31:35 venturia Exp $
  *
  */
 

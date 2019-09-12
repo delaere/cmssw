@@ -8,7 +8,6 @@
 //
 // Original Author:
 //         Created:  Sun Jan  6 22:01:27 EST 2008
-// $Id: FWTriggerTableViewManager.cc,v 1.8 2012/09/27 16:51:25 eulisse Exp $
 //
 
 // system include files

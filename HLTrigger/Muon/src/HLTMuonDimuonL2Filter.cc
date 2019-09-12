@@ -1,7 +1,7 @@
 /** \class HLTMuonDimuonL2Filter
  *
  * See header file for documentation
- *  
+ *
  *  \author J. Alcaraz, P. Garcia, M.Vander Donckt
  *
  */
@@ -27,6 +27,8 @@
 #include "HLTrigger/Muon/interface/HLTMuonL2ToL1Map.h"
 #include "DataFormats/BeamSpot/interface/BeamSpot.h"
 
+#include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
+
 using namespace edm;
 using namespace std;
 using namespace reco;
@@ -37,9 +39,13 @@ using namespace l1extra;
 //
 HLTMuonDimuonL2Filter::HLTMuonDimuonL2Filter(const edm::ParameterSet& iConfig): HLTFilter(iConfig),
    beamspotTag_   (iConfig.getParameter< edm::InputTag > ("BeamSpotTag")),
+   beamspotToken_ (consumes<reco::BeamSpot>(beamspotTag_)),
    candTag_     (iConfig.getParameter< edm::InputTag > ("CandTag")),
+   candToken_   (consumes<reco::RecoChargedCandidateCollection>(candTag_)),
    previousCandTag_   (iConfig.getParameter<InputTag > ("PreviousCandTag")),
+   previousCandToken_ (consumes<trigger::TriggerFilterObjectWithRefs>(previousCandTag_)),
    seedMapTag_( iConfig.getParameter<InputTag >("SeedMapTag") ),
+   seedMapToken_(consumes<SeedMap>(seedMapTag_)),
    fast_Accept_ (iConfig.getParameter<bool> ("FastAccept")),
    max_Eta_     (iConfig.getParameter<double> ("MaxEta")),
    min_Nhits_   (iConfig.getParameter<int> ("MinNhits")),
@@ -63,7 +69,7 @@ HLTMuonDimuonL2Filter::HLTMuonDimuonL2Filter(const edm::ParameterSet& iConfig): 
 {
 
    LogDebug("HLTMuonDimuonL2Filter")
-      << " CandTag/MinN/MaxEta/MinNhits/MinNstations/MinNchambers/MaxDr/MaxDz/MinPt1/MinPt2/MinInvMass/MaxInvMass/MinAcop/MaxAcop/MinAngle/MaxAngle/MinPtBalance/MaxPtBalance/NSigmaPt : " 
+      << " CandTag/MinN/MaxEta/MinNhits/MinNstations/MinNchambers/MaxDr/MaxDz/MinPt1/MinPt2/MinInvMass/MaxInvMass/MinAcop/MaxAcop/MinAngle/MaxAngle/MinPtBalance/MaxPtBalance/NSigmaPt : "
       << candTag_.encode()
       << " " << fast_Accept_
       << " " << max_Eta_
@@ -90,9 +96,40 @@ HLTMuonDimuonL2Filter::~HLTMuonDimuonL2Filter()
 // member functions
 //
 
+void
+HLTMuonDimuonL2Filter::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+  edm::ParameterSetDescription desc;
+  makeHLTFilterDescription(desc);
+  desc.add<edm::InputTag>("BeamSpotTag",edm::InputTag("hltOfflineBeamSpot"));
+  desc.add<edm::InputTag>("CandTag",edm::InputTag("hltL2MuonCandidates"));
+  desc.add<edm::InputTag>("PreviousCandTag",edm::InputTag(""));
+  desc.add<edm::InputTag>("SeedMapTag",edm::InputTag("hltL2Muons"));
+  desc.add<bool>("FastAccept",false);
+  desc.add<double>("MaxEta",2.5);
+  desc.add<int>("MinNhits",0);
+  desc.add<int>("MinNstations",0);
+  desc.add<int>("MinNchambers",2);
+  desc.add<double>("MaxDr",100.0);
+  desc.add<double>("MaxDz",9999.0);
+  desc.add<int>("ChargeOpt",0);
+  desc.add<double>("MinPtPair",0.0);
+  desc.add<double>("MinPtMax",3.0);
+  desc.add<double>("MinPtMin",3.0);
+  desc.add<double>("MinInvMass",1.6);
+  desc.add<double>("MaxInvMass",5.6);
+  desc.add<double>("MinAcop",-1.0);
+  desc.add<double>("MaxAcop",3.15);
+  desc.add<double>("MinAngle",-999.0);
+  desc.add<double>("MaxAngle",2.5);
+  desc.add<double>("MinPtBalance",-1.0);
+  desc.add<double>("MaxPtBalance",999999.0);
+  desc.add<double>("NSigmaPt",0.0);
+  descriptions.add("hltMuonDimuonL2Filter", desc);
+}
+
 // ------------ method called to produce the data  ------------
 bool
-HLTMuonDimuonL2Filter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct)
+HLTMuonDimuonL2Filter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) const
 {
 
    double const MuMass = 0.106;
@@ -107,16 +144,16 @@ HLTMuonDimuonL2Filter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSet
 
    // get hold of trks
    Handle<RecoChargedCandidateCollection> mucands;
-   iEvent.getByLabel (candTag_,mucands);
+   iEvent.getByToken(candToken_,mucands);
    if (saveTags()) filterproduct.addCollectionTag(candTag_);
 
    BeamSpot beamSpot;
    Handle<BeamSpot> recoBeamSpotHandle;
-   iEvent.getByLabel(beamspotTag_,recoBeamSpotHandle);
+   iEvent.getByToken(beamspotToken_,recoBeamSpotHandle);
    beamSpot = *recoBeamSpotHandle;
 
    // get the L2 to L1 map object for this event
-   HLTMuonL2ToL1Map mapL2ToL1(previousCandTag_, seedMapTag_, iEvent);
+   HLTMuonL2ToL1Map mapL2ToL1(previousCandToken_, seedMapToken_, iEvent);
 
    // look at all mucands,  check cuts and add to filter object
    int n = 0;
@@ -132,7 +169,7 @@ HLTMuonDimuonL2Filter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSet
             << tk1->charge()*tk1->pt() << ", eta= " << tk1->eta() << ", hits= " << tk1->numberOfValidHits();
       // find the L1 Particle corresponding to the L2 Track
       if (!mapL2ToL1.isTriggeredByL1(tk1)) continue;
- 
+
       if (fabs(tk1->eta())>max_Eta_) continue;
 
       // cut on number of hits
@@ -140,7 +177,7 @@ HLTMuonDimuonL2Filter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSet
 
       // number of stations
       if (tk1->hitPattern().muonStationsWithAnyHits() < min_Nstations_) continue;
-      
+
       // number of chambers
       if(tk1->hitPattern().dtStationsWithAnyHits() +
 	 tk1->hitPattern().cscStationsWithAnyHits() < min_Nchambers_) continue;
@@ -269,12 +306,12 @@ HLTMuonDimuonL2Filter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSet
 	      }
 	      if (i1done && i2done) break;
             }
-	    
-            if (!i1done) { 
+	
+            if (!i1done) {
 	      ref1=RecoChargedCandidateRef( Ref<RecoChargedCandidateCollection> (mucands,distance(mucands->begin(), cand1)));
 	      filterproduct.addObject(TriggerMuon,ref1);
             }
-            if (!i2done) { 
+            if (!i2done) {
 	      ref2=RecoChargedCandidateRef( Ref<RecoChargedCandidateCollection> (mucands,distance(mucands->begin(),cand2 )));
 	    filterproduct.addObject(TriggerMuon,ref2);
             }
@@ -287,7 +324,7 @@ HLTMuonDimuonL2Filter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSet
    // filter decision
    const bool accept (n >= 1);
 
-   LogDebug("HLTMuonDimuonL2Filter") << " >>>>> Result of HLTMuonDimuonL2Filter is "<< accept << ", number of muon pairs passing thresholds= " << n; 
+   LogDebug("HLTMuonDimuonL2Filter") << " >>>>> Result of HLTMuonDimuonL2Filter is "<< accept << ", number of muon pairs passing thresholds= " << n;
 
    return accept;
 }

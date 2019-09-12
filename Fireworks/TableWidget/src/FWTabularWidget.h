@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Mon Feb  2 16:45:19 EST 2009
-// $Id: FWTabularWidget.h,v 1.6 2011/03/07 13:13:51 amraktad Exp $
 //
 
 // system include files

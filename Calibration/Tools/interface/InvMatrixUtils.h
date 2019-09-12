@@ -2,10 +2,6 @@
 
     \brief various utilities
 
-    $Date: 2008/02/25 17:39:59 $
-    $Revision: 1.2 $
-    $Id: InvMatrixUtils.h,v 1.2 2008/02/25 17:39:59 malberti Exp $ 
-    \author $Author: malberti $
 */
 
 #ifndef InvMatrixUtils_h

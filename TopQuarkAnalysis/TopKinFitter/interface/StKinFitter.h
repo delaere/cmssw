@@ -1,5 +1,4 @@
 //
-// $Id: StKinFitter.h,v 1.5 2013/05/30 20:51:27 gartung Exp $
 //
 
 #ifndef TopKinFitter_StKinFitter_h

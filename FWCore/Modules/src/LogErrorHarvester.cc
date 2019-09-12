@@ -39,9 +39,9 @@ namespace edm {
       static void fillDescriptions(ConfigurationDescriptions& descriptions);
 
     private:
-      virtual void beginJob();
-      virtual void produce(Event&, EventSetup const&);
-      virtual void endJob() ;
+      virtual void beginJob() override;
+      virtual void produce(Event&, EventSetup const&) override;
+      virtual void endJob() override ;
   };
 
   LogErrorHarvester::LogErrorHarvester(ParameterSet const&) {
@@ -53,11 +53,12 @@ namespace edm {
 
   void
   LogErrorHarvester::produce(Event& iEvent, EventSetup const&) {
-    if(!FreshErrorsExist()) {
+    const auto index = iEvent.streamID().value();
+    if(!FreshErrorsExist(index)) {
       std::auto_ptr<std::vector<ErrorSummaryEntry> > errors(new std::vector<ErrorSummaryEntry>());
       iEvent.put(errors);
     } else {
-      std::auto_ptr<std::vector<ErrorSummaryEntry> > errors(new std::vector<ErrorSummaryEntry>(LoggedErrorsSummary()));
+      std::auto_ptr<std::vector<ErrorSummaryEntry> > errors(new std::vector<ErrorSummaryEntry>(LoggedErrorsSummary(index)));
       iEvent.put(errors);
     }
   }

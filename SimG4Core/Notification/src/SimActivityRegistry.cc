@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Sun Nov 13 12:44:58 EST 2005
-// $Id: SimActivityRegistry.cc,v 1.2 2005/11/21 22:01:21 chrjones Exp $
 //
 
 // system include files

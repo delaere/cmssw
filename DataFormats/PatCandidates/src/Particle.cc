@@ -1,5 +1,4 @@
 //
-// $Id: Particle.cc,v 1.2 2008/11/28 19:02:15 lowette Exp $
 //
 
 #include "DataFormats/PatCandidates/interface/Particle.h"

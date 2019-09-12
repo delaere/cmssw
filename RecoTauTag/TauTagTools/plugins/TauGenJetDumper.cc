@@ -7,7 +7,6 @@
  *
  *         Author:  Evan K. Friis, UC Davis
  *
- *         $Id $
  *
  * =====================================================================================
  */
@@ -28,7 +27,7 @@ class TauGenJetDumper : public edm::EDAnalyzer {
     explicit TauGenJetDumper(const edm::ParameterSet& pset):
       genJetSrc_(pset.getParameter<edm::InputTag>("src")) {}
     virtual ~TauGenJetDumper() {}
-    virtual void analyze(const edm::Event& evt, const edm::EventSetup& es);
+    virtual void analyze(const edm::Event& evt, const edm::EventSetup& es) override;
   private:
     edm::InputTag genJetSrc_;
 };

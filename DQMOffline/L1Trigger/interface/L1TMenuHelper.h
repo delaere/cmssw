@@ -1,11 +1,9 @@
 #ifndef DQMOFFLINE_L1TRIGGER_L1TMENUHELPER_H
 #define DQMOFFLINE_L1TRIGGER_L1TMENUHELPER_H
 
-/*
+/**
  * \file L1TMenuHelper.h
  *
- * $Date: 2012/11/20 14:57:08 $
- * $Revision: 1.1 $
  * \author J. Pela
  *
 */
@@ -92,9 +90,9 @@ class L1TMenuHelper {
     std::string enumToStringL1GtConditionCategory(L1GtConditionCategory iConditionCategory);
 
     // Getters
-    int  getPrescaleByAlias(TString iCategory, TString iAlias);
-    unsigned int getEtaRangeByAlias(TString iCategory, TString iAlias);    
-    unsigned int getQualityAlias   (TString iCategory, TString iAlias);
+    int  getPrescaleByAlias(const TString& iCategory, const TString& iAlias);
+    unsigned int getEtaRangeByAlias(const TString& iCategory, const TString& iAlias);    
+    unsigned int getQualityAlias   (const TString& iCategory, const TString& iAlias);
 
   private:
 

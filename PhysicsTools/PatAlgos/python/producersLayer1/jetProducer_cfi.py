@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 patJets = cms.EDProducer("PATJetProducer",
     # input
-    jetSource = cms.InputTag("ak5CaloJets"),
+    jetSource = cms.InputTag("ak5PFJetsCHS"),
     # add user data
     userData = cms.PSet(
       # add custom classes here
@@ -36,19 +36,13 @@ patJets = cms.EDProducer("PATJetProducer",
     addBTagInfo          = cms.bool(True),   ## master switch
     addDiscriminators    = cms.bool(True),   ## addition btag discriminators
     discriminatorSources = cms.VInputTag(
-        cms.InputTag("combinedSecondaryVertexBJetTags"),
-        cms.InputTag("combinedSecondaryVertexMVABJetTags"),
         cms.InputTag("jetBProbabilityBJetTags"),
         cms.InputTag("jetProbabilityBJetTags"),
+        cms.InputTag("trackCountingHighPurBJetTags"),
+        cms.InputTag("trackCountingHighEffBJetTags"),
         cms.InputTag("simpleSecondaryVertexHighEffBJetTags"),
         cms.InputTag("simpleSecondaryVertexHighPurBJetTags"),
-        cms.InputTag("softElectronByPtBJetTags"),
-        cms.InputTag("softElectronByIP3dBJetTags"),
-        cms.InputTag("softMuonBJetTags"),
-        cms.InputTag("softMuonByPtBJetTags"),
-        cms.InputTag("softMuonByIP3dBJetTags"),
-        cms.InputTag("trackCountingHighEffBJetTags"),
-        cms.InputTag("trackCountingHighPurBJetTags"),
+        cms.InputTag("combinedSecondaryVertexBJetTags")
     ),
     # clone tag infos ATTENTION: these take lots of space!
     # usually the discriminators from the default algos
@@ -57,7 +51,7 @@ patJets = cms.EDProducer("PATJetProducer",
     tagInfoSources  = cms.VInputTag(),
     # track association
     addAssociatedTracks    = cms.bool(True),
-    trackAssociationSource = cms.InputTag("ak5JetTracksAssociatorAtVertex"),
+    trackAssociationSource = cms.InputTag("ak5JetTracksAssociatorAtVertexPF"),
     # jet charge
     addJetCharge    = cms.bool(True),
     jetChargeSource = cms.InputTag("patJetCharge"),
@@ -75,7 +69,10 @@ patJets = cms.EDProducer("PATJetProducer",
     partonJetSource     = cms.InputTag("NOT_IMPLEMENTED"),          ## ParticleJet source to be used for the matching
     # jet flavour idetification configurables
     getJetMCFlavour    = cms.bool(True),
-    JetPartonMapSource = cms.InputTag("patJetFlavourAssociation"),
+    useLegacyJetMCFlavour = cms.bool(False),
+    addJetFlavourInfo  = cms.bool(False),
+    JetPartonMapSource = cms.InputTag("patJetFlavourAssociationLegacy"),
+    JetFlavourInfoSource = cms.InputTag("patJetFlavourAssociation"),
     # efficiencies
     addEfficiencies = cms.bool(False),
     efficiencies    = cms.PSet(),

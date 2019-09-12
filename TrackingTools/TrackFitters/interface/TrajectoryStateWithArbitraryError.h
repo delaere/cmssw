@@ -6,8 +6,6 @@
  *  but with "infinite" errors, i.e. errors so big that they don't
  *  bias a fit starting with this state. Ported from ORCA
  *
- *  $Date: 2007/05/09 14:17:57 $
- *  $Revision: 1.2 $
  *  \author todorov, cerati
  */
 

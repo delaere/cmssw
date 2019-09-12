@@ -13,7 +13,6 @@
 //
 // Original Author:  Jeremiah Mans
 //         Created:  Mon Oct  3 11:35:27 CDT 2005
-// $Id: HcalHardcodeGeometryEP.cc,v 1.12 2012/03/22 10:30:51 sunanda Exp $
 //
 //
 

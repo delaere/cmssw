@@ -12,7 +12,6 @@
 */
 //
 // Original Author:  Paolo Meridiani
-// $Id: CaloTopologyBuilder.h,v 1.3 2009/04/10 17:56:34 heltsley Exp $
 //
 //
 

@@ -4,7 +4,6 @@
 //
 // Package:     newVersion
 // Class  :     CmsShowNavigator
-// $Id: CmsShowNavigator.h,v 1.56 2012/07/06 23:33:29 amraktad Exp $
 //
 
 // system include files

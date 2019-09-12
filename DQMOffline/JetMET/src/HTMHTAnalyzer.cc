@@ -1,8 +1,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2010/03/25 11:02:48 $
- *  $Revision: 1.7 $
  *  \author K. Hatakeyama - Rockefeller University
  */
 

@@ -13,7 +13,7 @@
 //
 // Original Author:  Werner Man-Li Sun
 //         Created:  Mon Sep 28 22:17:24 CEST 2009
-// $Id: L1CaloGeometryDump.cc,v 1.1 2009/09/28 23:01:25 wsun Exp $
+// $Id$
 //
 //
 
@@ -47,9 +47,9 @@ class L1CaloGeometryDump : public edm::EDAnalyzer {
 
 
    private:
-      virtual void beginJob() ;
-      virtual void analyze(const edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
+      virtual void beginJob() override ;
+      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
 
       // ----------member data ---------------------------
 };

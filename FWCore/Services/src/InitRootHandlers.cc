@@ -28,23 +28,32 @@
 #include "TTree.h"
 
 namespace {
+  enum class SeverityLevel {
+    kInfo,
+    kWarning,
+    kError,
+    kSysError,
+    kFatal
+  };
+  
+  static thread_local bool s_ignoreWarnings = false;
 
-  void RootErrorHandlerImpl(int level, char const* location, char const* message, bool ignoreWarnings) {
+  void RootErrorHandlerImpl(int level, char const* location, char const* message) {
 
   bool die = false;
 
   // Translate ROOT severity level to MessageLogger severity level
 
-    edm::ELseverityLevel el_severity = edm::ELseverityLevel::ELsev_info;
+    SeverityLevel el_severity = SeverityLevel::kInfo;
 
     if (level >= kFatal) {
-      el_severity = edm::ELseverityLevel::ELsev_fatal;
+      el_severity = SeverityLevel::kFatal;
     } else if (level >= kSysError) {
-      el_severity = edm::ELseverityLevel::ELsev_severe;
+      el_severity = SeverityLevel::kSysError;
     } else if (level >= kError) {
-      el_severity = edm::ELseverityLevel::ELsev_error;
+      el_severity = SeverityLevel::kError;
     } else if (level >= kWarning) {
-      el_severity = ignoreWarnings ? edm::ELseverityLevel::ELsev_info : edm::ELseverityLevel::ELsev_warning;
+      el_severity = s_ignoreWarnings ? SeverityLevel::kInfo : SeverityLevel::kWarning;
     }
 
   // Adapt C-strings to std::strings
@@ -88,12 +97,12 @@ namespace {
        && (el_message.find("fill branch") != std::string::npos)
        && (el_message.find("address") != std::string::npos)
        && (el_message.find("not set") != std::string::npos)) {
-        el_severity = edm::ELseverityLevel::ELsev_fatal;
+        el_severity = SeverityLevel::kFatal;
       }
 
       if ((el_message.find("Tree branches") != std::string::npos)
        && (el_message.find("different numbers of entries") != std::string::npos)) {
-        el_severity = edm::ELseverityLevel::ELsev_fatal;
+        el_severity = SeverityLevel::kFatal;
       }
 
 
@@ -108,10 +117,10 @@ namespace {
           (el_location.find("THistPainter::PaintInit") != std::string::npos) ||
           (el_location.find("TUnixSystem::SetDisplay") != std::string::npos) ||
           (el_location.find("TGClient::GetFontByName") != std::string::npos)) {
-        el_severity = edm::ELseverityLevel::ELsev_info;
+        el_severity = SeverityLevel::kInfo;
       }
 
-    if (el_severity == edm::ELseverityLevel::ELsev_info) {
+    if (el_severity == SeverityLevel::kInfo) {
       // Don't throw if the message is just informational.
       die = false;
     } else {
@@ -136,25 +145,21 @@ namespace {
     // Typically, we get here only for informational messages,
     // but we leave the other code in just in case we change
     // the criteria for throwing.
-    if (el_severity == edm::ELseverityLevel::ELsev_fatal) {
+    if (el_severity == SeverityLevel::kFatal) {
       edm::LogError("Root_Fatal") << el_location << el_message;
-    } else if (el_severity == edm::ELseverityLevel::ELsev_severe) {
+    } else if (el_severity == SeverityLevel::kSysError) {
       edm::LogError("Root_Severe") << el_location << el_message;
-    } else if (el_severity == edm::ELseverityLevel::ELsev_error) {
+    } else if (el_severity == SeverityLevel::kError) {
       edm::LogError("Root_Error") << el_location << el_message;
-    } else if (el_severity == edm::ELseverityLevel::ELsev_warning) {
+    } else if (el_severity == SeverityLevel::kWarning) {
       edm::LogWarning("Root_Warning") << el_location << el_message ;
-    } else if (el_severity == edm::ELseverityLevel::ELsev_info) {
+    } else if (el_severity == SeverityLevel::kInfo) {
       edm::LogInfo("Root_Information") << el_location << el_message ;
     }
   }
 
   void RootErrorHandler(int level, bool, char const* location, char const* message) {
-    RootErrorHandlerImpl(level, location, message, false);
-  }
-
-  void RootErrorHandlerWithoutWarnings(int level, bool, char const* location, char const* message) {
-    RootErrorHandlerImpl(level, location, message, true);
+    RootErrorHandlerImpl(level, location, message);
   }
 
   extern "C" {
@@ -244,6 +249,11 @@ namespace edm {
       if (!TypeWithDict(typeid(std::vector<std::vector<unsigned int> >)).hasDictionary()) {
          edmplugin::PluginCapabilities::get()->load(dictionaryPlugInPrefix() + "std::vector<std::vector<unsigned int> >");
       }
+
+      int debugLevel = pset.getUntrackedParameter<int>("DebugLevel");
+      if(debugLevel >0) {
+	gDebug = debugLevel;
+      }
     }
 
     InitRootHandlers::~InitRootHandlers () {
@@ -268,22 +278,19 @@ namespace edm {
           ->setComment("If True, enables automatic loading of data dictionaries.");
       desc.addUntracked<bool>("AbortOnSignal",true)
       ->setComment("If True, do an abort when a signal occurs that causes a crash. If False, ROOT will do an exit which attempts to do a clean shutdown.");
+      desc.addUntracked<int>("DebugLevel",0)
+ 	  ->setComment("Sets ROOT's gDebug value.");
       descriptions.add("InitRootHandlers", desc);
     }
 
     void
-    InitRootHandlers::disableErrorHandler_() {
-        SetErrorHandler(DefaultErrorHandler);
+    InitRootHandlers::enableWarnings_() {
+      s_ignoreWarnings =false;
     }
 
     void
-    InitRootHandlers::enableErrorHandler_() {
-        SetErrorHandler(RootErrorHandler);
-    }
-
-    void
-    InitRootHandlers::enableErrorHandlerWithoutWarnings_() {
-        SetErrorHandler(RootErrorHandlerWithoutWarnings);
+    InitRootHandlers::ignoreWarnings_() {
+      s_ignoreWarnings = true;
     }
 
   }  // end of namespace service

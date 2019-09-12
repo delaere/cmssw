@@ -4,9 +4,6 @@
 /** \class ConversionTrackFinder
  **  
  **
- **  $Id: ConversionTrackFinder.h,v 1.11 2013/05/23 17:57:02 gartung Exp $ 
- **  $Date: 2013/05/23 17:57:02 $ 
- **  $Revision: 1.11 $
  **  \author Nancy Marinelli, U. of Notre Dame, US
  **
  ***/
@@ -44,7 +41,7 @@ class ConversionTrackFinder {
 
   /// Initialize EventSetup objects at each event
   void setEventSetup( const edm::EventSetup& es ) ; 
-  void setEvent(const  edm::Event& e ) ; 
+  void setTrajectoryBuilder(const TrajectoryBuilder & builder) ; 
 
 
  private:

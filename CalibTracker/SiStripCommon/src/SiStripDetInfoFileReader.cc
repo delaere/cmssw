@@ -3,7 +3,6 @@
 // Class:      SiStripDetInfoFileReader
 // Original Author:  G. Bruno
 //         Created:  Mon May 20 10:04:31 CET 2007
-// $Id: SiStripDetInfoFileReader.cc,v 1.6 2009/06/09 18:31:52 elmer Exp $
 
 #include "CalibTracker/SiStripCommon/interface/SiStripDetInfoFileReader.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
@@ -129,7 +128,7 @@ const std::pair<unsigned short, double>  SiStripDetInfoFileReader::getNumberOfAp
   }
   else{
 
-    static std::pair<unsigned short, double> defaultValue(0,0);
+    std::pair<unsigned short, double> defaultValue(0,0.);
     edm::LogWarning("SiStripDetInfoFileReader::getNumberOfApvsAndStripLength - Unable to find requested detid. Returning invalid data ")<<endl; 
     return defaultValue;
 
@@ -148,7 +147,7 @@ const float & SiStripDetInfoFileReader::getThickness(uint32_t detId) const{
   }
   else{
 
-    static float defaultValue=0;
+    static const float defaultValue=0;
     edm::LogWarning("SiStripDetInfoFileReader::getThickness - Unable to find requested detid. Returning invalid data ")<<endl; 
     return defaultValue;
 

@@ -1,5 +1,4 @@
 //STARTHEADER
-// $Id: fastjetfortran_madfks.cc,v 1.1 2013/02/08 20:15:52 spadhi Exp $
 //
 // Copyright (c) 2005-2011, Matteo Cacciari, Gavin P. Salam and Gregory Soyez
 //

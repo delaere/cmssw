@@ -1,4 +1,3 @@
-// Last commit: $Id: test_SiStripEnumsAndStrings.h,v 1.4 2010/01/07 11:20:54 lowette Exp $
 
 #ifndef DataFormats_SiStripCommon_testSiStripEnumsAndStrings_H
 #define DataFormats_SiStripCommon_testSiStripEnumsAndStrings_H

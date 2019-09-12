@@ -10,8 +10,6 @@
  *    - one Eta Matching Unit (EMU)
  *
  *
- *   $Date: 2009/06/02 14:41:48 $
- *   $Revision: 1.9 $
  *
  *   N. Neumeister            CERN EP
  *   J. Troconiz              UAM Madrid

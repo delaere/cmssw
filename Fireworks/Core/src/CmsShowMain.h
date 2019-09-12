@@ -16,7 +16,6 @@
 //
 // Original Author:
 //         Created:  Mon Dec  3 08:34:30 PST 2007
-// $Id: CmsShowMain.h,v 1.59 2012/07/06 23:33:29 amraktad Exp $
 //
 
 #include "Fireworks/Core/interface/CmsShowMainBase.h"

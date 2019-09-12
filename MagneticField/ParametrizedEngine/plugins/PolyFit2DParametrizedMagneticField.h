@@ -6,8 +6,6 @@
  *  Magnetic Field engine wrapper for V. Maroussov's 2D parametrization
  *  of the MT data.
  *
- *  $Date: 2011/04/16 10:20:40 $
- *  $Revision: 1.1 $
  *  \author N. Amapane
  */
 

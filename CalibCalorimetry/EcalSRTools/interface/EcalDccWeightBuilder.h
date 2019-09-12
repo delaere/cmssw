@@ -1,5 +1,4 @@
 /*
- * $Id: EcalDccWeightBuilder.h,v 1.6 2009/10/09 15:55:35 pgras Exp $
  */
 
 #ifndef ECALDCCWEIGHTBUILDER_CC

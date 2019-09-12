@@ -13,7 +13,6 @@
 //
 // Original Author:  Igor Volobouev
 //         Created:  Wed Apr 20 13:52:23 CDT 2011
-// $Id: FFTJetPileupEstimator.cc,v 1.3 2012/11/21 03:13:26 igv Exp $
 //
 //
 
@@ -52,9 +51,9 @@ public:
 
 protected:
     // methods
-    void beginJob();
-    void produce(edm::Event&, const edm::EventSetup&);
-    void endJob();
+    void beginJob() override;
+    void produce(edm::Event&, const edm::EventSetup&) override;
+    void endJob() override;
 
 private:
     FFTJetPileupEstimator();

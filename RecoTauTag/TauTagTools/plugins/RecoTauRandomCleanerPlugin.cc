@@ -15,16 +15,16 @@ namespace reco { namespace tau {
 
 class RecoTauRandomCleanerPlugin : public RecoTauCleanerPlugin {
   public:
-    RecoTauRandomCleanerPlugin(const edm::ParameterSet& pset);
+  RecoTauRandomCleanerPlugin(const edm::ParameterSet& pset, edm::ConsumesCollector &&iC);
     virtual ~RecoTauRandomCleanerPlugin(){}
     // Get discriminant value for a given tau Ref
-    double operator()(const reco::PFTauRef&) const;
+    double operator()(const reco::PFTauRef&) const override;
   private:
     unsigned int seed_;
 };
 
 RecoTauRandomCleanerPlugin::RecoTauRandomCleanerPlugin(
-    const edm::ParameterSet& pset):RecoTauCleanerPlugin(pset) {
+  const edm::ParameterSet& pset, edm::ConsumesCollector &&iC):RecoTauCleanerPlugin(pset,std::move(iC)) {
   seed_ = pset.exists("seed") ? pset.getParameter<unsigned int>("seed") : 1234;
 }
 

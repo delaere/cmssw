@@ -9,8 +9,6 @@
  *                with the hardware model)
 */
 //
-//   $Date: 2013/04/22 17:03:01 $
-//   $Revision: 1.5 $
 //
 //   Author :
 //   H. Sakulin            HEPHY Vienna

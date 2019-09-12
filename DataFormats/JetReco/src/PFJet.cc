@@ -1,6 +1,5 @@
 // PFJet.cc
 // Fedor Ratnikov UMd
-// $Id: PFJet.cc,v 1.17 2010/03/10 21:52:18 pandolf Exp $
 #include <sstream>
 #include <typeinfo>
 

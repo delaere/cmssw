@@ -1,7 +1,5 @@
 /** \file
  *
- *  $Date: 2013/04/15 16:22:20 $
- *  $Revision: 1.8 $
  *  \author N. Amapane - CERN
  */
 
@@ -43,7 +41,7 @@ class MagGeometryAnalyzer : public edm::EDAnalyzer {
   }
   
  private:
-  void testGrids( const vector<MagVolume6Faces*>& bvol);
+  void testGrids( const vector<MagVolume6Faces const*>& bvol);
 };
 
 using namespace edm;
@@ -81,10 +79,10 @@ void MagGeometryAnalyzer::analyze(const edm::Event & event, const edm::EventSetu
 #include "VolumeGridTester.h"
 
 
-void MagGeometryAnalyzer::testGrids(const vector<MagVolume6Faces*>& bvol) {
+void MagGeometryAnalyzer::testGrids(const vector<MagVolume6Faces const*>& bvol) {
   static map<string,int> nameCalls;
 
-  for (vector<MagVolume6Faces*>::const_iterator i=bvol.begin();
+  for (vector<MagVolume6Faces const*>::const_iterator i=bvol.begin();
        i!=bvol.end(); i++) {
     if ((*i)->copyno != 1) {
       continue;

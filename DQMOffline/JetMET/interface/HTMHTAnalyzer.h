@@ -6,8 +6,6 @@
  *
  *  DQM monitoring source for HTMHT
  *
- *  $Date: 2010/02/24 19:08:53 $
- *  $Revision: 1.6 $
  *  \author K. Hatakeyama, Rockefeller University
  */
 

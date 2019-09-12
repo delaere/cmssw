@@ -11,8 +11,6 @@
  *      -  1 DT Muon Sorter (MS)
  *
  *
- *   $Date: 2008/02/18 17:38:02 $
- *   $Revision: 1.4 $
  *
  *   N. Neumeister            CERN EP
  *   J. Troconiz              UAM Madrid

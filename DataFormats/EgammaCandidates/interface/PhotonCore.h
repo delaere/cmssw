@@ -10,7 +10,6 @@
  *
  * \author  N. Marinelli Univ. of Notre Dame
  * 
- * \version $Id: PhotonCore.h,v 1.6 2011/07/19 16:24:12 nancy Exp $
  * $Log $
  */
 #include "DataFormats/EgammaCandidates/interface/ConversionFwd.h"
@@ -50,7 +49,7 @@ namespace reco {
     /// set reference to SuperCluster
     void setSuperCluster( const reco::SuperClusterRef & r ) { superCluster_ = r; }
     /// set reference to PFlow SuperCluster
-    void setPflowSuperCluster( const reco::SuperClusterRef & r ) { pfSuperCluster_ = r; }
+    void setParentSuperCluster( const reco::SuperClusterRef & r ) { parentSuperCluster_ = r; }
     /// add  single ConversionRef to the vector of Refs
     void addConversion( const reco::ConversionRef & r ) { conversions_.push_back(r); }
     /// add  single ConversionRef to the vector of Refs
@@ -65,7 +64,7 @@ namespace reco {
     /// get reference to SuperCluster
     reco::SuperClusterRef superCluster() const { return superCluster_;}
     /// get reference to PFlow SuperCluster
-    reco::SuperClusterRef pfSuperCluster() const { return pfSuperCluster_;}
+    reco::SuperClusterRef parentSuperCluster() const { return parentSuperCluster_;}
 
     //// comment for Florian. I have seen that in GsfElectronCore they have a getter for the supercluster
     // which returns the pfSuperCluster only if the standard supeclsuter is not null
@@ -77,6 +76,9 @@ namespace reco {
     /// get vector of references to one leg Conversion's
     reco::ConversionRefVector conversionsOneLeg() const {return conversionsOneLeg_;} 
 
+    void setConversions(const reco::ConversionRefVector &conversions) { conversions_ = conversions; }
+    void setConversionsOneLeg(const reco::ConversionRefVector &conversions) { conversionsOneLeg_ = conversions; }
+    
     /// get reference to electron seed if existing
     reco::ElectronSeedRefVector electronPixelSeeds() const {return electronSeed_;}
     bool isPFlowPhoton() const {return isPFlowPhoton_;} 
@@ -93,7 +95,7 @@ namespace reco {
     // vector of references to ElectronPixelSeeds
     reco::ElectronSeedRefVector  electronSeed_;
     /// reference to a Particle flow SuperCluster
-    reco::SuperClusterRef pfSuperCluster_;
+    reco::SuperClusterRef parentSuperCluster_;
     bool  isPFlowPhoton_;
     bool  isStandardPhoton_;
 

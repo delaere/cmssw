@@ -10,8 +10,6 @@
  *  Trigger Primitive from an HO HTR
  *
  *
- *  $Date: 2008/04/23 00:53:12 $
- *  $Revision: 1.3 $
  *  \author J. St. John - Boston U
  */
 class HOTriggerPrimitiveDigi {

@@ -2,8 +2,6 @@
  * 
  *  Digi for CSC ALCT info available in DDU
  *
- *  $Date: 2009/05/09 20:23:33 $
- *  $Revision: 1.6 $
  *
  */
 #include "DataFormats/CSCDigi/interface/CSCALCTStatusDigi.h"

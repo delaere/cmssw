@@ -13,7 +13,6 @@
 //
 // Original Author:  Michael Case
 //         Created:  Mon 2006/10/02
-// $Id: MuonNumberingTester.cc,v 1.4 2010/08/10 14:06:07 innocent Exp $
 //
 //
 

@@ -4,8 +4,6 @@
 /** \class BaseBinFinder
  * Abstract interface for a bin finder.
  *
- *  $Date: 2005/09/21 10:16:30 $
- *  $Revision: 1.1 $
  *  \author N. Amapane - INFN Torino
  */
 

@@ -14,8 +14,8 @@
  *   path p = { comparator }
  *
  *
- *  $Date: 2013/01/07 20:46:23 $
- *  $Revision: 1.15 $
+ *  $Date: 2012/12/02 22:13:12 $
+ *  $Revision: 1.14 $
  *  \author Nhan Tran
  *
  * ********
@@ -81,7 +81,7 @@ private:
 	//compares two geometries
 	void compareGeometries(Alignable* refAli, Alignable* curAli, const TrackerTopology* tTopo);
 	//filling the ROOT file
-	void fillTree(Alignable *refAli, AlgebraicVector diff, // typedef CLHEP::HepVector      AlgebraicVector; 
+	void fillTree(Alignable *refAli, const AlgebraicVector& diff, // typedef CLHEP::HepVector      AlgebraicVector; 
                       const TrackerTopology* tTopo); 
 	//for filling identifiers
 	void fillIdentifiers( int subdetlevel, int rawid, const TrackerTopology* tTopo);

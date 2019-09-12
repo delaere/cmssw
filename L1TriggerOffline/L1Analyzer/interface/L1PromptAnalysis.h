@@ -6,8 +6,6 @@
  *   Description:  This code is designed for l1 prompt analysis
 //                 starting point is a GMTTreeMaker By Ivan Mikulec. 
 */                
-//   $Date: 2010/02/11 00:12:52 $
-//   $Revision: 1.5 $
 //
 //   I. Mikulec            HEPHY Vienna
 //

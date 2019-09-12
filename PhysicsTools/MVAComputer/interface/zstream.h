@@ -8,7 +8,6 @@
 //
 // Author:	Christophe Saout <christophe.saout@cern.ch>
 // Created:     Sat Apr 24 15:18 CEST 2007
-// $Id: zstream.h,v 1.4 2012/04/02 12:37:11 davidlt Exp $
 //
 
 #include <iostream>

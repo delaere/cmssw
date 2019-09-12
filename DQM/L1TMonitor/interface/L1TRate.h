@@ -4,8 +4,6 @@
 /*
  * \file L1TRate.h
  *
- * $Date: 2011/10/28 13:24:48 $
- * $Revision: 1.4 $
  * \author J. Pela
  *
 */
@@ -28,6 +26,12 @@
 #include "DQMServices/Core/interface/MonitorElement.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
+
+#include "DataFormats/Scalers/interface/LumiScalers.h"
+#include "DataFormats/Scalers/interface/Level1TriggerRates.h"
+#include "DataFormats/Scalers/interface/Level1TriggerScalers.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
+
 
 #include <TString.h>
 
@@ -92,8 +96,9 @@ class L1TRate : public edm::EDAnalyzer {
     std::map<TString,TF1*>                  m_templateFunctions;      // For each trigger template f(InstLumi)=XSec
 
     // Input tags
-    edm::InputTag m_scalersSource;       // Where to get L1 Scalers
-    edm::InputTag m_l1GtDataDaqInputTag; // Where to get L1 GT Data DAQ
+    edm::EDGetTokenT<LumiScalersCollection> m_scalersSource_colLScal;                      // Where to get L1 Scalers
+    edm::EDGetTokenT<Level1TriggerScalersCollection> m_scalersSource_triggerScalers;       // Where to get L1 Scalers
+    edm::EDGetTokenT<L1GlobalTriggerReadoutRecord> m_l1GtDataDaqInputTag; // Where to get L1 GT Data DAQ
 
     // ParameterSet
     edm::ParameterSet m_parameters;

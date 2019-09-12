@@ -1,4 +1,3 @@
-// $Id: RBCEmulator.h,v 1.9 2009/06/17 15:27:23 aosorio Exp $
 #ifndef RBCEMULATOR_H 
 #define RBCEMULATOR_H 1
 

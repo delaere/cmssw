@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Tue Nov 11 14:08:50 EST 2008
-// $Id: FWRepresentationCheckerBase.cc,v 1.3 2010/06/02 22:36:36 chrjones Exp $
 //
 
 // system include files
@@ -30,8 +29,9 @@
 //
 FWRepresentationCheckerBase::FWRepresentationCheckerBase(const std::string& iPurpose, 
                                                          unsigned int iBitPackedViews,
-                                                         bool iRepresentsSubPart) :
-   m_purpose(iPurpose), m_bitPackedViews(iBitPackedViews), m_representsSubPart(iRepresentsSubPart)
+                                                         bool iRepresentsSubPart,
+                                                         bool iRequiresFF) :
+   m_purpose(iPurpose), m_bitPackedViews(iBitPackedViews), m_representsSubPart(iRepresentsSubPart), m_requiresFF(iRequiresFF)
 {
 }
 

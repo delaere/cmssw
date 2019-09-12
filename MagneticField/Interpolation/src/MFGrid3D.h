@@ -5,8 +5,6 @@
  *
  *  Generic virtual implementation of a MFGrid for a 3D underlying regular grid.
  *
- *  $Date: 2013/03/21 08:49:31 $
- *  $Revision: 1.2 $
  *  \author T. Todorov
  */
 

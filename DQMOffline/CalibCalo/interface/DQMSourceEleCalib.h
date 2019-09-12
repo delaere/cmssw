@@ -5,8 +5,6 @@
  * *
  *  DQM Source for phi symmetry stream
  *
- *  $Date: 2009/12/14 22:22:17 $
- *  $Revision: 1.3 $
  *  \author Stefano Argiro'
  *          Andrea Gozzelino - Universita  e INFN Torino
  *   
@@ -17,6 +15,10 @@
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "DataFormats/DetId/interface/DetId.h"
 #include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
+
+#include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
+#include "DataFormats/EgammaCandidates/interface/GsfElectronFwd.h"
+
 
 class DQMStore;
 class MonitorElement;
@@ -77,12 +79,12 @@ private:
   MonitorElement * HitsVsAssociatedHits_;
 
   /// object to monitor
-  edm::InputTag productMonitoredEB_;
+  edm::EDGetTokenT<EcalRecHitCollection> productMonitoredEB_;
 
  /// object to monitor
-  edm::InputTag productMonitoredEE_;
+  edm::EDGetTokenT<EcalRecHitCollection> productMonitoredEE_;
   //! electrons to monitor
-  edm::InputTag productMonitoredElectrons_;
+  edm::EDGetTokenT<reco::GsfElectronCollection> productMonitoredElectrons_;
 
   /// Monitor every prescaleFactor_ events
   unsigned int prescaleFactor_;

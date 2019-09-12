@@ -1,5 +1,4 @@
 //
-// $Id: CaloIsolationEnergy.cc,v 1.4 2011/11/01 23:35:45 gowdy Exp $
 //
 
 #include "PhysicsTools/PatUtils/interface/CaloIsolationEnergy.h"

@@ -13,7 +13,7 @@
 //
 // Original Author:  Werner Man-Li Sun
 //         Created:  Thu Oct  2 19:40:12 CEST 2008
-// $Id: DTEtaPatternLutOnlineProd.cc,v 1.1 2008/10/13 03:24:50 wsun Exp $
+// $Id$
 //
 //
 
@@ -40,7 +40,7 @@ class DTEtaPatternLutOnlineProd :
       ~DTEtaPatternLutOnlineProd();
 
   virtual boost::shared_ptr< L1MuDTEtaPatternLut > newObject(
-    const std::string& objectKey ) ;
+    const std::string& objectKey ) override ;
 
    private:
       // ----------member data ---------------------------

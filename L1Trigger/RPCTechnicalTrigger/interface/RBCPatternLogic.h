@@ -1,4 +1,3 @@
-// $Id: RBCPatternLogic.h,v 1.2 2009/06/07 21:18:50 aosorio Exp $
 #ifndef RBCPATTERNLOGIC_H 
 #define RBCPATTERNLOGIC_H 1
 

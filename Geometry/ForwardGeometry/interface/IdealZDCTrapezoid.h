@@ -15,8 +15,7 @@
   
   Total: 7 parameters 
   
-  $Date: 2011/09/27 09:15:30 $
-  $Revision: 1.10 $
+  $Revision: 1.9 $
   \author E. Garcia - UIC
   */
 

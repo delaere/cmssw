@@ -6,8 +6,6 @@
  *  which are built in the RecoMuon tracking code.
  *  This data format is meant to be used internally only.
  *
- *  $Date: 2007/05/04 18:25:27 $
- *  $Revision: 1.2 $
  *  \author R. Bellan - INFN Torino <riccardo.bellan@cern.ch>
  */
 

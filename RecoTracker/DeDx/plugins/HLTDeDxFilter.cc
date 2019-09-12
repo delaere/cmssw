@@ -40,9 +40,11 @@ HLTDeDxFilter::HLTDeDxFilter(const edm::ParameterSet& iConfig) : HLTFilter(iConf
   maxETA_       = iConfig.getParameter<double> ("maxETA");
   inputTracksTag_ = iConfig.getParameter< edm::InputTag > ("inputTracksTag");
   inputdedxTag_   = iConfig.getParameter< edm::InputTag > ("inputDeDxTag");
+  inputTracksToken_ = consumes<reco::TrackCollection>(iConfig.getParameter< edm::InputTag > ("inputTracksTag"));
+  inputdedxToken_   = consumes<edm::ValueMap<reco::DeDxData> >(iConfig.getParameter< edm::InputTag > ("inputDeDxTag"));
 
-  thisModuleTag_ = edm::InputTag(iConfig.getParameter<std::string>("@module_label")); 
- 
+  thisModuleTag_ = edm::InputTag(iConfig.getParameter<std::string>("@module_label"));
+
   //register your products
   produces<reco::RecoChargedCandidateCollection>();
 }
@@ -65,7 +67,7 @@ void HLTDeDxFilter::fillDescriptions(edm::ConfigurationDescriptions& description
 
 // ------------ method called to produce the data  ------------
 bool
-  HLTDeDxFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct)
+  HLTDeDxFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) const
 {
   using namespace std;
   using namespace edm;
@@ -83,11 +85,11 @@ bool
   }
 
   edm::Handle<reco::TrackCollection> trackCollectionHandle;
-  iEvent.getByLabel(inputTracksTag_,trackCollectionHandle);
+  iEvent.getByToken(inputTracksToken_,trackCollectionHandle);
   reco::TrackCollection trackCollection = *trackCollectionHandle.product();
-  
+
   edm::Handle<edm::ValueMap<reco::DeDxData> > dEdxTrackHandle;
-  iEvent.getByLabel(inputdedxTag_, dEdxTrackHandle);
+  iEvent.getByToken(inputdedxToken_, dEdxTrackHandle);
   const edm::ValueMap<reco::DeDxData> dEdxTrack = *dEdxTrackHandle.product();
 
   bool accept=false;
@@ -102,12 +104,12 @@ bool
           Particle::LorentzVector p4(track->px(), track->py(), track->pz(), sqrt(pow(track->p(),2) + pow(dEdxTrack[track].dEdx(),2)));
           Particle::Point vtx(track->vx(),track->vy(), track->vz());
           //SAVE NOH, NOM, NOS INFORMATION AS IF IT WAS THE PDGID OF THE PARTICLE
-          int Hits  = ((dEdxTrack[track].numberOfSaturatedMeasurements()&0xFF)<<16) | ((dEdxTrack[track].numberOfMeasurements()&0xFF)<<8) | (track->found()&0xFF); 
+          int Hits  = ((dEdxTrack[track].numberOfSaturatedMeasurements()&0xFF)<<16) | ((dEdxTrack[track].numberOfMeasurements()&0xFF)<<8) | (track->found()&0xFF);
           RecoChargedCandidate cand(q, p4, vtx, Hits, 0);
           cand.setTrack(track);
           chargedCandidates->push_back(cand);
        }
-       accept=true; 
+       accept=true;
     }
   }
 

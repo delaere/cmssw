@@ -5,8 +5,6 @@
  *
  *  Build the DTGeometry from the DDD description.  
  *
- *  $Date: 2012/12/24 14:35:11 $
- *  $Revision: 1.5 $
  *  \author N. Amapane - CERN. 
  *  \author Port of: MuBarDDDGeomBuilder, MuBarDetBuilder (ORCA) by S. Lacaprara, M. Case
  */

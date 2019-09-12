@@ -4,8 +4,6 @@
  *    Implementation of TSM trigger algorithm
  *
  *
- *   $Date: 2008/09/05 15:59:57 $
- *   $Revision: 1.3 $
  *
  *   \author C. Grandi, D. Bonacorsi, S. Marcellini
  */
@@ -52,7 +50,7 @@ class DTTSM {
     inline int number() const { return _n; }
 
     /// Set configuration
-    void setConfig(DTConfigTSPhi *config) {  _config=config; }
+    void setConfig(const DTConfigTSPhi *config) {  _config=config; }
 
     /// Add a TSS candidate to the TSM, ifs is first/second track flag
     void addCand(DTTSCand* cand);
@@ -74,7 +72,7 @@ class DTTSM {
     void clear();
 
     /// Configuration set
-    inline DTConfigTSPhi* config() const { return _config; }
+    inline const DTConfigTSPhi* config() const { return _config; }
 
     /// Return the number of input tracks (first/second)
     unsigned nCand(int ifs) const;
@@ -99,7 +97,7 @@ class DTTSM {
  
   private:
 
-    DTConfigTSPhi* _config;
+    const DTConfigTSPhi* _config;
 
 
     // SM double TSM

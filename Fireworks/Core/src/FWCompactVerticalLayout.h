@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Tue Mar 17 12:10:41 CDT 2009
-// $Id: FWCompactVerticalLayout.h,v 1.1 2009/03/18 15:36:41 chrjones Exp $
 //
 
 // system include files

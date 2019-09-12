@@ -5,8 +5,6 @@
  *
  *  The single EDProduct containing the HLT Prescale Table
  *
- *  $Date: 2010/10/14 23:00:36 $
- *  $Revision: 1.7 $
  *
  *  \author Martin Grunewald
  *

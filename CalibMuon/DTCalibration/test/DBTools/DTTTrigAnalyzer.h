@@ -4,8 +4,6 @@
 /** \class DTTTrigAnalyzer
  *  Plot the ttrig from the DB
  *
- *  $Date: 2010/02/15 16:45:47 $
- *  $Revision: 1.4 $
  *  \author S. Bolognesi - INFN Torino
  */
 
@@ -16,6 +14,7 @@
 
 #include <string>
 #include <fstream>
+#include <map>
 #include <vector>
 
 class DTTtrig;

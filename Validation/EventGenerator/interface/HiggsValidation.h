@@ -5,8 +5,6 @@
  *  
  *  Class to fill Event Generator dqm monitor elements; works on HepMCProduct
  *
- *  $Date: 2012/08/12 16:13:28 $
- *  $Revision: 1.1 $
  *
  */
 #include <iostream>
@@ -46,7 +44,7 @@ class HiggsValidation : public edm::EDAnalyzer {
   virtual void endRun(const edm::Run&, const edm::EventSetup&);
   
  private:
-
+  WeightManager wmanager_;
 
   class MonitoredDecays {
   public:
@@ -68,7 +66,7 @@ class HiggsValidation : public edm::EDAnalyzer {
 	if((channels[i].first == abs(pid1) && channels[i].second == abs(pid2)) || 
 	   (channels[i].first == abs(pid2) && channels[i].second == abs(pid1))) return i+1;
       }
-      return channels.size()+1;
+      return undetermined();//channels.size()+1;
     }
 
     size_t size(){return channels.size() + 2;}
@@ -157,8 +155,6 @@ class HiggsValidation : public edm::EDAnalyzer {
   int findHiggsDecayChannel(const HepMC::GenParticle*,std::vector<HepMC::GenParticle*> &decayprod);
   std::string convert(int);
   
-  WeightManager _wmanager;
-  
   edm::InputTag hepmcCollection_;
 
   int particle_id;
@@ -181,6 +177,8 @@ class HiggsValidation : public edm::EDAnalyzer {
   
   std::vector<MonitorElement*> HiggsDecayProd_pt;
   std::vector<MonitorElement*> HiggsDecayProd_eta;
+
+  edm::EDGetTokenT<edm::HepMCProduct> hepmcCollectionToken_;
 
 };
 

@@ -6,10 +6,41 @@ static int const* g_ptr_staticConst = &g_staticConst;
 
 
 // results in a warning by GlobalStaticChecker
-static int g_static;
+[[cms::thread_safe]] static int g_static;
 static int * g_ptr_static = &g_static;
 
+class ClassTest {
+   public:
+      explicit ClassTest();
+      ~ClassTest();
 
+void testConst() const;
+
+   private:
+
+      mutable int m_testMutable;
+      int * m_testPointer;
+      int m_testInteger;
+
+};
+
+void
+ClassTest::testConst() const
+{
+    // 1) reported by class checker
+    m_testMutable = 23;
+
+    // 2) compiles, not reported
+    (*m_testPointer) = 23;
+
+    // 3) compiles, not reported
+    int * localPtr = m_testPointer;
+    (*localPtr) = 23;
+
+    // 4) will not compile
+    // error: invalid conversion from 'const int*' to 'int*'
+    //int * localPtrToInt = &m_testInteger;
+} 
 
 class Foo
 {
@@ -40,7 +71,7 @@ int const & constRefAccess() const { return RVar_; } //OK ?
 
 class Bar
 {
-static int si_;
+[[cms::thread_safe]] static int si_;
 static void const modifyStatic(int &x) {si_=x;}
 private:
 Bar(): ci_{0},ipc_{&i_},icp_{&i_},ir_{i_},icr_{ci_} {}
@@ -121,7 +152,7 @@ void method3() const
 // must not produce a warning
 	int const& ira = (int const&)(icr_);
 // will produce a warning by StaticLocalChecker
-        static int evilStaticLocal = 0;
+        [[cms::thread_safe]] static int evilStaticLocal = 0;
 	static int & intRef = evilStaticLocal;
 	static int * intPtr = & evilStaticLocal;
 // no warnings here

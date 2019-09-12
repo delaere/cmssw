@@ -16,7 +16,6 @@
 //
 // Original Author:  Gena Kukartsev, kukarzev@fnal.gov
 //         Created:  Tue Nov 06 14:30:33 CDT 2007
-// $Id: HcalTriggerKey.h,v 1.4 2010/08/06 20:24:09 wmtan Exp $
 //
 
 #include <map>

@@ -1,7 +1,5 @@
 /** \file
  *
- *  $Date: 2012/03/21 16:45:14 $
- *  $Revision: 1.2 $
  *  \author S. Bolognesi - INFN To 
  */
 

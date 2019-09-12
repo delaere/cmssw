@@ -20,11 +20,11 @@ namespace triggerExpression {
 
 template <typename T>
 static 
-const T * get(const edm::Event & event, const edm::InputTag & tag) {
+const T * get(const edm::Event & event, const edm::EDGetTokenT<T> & token) {
   edm::Handle<T> handle;
-  event.getByLabel(tag, handle);
+  event.getByToken(token, handle);
   if (not handle.isValid()) {
-    boost::shared_ptr<cms::Exception> const & error = handle.whyFailed();
+    auto const & error = handle.whyFailed();
     edm::LogWarning(error->category()) << error->what();
     return 0;
   } else {
@@ -46,9 +46,9 @@ bool Data::setEvent(const edm::Event & event, const edm::EventSetup & setup) {
   m_eventNumber = event.id().event();
 
   // access L1 objects only if L1 is used
-  if (not m_l1tResultsTag.label().empty()) {
+  if (hasL1T()) {
     // cache the L1 GT results objects
-    m_l1tResults = get<L1GlobalTriggerReadoutRecord>(event, m_l1tResultsTag);
+    m_l1tResults = get<L1GlobalTriggerReadoutRecord>(event, m_l1tResultsToken);
     if (not m_l1tResults)
       return false;
 
@@ -69,9 +69,9 @@ bool Data::setEvent(const edm::Event & event, const edm::EventSetup & setup) {
   }
 
   // access HLT objects only if HLT is used
-  if (not m_hltResultsTag.label().empty()) {
+  if (hasHLT()) {
     // cache the HLT TriggerResults
-    m_hltResults = get<edm::TriggerResults>(event, m_hltResultsTag);
+    m_hltResults = get<edm::TriggerResults>(event, m_hltResultsToken);
     if (not m_hltResults)
       return false;
 

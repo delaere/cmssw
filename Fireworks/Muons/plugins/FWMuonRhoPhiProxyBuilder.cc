@@ -3,7 +3,6 @@
 // Package:     Muons
 // Class  :     FWMuonRhoPhiProxyBuilder
 //
-// $Id: FWMuonRhoPhiProxyBuilder.cc,v 1.2 2010/11/11 20:25:28 amraktad Exp $
 //
 
 #include "Fireworks/Core/interface/FWSimpleProxyBuilderTemplate.h"
@@ -24,10 +23,10 @@ private:
    // Disable default assignment operator
    const FWMuonRhoPhiProxyBuilder& operator=( const FWMuonRhoPhiProxyBuilder& );
 
-   void build( const reco::Muon& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext* );
+   void build( const reco::Muon& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext* ) override;
 
    virtual void localModelChanges( const FWModelId& iId, TEveElement* iCompound,
-                                   FWViewType::EType viewType, const FWViewContext* vc );
+                                   FWViewType::EType viewType, const FWViewContext* vc ) override;
 
    mutable FWMuonBuilder m_builder;
 };

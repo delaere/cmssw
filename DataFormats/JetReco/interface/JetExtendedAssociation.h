@@ -7,7 +7,6 @@
  *
  * \author Fedor Ratnikov, Sept. 9, 2007
  *
- * \version   $Id: JetExtendedAssociation.h,v 1.5 2008/05/21 00:27:45 fedor Exp $
  ************************************************************/
 
 #include "DataFormats/Common/interface/AssociationVector.h"

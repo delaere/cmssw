@@ -12,8 +12,6 @@
  *  Rods consist of one or more slabs (MagBSlab); each one consisting of one 
  *  or, in few cases, several volumes with the same lenght in Z.
  *
- *  $Date: 2013/05/30 21:57:39 $
- *  $Revision: 1.3 $
  *  \author N. Amapane - INFN Torino
  */
 

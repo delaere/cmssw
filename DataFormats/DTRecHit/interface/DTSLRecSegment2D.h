@@ -5,8 +5,6 @@
  *
  *  a 2D (x, dx/dz) segment in a DT superlayer.
  *
- *  $Date: 2006/06/29 17:18:27 $
- *  $Revision: 1.2 $
  *  \author R. Bellan - INFN Torino <riccardo.bellan@cern.ch>
  */
 

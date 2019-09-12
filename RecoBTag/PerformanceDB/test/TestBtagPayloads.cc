@@ -13,11 +13,11 @@
 //
 // Original Author:  Michael Segala
 //         Created:  Wed Jun 20 02:47:47 CDT 2012
-// $Id: TestBtagPayloads.cc,v 1.2 2013/01/31 17:54:44 msegala Exp $
 //
 //
 
 // system include files
+#include <iostream>
 #include <memory>
 #include <stdio.h>
 

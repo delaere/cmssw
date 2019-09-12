@@ -1,7 +1,5 @@
 /** \file
  *
- *  $Date: 2013/05/21 12:57:27 $
- *  $Revision: 1.9 $
  */
 
 #include "MagneticField/GeomBuilder/plugins/VolumeBasedMagneticFieldESProducer.h"

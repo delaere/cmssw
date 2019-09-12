@@ -15,7 +15,7 @@
 //
 // Original Author:  Chi Nhan Nguyen
 //         Created:  Mon Feb 19 13:25:24 CST 2007
-// $Id: FastL1Region.h,v 1.17 2009/03/23 11:41:27 chinhan Exp $
+// $Id: FastL1Region.h,v 1.5 2009/02/08 18:14:36 chinhan Exp $
 //
 
 // user include files
@@ -113,7 +113,7 @@ class FastL1Region {
   FastL1Region();
   ~FastL1Region();
 
-  void SetParameters(L1Config);
+  void SetParameters(const L1Config&);
   void FillTower(const CaloTower& t,int& tid,edm::ESHandle<CaloGeometry> &cGeom); 
   void FillTowerZero(const CaloTower& t,int& tid); 
   void FillTower_Scaled(const CaloTower& t,int& tid,bool doRCTTrunc,edm::ESHandle<CaloGeometry> &cGeom); 

@@ -4,8 +4,6 @@
 /*
  * \file EECosmicTask.h
  *
- * $Date: 2012/04/27 13:46:13 $
- * $Revision: 1.19 $
  * \author G. Della Ricca
  *
 */
@@ -13,6 +11,9 @@
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
+#include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
 
 class MonitorElement;
 class DQMStore;
@@ -65,9 +66,9 @@ bool enableCleanup_;
 
 bool mergeRuns_;
 
-edm::InputTag EcalRawDataCollection_;
-edm::InputTag EcalUncalibratedRecHitCollection_; 
-edm::InputTag EcalRecHitCollection_;
+edm::EDGetTokenT<EcalRawDataCollection> EcalRawDataCollection_;
+edm::EDGetTokenT<EcalUncalibratedRecHitCollection> EcalUncalibratedRecHitCollection_; 
+edm::EDGetTokenT<EcalRecHitCollection> EcalRecHitCollection_;
 
 MonitorElement* meSelMap_[18];
 

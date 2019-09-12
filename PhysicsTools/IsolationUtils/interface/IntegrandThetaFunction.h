@@ -17,7 +17,6 @@
 //
 // Original Author:  Christian Veelken, UC Davis
 //         Created:  Thu Nov  2 13:47:40 CST 2006
-// $Id: IntegrandThetaFunction.h,v 1.2 2009/01/14 10:53:14 hegner Exp $
 //
 //
 

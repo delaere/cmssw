@@ -4,8 +4,6 @@
 /** \class DTDDUUnpacker
  *  The unpacker for DTs' FED.
  *
- *  $Date: 2007/09/04 08:07:26 $
- *  $Revision: 1.4 $
  * \author M. Zanetti INFN Padova
  * FRC 060906
  */

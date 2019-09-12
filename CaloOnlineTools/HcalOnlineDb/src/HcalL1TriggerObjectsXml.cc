@@ -8,7 +8,6 @@
 //
 // Original Author:  Gena Kukartsev, kukarzev@fnal.gov
 //         Created:  Wed Jul 01 06:30:00 CDT 2009
-// $Id: HcalL1TriggerObjectsXml.cc,v 1.2 2009/11/18 23:02:26 lsexton Exp $
 //
 
 #include <iostream>
@@ -18,9 +17,8 @@
 #include "CaloOnlineTools/HcalOnlineDb/interface/HcalL1TriggerObjectsXml.h"
 #include "CaloOnlineTools/HcalOnlineDb/interface/ConnectionManager.h"
 #include "CaloOnlineTools/HcalOnlineDb/interface/ConfigurationDatabaseException.hh"
-#include "xgi/Utils.h"
-#include "toolbox/string.h"
 #include "OnlineDB/Oracle/interface/Oracle.h"
+
 
 using namespace std;
 using namespace oracle::occi;

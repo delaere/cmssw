@@ -1,7 +1,5 @@
 /** \file GenericHouseholder.cc
  *
- * $Date: 2010/08/06 20:24:06 $
- * $Revision: 1.2 $
  *
  * \author Lorenzo Agostino, R.Ofierzynski, CERN
  */

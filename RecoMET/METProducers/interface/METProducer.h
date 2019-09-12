@@ -13,7 +13,6 @@
 //
 // Original Author:  Rick Cavanaugh
 //         Created:  May 14, 2005
-// $Id: METProducer.h,v 1.32 2013/05/03 18:47:56 salee Exp $
 //
 //
 
@@ -22,8 +21,13 @@
 
 #include <string.h>
 #include "FWCore/Framework/interface/EDProducer.h"
+#include "DataFormats/Common/interface/View.h"
+#include "DataFormats/Candidate/interface/Candidate.h"
 #include "RecoMET/METAlgorithms/interface/TCMETAlgo.h"
 #include "FWCore/Utilities/interface/InputTag.h"
+
+#include "DataFormats/JetReco/interface/PFJet.h"
+#include "DataFormats/ParticleFlowReco/interface/PFClusterFwd.h"
 
 namespace edm {
   class ParameterSet;
@@ -61,6 +65,8 @@ namespace cms
       std::string METtype;
       std::string alias;
 
+      edm::EDGetTokenT<edm::View<reco::Candidate> > inputToken_;
+
       //Calculate MET Significance (not necessary at HLT)
       bool calculateSignificance_;
       metsig::SignAlgoResolutions *resolutions_;
@@ -81,7 +87,12 @@ namespace cms
       //Use Pt instaed of Et
       bool usePt;
 
+      // for pfMET
+      edm::EDGetTokenT<edm::View<reco::PFJet> > jetToken_;
+
+
       TCMETAlgo tcMetAlgo_;
+
     };
 }
 

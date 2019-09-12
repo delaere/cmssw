@@ -13,7 +13,6 @@
 //
 // Original Author:  pts/47
 //         Created:  Thu Jul 13 21:38:08 CEST 2006
-// $Id: L1RCTTestAnalyzer.h,v 1.15 2012/04/10 13:30:58 ghete Exp $
 //
 //
 

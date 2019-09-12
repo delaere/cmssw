@@ -1,22 +1,19 @@
 /*
  * \file EcalEndcapDigisValidation.cc
  *
- * $Date: 2010/01/04 15:10:59 $
- * $Revision: 1.21 $
  * \author F. Cossutti
  *
 */
 
 #include <Validation/EcalDigis/interface/EcalEndcapDigisValidation.h>
 #include "CalibCalorimetry/EcalTrivialCondModules/interface/EcalTrivialConditionRetriever.h"
-#include "DQMServices/Core/interface/DQMStore.h"
 
 using namespace cms;
 using namespace edm;
 using namespace std;
 
 EcalEndcapDigisValidation::EcalEndcapDigisValidation(const ParameterSet& ps):
-  EEdigiCollection_(ps.getParameter<edm::InputTag>("EEdigiCollection"))
+  EEdigiCollectionToken_(consumes<EEDigiCollection>(ps.getParameter<edm::InputTag>("EEdigiCollection")))
   {
  
   // verbosity switch
@@ -149,7 +146,7 @@ void EcalEndcapDigisValidation::analyze(Event const & e, EventSetup const & c){
 
   Handle<EEDigiCollection> EcalDigiEE;
 
-  e.getByLabel( EEdigiCollection_ , EcalDigiEE );
+  e.getByToken( EEdigiCollectionToken_ , EcalDigiEE );
 
   // Return if no Endcap data available
   if( !EcalDigiEE.isValid() ) return;

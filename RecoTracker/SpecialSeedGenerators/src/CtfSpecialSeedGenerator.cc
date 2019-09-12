@@ -9,23 +9,37 @@
 #include "RecoTracker/TkTrackingRegions/interface/TrackingRegion.h"
 #include "RecoTracker/TkTrackingRegions/interface/OrderedHitsGeneratorFactory.h"
 #include "RecoTracker/TkSeedingLayers/interface/OrderedSeedingHits.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
-
-#include "RecoTracker/SpecialSeedGenerators/interface/ClusterChecker.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 using namespace ctfseeding;
 
 CtfSpecialSeedGenerator::CtfSpecialSeedGenerator(const edm::ParameterSet& conf): 
   conf_(conf),
   requireBOFF(conf.getParameter<bool>("requireBOFF")),
-  theMaxSeeds(conf.getParameter<int32_t>("maxSeeds"))
+  theMaxSeeds(conf.getParameter<int32_t>("maxSeeds")),
+  check(conf,consumesCollector())
+
 {
   	useScintillatorsConstraint = conf_.getParameter<bool>("UseScintillatorsConstraint");
   	edm::LogVerbatim("CtfSpecialSeedGenerator") << "Constructing CtfSpecialSeedGenerator";
   	produces<TrajectorySeedCollection>();
 	theSeedBuilder =0; 
 	theRegionProducer =0;
+
+	edm::ParameterSet regfactoryPSet = conf_.getParameter<edm::ParameterSet>("RegionFactoryPSet");
+  	std::string regfactoryName = regfactoryPSet.getParameter<std::string>("ComponentName");
+  	theRegionProducer = TrackingRegionProducerFactory::get()->create(regfactoryName,regfactoryPSet, consumesCollector());
+
+	std::vector<edm::ParameterSet> pSets = conf_.getParameter<std::vector<edm::ParameterSet> >("OrderedHitsFactoryPSets");
+	std::vector<edm::ParameterSet>::const_iterator iPSet;
+        edm::ConsumesCollector iC = consumesCollector();
+	for (iPSet = pSets.begin(); iPSet != pSets.end(); iPSet++){
+		std::string hitsfactoryName = iPSet->getParameter<std::string>("ComponentName");
+		theGenerators.emplace_back(OrderedHitsGeneratorFactory::get()->create( hitsfactoryName, *iPSet, iC));
+        }
 }
 
 CtfSpecialSeedGenerator::~CtfSpecialSeedGenerator(){
@@ -34,11 +48,6 @@ CtfSpecialSeedGenerator::~CtfSpecialSeedGenerator(){
 void CtfSpecialSeedGenerator::endRun(edm::Run const&, edm::EventSetup const&){
     if (theSeedBuilder)    { delete theSeedBuilder;    theSeedBuilder = 0; }
     if (theRegionProducer) { delete theRegionProducer; theRegionProducer = 0; }
-    std::vector<OrderedHitsGenerator*>::iterator iGen;	
-    for (iGen = theGenerators.begin(); iGen != theGenerators.end(); iGen++){
-        delete (*iGen);
-    }
-    theGenerators.clear();
 }
 
 void CtfSpecialSeedGenerator::beginRun(edm::Run const&, const edm::EventSetup& iSetup){
@@ -74,9 +83,6 @@ void CtfSpecialSeedGenerator::beginRun(edm::Run const&, const edm::EventSetup& i
           	upperScintillator = BoundPlane::build(upperPosition, rot, &upperBounds);
           	lowerScintillator = BoundPlane::build(lowerPosition, rot, &lowerBounds);
   	} 
-	edm::ParameterSet regfactoryPSet = conf_.getParameter<edm::ParameterSet>("RegionFactoryPSet");
-  	std::string regfactoryName = regfactoryPSet.getParameter<std::string>("ComponentName");
-  	theRegionProducer = TrackingRegionProducerFactory::get()->create(regfactoryName,regfactoryPSet);
 	
 	edm::ESHandle<Propagator>  propagatorAlongHandle;
   	iSetup.get<TrackingComponentsRecord>().get("PropagatorWithMaterial",propagatorAlongHandle);
@@ -107,8 +113,6 @@ void CtfSpecialSeedGenerator::beginRun(edm::Run const&, const edm::EventSetup& i
 	std::vector<edm::ParameterSet> pSets = conf_.getParameter<std::vector<edm::ParameterSet> >("OrderedHitsFactoryPSets");
 	std::vector<edm::ParameterSet>::const_iterator iPSet;
 	for (iPSet = pSets.begin(); iPSet != pSets.end(); iPSet++){
-		std::string hitsfactoryName = iPSet->getParameter<std::string>("ComponentName");
-        	theGenerators.push_back(OrderedHitsGeneratorFactory::get()->create( hitsfactoryName, *iPSet));
         	std::string propagationDirection = iPSet->getParameter<std::string>("PropagationDirection");
         	if (propagationDirection == "alongMomentum") thePropDirs.push_back(alongMomentum);
         	else thePropDirs.push_back(oppositeToMomentum);
@@ -144,7 +148,6 @@ void CtfSpecialSeedGenerator::produce(edm::Event& e, const edm::EventSetup& iSet
   std::auto_ptr<TrajectorySeedCollection> output(new TrajectorySeedCollection);
   
   //check on the number of clusters
-  ClusterChecker check(conf_);
   if ( !requireBOFF || (theMagfield->inTesla(GlobalPoint(0,0,0)).mag() == 0.00) ) {
       size_t clustsOrZero = check.tooManyClusters(e);
       if (!clustsOrZero){
@@ -166,9 +169,8 @@ bool CtfSpecialSeedGenerator::run(const edm::EventSetup& iSetup,
         bool ok = true;
 	for (iReg = regions.begin(); iReg != regions.end(); iReg++){
 		if(!theSeedBuilder->momentumFromPSet()) theSeedBuilder->setMomentumTo((*iReg)->ptMin());
-		std::vector<OrderedHitsGenerator*>::const_iterator iGen;
 		int i = 0;
-		for (iGen = theGenerators.begin(); iGen != theGenerators.end(); iGen++){ 
+		for (auto iGen = theGenerators.begin(); iGen != theGenerators.end(); iGen++){
 		  ok = buildSeeds(iSetup, 
 			     e, 
 			     (*iGen)->run(**iReg, e, iSetup),
@@ -275,7 +277,7 @@ bool CtfSpecialSeedGenerator::postCheck(const TrajectorySeed& seed){
         TrajectoryStateOnSurface theTSOS = trajectoryStateTransform::transientState(pstate,
 								      &(theTracker->idToDet(DetId(pstate.detId()))->surface()),
 								      &(*theMagfield));	
-	FreeTrajectoryState* state = theTSOS.freeState();	
+	const FreeTrajectoryState* state = theTSOS.freeState();	
 	StraightLinePlaneCrossing planeCrossingLower( Basic3DVector<float>(state->position()), 
 						      Basic3DVector<float>(state->momentum()),
 						      alongMomentum);

@@ -3,7 +3,6 @@
 # 
 # Simple script to install CMSSW from sources in one go
 #
-# Author $Id: InstallFromSource.sh,v 1.6 2009/02/06 08:05:48 andreasp Exp $
 
 
 cmssw_release_area=/afs/cern.ch/cms/Releases/CMSSW

@@ -5,7 +5,7 @@
  * 
  * Implementation of muon chamber residuals for transverse DT layers
  * 
- * $Id: MuonDT2ChamberResidual.h,v 1.3 2011/10/12 23:40:24 khotilov Exp $
+ * $Id: $
  */
 
 #include "Alignment/MuonAlignmentAlgorithms/interface/MuonHitsChamberResidual.h"
@@ -14,7 +14,7 @@ class MuonDT2ChamberResidual: public MuonHitsChamberResidual
 {
 public:
   MuonDT2ChamberResidual(edm::ESHandle<GlobalTrackingGeometry> globalGeometry, AlignableNavigator *navigator,
-                         DetId chamberId, AlignableDetOrUnitPtr chamberAlignable);
+                         DetId chamberId, const AlignableDetOrUnitPtr& chamberAlignable);
   
   // for DT2, the residual is chamber local y
   // for DT2, the resslope is dresy/dz, or tan(phi_x)

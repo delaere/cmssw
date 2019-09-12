@@ -1,8 +1,8 @@
 /** \file LaserBeamsTEC2.cc
  *  
  *
- *  $Date: 2011/09/16 06:40:53 $
- *  $Revision: 1.8 $
+ *  $Date: 2010/09/09 18:22:48 $
+ *  $Revision: 1.7 $
  *  \author Maarten Thomas
  */
 
@@ -13,6 +13,7 @@
 #include "FWCore/Utilities/interface/RandomNumberGenerator.h"
 
 #include "CLHEP/Random/RandGaussQ.h"
+#include "CLHEP/Units/GlobalSystemOfUnits.h"
 #include "globals.hh"                        // Global Constants and typedefs
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"

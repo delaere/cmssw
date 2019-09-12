@@ -6,7 +6,6 @@
  *  This is 4-dimensional since it has an origin (x,y) and a direction (x,y)
  *  in the local coordinate system of the chamber.
  *
- *  $Date: 2013/04/22 22:41:32 $
  *  \author Matteo Sani
  *  \author Rick Wilkinson
  *  \author Tim Cox
@@ -28,7 +27,7 @@ public:
 	
     /// Constructor
     CSCSegment(const std::vector<const CSCRecHit2D*>& proto_segment, LocalPoint origin, 
-        	LocalVector direction, AlgebraicSymMatrix errors, double chi2);
+        	LocalVector direction, const AlgebraicSymMatrix& errors, double chi2);
   
     /// Destructor
     virtual ~CSCSegment();

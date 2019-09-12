@@ -12,7 +12,6 @@
  * \author Fedor Ratnikov, UMd
  *
  * \version   Original March 31, 2006 by F.R.
- * \version   $Id: GenJet.h,v 1.19 2008/05/26 11:22:12 arizzi Exp $
  ************************************************************/
 
 
@@ -77,6 +76,8 @@ public:
 
   const Specific& getSpecific () const {return m_specific;}
 
+  /// set the specific (note: responsibility of keeping it consistent with the jet daughers belongs to the caller)
+  void setSpecific (const Specific &spec ) {m_specific = spec;}
   
   /// Polymorphic clone
   virtual GenJet* clone () const;

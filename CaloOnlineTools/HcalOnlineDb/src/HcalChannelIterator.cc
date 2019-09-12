@@ -8,7 +8,6 @@
 //
 // Original Author:  Gena Kukartsev
 //         Created:  Mon Jul 13 12:15:33 CEST 2009
-// $Id: HcalChannelIterator.cc,v 1.6 2013/05/23 15:17:36 gartung Exp $
 //
 
 #include <fstream>

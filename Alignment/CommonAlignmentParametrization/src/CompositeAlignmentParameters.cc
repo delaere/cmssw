@@ -1,6 +1,6 @@
-///  $Date: 2008/09/02 15:18:19 $
-///  $Revision: 1.13 $
-/// (last update by $Author: flucke $)
+///  $Date: 2007/10/08 15:56:00 $
+///  $Revision: 1.12 $
+/// (last update by $Author: cklae $)
 
 #include "Alignment/CommonAlignmentParametrization/interface/CompositeAlignmentParameters.h"
 
@@ -258,7 +258,7 @@ CompositeAlignmentParameters::selectedDerivativesLegacy( const TrajectoryStateOn
 //__________________________________________________________________________________________________
 // finds Alignable corresponding to AlignableDet
 Alignable* 
-CompositeAlignmentParameters::alignableFromAlignableDet(AlignableDetOrUnitPtr adet) const
+CompositeAlignmentParameters::alignableFromAlignableDet(const AlignableDetOrUnitPtr& adet) const
 {
 
   AlignableDetToAlignableMap::const_iterator iali =

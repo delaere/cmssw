@@ -19,7 +19,7 @@
 #include "DataFormats/EgammaReco/interface/BasicClusterShapeAssociation.h"
 #include "DataFormats/EgammaReco/interface/HFEMClusterShapeAssociation.h"
 
-namespace {
+namespace DataFormats_EgammaReco {
   struct dictionary {
 
 	edm::RefToBase<reco::CaloCluster> refToBaseCaloCluster ;
@@ -36,7 +36,7 @@ namespace {
     edm::RefProd<reco::BasicClusterCollection> rp1;
     edm::Wrapper<edm::RefVector<reco::BasicClusterCollection> > wrv1;
     std::vector<reco::BasicClusterRef> vr1;
-
+    
     std::vector<reco::SuperCluster> sv3;
     reco::SuperClusterCollection v3;
     edm::Wrapper<reco::SuperClusterCollection> w3;

@@ -1,5 +1,4 @@
 //
-// $Id: Defaults_Text.h,v 1.1 2011/05/26 09:46:53 mseidel Exp $
 //
 // File: hitfit/Defaults_Text.h
 // Purpose: A lightweight implementation of the Defaults interface

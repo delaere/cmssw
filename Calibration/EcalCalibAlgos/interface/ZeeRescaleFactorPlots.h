@@ -16,7 +16,6 @@
 //
 // Original Author:  Lorenzo AGOSTINO, Radek Ofierzynski
 //         Created:  Tue Jul 18 12:17:01 CEST 2006
-// $Id: ZeeRescaleFactorPlots.h,v 1.6 2012/02/09 08:01:42 eulisse Exp $
 //
 //
 

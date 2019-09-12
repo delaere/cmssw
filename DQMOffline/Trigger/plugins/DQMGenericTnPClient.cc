@@ -25,8 +25,8 @@ class DQMGenericTnPClient : public edm::EDAnalyzer{
   public:
     DQMGenericTnPClient(const edm::ParameterSet& pset);
     virtual ~DQMGenericTnPClient();
-    virtual void analyze(const edm::Event& event, const edm::EventSetup& eventSetup) {};
-    virtual void endRun(const edm::Run &run, const edm::EventSetup &setup);
+    virtual void analyze(const edm::Event& event, const edm::EventSetup& eventSetup) override {};
+    virtual void endRun(const edm::Run &run, const edm::EventSetup &setup) override;
   void calculateEfficiency(std::string dirName, const ParameterSet& pset);
     void findAllSubdirectories (std::string dir, std::set<std::string> * myList, TString pattern);
   private:
@@ -185,7 +185,6 @@ DQMGenericTnPClient::~DQMGenericTnPClient(){
 }
 
 void DQMGenericTnPClient::findAllSubdirectories (std::string dir, std::set<std::string> * myList, TString pattern = "") {
-
   if (!dqmStore->dirExists(dir)) {
     LogError("DQMGenericTnPClient") << " DQMGenericTnPClient::findAllSubdirectories ==> Missing folder " << dir << " !!!";
     return;

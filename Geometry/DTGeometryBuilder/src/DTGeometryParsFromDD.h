@@ -5,8 +5,6 @@
  *
  *  Build the DTGeometry from the DDD description.  
  *
- *  $Date: 2009/01/16 11:11:47 $
- *  $Revision: 1.1 $
  *  \author Stefano Lacaprara  <lacaprara@pd.infn.it>  INFN LNL
  */
 

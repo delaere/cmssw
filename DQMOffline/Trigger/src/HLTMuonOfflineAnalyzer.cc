@@ -6,7 +6,6 @@
 
 //
 // Jason Slaunwhite and Jeff Klukas
-// $Id: HLTMuonOfflineAnalyzer.cc,v 1.3 2011/04/01 20:39:01 klukas Exp $
 //
 //
 
@@ -52,11 +51,11 @@ public:
 private:
 
   // Analyzer Methods
-  virtual void beginJob();
-  virtual void beginRun(const edm::Run &, const edm::EventSetup &);
-  virtual void analyze(const edm::Event &, const edm::EventSetup &);
-  virtual void endRun(const edm::Run &, const edm::EventSetup &);
-  virtual void endJob();
+  virtual void beginJob() override;
+  virtual void beginRun(const edm::Run &, const edm::EventSetup &) override;
+  virtual void analyze(const edm::Event &, const edm::EventSetup &) override;
+  virtual void endRun(const edm::Run &, const edm::EventSetup &) override;
+  virtual void endJob() override;
 
   // Extra Methods
   std::vector<std::string> moduleLabels(std::string);

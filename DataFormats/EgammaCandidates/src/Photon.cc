@@ -1,11 +1,10 @@
-// $Id: Photon.cc,v 1.28 2011/11/07 21:16:15 nancy Exp $
 #include "DataFormats/EgammaCandidates/interface/Photon.h"
 #include "DataFormats/EgammaReco/interface/SuperClusterFwd.h"
 
 using namespace reco;
 
 Photon::Photon( const LorentzVector & p4,
-		Point caloPos,
+		const Point& caloPos,
     const PhotonCoreRef & core,
 		const Point & vtx) :
     RecoCandidate( 0, p4, vtx, 22 ),

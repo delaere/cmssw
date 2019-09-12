@@ -1,4 +1,3 @@
-// $Id: TTUBasicConfig.h,v 1.3 2009/08/19 15:04:01 aosorio Exp $
 #ifndef INTERFACE_TTUBASICCONFIG_H 
 #define INTERFACE_TTUBASICCONFIG_H 1
 

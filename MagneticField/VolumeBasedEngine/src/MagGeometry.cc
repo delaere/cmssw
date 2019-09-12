@@ -1,8 +1,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2013/05/03 20:00:12 $
- *  $Revision: 1.23 $
  *  \author N. Amapane - INFN Torino
  */
 
@@ -23,10 +21,17 @@
 using namespace std;
 using namespace edm;
 
-MagGeometry::MagGeometry(const edm::ParameterSet& config, std::vector<MagBLayer *> tbl,
-			 std::vector<MagESector *> tes,
-			 std::vector<MagVolume6Faces*> tbv,
-			 std::vector<MagVolume6Faces*> tev) : 
+MagGeometry::MagGeometry(const edm::ParameterSet& config, const std::vector<MagBLayer *>& tbl,
+			 const std::vector<MagESector *>& tes,
+			 const std::vector<MagVolume6Faces*>& tbv,
+			 const std::vector<MagVolume6Faces*>& tev) :
+  MagGeometry(config, reinterpret_cast<std::vector<MagBLayer const*> const&>(tbl), reinterpret_cast<std::vector<MagESector const*> const&>(tes), 
+	      reinterpret_cast<std::vector<MagVolume6Faces const*> const&>(tbv), reinterpret_cast<std::vector<MagVolume6Faces const*> const&>(tev)) {}
+
+MagGeometry::MagGeometry(const edm::ParameterSet& config, const std::vector<MagBLayer const*>& tbl,
+			 const std::vector<MagESector const*>& tes,
+			 const std::vector<MagVolume6Faces const*>& tbv,
+			 const std::vector<MagVolume6Faces const*>& tev) : 
   lastVolume(0), theBLayers(tbl), theESectors(tes), theBVolumes(tbv), theEVolumes(tev), geometryVersion(0)
 {
   
@@ -35,7 +40,7 @@ MagGeometry::MagGeometry(const edm::ParameterSet& config, std::vector<MagBLayer 
 
   vector<double> rBorders;
 
-  for (vector<MagBLayer *>::const_iterator ilay = theBLayers.begin();
+  for (vector<MagBLayer const*>::const_iterator ilay = theBLayers.begin();
        ilay != theBLayers.end(); ++ilay) {
     if (verbose::debugOut) cout << "  Barrel layer at " << (*ilay)->minR() <<endl;
     //FIXME assume layers are already sorted in minR
@@ -45,7 +50,7 @@ MagGeometry::MagGeometry(const edm::ParameterSet& config, std::vector<MagBLayer 
   theBarrelBinFinder = new MagBinFinders::GeneralBinFinderInR<double>(rBorders);
 
   if (verbose::debugOut) {
-    for (vector<MagESector *>::const_iterator isec = theESectors.begin();
+    for (vector<MagESector const*>::const_iterator isec = theESectors.begin();
 	 isec != theESectors.end(); ++isec) {
       cout << "  Endcap sector at " << (*isec)->minPhi() << endl;
     }
@@ -62,12 +67,12 @@ MagGeometry::~MagGeometry(){
   delete theBarrelBinFinder;
   delete theEndcapBinFinder;
 
-  for (vector<MagBLayer *>::const_iterator ilay = theBLayers.begin();
+  for (vector<MagBLayer const*>::const_iterator ilay = theBLayers.begin();
        ilay != theBLayers.end(); ++ilay) {
     delete (*ilay);
   }
 
-  for (vector<MagESector *>::const_iterator ilay = theESectors.begin();
+  for (vector<MagESector const*>::const_iterator ilay = theESectors.begin();
        ilay != theESectors.end(); ++ilay) {
     delete (*ilay);
   }
@@ -76,7 +81,7 @@ MagGeometry::~MagGeometry(){
 
 // Return field vector at the specified global point
 GlobalVector MagGeometry::fieldInTesla(const GlobalPoint & gp) const {
-  MagVolume * v = 0;
+  MagVolume const * v = 0;
 
   
   v = findVolume(gp);
@@ -97,13 +102,13 @@ GlobalVector MagGeometry::fieldInTesla(const GlobalPoint & gp) const {
 
 
 // Linear search implementation (just for testing)
-MagVolume* 
+MagVolume const* 
 MagGeometry::findVolume1(const GlobalPoint & gp, double tolerance) const {  
 
-  MagVolume6Faces * found = 0;
+  MagVolume6Faces const* found = 0;
 
   if (inBarrel(gp)) { // Barrel
-    for (vector<MagVolume6Faces*>::const_iterator v = theBVolumes.begin();
+    for (vector<MagVolume6Faces const*>::const_iterator v = theBVolumes.begin();
 	 v!=theBVolumes.end(); ++v){
       if ((*v)==0) { //FIXME: remove this check
 	cout << endl << "***ERROR: MagGeometry::findVolume: MagVolume not set" << endl;
@@ -116,7 +121,7 @@ MagGeometry::findVolume1(const GlobalPoint & gp, double tolerance) const {
     }
 
   } else { // Endcaps
-    for (vector<MagVolume6Faces*>::const_iterator v = theEVolumes.begin();
+    for (vector<MagVolume6Faces const*>::const_iterator v = theEVolumes.begin();
 	 v!=theEVolumes.end(); ++v){
       if ((*v)==0) {  //FIXME: remove this check
 	cout << endl << "***ERROR: MagGeometry::findVolume: MagVolume not set" << endl;
@@ -133,14 +138,15 @@ MagGeometry::findVolume1(const GlobalPoint & gp, double tolerance) const {
 }
 
 // Use hierarchical structure for fast lookup.
-MagVolume* 
+MagVolume const* 
 MagGeometry::findVolume(const GlobalPoint & gp, double tolerance) const{
   // Check volume cache
-  if (lastVolume!=0 && lastVolume->inside(gp)){
-    return lastVolume;
+  auto lastVolumeCheck = lastVolume.load(std::memory_order_acquire);
+  if (lastVolumeCheck!=nullptr && lastVolumeCheck->inside(gp)){
+    return lastVolumeCheck;
   }
 
-  MagVolume * result=0;
+  MagVolume const* result=0;
   if (inBarrel(gp)) { // Barrel
     double R = gp.perp();
     int bin = theBarrelBinFinder->binIndex(R);
@@ -173,7 +179,7 @@ MagGeometry::findVolume(const GlobalPoint & gp, double tolerance) const{
     result = findVolume(gp, 0.03);
   }
 
-  if (cacheLastVolume) lastVolume = result;
+  if (cacheLastVolume) lastVolume.store(result,std::memory_order_release);
 
   return result;
 }

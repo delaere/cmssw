@@ -13,7 +13,6 @@
 //
 // Original Author:  Werner Man-Li Sun
 //         Created:  Tue Sep 16 22:43:22 CEST 2008
-// $Id: L1EmEtScaleOnlineProd.cc,v 1.4 2012/11/19 15:56:56 eulisse Exp $
 //
 //
 
@@ -38,7 +37,7 @@ class L1EmEtScaleOnlineProd :
       ~L1EmEtScaleOnlineProd();
 
   virtual boost::shared_ptr< L1CaloEtScale > newObject(
-    const std::string& objectKey ) ;
+    const std::string& objectKey ) override ;
 
 
    private:

@@ -11,8 +11,6 @@
   *     [5:4] Section (EM/HAD/Lumi)
   *     [3:0] Channel
   *
-  * $Date: 2009/02/09 16:48:01 $
-  * $Revision: 1.5 $
   * \author J. Mans - Minnesota
   */
 class HcalZDCDetId : public DetId {

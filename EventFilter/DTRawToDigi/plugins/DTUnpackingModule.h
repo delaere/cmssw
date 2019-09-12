@@ -4,8 +4,6 @@
 /** \class DTUnpackingModule
  *  The unpacking module for DTs.
  *
- *  $Date: 2012/09/13 14:53:55 $
- *  $Revision: 1.7 $
  * \author N. Amapane - S. Argiro' - M. Zanetti
  */
 

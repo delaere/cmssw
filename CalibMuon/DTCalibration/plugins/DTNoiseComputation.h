@@ -4,18 +4,16 @@
 /*
  * \file DTNoiseComputation.h
  *
- * $Date: 2010/01/19 09:51:31 $
- * $Revision: 1.4 $
  * \author G. Mila - INFN Torino
  *
 */
 
-#include <FWCore/Framework/interface/EDAnalyzer.h>
-#include <FWCore/Framework/interface/EventSetup.h>
+#include "FWCore/Framework/interface/EDAnalyzer.h"
+#include "FWCore/Framework/interface/EventSetup.h"
 #include "DataFormats/MuonDetId/interface/DTLayerId.h"
 #include "DataFormats/MuonDetId/interface/DTWireId.h"
 #include "DataFormats/MuonDetId/interface/DTChamberId.h"
-#include <FWCore/Framework/interface/ESHandle.h>
+#include "FWCore/Framework/interface/ESHandle.h"
 
 
 

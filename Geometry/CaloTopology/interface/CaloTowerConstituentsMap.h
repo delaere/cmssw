@@ -6,17 +6,18 @@
 #include "DataFormats/Common/interface/SortedCollection.h"
 #include <vector>
 #include <map>
+#include <atomic>
 
 class HcalTopology;
 
 /** \class CaloTowerConstituentsMap
   *  
-  * $Date: 2012/08/15 14:56:18 $
-  * $Revision: 1.4 $
   * \author J. Mans - Minnesota
   */
 class CaloTowerConstituentsMap {
 public:
+  CaloTowerConstituentsMap() = delete;
+  ~CaloTowerConstituentsMap();
   CaloTowerConstituentsMap(const HcalTopology * topology);
 
   /// Get the tower id for this det id (or null if not known)
@@ -60,7 +61,7 @@ private:
   };
 
   edm::SortedCollection<MapItem> m_items;
-  mutable std::multimap<CaloTowerDetId,DetId> m_reverseItems;
+  mutable std::atomic<std::multimap<CaloTowerDetId,DetId>*> m_reverseItems;
 };
 
 #endif

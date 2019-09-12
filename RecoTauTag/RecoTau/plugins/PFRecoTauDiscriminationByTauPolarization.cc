@@ -1,5 +1,4 @@
 #include "RecoTauTag/RecoTau/interface/TauDiscriminationProducerBase.h"
-#include "RecoTauTag/TauTagTools/interface/PFTauQualityCutWrapper.h"
 
 /* class PFRecoTauDiscriminationByTauPolarization
  * created : May 26 2010,
@@ -22,8 +21,8 @@ class PFRecoTauDiscriminationByTauPolarization :
 
     ~PFRecoTauDiscriminationByTauPolarization(){}
 
-    void beginEvent(const Event&, const EventSetup&);
-    double discriminate(const PFTauRef&);
+    void beginEvent(const Event&, const EventSetup&) override;
+    double discriminate(const PFTauRef&) override;
 
   private:
     bool booleanOutput;

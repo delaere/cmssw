@@ -16,7 +16,6 @@
 //
 // Original Author:
 //         Created:  Fri Jun 27 11:23:31 EDT 2008
-// $Id: CmsShowHelpPopup.h,v 1.6 2011/09/07 01:20:56 amraktad Exp $
 //
 
 // system include files

@@ -16,7 +16,6 @@
 //        Vladimir Rekovic, July 2010
 //
 //
-// $Id: TrigResRateMon.h,v 1.11 2011/09/21 16:51:09 lwming Exp $
 //
 //
 
@@ -56,6 +55,7 @@
 #include "DataFormats/HLTReco/interface/TriggerTypeDefs.h"
 #include "HLTrigger/HLTcore/interface/HLTConfigProvider.h"
 #include "DataFormats/BeamSpot/interface/BeamSpot.h"
+#include "DataFormats/Scalers/interface/LumiScalers.h"
 
 /*
    needs cleaining of include statments (VR)
@@ -69,7 +69,8 @@
 
 #include "DQMServices/Core/interface/MonitorElement.h"
 
-
+//for LumiScalers in getByToken method
+#include "DataFormats/Scalers/interface/LumiScalers.h"
 
 #include <iostream>
 #include <fstream>
@@ -324,6 +325,12 @@ class TrigResRateMon : public edm::EDAnalyzer {
 
       edm::Handle<edm::TriggerResults> triggerResults_;
 
+      //define Token(-s)
+      edm::EDGetTokenT<edm::TriggerResults> triggerResultsToken_;
+      edm::EDGetTokenT<edm::TriggerResults> triggerResultsTokenFU_;
+      edm::EDGetTokenT<LumiScalersCollection> lumiScalersToken_;
+
+
 
   // create a class that can store all the strings
   // associated with a primary dataset
@@ -364,7 +371,7 @@ class TrigResRateMon : public edm::EDAnalyzer {
     // function to set the paths and
     // create zeroed counts per path
     
-    void setPaths (std::vector<std::string> inputPaths){
+    void setPaths (const std::vector<std::string>& inputPaths){
       pathNames = inputPaths;
       for (std::vector<std::string>::const_iterator iPath = pathNames.begin();
            iPath != pathNames.end();
@@ -462,7 +469,7 @@ class TrigResRateMon : public edm::EDAnalyzer {
       }
     }// end fill RawCountsForPath
 
-    void setMaskedPaths (std::vector<std::string> inputPaths) {
+    void setMaskedPaths (const std::vector<std::string>& inputPaths) {
       for (unsigned i=0; i < inputPaths.size(); i++) {
         std::string maskSubString = inputPaths[i];
         for (unsigned j=0; j < pathNames.size(); j++) {

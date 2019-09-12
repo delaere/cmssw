@@ -4,8 +4,6 @@
 /** \class FlexibleKFFittingSmoother
  *  Combine different FittingSmoother in a single module
  *
- *  $Date: 2012/09/01 11:08:33 $
- *  $Revision: 1.2 $
  *  \author mangano
  */
 

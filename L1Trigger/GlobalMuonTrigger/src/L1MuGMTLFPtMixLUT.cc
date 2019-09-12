@@ -3,8 +3,6 @@
 //   Class: L1MuGMTLFPtMixLUT
 //
 // 
-//   $Date: 2010/03/19 14:33:35 $
-//   $Revision: 1.4 $
 //
 //   Author :
 //   H. Sakulin            HEPHY Vienna

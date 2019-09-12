@@ -5,8 +5,6 @@
 //   Description: Sector Processor
 //
 //
-//   $Date: 2010/06/28 14:35:29 $
-//   $Revision: 1.7 $
 //
 //   Author :
 //   N. Neumeister            CERN EP

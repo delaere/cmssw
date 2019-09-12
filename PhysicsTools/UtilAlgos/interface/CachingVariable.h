@@ -2,10 +2,9 @@
 #define ConfigurableAnalysis_CachingVariable_H
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-#include "FWCore/Services/interface/UpdaterService.h"
-#include "FWCore/ServiceRegistry/interface/Service.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/Common/interface/Handle.h"
+#include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CommonTools/Utils/interface/StringObjectFunction.h"
 #include "CommonTools/Utils/interface/StringCutObjectSelector.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
@@ -76,23 +75,33 @@ class CachingVariable {
  protected:
 
   mutable evalType cache_;
+  mutable edm::Event::CacheIdentifier_t eventCacheID_=0; 
 
   std::string method_;
   std::string name_;
   mutable std::string holderName_;
   void setCache(valueType & v) const { 
-    edm::Service<UpdaterService>()->checkOnce(name_+":"+holderName_);
+    eventCacheID_ = std::numeric_limits<edm::Event::CacheIdentifier_t>::max();
     cache_.first=true; cache_.second = v;}
   void setNotCompute() const { 
-    edm::Service<UpdaterService>()->checkOnce(name_+":"+holderName_);
+    eventCacheID_ = std::numeric_limits<edm::Event::CacheIdentifier_t>::max();
     cache_.first=false; cache_.second = 0;}
   evalType & baseEval(const edm::Event & iEvent) const {
-    if (edm::Service<UpdaterService>()->checkOnce(name_+":"+holderName_)){
+    if(notSeenThisEventAlready(iEvent)) {
       LogDebug("CachingVariable")<<name_+":"+holderName_<<" is checking once";
       cache_=eval(iEvent);
     }
     return cache_;
   }
+  bool notSeenThisEventAlready(const edm::Event& iEvent) const {
+    bool retValue = (std::numeric_limits<edm::Event::CacheIdentifier_t>::max() != eventCacheID_ and
+		     eventCacheID_ != iEvent.cacheIdentifier());
+    if(retValue) {
+      eventCacheID_=iEvent.cacheIdentifier();
+    }
+    return retValue;
+  }
+
   //cannot be made purely virtual otherwise one cannot have purely CachingVariableObjects
   virtual evalType eval(const edm::Event & iEvent) const {return std::make_pair(false,0);};
 
@@ -105,7 +114,7 @@ class CachingVariable {
 class ComputedVariable;
 class VariableComputer{
  public:
-  VariableComputer(CachingVariable::CachingVariableFactoryArg arg);
+  VariableComputer(const CachingVariable::CachingVariableFactoryArg& arg);
   virtual ~VariableComputer(){}
 
   virtual void compute(const edm::Event & iEvent) const = 0;
@@ -115,12 +124,23 @@ class VariableComputer{
   void doesNotCompute() const;
   void doesNotCompute(std::string var) const;
 
+  bool notSeenThisEventAlready(const edm::Event& iEvent) const {
+    bool retValue = eventCacheID_ != iEvent.cacheIdentifier();
+    if(retValue) {
+      eventCacheID_=iEvent.cacheIdentifier();
+    }
+    return retValue;
+  }
+
  protected:
-  CachingVariable::CachingVariableFactoryArg & arg_;
+  const CachingVariable::CachingVariableFactoryArg & arg_;
   std::string name_;
   std::string method_;
   mutable std::map<std::string ,const ComputedVariable *> iCompute_;
   std::string separator_;
+
+  mutable edm::Event::CacheIdentifier_t eventCacheID_=0; 
+
 };
 
 
@@ -132,13 +152,13 @@ typedef edmplugin::PluginFactory< VariableComputer* (CachingVariable::CachingVar
 
 class ComputedVariable : public CachingVariable {
  public:
-  ComputedVariable(CachingVariableFactoryArg arg );
+  ComputedVariable(const CachingVariableFactoryArg& arg );
   ComputedVariable(const std::string & M, std::string & N, edm::ParameterSet & P, const VariableComputer * c) : 
     CachingVariable(M,N,P), myComputer(c){}
   virtual ~ComputedVariable(){};
 
   virtual evalType eval(const edm::Event & iEvent) const {
-    if (edm::Service<UpdaterService>()->checkOnce(myComputer->name()+":"+holderName_))
+    if (myComputer->notSeenThisEventAlready(iEvent))
       myComputer->compute(iEvent);
     return cache_;
   }
@@ -148,7 +168,7 @@ class ComputedVariable : public CachingVariable {
 
 class VariableComputerTest : public VariableComputer {
  public:
-  VariableComputerTest(CachingVariable::CachingVariableFactoryArg arg) ;
+  VariableComputerTest(const CachingVariable::CachingVariableFactoryArg& arg) ;
   ~VariableComputerTest(){};
 
   void compute(const edm::Event & iEvent) const;
@@ -187,7 +207,7 @@ class Splitter : public CachingVariable {
 
 class VarSplitter : public Splitter{ 
  public:
-  VarSplitter(CachingVariableFactoryArg arg ) :
+  VarSplitter(const CachingVariableFactoryArg& arg ) :
     Splitter("VarSplitter",arg.n,arg.iConfig) {
     var_=arg.iConfig.getParameter<std::string>("var");
     useUnderFlow_=arg.iConfig.getParameter<bool>("useUnderFlow");
@@ -255,7 +275,7 @@ template <typename Object> class sortByStringFunction  {
 template <typename Object, const char * label> 
 class ExpressionVariable : public CachingVariable {
  public:
-  ExpressionVariable(CachingVariableFactoryArg arg) :
+  ExpressionVariable(const CachingVariableFactoryArg& arg) :
     CachingVariable(std::string(label)+"ExpressionVariable",arg.n,arg.iConfig) , f_(0), forder_(0) {
     src_=edm::Service<InputTagDistributorService>()->retrieve("src",arg.iConfig);
     //old style constructor
@@ -409,7 +429,7 @@ class ExpressionVariable : public CachingVariable {
 template< typename LHS,const char * lLHS, typename RHS,const char * lRHS, typename Calculator>
 class TwoObjectVariable : public CachingVariable {
 public:
-  TwoObjectVariable(CachingVariableFactoryArg arg) :
+  TwoObjectVariable(const CachingVariableFactoryArg& arg) :
     CachingVariable(Calculator::calculationType()+std::string(lLHS)+std::string(lRHS),arg.n,arg.iConfig),
     srcLhs_(edm::Service<InputTagDistributorService>()->retrieve("srcLhs",arg.iConfig)),
     indexLhs_(arg.iConfig.getParameter<unsigned int>("indexLhs")),
@@ -481,7 +501,7 @@ private:
 
 class VariablePower : public CachingVariable {
  public:
-  VariablePower(CachingVariableFactoryArg arg) :
+  VariablePower(const CachingVariableFactoryArg& arg) :
     CachingVariable("Power",arg.n,arg.iConfig){
     power_=arg.iConfig.getParameter<double>("power");
     var_=arg.iConfig.getParameter<std::string>("var");
@@ -504,7 +524,7 @@ class VariablePower : public CachingVariable {
 template <typename TYPE>
 class SimpleValueVariable : public CachingVariable {
  public:
-  SimpleValueVariable(CachingVariableFactoryArg arg) :
+  SimpleValueVariable(const CachingVariableFactoryArg& arg) :
     CachingVariable("SimpleValueVariable",arg.n,arg.iConfig),
     src_(edm::Service<InputTagDistributorService>()->retrieve("src",arg.iConfig)) { arg.m[arg.n]=this;}
   CachingVariable::evalType eval(const edm::Event & iEvent) const{
@@ -521,7 +541,7 @@ class SimpleValueVariable : public CachingVariable {
 template <typename TYPE>
 class SimpleValueVectorVariable : public CachingVariable {
  public:
-  SimpleValueVectorVariable(CachingVariableFactoryArg arg) :
+  SimpleValueVectorVariable(const CachingVariableFactoryArg& arg) :
     CachingVariable("SimpleValueVectorVariable",arg.n,arg.iConfig),
     src_(edm::Service<InputTagDistributorService>()->retrieve("src",arg.iConfig)),
     index_(arg.iConfig.getParameter<unsigned int>("index")) { arg.m[arg.n]=this;}

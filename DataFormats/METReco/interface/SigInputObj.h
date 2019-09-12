@@ -15,7 +15,6 @@
 //
 // Original Author:  Kyle Story, Freya Blekman (Cornell University)
 //         Created:  Fri Apr 18 11:58:33 CEST 2008
-// $Id: SigInputObj.h,v 1.1 2012/08/31 08:57:55 veelken Exp $
 //
 //
 

@@ -7,8 +7,6 @@
  *  It is assumed that x is the coordinate along the trapezoid bases while y is along
  *  the trapezoid height.
  *
- *  $Date: 2011/04/16 12:47:37 $
- *  $Revision: 1.6 $
  *  \author T. Todorov
  */
 

@@ -1,4 +1,3 @@
-// Last commit: $Id: test_Template.h,v 1.3 2010/01/07 11:21:03 lowette Exp $
 
 #ifndef DQM_SiStripCommissioningClients_test_Template_H
 #define DQM_SiStripCommissioningClients_test_Template_H

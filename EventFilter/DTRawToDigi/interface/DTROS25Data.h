@@ -4,8 +4,6 @@
 /** \class DTROS25Data
  *  The collection containing DT ROS25 status data.
  *
- *  $Date: 2007/02/14 15:52:20 $
- *  $Revision: 1.4 $
  *  \author M. Zanetti - INFN Padova
  */
 

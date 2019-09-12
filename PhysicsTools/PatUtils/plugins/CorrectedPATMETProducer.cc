@@ -9,9 +9,7 @@
  *
  * \author Christian Veelken, LLR
  *
- * \version $Revision: 1.1 $
  *
- * $Id: CorrectedPATMETProducer.cc,v 1.1 2011/09/16 08:09:52 veelken Exp $
  *
  */
 

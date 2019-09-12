@@ -1,4 +1,3 @@
-// Last commit: $Id: PedsFullNoiseHistosUsingDb.cc,v 1.5 2010/04/28 08:46:16 lowette Exp $
 
 #include "DQM/SiStripCommissioningDbClients/interface/PedsFullNoiseHistosUsingDb.h"
 #include "CondFormats/SiStripObjects/interface/PedsFullNoiseAnalysis.h"
@@ -95,7 +94,7 @@ void PedsFullNoiseHistosUsingDb::update( SiStripConfigDb::FedDescriptionsRange f
     for ( uint16_t ichan = 0; ichan < sistrip::FEDCH_PER_FED; ichan++ ) {
 
       // Build FED and FEC keys
-      const FedChannelConnection& conn = cabling()->connection( (*ifed)->getFedId(), ichan );
+      const FedChannelConnection& conn = cabling()->fedConnection( (*ifed)->getFedId(), ichan );
       if ( conn.fecCrate()== sistrip::invalid_ ||
            conn.fecSlot() == sistrip::invalid_ ||
            conn.fecRing() == sistrip::invalid_ ||

@@ -12,7 +12,6 @@
 
 /** \class EcalDataFrame
       
-$Id: EcalDataFrame.h,v 1.9 2012/01/27 15:04:40 franzoni Exp $
 */
 class EcalDataFrame {
  public:

@@ -1,5 +1,4 @@
 /*
- * $Id: Majority.h,v 1.1 2009/02/25 17:34:05 pgras Exp $
  */
 
 #ifndef MAJORITY_H

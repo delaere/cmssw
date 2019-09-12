@@ -15,7 +15,6 @@
 //
 // Original Author:  David Wardrope
 //         Created:  Tue Nov 11 16:47:29 GMT 2008
-// $Id: ErsatzMEt.h,v 1.6 2010/02/16 22:28:34 wdd Exp $
 //
 //
 

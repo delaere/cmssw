@@ -5,8 +5,6 @@
  *   Look-up tables for traco angle and position
  *
  *
- *   $Date: 2006/07/19 10:24:02 $
- *   $Revision: 1.1 $
  *
  *   \author S. Vanini - INFN Padova
  */

@@ -15,8 +15,6 @@ namespace geomsort{
  *
  *  precomputed_value_sort(v.begin(), v.end(), ExtractR<Surface>());
  *
- *  $Date: 2007/01/17 20:58:43 $
- *  $Revision: 1.1 $
  *  \author N. Amapane - CERN
  */
 
@@ -41,8 +39,6 @@ namespace geomsort{
  *
  *  precomputed_value_sort(v.begin(), v.end(), ExtractPhi<Surface>());
  *
- *  $Date: 2007/01/17 20:58:43 $
- *  $Revision: 1.1 $
  *  \author N. Amapane - CERN
  */
 
@@ -64,8 +60,6 @@ namespace geomsort{
  *
  *  precomputed_value_sort(v.begin(), v.end(), ExtractZ<Surface>());
  *
- *  $Date: 2007/01/17 20:58:43 $
- *  $Revision: 1.1 $
  *  \author N. Amapane - CERN
  */
 
@@ -85,8 +79,6 @@ namespace geomsort{
  *
  *  precomputed_value_sort(v.begin(), v.end(), ExtractAbsZ<Surface>());
  *
- *  $Date: 2007/01/17 20:58:43 $
- *  $Revision: 1.1 $
  *  \author N. Amapane - CERN
  */
 

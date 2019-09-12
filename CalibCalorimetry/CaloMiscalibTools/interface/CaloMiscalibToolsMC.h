@@ -16,7 +16,6 @@
 //
 // Original Author:  Lorenzo AGOSTINO
 //         Created:  Mon Jul 17 18:07:01 CEST 2006
-// $Id: CaloMiscalibToolsMC.h,v 1.1 2009/04/08 22:29:38 fra Exp $
 //
 // Modified       : Luca Malgeri 
 // Date:          : 11/09/2006 

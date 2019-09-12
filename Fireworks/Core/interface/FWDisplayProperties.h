@@ -16,7 +16,6 @@
 //
 // Original Author:
 //         Created:  Thu Jan  3 14:22:36 EST 2008
-// $Id: FWDisplayProperties.h,v 1.13 2011/02/22 18:37:31 amraktad Exp $
 //
 
 // system include files

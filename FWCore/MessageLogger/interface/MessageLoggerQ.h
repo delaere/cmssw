@@ -32,7 +32,6 @@ public:
   , CONFIGURE      // CFG -- handshaked
   , EXTERN_DEST    // EXT
   , SUMMARIZE      // SUM
-  , JOBREPORT      // JOB
   , JOBMODE        // MOD
   , SHUT_UP        // SHT
   , FLUSH_LOG_Q    // FLS -- handshaked
@@ -49,7 +48,6 @@ public:
   static  void  MLqCFG( ParameterSet * p );
   static  void  MLqEXT( service::NamedDestination* p );
   static  void  MLqSUM();
-  static  void  MLqJOB( std::string * j );
   static  void  MLqMOD( std::string * jm );
   static  void  MLqSHT();
   static  void  MLqFLS();
@@ -64,7 +62,7 @@ public:
   static bool handshaked ( const OpCode & op );
 
   // --- special control of standAlone logging behavior
-  static  void standAloneThreshold(std::string const & severity);
+  static  void standAloneThreshold(edm::ELseverityLevel const& severity);
   static  void squelch(std::string const & category);
   static  bool ignore ( edm::ELseverityLevel const & severity, 
   			std::string const & category );
@@ -85,9 +83,9 @@ private:
   void  operator = ( MessageLoggerQ const & );
 
   // --- data:
-  static  boost::shared_ptr<edm::service::AbstractMLscribe> mlscribe_ptr;
-  static  edm::ELseverityLevel threshold;
-  static  std::set<std::string> squelchSet;
+  [[cms::thread_safe]] static  boost::shared_ptr<edm::service::AbstractMLscribe> mlscribe_ptr;
+  [[cms::thread_safe]] static  edm::ELseverityLevel threshold;
+  [[cms::thread_safe]] static  std::set<std::string> squelchSet;
   
 };  // MessageLoggerQ
 

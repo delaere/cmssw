@@ -6,8 +6,6 @@
  *
  *  DQM client for muon alignment summary
  *
- *  $Date: 2009/03/04 10:57:48 $
- *  $Revision: 1.1 $
  *  \author J. Fernandez - Univ. Oviedo <Javier.Fernandez@cern.ch>
  */
 

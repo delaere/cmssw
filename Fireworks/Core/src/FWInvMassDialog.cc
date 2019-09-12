@@ -8,7 +8,6 @@
 //
 // Original Author:  Matevz Tadel
 //         Created:  Mon Nov 22 11:05:57 CET 2010
-// $Id: FWInvMassDialog.cc,v 1.4 2012/12/01 07:08:16 amraktad Exp $
 //
 
 // system include files

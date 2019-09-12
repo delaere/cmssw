@@ -2,8 +2,8 @@
  *
  *  See header file for a description of this class.
  *
- *  $Date: 2010/03/12 21:42:04 $
- *  $Revision: 1.2 $
+ *  $Date: 2009/03/26 14:11:04 $
+ *  $Revision: 1.1 $
  *  \author Paolo Ronchese INFN Padova
  *
  */
@@ -337,7 +337,7 @@ void DTCompactMapWriter::buildSteering( std::istream& jobDesc ) {
     }
 
   }
-  delete job_line;
+  delete[] job_line;
 
   // merge ROS and TDC maps
   fillReadOutMap( ros_count, tdc_idm, ros_map, rob_map );

@@ -5,8 +5,6 @@
  * *
  *  DQM Source for phi symmetry stream
  *
- *  $Date: 2009/10/15 11:31:28 $
- *  $Revision: 1.2 $
  *  \author Stefano Argiro'
  *          Andrea Gozzelino - Universita%Gï¿½%@ e INFN Torino
  *   
@@ -15,7 +13,8 @@
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
-
+#include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
+ 
 class DQMStore;
 class MonitorElement;
 
@@ -129,7 +128,10 @@ private:
 
   /// Output file name if required
   std::string fileName_;
-
+  
+  //define Token(-s)
+  edm::EDGetTokenT<EcalRecHitCollection> productMonitoredEBToken_;
+  edm::EDGetTokenT<EcalRecHitCollection> productMonitoredEEToken_;
 };
 
 #endif

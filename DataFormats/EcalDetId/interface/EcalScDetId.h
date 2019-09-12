@@ -1,5 +1,4 @@
 // -*- Mode: C++; c-basic-offset: 2; indent-tabs-mode: t; tab-width: 8; -*-
-//$Id: EcalScDetId.h,v 1.8 2012/11/02 13:07:52 innocent Exp $
 //
 // \author Philippe Gras (CEA/Saclay). Code adapted from EEDetId.
 //
@@ -9,7 +8,7 @@
 #include <iosfwd>
 #include "DataFormats/DetId/interface/DetId.h"
 #include "DataFormats/EcalDetId/interface/EcalSubdetector.h"
-
+#include "FWCore/Utilities/interface/thread_safety_macros.h"
 
 /** \class EcalScDetId
  *  Supercrystal identifier class for the ECAL endcap.
@@ -196,11 +195,15 @@ private:
   
   /** Map of z,x,y index to hashed index. See hashedIndex/
    */
-  static short xyz2HashedIndex[IX_MAX][IY_MAX][nEndcaps];
+  CMS_THREAD_SAFE static short xyz2HashedIndex[IX_MAX][IY_MAX][nEndcaps];
   
   /** Map of hased index to x,y,z. See hashedIndex/
    */
-  static EcalScDetId hashedIndex2DetId[kSizeForDenseIndexing];
+  CMS_THREAD_SAFE static EcalScDetId hashedIndex2DetId[kSizeForDenseIndexing];
+  
+  /*The two arrays are thread safe since they are filled safely using std::call_once and
+    then only read and never modified.
+   */
 };
 
 

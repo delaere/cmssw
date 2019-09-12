@@ -4,8 +4,6 @@
 /*
  * \file EBRawDataTask.h
  *
- * $Date: 2012/05/14 20:36:37 $
- * $Revision: 1.13 $
  * \author E. Di Marco
  *
 */
@@ -13,6 +11,9 @@
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "DataFormats/FEDRawData/interface/FEDRawDataCollection.h"
+#include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
 
 class MonitorElement;
 class DQMStore;
@@ -73,8 +74,8 @@ bool enableCleanup_;
 
 bool mergeRuns_;
 
-edm::InputTag FEDRawDataCollection_;
-edm::InputTag EcalRawDataCollection_;
+edm::EDGetTokenT<FEDRawDataCollection> FEDRawDataCollection_;
+edm::EDGetTokenT<EcalRawDataCollection> EcalRawDataCollection_;
 
 MonitorElement* meEBCRCErrors_;
 MonitorElement* meEBEventTypePreCalibrationBX_;

@@ -4,8 +4,6 @@
 /** \class GlobalMuonToMuonProducer
  *  No description available.
  *
- *  $Date: 2011/05/31 14:44:35 $
- *  $Revision: 1.1 $
  *  \author R. Bellan - INFN Torino <riccardo.bellan@cern.ch>
  */
 
@@ -17,6 +15,9 @@
 namespace reco {class Track;}
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "Geometry/CommonDetUnit/interface/GlobalTrackingGeometry.h"
+#include "DataFormats/MuonReco/interface/Muon.h"
+#include "DataFormats/MuonReco/interface/MuonTrackLinks.h"
+#include "DataFormats/MuonReco/interface/MuonFwd.h"
 
 
 class GlobalMuonToMuonProducer : public edm::EDProducer {
@@ -50,6 +51,7 @@ private:
 private:
 
   edm::InputTag theLinksCollectionLabel;
+  edm::EDGetTokenT<reco::MuonTrackLinksCollection> trackLinkToken_;
 };
 #endif
 

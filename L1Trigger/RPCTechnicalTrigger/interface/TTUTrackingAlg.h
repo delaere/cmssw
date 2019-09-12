@@ -1,4 +1,3 @@
-// $Id: TTUTrackingAlg.h,v 1.5 2009/08/09 11:11:36 aosorio Exp $
 #ifndef TTUTRACKINGALG_H 
 #define TTUTRACKINGALG_H 1
 

@@ -1,5 +1,4 @@
-// $Id: DetSetLazyVector_t.cppunit.cc,v 1.5 2011/11/16 22:28:11 wmtan Exp $
-#include <cppunit/extensions/HelperMacros.h>
+#include "cppunit/extensions/HelperMacros.h"
 #include "DataFormats/Common/interface/DetSetLazyVector.h"
 #include "DataFormats/Common/interface/DetSetVector.h"
 

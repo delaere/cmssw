@@ -7,8 +7,6 @@
  *   This candidate contains only information sent to the GT.
 */
 //
-//   $Date: 2007/04/02 15:44:06 $
-//   $Revision: 1.5 $
 //
 //   Author :
 //   H. Sakulin               HEPHY Vienna

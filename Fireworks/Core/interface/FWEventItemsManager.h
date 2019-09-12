@@ -16,7 +16,6 @@
 //
 // Original Author:
 //         Created:  Thu Jan  3 13:27:29 EST 2008
-// $Id: FWEventItemsManager.h,v 1.19 2011/07/30 04:54:27 amraktad Exp $
 //
 
 // system include files

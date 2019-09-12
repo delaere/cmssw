@@ -16,7 +16,6 @@
 //
 // Original Author:  Gena Kukartsev
 //         Created:  Thu Sep 27 01:46:46 CEST 2007
-// $Id: XMLDOMBlock.h,v 1.3 2010/08/06 20:24:02 wmtan Exp $
 //
 
 

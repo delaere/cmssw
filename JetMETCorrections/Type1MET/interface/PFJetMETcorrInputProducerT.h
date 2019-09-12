@@ -12,9 +12,7 @@
  *          Florent Lacroix, University of Illinois at Chicago
  *          Christian Veelken, LLR
  *
- * \version $Revision: 1.8 $
  *
- * $Id: PFJetMETcorrInputProducerT.h,v 1.8 2012/04/19 17:56:29 veelken Exp $
  *
  */
 
@@ -71,7 +69,7 @@ class PFJetMETcorrInputProducerT : public edm::EDProducer
     : moduleLabel_(cfg.getParameter<std::string>("@module_label")),
       skipMuonSelection_(0)
   {
-    src_ = cfg.getParameter<edm::InputTag>("src");
+    token_ = consumes<std::vector<T> >(cfg.getParameter<edm::InputTag>("src"));
     
     offsetCorrLabel_ = ( cfg.exists("offsetCorrLabel") ) ?
       cfg.getParameter<std::string>("offsetCorrLabel") : "";
@@ -90,7 +88,7 @@ class PFJetMETcorrInputProducerT : public edm::EDProducer
     skipMuons_ = cfg.getParameter<bool>("skipMuons");
     if ( skipMuons_ ) {
       std::string skipMuonSelection_string = cfg.getParameter<std::string>("skipMuonSelection");
-      skipMuonSelection_ = new StringCutObjectSelector<reco::Muon>(skipMuonSelection_string);
+      skipMuonSelection_ = new StringCutObjectSelector<reco::Candidate>(skipMuonSelection_string,true);
     }
 
     if ( cfg.exists("type2Binning") ) {
@@ -134,7 +132,7 @@ class PFJetMETcorrInputProducerT : public edm::EDProducer
 
     typedef std::vector<T> JetCollection;
     edm::Handle<JetCollection> jets;
-    evt.getByLabel(src_, jets);
+    evt.getByToken(token_, jets);
 
     int numJets = jets->size();
     for ( int jetIndex = 0; jetIndex < numJets; ++jetIndex ) {
@@ -149,10 +147,12 @@ class PFJetMETcorrInputProducerT : public edm::EDProducer
       static PFJetMETcorrInputProducer_namespace::RawJetExtractorT<T> rawJetExtractor;
       reco::Candidate::LorentzVector rawJetP4 = rawJetExtractor(rawJet);
       if ( skipMuons_ ) {
-	std::vector<reco::PFCandidatePtr> cands = rawJet.getPFConstituents();
-	for ( std::vector<reco::PFCandidatePtr>::const_iterator cand = cands.begin();
+	const std::vector<reco::CandidatePtr> & cands = rawJet.daughterPtrVector();
+	for ( std::vector<reco::CandidatePtr>::const_iterator cand = cands.begin();
 	      cand != cands.end(); ++cand ) {
-	  if ( (*cand)->muonRef().isNonnull() && (*skipMuonSelection_)(*(*cand)->muonRef()) ) {
+          const reco::PFCandidate *pfcand = dynamic_cast<const reco::PFCandidate *>(cand->get());
+          const reco::Candidate *mu = (pfcand != 0 ? ( pfcand->muonRef().isNonnull() ? pfcand->muonRef().get() : 0) : cand->get());
+	  if ( mu != 0 && (*skipMuonSelection_)(*mu) ) {
 	    reco::Candidate::LorentzVector muonP4 = (*cand)->p4();
 	    rawJetP4 -= muonP4;
 	  }
@@ -209,7 +209,7 @@ class PFJetMETcorrInputProducerT : public edm::EDProducer
 
   std::string moduleLabel_;
 
-  edm::InputTag src_; // PFJet input collection
+  edm::EDGetTokenT<std::vector<T> > token_;
 
   std::string offsetCorrLabel_; // e.g. 'ak5PFJetL1Fastjet'
   std::string jetCorrLabel_;    // e.g. 'ak5PFJetL1FastL2L3' (MC) / 'ak5PFJetL1FastL2L3Residual' (Data)
@@ -227,7 +227,7 @@ class PFJetMETcorrInputProducerT : public edm::EDProducer
 
   bool skipMuons_; // flag to subtract momentum of muons (provided muons pass selection cuts) which are within jets
                    // from jet energy before compute JECs/propagating JECs to Type 1 + 2 MET corrections
-  StringCutObjectSelector<reco::Muon>* skipMuonSelection_;
+  StringCutObjectSelector<reco::Candidate>* skipMuonSelection_;
 
   struct type2BinningEntryType
   {

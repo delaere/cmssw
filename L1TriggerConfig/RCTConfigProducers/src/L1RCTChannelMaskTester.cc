@@ -13,9 +13,9 @@
 //
 // Original Author:  Sridhara Dasu
 //         Created:  Mon Jul 16 23:48:35 CEST 2007
-// $Id: L1RCTChannelMaskTester.cc,v 1.5 2010/06/16 19:27:54 ghete Exp $
 //
 //
+#include <iostream>
 // user include files
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
@@ -45,7 +45,7 @@ public:
     }
     virtual ~L1RCTChannelMaskTester() {
     }
-    virtual void analyze(const edm::Event&, const edm::EventSetup&);
+    virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
 
 };
 

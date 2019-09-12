@@ -13,7 +13,7 @@
 //
 // Original Author:  Erik Butz
 //         Created:  Tue Dec 11 14:03:05 CET 2007
-// $Id: TrackerOfflineValidation.cc,v 1.56 2013/01/07 20:46:23 wmtan Exp $
+// $Id: TrackerOfflineValidation.cc,v 1.55 2012/09/28 20:48:06 flucke Exp $
 //
 //
 
@@ -159,7 +159,7 @@ private:
       if (!dqmMode){
 	edm::Service<TFileService> fs;
 	if (newDir.length()==0){
-	  tfd.reset(new TFileDirectory(static_cast<TFileDirectory&>(*fs)));
+	  tfd.reset(new TFileDirectory(fs->tFileDirectory()));
 	}
 	else {
 	  tfd.reset(new TFileDirectory(fs->mkdir(newDir)));
@@ -191,8 +191,8 @@ private:
   // 
   // ------------- private member function -------------
   // 
-  virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  virtual void endJob();
+  virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+  virtual void endJob() override;
   
   virtual void checkBookHists(const edm::EventSetup& setup);
 
@@ -459,9 +459,8 @@ TrackerOfflineValidation::bookGlobalHists(DirectoryWrapper& tfd )
 					 "p_{T}^{track};p_{T}^{track} [GeV];Number of Tracks",
 					 250,0.,250));           
   vTrackHistos_.push_back(tfd.make<TH1F>("h_ptResolution",
-					 "#delta{p_{T}/p_{T}^{track}};#delta_{p_{T}/p_{T}^{track}};Number of Tracks",
+					 "#delta_{p_{T}}/p_{T}^{track};#delta_{p_{T}}/p_{T}^{track};Number of Tracks",
 					 100,0.,0.5));           
-
   vTrackProfiles_.push_back(tfd.make<TProfile>("p_d0_vs_phi",
 					       "Transverse Impact Parameter vs. #phi;#phi_{Track};#LT d_{0} #GT [cm]",
 					       100,-3.15,3.15));
@@ -562,30 +561,30 @@ TrackerOfflineValidation::bookGlobalHists(DirectoryWrapper& tfd )
 
   /****************** Definition of 2-D Histos of ResX vs momenta ****************************/
   vTrack2DHistos_.push_back(tfd.make<TH2F>("p_vs_resXprime_pixB",
-					   "#momentum vs. #resX in pixB;#momentum;#resX",
+					   "res_{x'} vs momentum in BPix;p [GeV]; res_{x'}",
 					   15,0.,15., 200, -0.1,0.1));			   
   vTrack2DHistos_.push_back(tfd.make<TH2F>("p_vs_resXprime_pixE",
-					   "#momentum vs. #resX in pixE;#momentum;#resX",
+					   "res_{x'} vs momentum in FPix;p [GeV]; res_{x'}",
 					   15,0.,15., 200, -0.1,0.1)); 
   vTrack2DHistos_.push_back(tfd.make<TH2F>("p_vs_resXprime_TIB",
-					   "#momentum vs. #resX in TIB;#momentum;#resX",
+					   "res_{x'} vs momentum in TIB;p [GeV]; res_{x'}",
 					   15,0.,15., 200, -0.1,0.1)); 
   vTrack2DHistos_.push_back(tfd.make<TH2F>("p_vs_resXprime_TID",
-					   "#momentum vs. #resX in TID;#momentum;#resX",
+					   "res_{x'} vs momentum in TID;p [GeV]; res_{x'}",
 					   15,0.,15., 200, -0.1,0.1)); 
   vTrack2DHistos_.push_back(tfd.make<TH2F>("p_vs_resXprime_TOB",
-					   "#momentum vs. #resX in TOB;#momentum;#resX",
+					   "res_{x'} vs momentum in TOB;p [GeV]; res_{x'}",
 					   15,0.,15., 200, -0.1,0.1));
   vTrack2DHistos_.push_back(tfd.make<TH2F>("p_vs_resXprime_TEC",
-					   "#momentum vs. #resX in TEC;#momentum;#resX",
+					   "res_{x'} vs momentum in TEC;p [GeV]; res_{x'}",
 					   15,0.,15., 200, -0.1,0.1)); 	
 
   /****************** Definition of 2-D Histos of ResY vs momenta ****************************/
   vTrack2DHistos_.push_back(tfd.make<TH2F>("p_vs_resYprime_pixB",
-					   "#momentum vs. #resY in pixB;#momentum;#resY",
+					   "res_{y'} vs momentum in BPix;p [GeV]; res_{y'}",
 					   15,0.,15., 200, -0.1,0.1));			   
   vTrack2DHistos_.push_back(tfd.make<TH2F>("p_vs_resYprime_pixE",
-					   "#momentum vs. #resY in pixE;#momentum;#resY",
+					   "res_{y'} vs momentum in FPix;p [GeV]; res_{y'}",
 					   15,0.,15., 200, -0.1,0.1)); 
 
 }

@@ -21,7 +21,9 @@ GsfTrackProducer::GsfTrackProducer(const edm::ParameterSet& iConfig):
   theAlgo(iConfig)
 {
   setConf(iConfig);
-  setSrc( iConfig.getParameter<edm::InputTag>( "src" ), iConfig.getParameter<edm::InputTag>( "beamSpot" ));
+  setSrc( consumes<TrackCandidateCollection>(iConfig.getParameter<edm::InputTag>( "src" )), 
+          consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>( "beamSpot" )),
+          consumes<MeasurementTrackerEvent>(iConfig.getParameter<edm::InputTag>( "MeasurementTrackerEvent") ));
   setAlias( iConfig.getParameter<std::string>( "@module_label" ) );
 //   string a = alias_;
 //   a.erase(a.size()-6,a.size());

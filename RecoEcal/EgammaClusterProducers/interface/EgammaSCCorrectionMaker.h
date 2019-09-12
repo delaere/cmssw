@@ -14,7 +14,6 @@
 //
 // Original Author:  Dave Evans
 //         Created:  Thu Apr 13 15:50:17 CEST 2006
-// $Id: EgammaSCCorrectionMaker.h,v 1.14 2012/04/19 13:13:11 argiro Exp $
 //
 //
 
@@ -31,6 +30,10 @@
 #include "RecoEcal/EgammaClusterAlgos/interface/EgammaSCEnergyCorrectionAlgo.h"
 #include "RecoEcal/EgammaCoreTools/interface/EcalClusterFunctionBaseClass.h" 
 #include "RecoEcal/EgammaCoreTools/interface/EcalClusterFunctionFactory.h" 
+
+#include "DataFormats/EgammaReco/interface/SuperClusterFwd.h"
+#include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
+
 
 class EgammaSCCorrectionMaker : public edm::EDProducer {
 	
@@ -68,8 +71,9 @@ class EgammaSCCorrectionMaker : public edm::EDProducer {
      double etThresh_;
      
      // vars to get products
-     edm::InputTag rHInputProducer_;
-     edm::InputTag sCInputProducer_;
+     edm::EDGetTokenT<EcalRecHitCollection>          rHInputProducer_;
+     edm::EDGetTokenT<reco::SuperClusterCollection>  sCInputProducer_;
+	 edm::InputTag rHTag_;
 
      reco::CaloCluster::AlgoId sCAlgo_;
      std::string outputCollection_;

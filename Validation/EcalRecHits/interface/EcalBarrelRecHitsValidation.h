@@ -4,7 +4,6 @@
 /*
  * \file EcalBarrelRecHitsValidation.h
  *
- * $Date: 2009/12/14 22:24:41 $
  * \author C. Rovelli
  *
 */
@@ -62,8 +61,9 @@ private:
  
  DQMStore* dbe_;
 
- edm::InputTag EBdigiCollection_;
- edm::InputTag EBuncalibrechitCollection_;
+ // fix for consumes
+ edm::EDGetTokenT< EBDigiCollection > EBdigiCollection_token_;
+ edm::EDGetTokenT< EBUncalibratedRecHitCollection > EBuncalibrechitCollection_token_;
 
  MonitorElement* meEBUncalibRecHitsOccupancy_;     
  MonitorElement* meEBUncalibRecHitsAmplitude_;    

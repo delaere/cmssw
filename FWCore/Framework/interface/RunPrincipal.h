@@ -18,11 +18,14 @@ is the DataBlock.
 #include "boost/shared_ptr.hpp"
 
 #include "DataFormats/Provenance/interface/RunAuxiliary.h"
+#include "DataFormats/Provenance/interface/ProcessHistoryID.h"
+#include "FWCore/Utilities/interface/RunIndex.h"
 #include "FWCore/Framework/interface/Principal.h"
 
 namespace edm {
 
   class HistoryAppender;
+  class ModuleCallingContext;
   class UnscheduledHandler;
 
   class RunPrincipal : public Principal {
@@ -34,17 +37,33 @@ namespace edm {
         boost::shared_ptr<RunAuxiliary> aux,
         boost::shared_ptr<ProductRegistry const> reg,
         ProcessConfiguration const& pc,
-        HistoryAppender* historyAppender);
+        HistoryAppender* historyAppender,
+        unsigned int iRunIndex);
     ~RunPrincipal() {}
 
-    void fillRunPrincipal(DelayedReader* reader = 0);
+    void fillRunPrincipal(ProcessHistoryRegistry const& processHistoryRegistry, DelayedReader* reader = 0);
 
+    /** Multiple Runs may be processed simultaneously. The
+     return value can be used to identify a particular Run.
+     The value will range from 0 to one less than
+     the maximum number of allowed simultaneous Runs. A particular
+     value will be reused once the processing of the previous Run 
+     using that index has been completed.
+     */
+    RunIndex index() const {
+      return index_;
+    }
+    
     RunAuxiliary const& aux() const {
       return *aux_;
     }
 
     RunNumber_t run() const {
       return aux().run();
+    }
+    
+    ProcessHistoryID const& reducedProcessHistoryID() const {
+      return m_reducedHistoryID;
     }
 
     RunID const& id() const {
@@ -70,7 +89,7 @@ namespace edm {
     void setUnscheduledHandler(boost::shared_ptr<UnscheduledHandler>) {}
 
     void put(
-        ConstBranchDescription const& bd,
+        BranchDescription const& bd,
         WrapperOwningHolder const& edp);
 
     void readImmediate() const;
@@ -83,12 +102,16 @@ namespace edm {
 
     virtual bool isComplete_() const override {return complete_;}
 
-    virtual bool unscheduledFill(std::string const&) const override {return false;}
+    virtual bool unscheduledFill(std::string const&,
+                                 ModuleCallingContext const* mcc) const override {return false;}
+
+    virtual unsigned int transitionIndex_() const override;
 
     void resolveProductImmediate(ProductHolderBase const& phb) const;
 
-    // A vector of product holders.
     boost::shared_ptr<RunAuxiliary> aux_;
+    ProcessHistoryID m_reducedHistoryID;
+    RunIndex index_;
 
     bool complete_;
   };

@@ -1,6 +1,4 @@
 /*  
- *  $Date: 2009/02/20 17:46:26 $
- *  $Revision: 1.1 $
  *  \author A. Campbell -- DESY
  */
 #include "EventFilter/CastorRawToDigi/interface/CastorCORData.h"

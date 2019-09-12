@@ -10,7 +10,6 @@
 //
 // Original Author:
 //         Created:  Sun Jan  6 23:57:00 EST 2008
-// $Id: FWPhotonDetailView.h,v 1.9 2010/01/14 15:55:14 amraktad Exp $
 //
 
 // user include files

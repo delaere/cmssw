@@ -3,11 +3,8 @@
 
 /** \class CandidateTriggerObjectProducer
  *
- *  
- *  This class creates a list of candidates based on the last accepted filter 
  *
- *  $Date: 2013/02/28 00:22:50 $
- *  $Revision: 1.2 $
+ *  This class creates a list of candidates based on the last accepted filter
  *
  *  \author Paolo Meridiani
  *
@@ -24,7 +21,7 @@
 // class declaration
 //
 class CandidateTriggerObjectProducer : public edm::EDProducer {
-  
+
  public:
   explicit CandidateTriggerObjectProducer(const edm::ParameterSet&);
   ~CandidateTriggerObjectProducer();
@@ -37,7 +34,9 @@ class CandidateTriggerObjectProducer : public edm::EDProducer {
 
   /// module config parameters
   edm::InputTag triggerResultsTag_;
+  edm::EDGetTokenT<edm::TriggerResults>   triggerResultsToken_;
   edm::InputTag triggerEventTag_;
+  edm::EDGetTokenT<trigger::TriggerEvent> triggerEventToken_;
   std::string   triggerName_;
 
   /// additional class data memebers

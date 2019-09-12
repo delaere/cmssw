@@ -2,8 +2,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2012/03/02 19:47:32 $
- *  $Revision: 1.11 $
  *  \author S. Maselli - INFN Torino
  *          A. Vilela Pereira
  */

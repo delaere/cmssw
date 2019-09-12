@@ -1,5 +1,4 @@
 //
-//     $Id: PatMETHitFitTranslator.cc,v 1.1 2011/05/26 09:47:00 mseidel Exp $
 //
 
 /**
@@ -13,7 +12,7 @@
     @par Created
     Sat Jun 27 17:49:32 2009 UTC
 
-    @version $Id: PatMETHitFitTranslator.cc,v 1.1 2011/05/26 09:47:00 mseidel Exp $
+    @version $Id: PatMETHitFitTranslator.cc,v 1.7 2011/01/29 22:21:38 haryo Exp $
  */
 
 

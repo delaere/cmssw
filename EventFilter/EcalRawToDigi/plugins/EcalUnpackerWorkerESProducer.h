@@ -15,7 +15,6 @@
 //
 // Original Author:  Jean-Roch Vlimant
 //         Created:  Sat Oct  6 04:57:46 CEST 2007
-// $Id: EcalUnpackerWorkerESProducer.h,v 1.2 2009/04/28 12:26:19 vlimant Exp $
 //
 //
 

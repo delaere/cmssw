@@ -12,8 +12,6 @@
  *  possible HLT filters. Hence we accept the reasonably small
  *  overhead of empty containers.
  *
- *  $Date: 2012/01/30 08:47:27 $
- *  $Revision: 1.16 $
  *
  *  \author Martin Grunewald
  *

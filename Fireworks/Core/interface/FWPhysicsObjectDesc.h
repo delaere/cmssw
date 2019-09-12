@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Tue Jan 15 15:04:58 EST 2008
-// $Id: FWPhysicsObjectDesc.h,v 1.9 2012/08/03 18:20:27 wmtan Exp $
 //
 
 // system include files

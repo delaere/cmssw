@@ -1,6 +1,5 @@
 // F.Ratnikov (UMd), Oct 28, 2005
 // Modified by S. Won 6 May 2008
-// $Id: CastorDbXml.cc,v 1.2 2009/12/10 10:29:00 elmer Exp $
 //
 #include <vector>
 #include <string>

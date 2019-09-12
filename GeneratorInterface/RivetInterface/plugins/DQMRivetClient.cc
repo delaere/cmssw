@@ -2,8 +2,6 @@
  *  Class:DQMRivetClient 
  *
  *
- *  $Date: 2012/06/22 08:47:17 $
- *  $Revision: 1.1 $
  * 
  *  \author Junghwan Goh - SungKyunKwan University
  */

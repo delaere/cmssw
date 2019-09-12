@@ -19,7 +19,6 @@ through the MessageLogger.
 
 //
 // Original Author:  Marc Paterno
-// $Id: JobReportService.h,v 1.4 2011/02/15 22:10:39 wmtan Exp $
 //
 
 #include <string>
@@ -36,15 +35,8 @@ namespace edm {
     public:
       JobReportService(ParameterSet const& ps, ActivityRegistry& reg);
       ~JobReportService();
-         
-      void postBeginJob();
+
       void postEndJob();
-
-      void preEventProcessing(const edm::EventID&, const edm::Timestamp&);
-      void postEventProcessing(const Event&, const EventSetup&);
-
-      void preModule(const ModuleDescription&);
-      void postModule(const ModuleDescription&);
 
       void frameworkShutdownOnFailure();
 
@@ -57,5 +49,4 @@ namespace edm {
     }
   }
 }
-
 #endif

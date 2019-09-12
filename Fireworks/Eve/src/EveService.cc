@@ -8,7 +8,6 @@
 //
 // Original Author:  Matevz Tadel
 //         Created:  Fri Jun 25 18:57:39 CEST 2010
-// $Id: EveService.cc,v 1.9 2012/08/16 01:09:21 amraktad Exp $
 //
 
 // system include files
@@ -65,12 +64,12 @@ namespace
       }
 
       // get field values
-      virtual Float_t GetMaxFieldMag() const
+      virtual Float_t GetMaxFieldMag() const override
       {
          return fFieldMag;
       }
 
-      virtual TEveVector GetField(Float_t x, Float_t y, Float_t z) const
+      virtual TEveVector GetField(Float_t x, Float_t y, Float_t z) const override
       {
          static const Float_t barrelFac = 1.2 / 3.8;
          static const Float_t endcapFac = 2.0 / 3.8;

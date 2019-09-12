@@ -1,4 +1,3 @@
-// $Id: FWTableViewTableManager.cc,v 1.18 2012/09/21 09:26:26 eulisse Exp $
 
 #include <math.h>
 #include <sstream>

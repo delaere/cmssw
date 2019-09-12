@@ -11,8 +11,6 @@ class HcalZDCDetId;
 
 /** \class ZdcHardcodeGeometryLoader
  *
- * $Date: 2011/06/04 19:04:50 $
- * $Revision: 1.5 $
  * \author E. Garcia - UIC
 */
 

@@ -4,7 +4,6 @@
  * Slava Valuev  May 26, 2004.
  * Porting from ORCA by S. Valuev in September 2006.
  *
- * $Id: CSCAnodeLCTAnalyzer.cc,v 1.14 2012/12/05 21:12:53 khotilov Exp $
  *
  */
 

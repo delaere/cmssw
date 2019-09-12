@@ -4,8 +4,6 @@
 /** \class Chi2MeasurementEstimatorESProducer
  *  ESProducer for Chi2MeasurementEstimator.
  *
- *  $Date: 2007/05/09 14:05:13 $
- *  $Revision: 1.2 $
  *  \author cerati
  */
 

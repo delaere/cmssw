@@ -10,8 +10,6 @@
  *  pointers to the services, therefore EACH event the setServices(const edm::EventSetup&)
  *  method MUST be called in the code in which the TrackTransformer is used.
  *
- *  $Date: 2013/05/28 17:59:53 $
- *  $Revision: 1.16 $
  *  \author R. Bellan - INFN Torino <riccardo.bellan@cern.ch>
  */
 

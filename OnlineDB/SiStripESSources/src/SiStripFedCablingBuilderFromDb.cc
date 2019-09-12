@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripFedCablingBuilderFromDb.cc,v 1.59 2013/05/30 21:52:09 gartung Exp $
 
 #include "OnlineDB/SiStripESSources/interface/SiStripFedCablingBuilderFromDb.h"
 #include "CalibFormats/SiStripObjects/interface/SiStripFecCabling.h"

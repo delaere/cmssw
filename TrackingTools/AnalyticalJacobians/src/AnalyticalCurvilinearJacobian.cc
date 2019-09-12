@@ -1,5 +1,7 @@
 #include "TrackingTools/AnalyticalJacobians/interface/AnalyticalCurvilinearJacobian.h"
 #include "TrackingTools/TrajectoryParametrization/interface/GlobalTrajectoryParameters.h"
+#include <vdt/vdtMath.h>
+
 
 AnalyticalCurvilinearJacobian::AnalyticalCurvilinearJacobian 
 (const GlobalTrajectoryParameters& globalParameters,
@@ -11,8 +13,9 @@ AnalyticalCurvilinearJacobian::AnalyticalCurvilinearJacobian
   // helix: calculate full jacobian
   //
   if ( s*s*fabs(globalParameters.transverseCurvature())>1.e-5 ) { 
-    GlobalPoint xStart = globalParameters.position();
-    GlobalVector h  = globalParameters.magneticFieldInInverseGeV(xStart);
+    // GlobalPoint xStart = globalParameters.position();
+    // GlobalVector h  = globalParameters.magneticFieldInInverseGeV(xStart);
+    GlobalVector h  = globalParameters.magneticFieldInInverseGeV();
     computeFullJacobian(globalParameters,x,p,h,s);
   }
   //
@@ -86,7 +89,7 @@ AnalyticalCurvilinearJacobian::computeFullJacobian
   double qp = -h.mag();
 //   double q = -h.mag()*qbp;
   double q = qp*qbp;
-  double theta = q*absS; double sint = sin(theta); double cost = cos(theta);
+  double theta = q*absS; double sint,cost;   vdt::fast_sincos(theta,sint,cost);
   double hn1 = hn.x(); double hn2 = hn.y(); double hn3 = hn.z();
   double dx1 = dx.x(); double dx2 = dx.y(); double dx3 = dx.z();
   double gamma = hn1*t21 + hn2*t22 + hn3*t23;

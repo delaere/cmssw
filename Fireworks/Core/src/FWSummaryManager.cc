@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Tue Mar  4 09:35:32 EST 2008
-// $Id: FWSummaryManager.cc,v 1.22 2010/06/18 10:17:16 yana Exp $
 //
 
 // system include files

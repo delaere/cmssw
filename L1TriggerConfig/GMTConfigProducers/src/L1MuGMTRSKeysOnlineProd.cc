@@ -9,8 +9,6 @@
  *
  * \author: Ivan Mikulec
  *
- * $Date: 2009/03/25 20:51:08 $
- * $Revision: 1.1 $
  *
  */
 
@@ -23,7 +21,7 @@ class L1MuGMTRSKeysOnlineProd : public L1ObjectKeysOnlineProdBase {
       L1MuGMTRSKeysOnlineProd(const edm::ParameterSet& iConfig) ;
       ~L1MuGMTRSKeysOnlineProd() {}
 
-      virtual void fillObjectKeys( ReturnType pL1TriggerKey ) ;
+      virtual void fillObjectKeys( ReturnType pL1TriggerKey ) override ;
    private:
       bool m_enableL1MuGMTChannelMask ;
 };

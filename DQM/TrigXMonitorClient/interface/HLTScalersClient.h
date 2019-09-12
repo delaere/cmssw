@@ -2,12 +2,7 @@
 // 
 // Client class for HLT Scalers module.
 // 
-// $Id: HLTScalersClient.h,v 1.14 2010/04/02 20:48:11 wittich Exp $
 
-// $Log: HLTScalersClient.h,v $
-// Revision 1.14  2010/04/02 20:48:11  wittich
-// updates to scale entries by received number of FU's
-//
 // Revision 1.13  2010/03/17 20:56:18  wittich
 // Check for good updates based on mergeCount values
 // add code for rates normalized per FU
@@ -98,7 +93,7 @@ public:
       std::deque<CountLS_t>(),
       targetSize_(sz)
     {}
-    unsigned int targetSize() { return targetSize_; };
+    unsigned int targetSize() const { return targetSize_; };
     double getCount(int ls)
     {
       CountLSFifo_t::iterator p = std::find(this->begin(), this->end(),
@@ -198,7 +193,7 @@ private:
   std::string processName_;
   //HLTConfigProvider hltConfig_;
   std::deque<int> ignores_;
-  std::pair<double,double> getSlope_(CountLSFifo_t points);
+  std::pair<double,double> getSlope_(const CountLSFifo_t& points);
 private:
   bool debug_;
   int maxFU_;

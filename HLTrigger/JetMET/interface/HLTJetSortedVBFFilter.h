@@ -3,19 +3,20 @@
 
 /** \class HLTJetSortedVBFFilter
  *
- *  
+ *
  *  This class is an HLTFilter (-> EDFilter) implementing a
  *  single jet requirement with an Energy threshold (not Et!)
  *  Based on HLTSinglet
  *
- *  $Date: 2012/02/06 15:09:21 $
- *  $Revision: 1.3 $
  *
  *  \author Jacopo Bernardini
  *
  */
 
 #include "DataFormats/HLTReco/interface/TriggerTypeDefs.h"
+#include "DataFormats/JetReco/interface/CaloJetCollection.h"
+#include "DataFormats/BTauReco/interface/JetTag.h"
+#include "DataFormats/HLTReco/interface/TriggerFilterObjectWithRefs.h"
 #include "HLTrigger/HLTcore/interface/HLTFilter.h"
 #include<string>
 
@@ -40,17 +41,19 @@ class HLTJetSortedVBFFilter : public HLTFilter {
   explicit HLTJetSortedVBFFilter(const edm::ParameterSet&);
   ~HLTJetSortedVBFFilter();
   static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
-  virtual bool hltFilter(edm::Event&, const edm::EventSetup&,trigger::TriggerFilterObjectWithRefs& filterproduct);
-      
+  virtual bool hltFilter(edm::Event&, const edm::EventSetup&,trigger::TriggerFilterObjectWithRefs& filterproduct) const override;
+
  private:
-  edm::InputTag inputJets_; 
-  edm::InputTag inputJetTags_; 
-  double mqq_;           
-  double detaqq_; 
-  double detabb_;        
-  double ptsqq_;          
-  double ptsbb_; 
-  double seta_; 
+  edm::EDGetTokenT<std::vector<T>> m_theJetsToken;
+  edm::EDGetTokenT<reco::JetTagCollection> m_theJetTagsToken;
+  edm::InputTag inputJets_;
+  edm::InputTag inputJetTags_;
+  double mqq_;
+  double detaqq_;
+  double detabb_;
+  double ptsqq_;
+  double ptsbb_;
+  double seta_;
   std::string value_;
   int triggerType_;
 };

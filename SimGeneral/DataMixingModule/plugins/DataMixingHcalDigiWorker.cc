@@ -79,7 +79,6 @@ namespace edm
     ES.get<HcalDbRecord>().get(conditions);                                         
 
 
-
     // fill in maps of hits
 
     LogInfo("DataMixingHcalDigiWorker")<<"===============> adding MC signals for "<<e.id();
@@ -124,9 +123,10 @@ namespace edm
 	 HBHEDigiStorage_.insert(HBHEDigiMap::value_type( ( it->id() ), tool ));
 	 
 #ifdef DEBUG	 
-         LogDebug("DataMixingHcalDigiWorker") << "processed HBHEDigi with rawId: "
-				      << it->id() << "\n"
-				      << " digi energy: " << it->energy();
+         // Commented out because this does not compile anymore	 
+         // LogDebug("DataMixingHcalDigiWorker") << "processed HBHEDigi with rawId: "
+         //                                      << it->id() << "\n"
+         //                                      << " digi energy: " << it->energy();
 #endif
 
        }
@@ -165,9 +165,10 @@ namespace edm
 	 HODigiStorage_.insert(HODigiMap::value_type( ( it->id() ), tool ));
 	 
 #ifdef DEBUG	 
-         LogDebug("DataMixingHcalDigiWorker") << "processed HODigi with rawId: "
-				      << it->id() << "\n"
-				      << " digi energy: " << it->energy();
+         // Commented out because this does not compile anymore	 
+         // LogDebug("DataMixingHcalDigiWorker") << "processed HODigi with rawId: "
+         //                                      << it->id() << "\n"
+         //                                      << " digi energy: " << it->energy();
 #endif
 
        }
@@ -206,9 +207,10 @@ namespace edm
 	 HFDigiStorage_.insert(HFDigiMap::value_type( ( it->id() ), tool ));
 	 
 #ifdef DEBUG	 
-         LogDebug("DataMixingHcalDigiWorker") << "processed HFDigi with rawId: "
-				      << it->id() << "\n"
-				      << " digi energy: " << it->energy();
+         // Commented out because this does not compile anymore	 
+         // LogDebug("DataMixingHcalDigiWorker") << "processed HFDigi with rawId: "
+         //                                      << it->id() << "\n"
+         //                                      << " digi energy: " << it->energy();
 #endif
 
        }
@@ -249,9 +251,10 @@ namespace edm
 	   ZDCDigiStorage_.insert(ZDCDigiMap::value_type( ( it->id() ), tool ));
 	 
 #ifdef DEBUG	 
-	   LogDebug("DataMixingHcalDigiWorker") << "processed ZDCDigi with rawId: "
-						<< it->id() << "\n"
-						<< " digi energy: " << it->energy();
+           // Commented out because this does not compile anymore	 
+           // LogDebug("DataMixingHcalDigiWorker") << "processed ZDCDigi with rawId: "
+           //                                      << it->id() << "\n"
+           //                                      << " digi energy: " << it->energy();
 #endif
 
 	 }
@@ -260,7 +263,8 @@ namespace edm
     
   } // end of addHCalSignals
 
-  void DataMixingHcalDigiWorker::addHcalPileups(const int bcr, const EventPrincipal *ep, unsigned int eventNr,const edm::EventSetup& ES) {
+  void DataMixingHcalDigiWorker::addHcalPileups(const int bcr, const EventPrincipal *ep, unsigned int eventNr,const edm::EventSetup& ES,
+                                                ModuleCallingContext const* mcc) {
   
     LogDebug("DataMixingHcalDigiWorker") <<"\n===============> adding pileups from event  "<<ep->id()<<" for bunchcrossing "<<bcr;
 
@@ -272,8 +276,9 @@ namespace edm
 
     // HBHE first
 
+
     boost::shared_ptr<Wrapper<HBHEDigiCollection>  const> HBHEDigisPTR = 
-          getProductByTag<HBHEDigiCollection>(*ep, HBHEPileInputTag_ );
+      getProductByTag<HBHEDigiCollection>(*ep, HBHEPileInputTag_, mcc);
  
     if(HBHEDigisPTR ) {
 
@@ -298,16 +303,18 @@ namespace edm
 	 HBHEDigiStorage_.insert(HBHEDigiMap::value_type( (it->id()), tool ));
 	 
 #ifdef DEBUG	 
-	 LogDebug("DataMixingHcalDigiWorker") << "processed HBHEDigi with rawId: "
-				      << it->id() << "\n"
-				      << " digi energy: " << it->energy();
+         // Commented out because this does not compile anymore	 
+	 // LogDebug("DataMixingHcalDigiWorker") << "processed HBHEDigi with rawId: "
+         //                                      << it->id() << "\n"
+         //                                      << " digi energy: " << it->energy();
 #endif
        }
     }
+    else {std::cout << "NO HBHE Digis!!!!" << std::endl;}
     // HO Next
 
     boost::shared_ptr<Wrapper<HODigiCollection>  const> HODigisPTR = 
-          getProductByTag<HODigiCollection>(*ep, HOPileInputTag_ );
+      getProductByTag<HODigiCollection>(*ep, HOPileInputTag_, mcc);
  
     if(HODigisPTR ) {
 
@@ -332,9 +339,10 @@ namespace edm
 	 HODigiStorage_.insert(HODigiMap::value_type( (it->id()), tool ));
 	 
 #ifdef DEBUG	 
-	 LogDebug("DataMixingHcalDigiWorker") << "processed HODigi with rawId: "
-				      << it->id() << "\n"
-				      << " digi energy: " << it->energy();
+         // Commented out because this does not compile anymore	 
+	 // LogDebug("DataMixingHcalDigiWorker") << "processed HODigi with rawId: "
+         //                                      << it->id() << "\n"
+         //                                      << " digi energy: " << it->energy();
 #endif
        }
     }
@@ -343,7 +351,7 @@ namespace edm
     // HF Next
 
     boost::shared_ptr<Wrapper<HFDigiCollection>  const> HFDigisPTR = 
-          getProductByTag<HFDigiCollection>(*ep, HFPileInputTag_ );
+      getProductByTag<HFDigiCollection>(*ep, HFPileInputTag_, mcc);
  
     if(HFDigisPTR ) {
 
@@ -368,9 +376,10 @@ namespace edm
 	 HFDigiStorage_.insert(HFDigiMap::value_type( (it->id()), tool ));
 	 
 #ifdef DEBUG	 
-	 LogDebug("DataMixingHcalDigiWorker") << "processed HFDigi with rawId: "
-				      << it->id() << "\n"
-				      << " digi energy: " << it->energy();
+         // Commented out because this does not compile anymore	 
+	 // LogDebug("DataMixingHcalDigiWorker") << "processed HFDigi with rawId: "
+         //                                      << it->id() << "\n"
+         //                                      << " digi energy: " << it->energy();
 #endif
        }
     }
@@ -382,7 +391,7 @@ namespace edm
 
 
       boost::shared_ptr<Wrapper<ZDCDigiCollection>  const> ZDCDigisPTR = 
-	getProductByTag<ZDCDigiCollection>(*ep, ZDCPileInputTag_ );
+	getProductByTag<ZDCDigiCollection>(*ep, ZDCPileInputTag_, mcc);
  
       if(ZDCDigisPTR ) {
 
@@ -406,10 +415,11 @@ namespace edm
 
 	  ZDCDigiStorage_.insert(ZDCDigiMap::value_type( (it->id()), tool ));
 	 
-#ifdef DEBUG	 
-	  LogDebug("DataMixingHcalDigiWorker") << "processed ZDCDigi with rawId: "
-					       << it->id() << "\n"
-					       << " digi energy: " << it->energy();
+#ifdef DEBUG
+          // Commented out because this does not compile anymore	 
+	  // LogDebug("DataMixingHcalDigiWorker") << "processed ZDCDigi with rawId: "
+          //                                      << it->id() << "\n"
+          //                                      << " digi energy: " << it->energy();
 #endif
 	}
       }
@@ -508,7 +518,7 @@ namespace edm
 
 	  unsigned int sizeold = HB_old.size();
 	  for(unsigned int isamp = 0; isamp<sizeold; isamp++) {
-	    coder.fC2adc(HB_old,(HBHEdigis->back()), 0 );   // as per simulation, capid=0???
+	    coder.fC2adc(HB_old,(HBHEdigis->back()), 1 );   // as per simulation, capid=1
 	  }
 	}
 	//save pointers for next iteration                                                                 
@@ -532,7 +542,7 @@ namespace edm
 
         unsigned int sizenew = (iHB->second).size();
 	for(unsigned int isamp = 0; isamp<sizenew; isamp++) {
-	  coder.fC2adc(HB_old,(HBHEdigis->back()), 0 );  // as per simulation, capid=0???
+	  coder.fC2adc(HB_old,(HBHEdigis->back()), 1 );  // as per simulation, capid=1
   	}
       }
     }
@@ -603,7 +613,7 @@ namespace edm
 
 	  unsigned int sizeold = HO_old.size();
 	  for(unsigned int isamp = 0; isamp<sizeold; isamp++) {
-	    coder.fC2adc(HO_old,(HOdigis->back()), 0 );   // as per simulation, capid=0???
+	    coder.fC2adc(HO_old,(HOdigis->back()), 1 );   // as per simulation, capid=1
 	  }
 	}
 	//save pointers for next iteration                                                                 
@@ -625,7 +635,7 @@ namespace edm
 
 	  unsigned int sizeold = (iHO->second).size();
 	  for(unsigned int isamp = 0; isamp<sizeold; isamp++) {
-	    coder.fC2adc(HO_old,(HOdigis->back()), 0 );   // as per simulation, capid=0???
+	    coder.fC2adc(HO_old,(HOdigis->back()), 1 );   // as per simulation, capid=1
 	  }
 
       }
@@ -696,7 +706,7 @@ namespace edm
 
 	  unsigned int sizeold = HF_old.size();
 	  for(unsigned int isamp = 0; isamp<sizeold; isamp++) {
-	    coder.fC2adc(HF_old,(HFdigis->back()), 0 );   // as per simulation, capid=0???
+	    coder.fC2adc(HF_old,(HFdigis->back()), 1 );   // as per simulation, capid=1
 	  }
 	}
 	//save pointers for next iteration                                                                 
@@ -718,7 +728,7 @@ namespace edm
 
 	  unsigned int sizeold = (iHF->second).size();
 	  for(unsigned int isamp = 0; isamp<sizeold; isamp++) {
-	    coder.fC2adc(HF_old,(HFdigis->back()), 0 );   // as per simulation, capid=0???
+	    coder.fC2adc(HF_old,(HFdigis->back()), 1 );   // as per simulation, capid=1
 	  }
 
       }
@@ -790,7 +800,7 @@ namespace edm
 
 	  unsigned int sizeold = ZDC_old.size();
 	  for(unsigned int isamp = 0; isamp<sizeold; isamp++) {
-	    coder.fC2adc(ZDC_old,(ZDCdigis->back()), 0 );   // as per simulation, capid=0???
+	    coder.fC2adc(ZDC_old,(ZDCdigis->back()), 1 );   // as per simulation, capid=1
 	  }
 	}
 	//save pointers for next iteration                                                                 
@@ -812,7 +822,7 @@ namespace edm
 
 	  unsigned int sizeold = (iZDC->second).size();
 	  for(unsigned int isamp = 0; isamp<sizeold; isamp++) {
-	    coder.fC2adc(ZDC_old,(ZDCdigis->back()), 0 );   // as per simulation, capid=0???
+	    coder.fC2adc(ZDC_old,(ZDCdigis->back()), 1 );   // as per simulation, capid=1
 	  }
 
       }
@@ -828,10 +838,18 @@ namespace edm
     LogInfo("DataMixingHcalDigiWorker") << "total # HF Merged digis: " << HFdigis->size() ;
     LogInfo("DataMixingHcalDigiWorker") << "total # ZDC Merged digis: " << ZDCdigis->size() ;
 
+
+    // make empty collections for now:
+    std::auto_ptr<HBHEUpgradeDigiCollection> hbheupgradeResult(new HBHEUpgradeDigiCollection());
+    std::auto_ptr<HFUpgradeDigiCollection> hfupgradeResult(new HFUpgradeDigiCollection());
+
+
     e.put( HBHEdigis, HBHEDigiCollectionDM_ );
     e.put( HOdigis, HODigiCollectionDM_ );
     e.put( HFdigis, HFDigiCollectionDM_ );
     e.put( ZDCdigis, ZDCDigiCollectionDM_ );
+    e.put( hbheupgradeResult, "HBHEUpgradeDigiCollection" );
+    e.put( hfupgradeResult, "HFUpgradeDigiCollection" );
 
     // clear local storage after this event
     HBHEDigiStorage_.clear();

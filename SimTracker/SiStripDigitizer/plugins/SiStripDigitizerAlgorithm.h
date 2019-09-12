@@ -22,10 +22,10 @@
 #include "CondFormats/SiStripObjects/interface/SiStripThreshold.h"
 #include "CondFormats/SiStripObjects/interface/SiStripBadStrip.h"
 #include "CalibFormats/SiStripObjects/interface/SiStripGain.h"
-#include "SiTrivialDigitalConverter.h"
-#include "SiGaussianTailNoiseAdder.h"
+#include "SimTracker/SiStripDigitizer/interface/SiTrivialDigitalConverter.h"
+#include "SimTracker/SiStripDigitizer/interface/SiGaussianTailNoiseAdder.h"
 #include "SiHitDigitizer.h"
-#include "SiPileUpSignals.h"
+#include "SimTracker/SiStripDigitizer/interface/SiPileUpSignals.h"
 #include "Geometry/CommonDetUnit/interface/GeomDetUnit.h"
 #include "Geometry/TrackerGeometryBuilder/interface/StripGeomDetUnit.h"
 #include "Geometry/CommonTopologies/interface/StripTopology.h"
@@ -114,6 +114,7 @@ class SiStripDigitizerAlgorithm {
   const double cosmicShift;
   const double inefficiency;
   const double pedOffset;
+  const bool PreMixing_;
 
   const ParticleDataTable * pdt;
   const ParticleData * particle;

@@ -13,7 +13,6 @@
 //
 // Original Author:  Phillip R. Dudero
 //         Created:  Tue Jan 16 21:11:37 CST 2007
-// $Id: HcalQLPlotAnalAlgos.cc,v 1.4 2008/01/05 22:27:39 elmer Exp $
 //
 //
 
@@ -42,7 +41,7 @@
 // constructors and destructor
 //
 HcalQLPlotAnalAlgos::HcalQLPlotAnalAlgos(const char *outputFilename,
-					 edm::ParameterSet histoParams)
+					 const edm::ParameterSet& histoParams)
 {
   triggerID_=HcalQLPlotHistoMgr::UNKNOWN;
 

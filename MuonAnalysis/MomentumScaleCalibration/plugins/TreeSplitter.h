@@ -16,7 +16,6 @@
 //
 // Original Author:  Marco De Mattia
 //         Created:  Thu Sep 11 12:16:00 CEST 2008
-// $Id: TreeSplitter.h,v 1.1 2010/07/13 10:50:38 demattia Exp $
 //
 
 #include "FWCore/Framework/interface/MakerMacros.h"

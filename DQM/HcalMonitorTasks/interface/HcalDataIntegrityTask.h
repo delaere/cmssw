@@ -22,8 +22,6 @@
 
 /** \class HcalDataIntegrityTask
  *
- * $Date: 2010/03/25 11:00:57 $
- * $Revision: 1.4 $
  * \author J. Temple -- University of Maryland
  * copied from W. Fisher/J. St. John's DataFormat code
  */
@@ -103,6 +101,9 @@ class HcalDataIntegrityTask: public HcalBaseDQMonitor
   const HcalElectronicsMap*    readoutMap_;
   edm::InputTag inputLabelRawData_;
   edm::InputTag inputLabelReport_;
+
+  edm::EDGetTokenT<FEDRawDataCollection> tok_raw_;
+  edm::EDGetTokenT<HcalUnpackerReport> tok_report_;
 
 };
 

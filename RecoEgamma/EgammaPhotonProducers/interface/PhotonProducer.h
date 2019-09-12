@@ -3,9 +3,6 @@
 /** \class PhotonProducer
  **  
  **
- **  $Id: PhotonProducer.h,v 1.46 2013/02/27 20:33:00 eulisse Exp $ 
- **  $Date: 2013/02/27 20:33:00 $ 
- **  $Revision: 1.46 $
  **  \author Nancy Marinelli, U. of Notre Dame, US
  **
  ***/
@@ -66,11 +63,11 @@ class PhotonProducer : public edm::EDProducer {
 
   // std::string PhotonCoreCollection_;
   std::string PhotonCollection_;
-  edm::InputTag photonCoreProducer_;
-  edm::InputTag barrelEcalHits_;
-  edm::InputTag endcapEcalHits_;
-
-  edm::InputTag hcalTowers_;
+  edm::EDGetTokenT<reco::PhotonCoreCollection> photonCoreProducer_;
+  edm::EDGetTokenT<EcalRecHitCollection> barrelEcalHits_;
+  edm::EDGetTokenT<EcalRecHitCollection> endcapEcalHits_;
+  edm::EDGetTokenT<CaloTowerCollection> hcalTowers_;
+  edm::EDGetTokenT<reco::VertexCollection> vertexProducer_;
 
   std::string conversionProducer_;
   std::string conversionCollection_;
@@ -94,7 +91,7 @@ class PhotonProducer : public edm::EDProducer {
 
   bool validConversions_;
   std::string pixelSeedProducer_;
-  std::string vertexProducer_;
+  
   bool usePrimaryVertex_;
   edm::ParameterSet conf_;
 

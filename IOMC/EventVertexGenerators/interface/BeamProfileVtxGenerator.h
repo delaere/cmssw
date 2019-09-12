@@ -7,7 +7,6 @@
  * Attention: Units are assumed to be cm and radian!
  * \author Sunanda Banerjee
  *
- * $Id: BeamProfileVtxGenerator.h,v 1.8 2009/08/29 00:12:38 sunanda Exp $
  */
 
 #include "IOMC/EventVertexGenerators/interface/BaseEvtVtxGenerator.h"

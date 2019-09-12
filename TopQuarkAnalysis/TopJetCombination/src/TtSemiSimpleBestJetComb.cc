@@ -1,5 +1,4 @@
 //
-// $Id: TtSemiSimpleBestJetComb.cc,v 1.4 2008/02/17 11:27:55 rwolf Exp $
 //
 
 #include "TopQuarkAnalysis/TopJetCombination/interface/TtSemiSimpleBestJetComb.h"

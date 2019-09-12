@@ -13,7 +13,6 @@
 //
 // Original Author:  Wei Li
 //         Created:  Tue Dec  8 23:51:37 EST 2009
-// $Id: HighMultiplicityGenFilter.cc,v 1.1 2011/06/10 12:10:40 eulisse Exp $
 //
 //
 
@@ -41,9 +40,9 @@ class HighMultiplicityGenFilter : public edm::EDFilter {
       ~HighMultiplicityGenFilter();
 
    private:
-      virtual void beginJob();
-      virtual bool filter(edm::Event&, const edm::EventSetup&);
-      virtual void endJob();
+      virtual void beginJob() override;
+      virtual bool filter(edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override;
       
       // ----------member data ---------------------------
       edm::ESHandle <ParticleDataTable> pdt; 

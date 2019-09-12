@@ -1,6 +1,5 @@
 #ifndef HepPDTProducer_ParticleDataTable_h
 #define HepPDTProducer_ParticleDataTable_h
-// $Id: ParticleDataTable.h,v 1.5 2007/03/20 09:09:29 llista Exp $
 
 #include "FWCore/Framework/interface/data_default_record_trait.h"
 #include "HepPDT/ParticleDataTable.hh"

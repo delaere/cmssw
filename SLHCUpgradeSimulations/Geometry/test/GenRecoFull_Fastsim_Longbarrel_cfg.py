@@ -91,11 +91,12 @@ process.fourthMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
 process.fifthMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
 
 process.muons.TrackerKinkFinderParameters.TrackerRecHitBuilder = cms.string('WithTrackAngle')
+from RecoPixelVertexing.PixelTriplets.quadrupletseedmerging_cff import PixelSeedMergerQuadruplets
 process.regionalCosmicTrackerSeeds.SeedMergerPSet = cms.PSet(
         mergeTriplets = cms.bool(False),
         ttrhBuilderLabel = cms.string( "PixelTTRHBuilderWithoutAngle" ),
         addRemainingTriplets = cms.bool(False),
-        layerListName = cms.string( "PixelSeedMergerQuadruplets" )
+        layerList = PixelSeedMergerQuadruplets
         )
 process.regionalCosmicTracks.TTRHBuilder = cms.string('WithTrackAngle')
 
@@ -136,7 +137,7 @@ process.options = cms.untracked.PSet(
 
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
-    version = cms.untracked.string('$Revision: 1.2 $'),
+    version = cms.untracked.string('$Revision: 1.1 $'),
     annotation = cms.untracked.string('SLHCUpgradeSimulations/Configuration/python/FourMuPt_1_50_cfi.py nevts:10'),
     name = cms.untracked.string('PyReleaseValidation')
 )

@@ -1,8 +1,8 @@
 /** \file RigidBodyAlignmentParameters.cc
  *
- *  Version    : $Revision: 1.14 $
- *  last update: $Date: 2008/09/02 15:08:12 $
- *  by         : $Author: flucke $
+ *  Version    : $Revision: 1.13 $
+ *  last update: $Date: 2007/10/08 15:56:01 $
+ *  by         : $Author: cklae $
  */
 
 #include "FWCore/Utilities/interface/Exception.h"
@@ -93,7 +93,7 @@ RigidBodyAlignmentParameters::derivatives( const TrajectoryStateOnSurface &tsos,
   } else { // different alignable => transform into correct frame
     const AlgebraicMatrix deriv = KarimakiAlignmentDerivatives()(tsos);
     FrameToFrameDerivative ftfd;
-    return ftfd.frameToFrameDerivative(alidet, ali) * deriv;
+    return ftfd.frameToFrameDerivative(alidet, ali).T() * deriv;
   }
 }
 

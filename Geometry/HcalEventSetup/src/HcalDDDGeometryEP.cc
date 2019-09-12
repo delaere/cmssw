@@ -13,7 +13,6 @@
 //
 // Original Author:  Sunanda Banerjee
 //         Created:  Thu Oct 20 11:35:27 CDT 2006
-// $Id: HcalDDDGeometryEP.cc,v 1.7 2012/10/29 07:32:07 mansj Exp $
 //
 //
 

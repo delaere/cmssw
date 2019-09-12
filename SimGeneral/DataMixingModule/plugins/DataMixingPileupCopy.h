@@ -31,6 +31,8 @@
 
 namespace edm
 {
+  class ModuleCallingContext;
+
   class DataMixingPileupCopy
     {
     public:
@@ -44,7 +46,8 @@ namespace edm
       virtual ~DataMixingPileupCopy();
 
       void putPileupInfo(edm::Event &e) ;
-      void addPileupInfo(const edm::EventPrincipal*,unsigned int EventId);
+      void addPileupInfo(const edm::EventPrincipal*,unsigned int EventId,
+                         ModuleCallingContext const* mcc);
 
 
     private:
@@ -64,6 +67,8 @@ namespace edm
       //      unsigned int eventId_; //=0 for signal, from 1-n for pileup events
 
       std::string label_;
+
+      bool FoundPlayback_;
 
     };
 }//edm

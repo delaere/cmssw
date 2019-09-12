@@ -5,7 +5,6 @@
  * Generate event vertices according to a Gauss distribution. 
  * Attention: All values are assumed to be cm!
  *
- * $Id: GaussEvtVtxGenerator.h,v 1.6 2008/04/04 21:38:24 yumiceva Exp $
  */
 
 #include "IOMC/EventVertexGenerators/interface/BaseEvtVtxGenerator.h"

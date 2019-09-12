@@ -20,9 +20,7 @@ std::string IntToString(int num)
 /*! \class H4Geom
  * \brief A helper class with geometry information of the super module
  *
- * $Date: 2010/10/21 17:33:47 $
- * $Author: wmtan $
- *
+ * Author: Giovanni Franzoni
  * Crystal numbering schemes during automn 2004 (SM10):
  * - <b>Conventions</b>
  *   SM Crystal Number range is [1, 1700]

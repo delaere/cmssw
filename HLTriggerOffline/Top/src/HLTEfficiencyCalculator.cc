@@ -12,7 +12,6 @@
 //
 // Original Author: Abideh Jafari 
 //         Created:  Wed Aug 01 09:06:32 CEST 2012
-// $Id: HLTEfficiencyCalculator.cc,v 1.1 2012/08/01 08:26:04 ajafari Exp $
 //
 //
 
@@ -31,6 +30,7 @@ HLTEffCalculator::HLTEffCalculator(const edm::ParameterSet& iConfig)
      HLTresCollection           = iConfig.getParameter<edm::InputTag>("TriggerResCollection");
      verbosity =  iConfig.getUntrackedParameter<int>("verbosity",0);	
      myEffHandler = new  EfficiencyHandler("TopHLTs", iConfig.getParameter<std::vector<std::string> >("hltPaths"), verbosity);   
+     HLTresCollectionToken_ = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResCollection"));
 }
 
 HLTEffCalculator::~HLTEffCalculator()
@@ -56,7 +56,7 @@ HLTEffCalculator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
  
   // Trigger 
   Handle<TriggerResults> trh;
-  iEvent.getByLabel(HLTresCollection,trh);
+  iEvent.getByToken(HLTresCollectionToken_,trh);
   if( ! trh.isValid() ) {
     LogDebug("") << "HL TriggerResults with label ["+HLTresCollection.encode()+"] not found!";
     return;

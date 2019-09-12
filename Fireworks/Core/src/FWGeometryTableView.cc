@@ -8,7 +8,6 @@
 //
 // Original Author:  
 //         Created:  Wed Jan  4 00:05:34 CET 2012
-// $Id: FWGeometryTableView.cc,v 1.40 2012/05/10 21:31:18 amraktad Exp $
 //
 
 // system include files
@@ -88,7 +87,7 @@ public:
 
   }
 
-   virtual void fillOptions(const char* iBegin, const char* iEnd, std::vector<std::pair<boost::shared_ptr<std::string>, std::string> >& oOptions) const 
+   virtual void fillOptions(const char* iBegin, const char* iEnd, std::vector<std::pair<boost::shared_ptr<std::string>, std::string> >& oOptions) const override 
    {
       oOptions.clear();
       m_list.clear();

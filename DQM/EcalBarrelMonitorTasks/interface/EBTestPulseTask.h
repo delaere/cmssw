@@ -4,8 +4,6 @@
 /*
  * \file EBTestPulseTask.h
  *
- * $Date: 2012/04/27 13:46:00 $
- * $Revision: 1.36 $
  * \author G. Della Ricca
  * \author G. Franzoni
  *
@@ -14,6 +12,10 @@
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
+#include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
+#include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
 
 class MonitorElement;
 class DQMStore;
@@ -66,10 +68,10 @@ bool enableCleanup_;
 
 bool mergeRuns_;
 
-edm::InputTag EcalRawDataCollection_;
-edm::InputTag EBDigiCollection_;
-edm::InputTag EcalPnDiodeDigiCollection_;
-edm::InputTag EcalUncalibratedRecHitCollection_;
+edm::EDGetTokenT<EcalRawDataCollection> EcalRawDataCollection_;
+edm::EDGetTokenT<EBDigiCollection> EBDigiCollection_;
+edm::EDGetTokenT<EcalPnDiodeDigiCollection> EcalPnDiodeDigiCollection_;
+edm::EDGetTokenT<EcalUncalibratedRecHitCollection> EcalUncalibratedRecHitCollection_;
 std::vector<int> MGPAGains_;
 std::vector<int> MGPAGainsPN_;
 

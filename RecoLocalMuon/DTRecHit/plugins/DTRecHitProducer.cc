@@ -1,7 +1,5 @@
 /** \file
  *
- *  $Date: 2011/03/30 17:34:13 $
- *  $Revision: 1.4 $
  *  \author G. Cerminara
  */
 
@@ -32,17 +30,16 @@ using namespace std;
 
 
 
-DTRecHitProducer::DTRecHitProducer(const ParameterSet& config){
+DTRecHitProducer::DTRecHitProducer(const ParameterSet& config) :
   // Set verbose output
-  debug = config.getUntrackedParameter<bool>("debug", false); 
-
+  debug(config.getUntrackedParameter<bool>("debug", false)),
+  theDTDigiLabel(config.getParameter<InputTag>("dtDigiLabel"))
+{
   if(debug)
     cout << "[DTRecHitProducer] Constructor called" << endl;
   
   produces<DTRecHitCollection>();
 
-  theDTDigiLabel = config.getParameter<InputTag>("dtDigiLabel");
-  
   // Get the concrete reconstruction algo from the factory
   string theAlgoName = config.getParameter<string>("recAlgo");
   theAlgo = DTRecHitAlgoFactory::get()->create(theAlgoName,
@@ -97,8 +94,3 @@ void DTRecHitProducer::produce(Event& event, const EventSetup& setup) {
 
   event.put(recHitCollection);
 }
-
-
-
-bool
-DTRecHitProducer::debug;

@@ -38,18 +38,18 @@ class RecoTauEnergyRecoveryPlugin2 : public RecoTauModifierPlugin
 {
  public:
 
-  explicit RecoTauEnergyRecoveryPlugin2(const edm::ParameterSet&);
+  explicit RecoTauEnergyRecoveryPlugin2(const edm::ParameterSet&, edm::ConsumesCollector &&iC);
   virtual ~RecoTauEnergyRecoveryPlugin2();
-  void operator()(PFTau&) const;
-  virtual void beginEvent();
+  void operator()(PFTau&) const override;
+  virtual void beginEvent() override;
 
  private:
 
   double dRcone_;
 };
 
-RecoTauEnergyRecoveryPlugin2::RecoTauEnergyRecoveryPlugin2(const edm::ParameterSet& cfg)
-  : RecoTauModifierPlugin(cfg),
+  RecoTauEnergyRecoveryPlugin2::RecoTauEnergyRecoveryPlugin2(const edm::ParameterSet& cfg, edm::ConsumesCollector &&iC)
+    : RecoTauModifierPlugin(cfg, std::move(iC)),
     dRcone_(cfg.getParameter<double>("dRcone"))
 {}
 

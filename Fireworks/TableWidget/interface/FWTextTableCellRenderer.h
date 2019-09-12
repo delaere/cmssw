@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Mon Feb  2 16:43:50 EST 2009
-// $Id: FWTextTableCellRenderer.h,v 1.6 2011/03/02 18:34:17 amraktad Exp $
 //
 
 // system include files

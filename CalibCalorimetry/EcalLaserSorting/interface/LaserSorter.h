@@ -1,5 +1,4 @@
 /*
- * $Id: LaserSorter.h,v 1.8 2012/10/09 19:00:18 wdd Exp $
  */
 
 #ifndef EVENT_SELECT_H

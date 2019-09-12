@@ -1,6 +1,5 @@
 //
 // Original Author:  Fedor Ratnikov Dec 27, 2006
-// $Id: ChainedJetCorrector.h,v 1.3 2011/04/28 14:05:21 kkousour Exp $
 //
 // Correction which chains other corrections
 //

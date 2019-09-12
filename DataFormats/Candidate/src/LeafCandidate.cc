@@ -1,4 +1,3 @@
-// $Id: LeafCandidate.cc,v 1.15 2012/10/13 07:39:04 innocent Exp $
 #include "DataFormats/Candidate/interface/LeafCandidate.h"
 #include "FWCore/Utilities/interface/EDMException.h"
 using namespace reco;

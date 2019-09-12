@@ -7,8 +7,11 @@
  *
  */
 
-#include "HLTrigger/HLTcore/interface/HLTFilter.h"
+#include "FWCore/Framework/interface/EDFilter.h"
 #include "RecoMET/METAlgorithms/interface/HcalNoiseAlgo.h"
+#include "DataFormats/METReco/interface/HcalNoiseRBX.h"
+#include "DataFormats/METReco/interface/CaloMET.h"
+#include "DataFormats/METReco/interface/CaloMETCollection.h"
 
 namespace edm {
    class ConfigurationDescriptions;
@@ -23,6 +26,8 @@ class HLTHcalMETNoiseCleaner : public edm::EDFilter {
   virtual bool filter(edm::Event&, const edm::EventSetup&);
   
  private:
+  edm::EDGetTokenT<reco::CaloMETCollection> m_theCaloMetToken;
+  edm::EDGetTokenT<reco::HcalNoiseRBXCollection> m_theHcalNoiseToken;
   // parameters
   edm::InputTag HcalNoiseRBXCollectionTag_;
   edm::InputTag CaloMetCollectionTag_;

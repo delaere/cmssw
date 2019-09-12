@@ -2,8 +2,6 @@
  *
  * Digi for RPC data coming thru RAT-ALCT-DDU.
  *
- * $Date: 2008/10/29 18:34:41 $
- * $Revision: 1.7 $
  *
  * \author N. Terentiev, CMU
  */

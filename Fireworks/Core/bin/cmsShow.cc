@@ -28,7 +28,7 @@ namespace {
             
       // ---------- member functions ---------------------------
       virtual
-      void  runCommand(edm::MessageLoggerQ::OpCode  opcode, void * operand);
+      void  runCommand(edm::MessageLoggerQ::OpCode  opcode, void * operand) override;
       
    private:
       SilentMLscribe(const SilentMLscribe&); // stop default
@@ -50,7 +50,6 @@ namespace {
             delete errorobj_p;
             break;
          }
-         case edm::MessageLoggerQ::JOBREPORT:
          case edm::MessageLoggerQ::JOBMODE:
          case edm::MessageLoggerQ::GROUP_STATS:
          {
@@ -142,7 +141,7 @@ int main (int argc, char **argv)
    {
       TString infoFileName("data/version.txt");
       fireworks::setPath(infoFileName);
-      ifstream infoFile(infoFileName);
+      std::ifstream infoFile(infoFileName);
       infoText.ReadLine(infoFile);
       infoFile.close();
    }

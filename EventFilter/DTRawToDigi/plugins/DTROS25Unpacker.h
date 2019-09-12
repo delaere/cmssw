@@ -5,8 +5,6 @@
  *  The unpacker for DTs' ROS25: 
  *  final version of Read Out Sector board with 25 channels.
  *
- *  $Date: 2007/09/04 08:07:26 $
- *  $Revision: 1.4 $
  * \author M. Zanetti INFN Padova
  * FRC 060906
  */

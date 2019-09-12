@@ -1,8 +1,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2011/02/22 16:23:00 $
- *  $Revision: 1.8 $
  *  \author S. Bolognesi - INFN Torino
  */
 
@@ -21,19 +19,15 @@ using namespace std;
 using namespace edm;
 
 DTLinearDriftFromDBAlgo::DTLinearDriftFromDBAlgo(const ParameterSet& config) :
-  DTRecHitBaseAlgo(config) {
-
-    minTime = config.getParameter<double>("minTime"); 
-
-    maxTime = config.getParameter<double>("maxTime"); 
-
-    doVdriftCorr = config.getParameter<bool>("doVdriftCorr");
-
-    // Option to force going back to digi time at Step 2 
-    stepTwoFromDigi = config.getParameter<bool>("stepTwoFromDigi");
-
-    // Set verbose output
-    debug = config.getUntrackedParameter<bool>("debug");
+  DTRecHitBaseAlgo(config),
+  minTime(config.getParameter<double>("minTime")),
+  maxTime(config.getParameter<double>("maxTime")),
+  doVdriftCorr(config.getParameter<bool>("doVdriftCorr")),
+  // Option to force going back to digi time at Step 2 
+  stepTwoFromDigi(config.getParameter<bool>("stepTwoFromDigi")),
+  // Set verbose output
+  debug(config.getUntrackedParameter<bool>("debug"))
+{
     if(debug)
       cout<<"[DTLinearDriftFromDBAlgo] Constructor called"<<endl;
   }
@@ -242,11 +236,3 @@ bool DTLinearDriftFromDBAlgo::compute(const DTLayer* layer,
     return false;
   }
 }
-
-float DTLinearDriftFromDBAlgo::minTime;
-
-  
-float DTLinearDriftFromDBAlgo::maxTime;
-
-  
-bool DTLinearDriftFromDBAlgo::debug;

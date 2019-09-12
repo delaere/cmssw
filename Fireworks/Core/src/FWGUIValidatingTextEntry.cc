@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Fri Aug 22 18:13:39 EDT 2008
-// $Id: FWGUIValidatingTextEntry.cc,v 1.9 2011/07/20 20:17:54 amraktad Exp $
 //
 
 // system include files
@@ -147,7 +146,7 @@ public:
          TTimer(100),
          m_window(iWindow) {
       }
-      virtual Bool_t Notify() {
+      virtual Bool_t Notify() override {
          TurnOff();
          m_window->RequestFocus();
          return kTRUE;

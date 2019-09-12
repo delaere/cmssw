@@ -12,7 +12,6 @@
  *
  * \version   Original: April 22, 2005 by Fernando Varela Rodriguez.
  * \version   May 23, 2006 by F.R.
- * \version   $Id: Jet.h,v 1.32 2012/02/01 14:51:10 pandolf Exp $
  ************************************************************/
 #include <string>
 #include "DataFormats/Candidate/interface/CompositePtrCandidate.h"

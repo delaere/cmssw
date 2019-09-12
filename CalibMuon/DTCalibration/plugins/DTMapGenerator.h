@@ -4,8 +4,6 @@
 /** \class DTMapGenerator
  *  Class which creates a textual map of the hardware channels 
  *  in the software detIds
- *  $Date: 2010/01/19 09:51:31 $
- *  $Revision: 1.2 $
  *  \author G. Cerminara S. Bolognesi - INFN Torino
  */
 

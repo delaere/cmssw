@@ -145,6 +145,13 @@ namespace edm
 	// Get the iterators over the digis associated with this LayerId
 	const CSCStripDigiCollection::Range& range = (*CSLayerIt).second;
 
+	//std::cout << " Signal CSC layer " << (*CSLayerIt).first << std::endl;
+
+	//for(CSCStripDigiCollection::const_iterator dtdigi=range.first; dtdigi!=range.second; dtdigi++){
+	//  std::cout << "Digi " << (*dtdigi) << std::endl;
+	//}
+
+
 	OurCSCStripDigis_->put(range, layerId);
       }
     }
@@ -213,7 +220,8 @@ namespace edm
     
   } // end of addMuonSignals
 
-  void DataMixingMuonWorker::addMuonPileups(const int bcr, const EventPrincipal *ep, unsigned int eventNr) {
+  void DataMixingMuonWorker::addMuonPileups(const int bcr, const EventPrincipal *ep, unsigned int eventNr,
+                                            ModuleCallingContext const* mcc) {
   
     LogDebug("DataMixingMuonWorker") <<"\n===============> adding pileups from event  "<<ep->id()<<" for bunchcrossing "<<bcr;
 
@@ -224,7 +232,7 @@ namespace edm
     // Get the digis from the event
 
    boost::shared_ptr<Wrapper<DTDigiCollection>  const> DTDigisPTR = 
-          getProductByTag<DTDigiCollection>(*ep, DTPileInputTag_ );
+     getProductByTag<DTDigiCollection>(*ep, DTPileInputTag_, mcc);
  
    if(DTDigisPTR ) {
 
@@ -238,6 +246,7 @@ namespace edm
 	// Get the iterators over the Digis associated with this LayerId
 	const DTDigiCollection::Range& range = (*DTLayerIt).second;
 
+
 	OurDTDigis_->put(range, layerId);
       
       }
@@ -249,7 +258,7 @@ namespace edm
 
 
    boost::shared_ptr<Wrapper<RPCDigiCollection>  const> RPCDigisPTR = 
-          getProductByTag<RPCDigiCollection>(*ep, RPCPileInputTag_ );
+     getProductByTag<RPCDigiCollection>(*ep, RPCPileInputTag_, mcc);
  
    if(RPCDigisPTR ) {
 
@@ -274,7 +283,7 @@ namespace edm
     // Get the digis from the event
 
    boost::shared_ptr<Wrapper<CSCStripDigiCollection>  const> CSCStripDigisPTR = 
-          getProductByTag<CSCStripDigiCollection>(*ep, CSCStripPileInputTag_ );
+     getProductByTag<CSCStripDigiCollection>(*ep, CSCStripPileInputTag_, mcc);
  
    if(CSCStripDigisPTR ) {
 
@@ -288,6 +297,12 @@ namespace edm
 	// Get the iterators over the digis associated with this LayerId
 	const CSCStripDigiCollection::Range& range = (*CSCStripLayerIt).second;
 
+	//std::cout << " Pileup CSC layer " << (*CSCStripLayerIt).first << std::endl;
+
+	//for(CSCStripDigiCollection::const_iterator dtdigi=range.first; dtdigi!=range.second; dtdigi++){
+	//  std::cout << "Digi " << (*dtdigi) << std::endl;
+	//	}
+
 	OurCSCStripDigis_->put(range, layerId);
       
       }
@@ -299,7 +314,7 @@ namespace edm
     // Get the digis from the event
 
    boost::shared_ptr<Wrapper<CSCWireDigiCollection>  const> CSCWireDigisPTR = 
-          getProductByTag<CSCWireDigiCollection>(*ep, CSCWirePileInputTag_ );
+     getProductByTag<CSCWireDigiCollection>(*ep, CSCWirePileInputTag_, mcc);
  
    if(CSCWireDigisPTR ) {
 
@@ -324,7 +339,7 @@ namespace edm
    // Get the digis from the event
 
    boost::shared_ptr<Wrapper<CSCComparatorDigiCollection>  const> CSCComparatorDigisPTR =
-     getProductByTag<CSCComparatorDigiCollection>(*ep, CSCCompPileInputTag_ );
+     getProductByTag<CSCComparatorDigiCollection>(*ep, CSCCompPileInputTag_, mcc);
 
    if(CSCComparatorDigisPTR ) {
 
@@ -365,6 +380,7 @@ namespace edm
       // Get the iterators over the digis associated with this LayerId
       const DTDigiCollection::Range& range = (*DLayerIt).second;
 
+
       DTDigiMerge->put(range, layerId);
       
     }
@@ -392,8 +408,85 @@ namespace edm
       // Get the iterators over the digis associated with this LayerId
       const CSCStripDigiCollection::Range& range = (*CSLayerIt).second;
 
-      CSCStripDigiMerge->put(range, layerId);
-      
+      std::vector<CSCStripDigi> NewDigiList;
+
+      std::vector<int> StripList;
+      std::vector<CSCStripDigiCollection::const_iterator> StripPointer;
+
+      for(CSCStripDigiCollection::const_iterator dtdigi=range.first; dtdigi!=range.second; ++dtdigi){
+        //std::cout << "Digi " << (*dtdigi).getStrip() << std::endl;
+	StripList.push_back( (*dtdigi).getStrip() );
+	StripPointer.push_back( dtdigi );
+      }
+
+      int PrevStrip = -1;
+      std::vector<int> DuplicateList;
+
+      std::vector<CSCStripDigiCollection::const_iterator>::const_iterator StripPtr = StripPointer.begin();
+
+      for( std::vector<int>::const_iterator istrip = StripList.begin(); istrip !=StripList.end(); ++istrip) {
+       
+	const int CurrentStrip = *(istrip);
+	
+	if(CurrentStrip > PrevStrip) { 
+	  PrevStrip = CurrentStrip; 
+
+	  int dupl_count;
+	  dupl_count = std::count(StripList.begin(), StripList.end(), CurrentStrip);
+	  if(dupl_count > 1) {
+	    std::vector<int>::const_iterator  duplicate = istrip;
+	    ++duplicate;
+	    std::vector<CSCStripDigiCollection::const_iterator>::const_iterator DuplPointer = StripPtr;
+	    ++DuplPointer;
+	    for( ; duplicate!=StripList.end(); ++duplicate) {
+	      if( (*duplicate) == CurrentStrip ) {
+
+		//		std::cout << " Duplicate of current " << CurrentStrip << " found at " << (duplicate - StripList.begin()) << std::endl;
+
+		DuplicateList.push_back(CurrentStrip);
+
+		std::vector<int> pileup_adc = (**DuplPointer).getADCCounts();
+		std::vector<int> signal_adc = (**StripPtr).getADCCounts();
+
+		std::vector<int>::const_iterator minplace;
+		
+		minplace = std::min_element(pileup_adc.begin(), pileup_adc.end());
+
+		int minvalue = (*minplace);
+		
+		std::vector<int> new_adc;
+
+		std::vector<int>::const_iterator newsig = signal_adc.begin();
+
+		for(std::vector<int>::const_iterator ibin = pileup_adc.begin(); ibin!=pileup_adc.end(); ++ibin) {
+		  new_adc.push_back((*newsig)+(*ibin)-minvalue);
+
+		  ++newsig;
+		}
+
+		CSCStripDigi newDigi(CurrentStrip, new_adc);
+		NewDigiList.push_back(newDigi);
+	      }
+	      ++DuplPointer;
+	    }
+	  }
+	  else { NewDigiList.push_back(**StripPtr); }
+	}  // if strips monotonically increasing...  Haven't hit duplicates yet
+	else { // reached end of signal digis, or there was no overlap
+	  PrevStrip = 1000;  // now into pileup signals, stop looking forward for duplicates
+
+	  // check if this digi was in the duplicate list
+	  int check;
+	  check = std::count(DuplicateList.begin(), DuplicateList.end(), CurrentStrip);
+	  if(check == 0) NewDigiList.push_back(**StripPtr);
+	}
+	++StripPtr;
+      }
+
+      CSCStripDigiCollection::Range stripRange(NewDigiList.begin(), NewDigiList.end());
+
+      CSCStripDigiMerge->put(stripRange, layerId);
+
     }
     // Loop over CSCStrip digis, copying them from our own local storage
 

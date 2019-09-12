@@ -13,7 +13,6 @@
 //
 // Original Author:  Giuseppe Cerati & Domenico Giordano
 //         Created:  Thu Mar 11 10:48:48 CET 2010
-// $Id: ConversionSeedFilter.cc,v 1.3 2013/02/27 14:58:16 muzaffar Exp $
 //
 //
 
@@ -45,9 +44,9 @@ public:
   ~ConversionSeedFilter();
   
 private:
-  virtual void beginJob() ;
+  virtual void beginJob() override ;
   virtual void produce(edm::Event&, const edm::EventSetup&) override;
-  virtual void endJob() ;
+  virtual void endJob() override ;
   bool isCompatible(double *vars1, double* vars2);
   void getKine(const TrajectoryStateOnSurface& tsos, double *vars);
   void SearchAmongSeeds(const TrajectorySeedCollection* pInPos,const TrajectorySeedCollection* pInNeg, TrajectorySeedCollection& selectedColl, std::vector<bool>& idxPosColl1, std::vector<bool>& idxPosColl2);

@@ -19,7 +19,6 @@
 // Updated by: Lukas Wehrli
 // for pixel offline DQM 
 //         Created:  
-// $Id: SiPixelClusterSource.h,v 1.20 2011/05/20 17:17:24 wmtan Exp $
 
 #include <memory>
 
@@ -104,7 +103,8 @@
   MonitorElement* meClPosDisk1mz;
   MonitorElement* meClPosDisk2mz;
 
-
+  //define Token(-s)
+  edm::EDGetTokenT<edmNew::DetSetVector<SiPixelCluster> > srcToken_;
 };
 
 #endif

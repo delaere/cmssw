@@ -1,4 +1,3 @@
-// Last commit: $Id: test_AnalyzeCabling.cc,v 1.2 2008/06/05 14:59:15 bainbrid Exp $
 
 #include "OnlineDB/SiStripESSources/test/stubs/test_AnalyzeCabling.h"
 #include "FWCore/Framework/interface/ESHandle.h"

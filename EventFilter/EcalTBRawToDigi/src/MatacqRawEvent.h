@@ -1,5 +1,4 @@
 // -*- Mode: C++; c-basic-offset: 2; indent-tabs-mode: t; tab-width: 8; -*-
-//$Id: MatacqRawEvent.h,v 1.4 2012/06/11 09:15:54 davidlt Exp $
 
 #ifndef MATACQTBRAWEVENT_H
 #define MATACQTBRAWEVENT_H

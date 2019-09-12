@@ -20,7 +20,6 @@
 //                Porting from ORCA by S. Valuev (Slava.Valuev@cern.ch),
 //                May 2006.
 //
-//   $Id: CSCAnodeLCTProcessor.cc,v 1.43 2012/12/05 21:14:22 khotilov Exp $
 //
 //   Modifications: 
 //

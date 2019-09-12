@@ -1,7 +1,5 @@
 /** \file
  *
- *  $Date: 2013/04/22 22:39:24 $
- *  $Revision: 1.19 $
  *
  * \author M.Schmitt, Northwestern
  */

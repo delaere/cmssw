@@ -15,9 +15,7 @@ highPtTripletStepClusters = cms.EDProducer("TrackClusterRemover",
 
 # SEEDING LAYERS
 import RecoTracker.TkSeedingLayers.PixelLayerTriplets_cfi
-highPtTripletStepSeedLayers = RecoTracker.TkSeedingLayers.PixelLayerTriplets_cfi.pixellayertriplets.clone(
-    ComponentName = 'highPtTripletStepSeedLayers'
-    )
+highPtTripletStepSeedLayers = RecoTracker.TkSeedingLayers.PixelLayerTriplets_cfi.PixelLayerTriplets.clone()
 highPtTripletStepSeedLayers.BPix.skipClusters = cms.InputTag('highPtTripletStepClusters')
 highPtTripletStepSeedLayers.FPix.skipClusters = cms.InputTag('highPtTripletStepClusters')
 
@@ -63,7 +61,6 @@ highPtTripletStepTrajectoryBuilder = RecoTracker.CkfPattern.GroupedCkfTrajectory
     ComponentName = 'highPtTripletStepTrajectoryBuilder',
     MeasurementTrackerName = '',
     trajectoryFilterName = 'highPtTripletStepTrajectoryFilter',
-    clustersToSkip = cms.InputTag('highPtTripletStepClusters'),
     maxCand = 3,
     estimator = cms.string('highPtTripletStepChi2Est')
     )
@@ -72,6 +69,7 @@ highPtTripletStepTrajectoryBuilder = RecoTracker.CkfPattern.GroupedCkfTrajectory
 import RecoTracker.CkfPattern.CkfTrackCandidates_cfi
 highPtTripletStepTrackCandidates = RecoTracker.CkfPattern.CkfTrackCandidates_cfi.ckfTrackCandidates.clone(
     src = cms.InputTag('highPtTripletStepSeeds'),
+    clustersToSkip = cms.InputTag('highPtTripletStepClusters'),
     TrajectoryBuilder = 'highPtTripletStepTrajectoryBuilder',
     doSeedingRegionRebuilding = True,
     useHitsSplitting = True
@@ -106,6 +104,7 @@ highPtTripletStepSelector = RecoTracker.FinalTrackSelectors.multiTrackSelector_c
 
 # Final sequence
 HighPtTripletStep = cms.Sequence(highPtTripletStepClusters*
+                                highPtTripletStepSeedLayers*
                                 highPtTripletStepSeeds*
                                 highPtTripletStepTrackCandidates*
                                 highPtTripletStepTracks*

@@ -4,8 +4,6 @@
 /** \class RPCDigiReader
  *  Analyse the RPC digitizer (derived from R. Bellan DTDigiReader. 
  *  
- *  $Date: 2013/02/28 21:16:28 $
- *  $Revision: 1.10 $
  *  \authors: M. Maggi -- INFN Bari
  */
 

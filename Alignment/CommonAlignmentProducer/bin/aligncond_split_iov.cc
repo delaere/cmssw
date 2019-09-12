@@ -26,6 +26,9 @@
 #include "CondFormats/Alignment/interface/Alignments.h"
 #include "CondFormats/Alignment/interface/AlignmentErrors.h"
 #include "CondFormats/Alignment/interface/AlignmentSurfaceDeformations.h"
+#include "CondFormats/SiPixelObjects/interface/SiPixelLorentzAngle.h"
+#include "CondFormats/SiStripObjects/interface/SiStripLorentzAngle.h"
+#include "CondFormats/SiStripObjects/interface/SiStripBackPlaneCorrection.h"
 
 #include <iterator>
 #include <iostream>
@@ -36,7 +39,7 @@ namespace cond {
   public:
     AlignSplitIOV();
     ~AlignSplitIOV();
-    int execute();
+    int execute() override;
 
     template<class T>
     std::string processPayloadContainer(cond::DbSession &sourcedb,
@@ -130,6 +133,15 @@ int cond::AlignSplitIOV::execute()
 							  ioviterator->token(), payloadContainerName);
     else if (payloadContainerName=="AlignmentSurfaceDeformations")
       objToken = processPayloadContainer<AlignmentSurfaceDeformations>(sourcedb, destdb,
+								       ioviterator->token(), payloadContainerName);
+    else if (payloadContainerName=="SiPixelLorentzAngle")
+      objToken = processPayloadContainer<SiPixelLorentzAngle>(sourcedb, destdb,
+								       ioviterator->token(), payloadContainerName);
+    else if (payloadContainerName=="SiStripLorentzAngle")
+      objToken = processPayloadContainer<SiStripLorentzAngle>(sourcedb, destdb,
+								       ioviterator->token(), payloadContainerName);
+    else if (payloadContainerName=="SiStripBackPlaneCorrection")
+      objToken = processPayloadContainer<SiStripBackPlaneCorrection>(sourcedb, destdb,
 								       ioviterator->token(), payloadContainerName);
     else {
       return 1;

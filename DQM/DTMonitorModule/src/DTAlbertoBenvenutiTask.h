@@ -5,8 +5,6 @@
 /*
  * \file DTAlbertoBenvenutiTask.h
  *
- * $Date: 2012/09/24 16:08:06 $
- * $Revision: 1.5 $
  * \author G. Mila - INFN Torino
  *
 */
@@ -19,7 +17,8 @@
 #include <FWCore/Framework/interface/Event.h>
 #include <FWCore/Framework/interface/MakerMacros.h>
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-
+#include <DataFormats/DTDigi/interface/DTDigiCollection.h>
+ 
 #include <memory>
 #include <iostream>
 #include <fstream>
@@ -40,7 +39,7 @@ public:
 
   /// Constructor
   DTAlbertoBenvenutiTask(const edm::ParameterSet& ps);
-  
+
   /// Destructor
   virtual ~DTAlbertoBenvenutiTask();
 
@@ -53,7 +52,7 @@ protected:
 
   /// Book the ME
   void bookHistos(const DTWireId dtWire);
- 
+
   /// Analyze
   void analyze(const edm::Event& e, const edm::EventSetup& c);
 
@@ -85,7 +84,14 @@ private:
 
   std::map<DTWireId, TH1F*> TBMap;
 
+  //define Token(-s)
+  edm::EDGetTokenT<DTDigiCollection> DTUnpackerToken_;
 
 };
 
 #endif
+
+/* Local Variables: */
+/* show-trailing-whitespace: t */
+/* truncate-lines: t */
+/* End: */

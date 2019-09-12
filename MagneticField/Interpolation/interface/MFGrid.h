@@ -6,8 +6,6 @@
  *  Virtual interface for a field provider that is based on interpolation
  *  on a regular grid.
  *
- *  $Date: 2009/08/11 07:16:33 $
- *  $Revision: 1.5 $
  *  \author T. Todorov
  */
 

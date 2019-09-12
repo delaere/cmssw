@@ -11,7 +11,6 @@
 //
 // Original Author:  Jim Brooke
 //         Created:  Thu May 18 15:04:56 CEST 2006
-// $Id: L1GctEmulator.h,v 1.9 2009/12/24 17:42:16 jbrooke Exp $
 //
 //
 

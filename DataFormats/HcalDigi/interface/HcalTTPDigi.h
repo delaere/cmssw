@@ -7,8 +7,6 @@
 
 /** \class HcalTTPDigi
   *  
-  * $Date: 2010/04/07 02:06:12 $
-  * $Revision: 1.2 $
   * \author J. Mans - Minnesota
   */
 class HcalTTPDigi {

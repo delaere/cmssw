@@ -4,8 +4,6 @@
  *   Defines the ability to calculate coordinates 
  *   of L1DT Trigger objects
  *
- *   $Date: 2008/11/05 00:08:28 $
- *   $Revision: 1.5 $
  *
  *   \author C.Grandi
  */

@@ -13,7 +13,6 @@
 //
 // Original Author:  Lorenzo AGOSTINO
 //         Created:  Tue Jul 18 12:17:01 CEST 2006
-// $Id: miscalibExample.cc,v 1.8 2010/01/14 22:21:39 wmtan Exp $
 //
 //
 

@@ -5,8 +5,6 @@
  *
  *  Base class for the different implementation of magnetic field engines.
  *
- *  $Date: 2011/12/10 16:36:11 $
- *  $Revision: 1.11 $
  *  \author N. Amapane - CERN
  */
 
@@ -14,11 +12,13 @@
 #include "DataFormats/GeometryVector/interface/GlobalPoint.h"
 #include "FWCore/Utilities/interface/Visibility.h"
 #include "FWCore/Utilities/interface/Likely.h"
+#include <atomic>
 
 class MagneticField
 {
  public:
   MagneticField();
+  MagneticField(const MagneticField& orig);
   virtual ~MagneticField();
 
   /// Derived classes can implement cloning without ownership of the 
@@ -27,7 +27,6 @@ class MagneticField
     return 0;
   }
   
-
   /// Field value ad specified global point, in Tesla
   virtual GlobalVector inTesla (const GlobalPoint& gp) const = 0;
 
@@ -54,18 +53,14 @@ class MagneticField
   }
   
   /// The nominal field value for this map in kGauss
-  int nominalValue() const {
-    if unlikely(!nominalValueCompiuted) { 
-      theNominalValue = computeNominalValue();
-      nominalValueCompiuted=true;
-    }
-    return theNominalValue;
-  }
+  int nominalValue() const;
+
 private:
   //nominal field value 
   virtual int computeNominalValue() const;
-  mutable bool nominalValueCompiuted;
+  mutable std::atomic<char> nominalValueCompiuted;
   mutable int theNominalValue;
+  enum FooStates {kUnset, kSetting, kSet};
 };
 
 #endif

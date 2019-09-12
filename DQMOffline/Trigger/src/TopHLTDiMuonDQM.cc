@@ -1,6 +1,4 @@
 /*
- *  $Date: 2010/08/13 09:11:38 $
- *  $Revision: 1.8 $
  *  \author M. Marienfeld - DESY Hamburg
  */
 

@@ -12,15 +12,13 @@
 using namespace reco;
 
 
-uint32_t HitPattern::encode(const TrackingRecHit & hit, unsigned int i){
+uint32_t HitPattern::encode(DetId id, uint32_t hitType, unsigned int i){
   
   // ignore the rec hit if the number of hit is larger than the max
   if (i >= 32 * PatternSize / HitSize) return 0;
 
   // get rec hit det id and rec hit type
-  DetId id = hit.geographicalId();
   uint32_t detid = id.det();
-  uint32_t hitType = (uint32_t) hit.getType();
 
   // init pattern of this hit to 0
   uint32_t pattern = 0;
@@ -220,8 +218,7 @@ int HitPattern::numberOfHits() const {
   return count;
 }
 
-
-int HitPattern::numberOfValidStripLayersWithMonoAndStereo () const {
+int HitPattern::numberOfValidStripLayersWithMonoAndStereo (uint32_t stripdet, uint32_t layer) const {
   static const int nHits = (PatternSize * 32) / HitSize;
   bool hasMono[SubstrMask + 1][LayerMask + 1];
   //     printf("sizeof(hasMono) = %d\n", sizeof(hasMono));
@@ -233,17 +230,19 @@ int HitPattern::numberOfValidStripLayersWithMonoAndStereo () const {
     uint32_t pattern = getHitPattern(i);
     if (pattern == 0) break;
     if (validHitFilter(pattern) && stripHitFilter(pattern)) {
+      if (stripdet!=0 && getSubStructure(pattern)!=stripdet) continue; 
+      if (layer!=0    && getSubSubStructure(pattern)!=layer) continue;
       switch (getSide(pattern)) {
       case 0: // mono
-	hasMono[getSubStructure(pattern)][getLayer(pattern)] 
-	  = true;
-	break;
+      hasMono[getSubStructure(pattern)][getLayer(pattern)] 
+        = true;
+      break;
       case 1: // stereo
-	hasStereo[getSubStructure(pattern)][getLayer(pattern)]
-	  = true;
-	break;
+      hasStereo[getSubStructure(pattern)][getLayer(pattern)]
+        = true;
+      break;
       default:
-	break;
+      break;
       }
     }
     
@@ -253,7 +252,7 @@ int HitPattern::numberOfValidStripLayersWithMonoAndStereo () const {
   for (int i = 0; i < SubstrMask + 1; ++i) 
     for (int j = 0; j < LayerMask + 1; ++j)
       if (hasMono[i][j] && hasStereo[i][j])
-	count++;
+      count++;
   return count;
 }
 

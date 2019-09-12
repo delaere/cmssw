@@ -5,8 +5,6 @@
  *
  *  Factory for field interpolators using binary files.
  *
- *  $Date: 2008/04/09 19:39:38 $
- *  $Revision: 1.2 $
  *  \author T. Todorov
  */
 

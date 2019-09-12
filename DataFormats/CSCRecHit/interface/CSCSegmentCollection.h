@@ -5,7 +5,6 @@
  *
  * The collection of CSCSegment's. See \ref CSCSegmentCollection.h for details.
  *
- *  $Date: 2010/03/12 13:08:15 $
  *  \author Matteo Sani
  */
 

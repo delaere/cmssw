@@ -1,8 +1,4 @@
 /** 
-    $Date: 2008/02/25 17:41:51 $
-    $Revision: 1.2 $
-    $Id: CalibCoeff.cc,v 1.2 2008/02/25 17:41:51 malberti Exp $ 
-    \author $Author: malberti $
 */
 
 #include "Calibration/Tools/interface/CalibCoeff.h"

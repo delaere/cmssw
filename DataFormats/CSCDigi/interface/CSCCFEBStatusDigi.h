@@ -5,8 +5,6 @@
  *
  * Digi for CSC CFEB status.
  *  
- *  $Date: 2013/04/22 22:39:23 $
- *  $Revision: 1.8 $
  *
  * \author N. Terentiev, CMU
  *

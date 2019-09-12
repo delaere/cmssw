@@ -7,8 +7,6 @@
 /** \class TrackAssociatorByChi2ESProducer
  *  ESProducer for TrackAssociatorByChi2
  *
- *  $Date: 2007/03/26 15:48:38 $
- *  $Revision: 1.2 $
  *  \author magni
  */
 

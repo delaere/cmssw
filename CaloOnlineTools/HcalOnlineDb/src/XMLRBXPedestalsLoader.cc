@@ -8,7 +8,6 @@
 //
 // Original Author:  Gena Kukartsev, kukarzev@fnal.gov
 //         Created:  Tue Oct 23 14:30:20 CDT 2007
-// $Id: XMLRBXPedestalsLoader.cc,v 1.8 2010/08/06 20:24:13 wmtan Exp $
 //
 
 // system include files

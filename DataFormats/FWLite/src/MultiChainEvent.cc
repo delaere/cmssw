@@ -11,6 +11,7 @@
 //
 
 // system include files
+#include <iostream>
 
 // user include files
 #include "DataFormats/FWLite/interface/MultiChainEvent.h"
@@ -29,11 +30,15 @@ public:
       MultiProductGetter(MultiChainEvent const* iEvent) : event_(iEvent) {}
 
       virtual edm::WrapperHolder
-      getIt(edm::ProductID const& iID) const {
-
-	return event_->getByProductID(iID);
+      getIt(edm::ProductID const& iID) const override {
+        return event_->getByProductID(iID);
       }
+
 private:
+      virtual unsigned int transitionIndex_() const override {
+        return 0U;
+      }
+
       MultiChainEvent const* event_;
 
     };

@@ -2,12 +2,10 @@
 #define MEtoEDMConverter_h
 
 /** \class MEtoEDMConverter
- *  
+ *
  *  Class to take dqm monitor elements and convert into a
  *  ROOT dataformat stored in Run tree of edm file
  *
- *  $Date: 2013/05/17 21:56:01 $
- *  $Revision: 1.20 $
  *  \author M. Strang SUNY-Buffalo
  */
 
@@ -63,7 +61,7 @@ public:
   explicit MEtoEDMConverter(const edm::ParameterSet&);
   virtual ~MEtoEDMConverter();
   virtual void beginJob() override;
-  virtual void endJob() override;  
+  virtual void endJob() override;
   virtual void produce(edm::Event&, const edm::EventSetup&) override;
   virtual void beginRun(edm::Run const&, const edm::EventSetup&) override;
   virtual void endRun(edm::Run const&, const edm::EventSetup&) override;
@@ -71,7 +69,7 @@ public:
   virtual void endLuminosityBlockProduce(edm::LuminosityBlock&, const edm::EventSetup&) override;
 
   template <class T>
-  void putData(T& iPutTo, bool iLumiOnly);
+      void putData(T& iPutTo, bool iLumiOnly, uint32_t run, uint32_t lumi);
 
   typedef std::vector<uint32_t> TagList;
 
@@ -80,6 +78,7 @@ private:
   int verbosity;
   int frequency;
   bool deleteAfterCopy;
+  bool enableMultiThread_;
   std::string path;
 
   DQMStore* dbe;

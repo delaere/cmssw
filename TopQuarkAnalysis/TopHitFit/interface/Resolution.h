@@ -1,5 +1,4 @@
 //
-// $Id: Resolution.h,v 1.2 2012/03/19 18:15:04 vadler Exp $
 //
 // File: hitfit/Resolution.h
 // Purpose: Calculate resolutions for a quantity.

@@ -24,13 +24,13 @@
  *  The covariance matrix for all structures of a level will be diagonal
  *  given by value^2 * identity.
  *
- *  $Date: 2010/01/07 14:36:23 $
- *  $Revision: 1.5 $
  *  \author Chung Khim Lae
  */
 
 #include "Alignment/CommonAlignment/interface/StructureType.h"
 #include "Alignment/SurveyAnalysis/interface/SurveyInputBase.h"
+
+#include <map>
 
 class SurveyInputDummy:
   public SurveyInputBase

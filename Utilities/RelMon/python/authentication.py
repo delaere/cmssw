@@ -5,9 +5,6 @@
 # This is a code manipulation of a component of the DQMCompare tool of 
 # Marco Rovere and Luca Malgeri.
 #
-# $Author: dpiparo $
-# $Date: 2012/06/12 12:25:27 $
-# $Revision: 1.1 $
 #
 #                                                                              
 # Danilo Piparo CERN - danilo.piparo@cern.ch                                   

@@ -1,5 +1,4 @@
 // F.R.
-// $Id: METFwd.h,v 1.1 2007/03/14 22:16:47 cavana Exp $
 #ifndef JetReco_METfwd_h
 #define JetReco_METfwd_h
 #include "DataFormats/Common/interface/Ref.h"

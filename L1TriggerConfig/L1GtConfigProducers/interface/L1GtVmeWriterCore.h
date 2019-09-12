@@ -14,8 +14,6 @@
  *   
  * \author: Vasile Mihai Ghete - HEPHY Vienna
  * 
- * $Date: 2013/05/23 16:50:08 $
- * $Revision: 1.4 $
  *
  */
 

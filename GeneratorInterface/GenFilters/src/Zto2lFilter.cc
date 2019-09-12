@@ -13,7 +13,6 @@
 //
 // Original Author:  Aruna Nayak
 //         Created:  Thu Aug 23 11:37:45 CEST 2007
-// $Id: Zto2lFilter.cc,v 1.7 2012/06/05 08:54:21 chanon Exp $
 //
 //
 

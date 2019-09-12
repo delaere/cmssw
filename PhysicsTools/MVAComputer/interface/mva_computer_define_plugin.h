@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Tue Jan 22 10:03:47 CST 2013
-// $Id: mva_computer_define_plugin.h,v 1.1 2013/01/22 16:46:07 chrjones Exp $
 //
 
 // system include files

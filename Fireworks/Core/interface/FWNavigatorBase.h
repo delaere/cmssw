@@ -4,7 +4,6 @@
 //
 // Package:     newVersion
 // Class  :     CmsShowNavigator
-// $Id: FWNavigatorBase.h,v 1.4 2010/09/02 19:54:03 matevz Exp $
 //
 
 // system include files

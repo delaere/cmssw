@@ -16,7 +16,6 @@
 //
 // Original Author:  Alja Mrak-Tadel
 //         Created:  Wed Apr  7 14:41:26 CEST 2010
-// $Id: FW3DView.h,v 1.27 2010/11/21 11:18:13 amraktad Exp $
 //
 
 // system include files

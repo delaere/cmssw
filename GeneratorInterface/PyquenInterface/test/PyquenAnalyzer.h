@@ -1,4 +1,3 @@
-// $Id: PyquenAnalyzer.h,v 1.4 2009/12/15 12:25:55 fabiocos Exp $
 
 #ifndef PyquenAnalyzer_H
 #define PyquenAnalyzer_H

@@ -11,8 +11,6 @@ class HcalHTRData;
  *  Interpretive class for an HcalDCCHeader
  *   
  *
- *  $Date: 2009/09/23 18:29:44 $
- *  $Revision: 1.9 $
  *  \author J. Mans - UMD
  */
 

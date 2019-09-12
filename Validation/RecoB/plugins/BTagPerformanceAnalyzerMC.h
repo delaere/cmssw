@@ -48,9 +48,11 @@ class BTagPerformanceAnalyzerMC : public edm::EDAnalyzer {
 
       ~BTagPerformanceAnalyzerMC();
 
+      virtual void beginRun(const edm::Run & run, const edm::EventSetup & es);
+
       virtual void analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup);
 
-  virtual void endJob();
+      virtual void endJob();
 
    private:
 
@@ -62,7 +64,7 @@ class BTagPerformanceAnalyzerMC : public edm::EDAnalyzer {
   };
 
   // Get histogram plotting options from configuration.
-  void bookHistos(const edm::ParameterSet& pSet);
+  void bookHistos();
   EtaPtBin getEtaPtBin(const int& iEta, const int& iPt);
     typedef std::pair<reco::Jet, reco::JetFlavour> JetWithFlavour;
 typedef std::map<edm::RefToBase<reco::Jet>, unsigned int, JetRefCompare> FlavourMap;
@@ -70,7 +72,7 @@ typedef std::map<edm::RefToBase<reco::Jet>, reco::JetFlavour::Leptons, JetRefCom
   //  reco::JetFlavour getJetFlavour(
   //	edm::RefToBase<reco::Jet> caloRef, FlavourMap flavours);
   bool getJetWithFlavour( edm::RefToBase<reco::Jet> caloRef,
-                         FlavourMap flavours, JetWithFlavour &jetWithFlavour,
+                         const FlavourMap& _flavours, JetWithFlavour &jetWithFlavour,
                          const edm::EventSetup & es);
 
   std::vector<std::string> tiDataFormatType;
@@ -110,6 +112,15 @@ typedef std::map<edm::RefToBase<reco::Jet>, reco::JetFlavour::Leptons, JetRefCom
 
   bool eventInitialized;
   bool electronPlots, muonPlots, tauPlots;
+
+  //add consumes 
+  edm::EDGetTokenT<GenEventInfoProduct> genToken;
+  edm::EDGetTokenT<reco::JetFlavourMatchingCollection> jetToken;
+  edm::EDGetTokenT<reco::SoftLeptonTagInfoCollection> slInfoToken;
+  std::vector< edm::EDGetTokenT<reco::JetTagCollection> > jetTagToken;
+  std::vector< std::pair<edm::EDGetTokenT<reco::JetTagCollection>, edm::EDGetTokenT<reco::JetTagCollection>> > tagCorrelationToken;
+  std::vector<std::vector <edm::EDGetTokenT<edm::View<reco::BaseTagInfo>> >> tagInfoToken;
+
 };
 
 

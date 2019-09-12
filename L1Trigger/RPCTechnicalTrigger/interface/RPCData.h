@@ -1,4 +1,3 @@
-// $Id: RPCData.h,v 1.4 2013/03/20 15:45:25 wdd Exp $
 #ifndef INTERFACE_RPCDATA_H 
 #define INTERFACE_RPCDATA_H 1
 

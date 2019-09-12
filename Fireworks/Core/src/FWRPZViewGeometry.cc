@@ -8,7 +8,6 @@
 //
 // Original Author:  Alja Mrak-Tadel
 //         Created:  Thu Mar 25 20:33:06 CET 2010
-// $Id: FWRPZViewGeometry.cc,v 1.19 2011/10/15 02:33:30 amraktad Exp $
 //
 
 // system include files

@@ -4,8 +4,6 @@
 /** \class TrackToTrackMap
  *  No description available.
  *
- *  $Date: 2007/08/21 02:08:53 $
- *  $Revision: 1.3 $
  *  \author R. Bellan - INFN Torino <riccardo.bellan@cern.ch>
  */
 

@@ -15,7 +15,6 @@
 //
 // Original Author:  G. Bruno
 //         Created:  Mon Nov 20 10:04:31 CET 2006
-// $Id: SiStripDetInfoFileReader.h,v 1.4 2008/09/19 16:53:10 giordano Exp $
 //
 //
 

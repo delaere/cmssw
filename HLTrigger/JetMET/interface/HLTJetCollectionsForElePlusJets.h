@@ -11,8 +11,6 @@
  *  combination of one electron + jets cleaned against this electrons satisfy the cuts.
  *  These jets are then added to a cleaned jet collection which is put into the event.
  *
- *  $Date: 2012/02/12 10:24:17 $
- *  $Revision: 1.2 $
  *
  *  \author Lukasz Kreczko
  *
@@ -26,6 +24,10 @@
 #include "FWCore/Framework/interface/Event.h"
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "DataFormats/HLTReco/interface/TriggerFilterObjectWithRefs.h"
+#include "DataFormats/JetReco/interface/CaloJetCollection.h"
+#include "DataFormats/JetReco/interface/PFJetCollection.h"
 
 
 namespace edm {
@@ -46,6 +48,8 @@ class HLTJetCollectionsForElePlusJets: public edm::EDProducer {
   private:
     virtual void produce(edm::Event&, const edm::EventSetup&);
 
+    edm::EDGetTokenT<trigger::TriggerFilterObjectWithRefs> m_theElectronToken;
+    edm::EDGetTokenT<std::vector<T>> m_theJetToken;
     edm::InputTag hltElectronTag;
     edm::InputTag sourceJetTag;
 

@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Wed Nov 26 14:52:01 EST 2008
-// $Id: FWPhotonProxyBuilder.cc,v 1.20 2010/11/11 20:25:28 amraktad Exp $
 //
 
 #include "TEveBoxSet.h"
@@ -30,7 +29,7 @@ public:
 
    virtual ~FWPhotonProxyBuilder( void ) {}
   
-   virtual bool haveSingleProduct( void ) const { return false; }
+   virtual bool haveSingleProduct( void ) const override { return false; }
   
    REGISTER_PROXYBUILDER_METHODS();
 
@@ -38,7 +37,7 @@ private:
    FWPhotonProxyBuilder( const FWPhotonProxyBuilder& );
    const FWPhotonProxyBuilder& operator=( const FWPhotonProxyBuilder& );
   
-   virtual void buildViewType( const reco::Photon& photon, unsigned int iIndex, TEveElement& oItemHolder, FWViewType::EType type , const FWViewContext*);
+   virtual void buildViewType( const reco::Photon& photon, unsigned int iIndex, TEveElement& oItemHolder, FWViewType::EType type , const FWViewContext*) override;
 };
 
 void

@@ -6,8 +6,6 @@
 //                find the 2 highest rank candidates per wedge
 //
 //
-//   $Date: 2008/02/18 17:38:05 $
-//   $Revision: 1.4 $
 //
 //   Author :
 //   N. Neumeister            CERN EP

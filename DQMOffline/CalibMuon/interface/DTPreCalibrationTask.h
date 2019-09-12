@@ -5,8 +5,6 @@
  *  Analysis on DT digis (TB + occupancy) before the calibration step
  *
  *
- *  $Date: 2010/01/07 16:31:59 $
- *  $Revision: 1.4 $
  *  \author G. Mila - INFN Torino
  */
 

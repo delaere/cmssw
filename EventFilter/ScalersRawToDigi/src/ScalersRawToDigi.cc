@@ -41,7 +41,7 @@ class ScalersRawToDigi : public edm::EDProducer
     explicit ScalersRawToDigi(const edm::ParameterSet&);
     ~ScalersRawToDigi();
 
-    virtual void produce(edm::Event&, const edm::EventSetup&);
+    virtual void produce(edm::Event&, const edm::EventSetup&) override;
 
   private:
     edm::InputTag inputTag_;
@@ -49,7 +49,7 @@ class ScalersRawToDigi : public edm::EDProducer
 
 // Constructor
 ScalersRawToDigi::ScalersRawToDigi(const edm::ParameterSet& iConfig):
-  inputTag_((char const *)"source")
+  inputTag_((char const *)"rawDataCollector")
 {
   produces<L1AcceptBunchCrossingCollection>();
   produces<L1TriggerScalersCollection>();

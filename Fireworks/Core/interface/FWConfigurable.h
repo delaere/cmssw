@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Sun Feb 24 14:35:47 EST 2008
-// $Id: FWConfigurable.h,v 1.3 2009/01/23 21:35:41 amraktad Exp $
 //
 
 // system include files

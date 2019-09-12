@@ -13,7 +13,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Fri Jun 24 19:13:25 EDT 2005
-// $Id: HcalDbAnalyzer.cc,v 1.23 2012/11/02 14:16:26 dlange Exp $
 //
 //
 

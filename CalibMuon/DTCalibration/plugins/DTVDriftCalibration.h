@@ -4,8 +4,6 @@
 /** \class DTVDriftCalibration
  *  No description available.
  *
- *  $Date: 2013/05/23 15:28:45 $
- *  $Revision: 1.6 $
  *  \author M. Giunta
  */
 

@@ -1,5 +1,4 @@
 //
-// $Id: TriggerAlgorithm.cc,v 1.4 2011/11/30 13:41:14 vadler Exp $
 //
 
 

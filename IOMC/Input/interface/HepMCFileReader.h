@@ -1,7 +1,6 @@
 #ifndef Input_HepMCFileReader_h
 #define Input_HepMCFileReader_h
 
-// $Id: HepMCFileReader.h,v 1.5 2009/12/01 19:23:11 fabstoec Exp $
 
 /** \class HepMCFileReader
 * 
@@ -12,8 +11,6 @@
 *  always invoke the method initialize before starting using the interface
 *  it exposes.
 *
-*  $Date: 2009/12/01 19:23:11 $
-*  $Revision: 1.5 $
 *  \author G. Bruno - CERN, EP Division
 */   
 

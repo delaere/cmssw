@@ -43,7 +43,7 @@ process.load('HLTrigger/HLTfilters/hltLevel1GTSeed_cfi')
 #Good Bunch Crossings
 process.bptxAnd = process.hltLevel1GTSeed.clone(L1TechTriggerSeeding = cms.bool(True), L1SeedsLogicalExpression = cms.string('0'))
 #BSCNOBEAMHALO
-process.bit40 = process.hltLevel1GTSeed.clone(L1TechTriggerSeeding = cms.bool(True), L1SeedsLogicalExpression = cms.string('(40 OR 41) AND NOT (36 OR 37 OR 38 OR 39) AND NOT ((42 AND NOT 43) OR (43 AND NOT 42))'))
+#process.bit40 = process.hltLevel1GTSeed.clone(L1TechTriggerSeeding = cms.bool(True), L1SeedsLogicalExpression = cms.string('(40 OR 41) AND NOT (36 OR 37 OR 38 OR 39) AND NOT ((42 AND NOT 43) OR (43 AND NOT 42))'))
 
 #Physics declared
 process.load('HLTrigger.special.hltPhysicsDeclared_cfi')
@@ -189,7 +189,7 @@ process.TrackerOfflineValidation.oO[offlineValidationMode]Oo..moduleLevelProfile
  ## PATH
  ##
 process.p = cms.Path(
-process.triggerSelection*
+#process.triggerSelection*
 process.offlineBeamSpot*process.HighPuritySelector*process.TrackRefitter1*process.TrackerTrackHitFilter*process.HitFilteredTracks
 *process.AlignmentTrackSelector*process.TrackRefitter2*process.seqTrackerOfflineValidation.oO[offlineValidationMode]Oo.)
 
@@ -244,7 +244,7 @@ process.load('HLTrigger/HLTfilters/hltLevel1GTSeed_cfi')
 #Good Bunch Crossings
 process.bptxAnd = process.hltLevel1GTSeed.clone(L1TechTriggerSeeding = cms.bool(True), L1SeedsLogicalExpression = cms.string('0'))
 #BSCNOBEAMHALO
-process.bit40 = process.hltLevel1GTSeed.clone(L1TechTriggerSeeding = cms.bool(True), L1SeedsLogicalExpression = cms.string('(40 OR 41) AND NOT (36 OR 37 OR 38 OR 39) AND NOT ((42 AND NOT 43) OR (43 AND NOT 42))'))
+#process.bit40 = process.hltLevel1GTSeed.clone(L1TechTriggerSeeding = cms.bool(True), L1SeedsLogicalExpression = cms.string('(40 OR 41) AND NOT (36 OR 37 OR 38 OR 39) AND NOT ((42 AND NOT 43) OR (43 AND NOT 42))'))
 
 #Physics declared
 process.load('HLTrigger.special.hltPhysicsDeclared_cfi')
@@ -390,7 +390,7 @@ process.TrackerOfflineValidation.oO[offlineValidationMode]Oo..moduleLevelProfile
  ## PATH
  ##
 process.p = cms.Path(
-process.triggerSelection*
+#process.triggerSelection*
 process.offlineBeamSpot*process.HighPuritySelector*process.TrackRefitter1*process.TrackerTrackHitFilter*process.HitFilteredTracks
 *process.AlignmentTrackSelector*process.TrackRefitter2*process.seqTrackerOfflineValidation.oO[offlineValidationMode]Oo.)
 
@@ -410,38 +410,29 @@ echo "Merging results from parallel jobs with TkAlOfflineJobsMerge.C"
 # export OUTPUTDIR=.oO[datadir]Oo.
 export OUTPUTDIR=.
 cp .oO[CMSSW_BASE]Oo./src/Alignment/OfflineValidation/scripts/merge_TrackerOfflineValidation.C .
-# root -x -b -q .oO[logdir]Oo./TkAlOfflineJobsMerge.C
-root -x -b -q TkAlOfflineJobsMerge.C
-cmsStage -f .oO[outputFile]Oo. .oO[resultFile]Oo.
+.oO[haddLoop]Oo.
 
 # create log file
 # ls -al .oO[datadir]Oo./AlignmentValidation*.root > .oO[datadir]Oo./log_rootfilelist.txt
 ls -al AlignmentValidation*.root > .oO[datadir]Oo./log_rootfilelist.txt
 
-# Remove parallel job files if merged file exists
-for file in $(cmsLs -l /store/caf/user/$USER/.oO[eosdir]Oo. |awk '{print $5}')
-do
-    if [[ ${file} = /store/caf/user/$USER/.oO[eosdir]Oo./AlignmentValidation*_[0-9]*.root ]]
-    then
-        cmsRm ${file}
-    fi
-done
-
+# Remove parallel job files
+.oO[rmUnmerged]Oo.
 """
 
 
 ######################################################################
 ######################################################################
 mergeOfflineParJobsTemplate="""
-void TkAlOfflineJobsMerge()
+void TkAlOfflineJobsMerge(TString pars, TString outFile)
 {
 // load framework lite just to find the CMSSW libs...
 gSystem->Load("libFWCoreFWLite");
 AutoLibraryLoader::enable();
-//compile the makro
+//compile the macro
 gROOT->ProcessLine(".L merge_TrackerOfflineValidation.C++");
 
-.oO[mergeOfflinParJobsInstantiation]Oo.
+hadd(pars, outFile);
 }
 """
 
@@ -535,7 +526,7 @@ process.TrackerTrackHitFilter.usePixelQualityFlag= True
 #no triger on bunch crossing bit 0
 
 
-process.triggerSelection=cms.Sequence(process.bit40)
+# process.triggerSelection=cms.Sequence(process.bit40)
 
 """
 

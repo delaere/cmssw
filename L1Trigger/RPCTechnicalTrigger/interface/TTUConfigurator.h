@@ -1,4 +1,3 @@
-// $Id: TTUConfigurator.h,v 1.2 2009/10/29 20:04:03 ghete Exp $
 #ifndef TTUCONFIGURATOR_H 
 #define TTUCONFIGURATOR_H 1
 

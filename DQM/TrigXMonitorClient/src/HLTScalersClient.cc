@@ -1,11 +1,4 @@
-// $Id: HLTScalersClient.cc,v 1.20 2012/12/06 09:49:36 eulisse Exp $
 // 
-// $Log: HLTScalersClient.cc,v $
-// Revision 1.20  2012/12/06 09:49:36  eulisse
-// Use `edm::isNotFinite` in place of `std::isnan`.
-//
-// * Required when running `-Ofast` builds.
-//
 // Revision 1.19  2010/07/20 02:58:27  wmtan
 // Add missing #include files
 //
@@ -595,7 +588,7 @@ void HLTScalersClient::analyze(const edm::Event& e, const edm::EventSetup& c )
 // note that the data is in units of counts, ls number
 // but we return a value in Hz...
 std::pair<double,double>
-HLTScalersClient::getSlope_(HLTScalersClient::CountLSFifo_t points)
+HLTScalersClient::getSlope_(const HLTScalersClient::CountLSFifo_t& points)
 {
   double slope, sigma_m;
   if ( points.size() < points.targetSize() ) {
@@ -615,7 +608,7 @@ HLTScalersClient::getSlope_(HLTScalersClient::CountLSFifo_t points)
     double xsq = 0;
     double y = 0;
     double n = double(points.size());
-    for ( CountLSFifo_t::iterator i(points.begin());
+    for ( auto i(points.begin());
 	  i != points.end(); ++i ) {
        if ( debug_ ) 
 	 std::cout << "x = " << i->first << ", y = " << i->second 
@@ -630,7 +623,7 @@ HLTScalersClient::getSlope_(HLTScalersClient::CountLSFifo_t points)
     // now get the uncertainty on the slope. Need intercept for this.
     double intercept = (xsq*y - xy*x)/(n*xsq-x*x);
     double sigma_ysq = 0;
-    for ( CountLSFifo_t::iterator i(points.begin());
+    for ( auto i (points.begin());
 	  i != points.end(); ++i ) {
       sigma_ysq += pow(( i->second - slope * i->first  - intercept),2.);
     }

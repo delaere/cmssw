@@ -3,8 +3,6 @@
  * module dumping TGraph with 10 data frames
  *   
  * 
- * $Date: 2009/09/03 22:47:50 $
- * $Revision: 1.8 $
  * \author N. Amapane - S. Argiro'
  * \author G. Franzoni
  *

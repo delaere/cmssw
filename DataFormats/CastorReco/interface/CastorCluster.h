@@ -6,7 +6,6 @@
  *
  * \author Hans Van Haevermaet, University of Antwerp
  *
- * \version $Id: CastorCluster.h,v 1.1 2009/02/27 15:48:37 hvanhaev Exp $
  *
  */
 

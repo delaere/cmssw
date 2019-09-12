@@ -11,7 +11,6 @@
  *
  * \author Fedor Ratnikov, UMd
  *
- * \version   $Id: BasicJet.h,v 1.11 2007/09/20 21:04:43 fedor Exp $
  ************************************************************/
 
 

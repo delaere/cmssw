@@ -1,8 +1,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2012/01/21 14:56:54 $
- *  $Revision: 1.2 $
  *  \author G. Cerminara - INFN Torino
  */
 
@@ -21,8 +19,13 @@ DTDataErrorFilter::DTDataErrorFilter(const edm::ParameterSet & config) :
 DTDataErrorFilter::~DTDataErrorFilter(){}
 
 
-bool DTDataErrorFilter::hltFilter(edm::Event& event, const edm::EventSetup& setup, trigger::TriggerFilterObjectWithRefs & filterproduct) {
-  // check the event error flag 
+bool DTDataErrorFilter::hltFilter(edm::Event& event, const edm::EventSetup& setup, trigger::TriggerFilterObjectWithRefs & filterproduct) const {
+  // check the event error flag
   if (dataMonitor->eventHasErrors()) return true;
   return false;
 }
+
+// Local Variables:
+// show-trailing-whitespace: t
+// truncate-lines: t
+// End:

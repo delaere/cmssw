@@ -16,7 +16,6 @@
 //
 // Original Author:
 //         Created:  Thu Jun 26 11:17:59 EDT 2008
-// $Id: FWParameterSetterEditorBase.h,v 1.4 2012/02/22 03:45:57 amraktad Exp $
 //
 
 // system include files

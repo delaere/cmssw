@@ -1,5 +1,4 @@
 #!/usr/bin/env perl
-# $Id: valgrindMemcheckGraph.pl,v 1.5 2013/03/15 18:02:18 muzaffar Exp $
 # Created: June 2007
 # Author: Gioivanni Petrucciani, INFN Pisa
 #

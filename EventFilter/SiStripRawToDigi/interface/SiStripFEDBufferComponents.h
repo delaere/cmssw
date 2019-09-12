@@ -43,7 +43,8 @@ namespace sistrip {
                         READOUT_MODE_PROC_RAW=0x6,
                         READOUT_MODE_ZERO_SUPPRESSED=0xA,
                         READOUT_MODE_ZERO_SUPPRESSED_LITE=0xC,
-                        READOUT_MODE_SPY=0xE
+                        READOUT_MODE_SPY=0xE,
+			READOUT_MODE_PREMIX_RAW=0xF //0x8?
                       };
 
   static const uint8_t PACKET_CODE_SCOPE = 0xE5;
@@ -409,7 +410,7 @@ namespace sistrip {
       void setChannelStatus(const uint8_t internalFEUnitNum, const uint8_t internalFEUnitChannelNum, const FEDChannelStatus status);
     };
 
-  class FEDAPVErrorHeader : public FEDFEHeader
+  class FEDAPVErrorHeader final : public FEDFEHeader
     {
     public:
       explicit FEDAPVErrorHeader(const uint8_t* headerBuffer);
@@ -436,7 +437,7 @@ namespace sistrip {
       uint8_t header_[APV_ERROR_HEADER_SIZE_IN_BYTES];
     };
 
-  class FEDFullDebugHeader : public FEDFEHeader
+  class FEDFullDebugHeader final : public FEDFEHeader
     {
     public:
       explicit FEDFullDebugHeader(const uint8_t* headerBuffer);

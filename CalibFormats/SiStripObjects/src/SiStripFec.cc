@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripFec.cc,v 1.7 2008/01/22 18:44:27 muzaffar Exp $
 
 #include "CalibFormats/SiStripObjects/interface/SiStripFec.h"
 #include <iostream>

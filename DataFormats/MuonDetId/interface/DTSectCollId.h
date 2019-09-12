@@ -4,7 +4,6 @@
  *   Definition of a Sector Coollector
  *
  *
- *   $Date: 2007/04/27 07:35:17 $
  *
  *   \authors 
  *           D. Bonacorsi, 

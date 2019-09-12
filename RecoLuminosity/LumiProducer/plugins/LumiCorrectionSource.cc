@@ -7,7 +7,6 @@
 Description: A essource/esproducer for lumi correction factor and run parameters needed to deduce the corrections
       Author: Zhen Xie
 */
-// $Id: LumiCorrectionSource.cc,v 1.15 2012/09/12 17:31:56 xiezhen Exp $
 
 //#include <memory>
 //#include "boost/shared_ptr.hpp"
@@ -62,7 +61,7 @@ Description: A essource/esproducer for lumi correction factor and run parameters
 #include <boost/tokenizer.hpp>
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
+#include "FWCore/Concurrency/interface/Xerces.h"
 #include <xercesc/util/XMLString.hpp>
 #include <boost/filesystem.hpp>
 #include "boost/filesystem/path.hpp"
@@ -110,7 +109,7 @@ const std::string
 LumiCorrectionSource::servletTranslation(const std::string& servlet) const{
   std::string frontierConnect;
   std::string realconnect;
-  xercesc::XMLPlatformUtils::Initialize();  
+  cms::concurrency::xercesInitialize();  
   std::auto_ptr< xercesc::XercesDOMParser > parser(new xercesc::XercesDOMParser);
   try{
     parser->setValidationScheme(xercesc::XercesDOMParser::Val_Auto);
@@ -303,6 +302,8 @@ LumiCorrectionSource::fillparamcache(unsigned int runnumber){
     coral::IQuery* lumiparamQuery=schema.newQuery();
     lumiparamQuery->addToTableList(std::string("LUMIDATA"));
     lumiparamQuery->setCondition(conditionStr,lumidataBindVariables);
+    lumiparamQuery->addToOutputList("NCOLLIDINGBUNCHES");
+    lumiparamQuery->defineOutput(lumiparamOutput);
     coral::ICursor& lumiparamcursor=lumiparamQuery->execute();
     unsigned int ncollidingbx=0;
     while( lumiparamcursor.next() ){

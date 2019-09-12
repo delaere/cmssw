@@ -1,4 +1,3 @@
-// $Id: RPCWheel.cc,v 1.12 2009/08/19 15:04:01 aosorio Exp $
 // Include files
 
 

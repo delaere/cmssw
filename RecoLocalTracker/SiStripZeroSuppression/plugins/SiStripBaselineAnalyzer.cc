@@ -13,7 +13,6 @@
 //
 // Original Author:  Ivan Amos Cali
 //         Created:  Mon Jul 28 14:10:52 CEST 2008
-// $Id: SiStripBaselineAnalyzer.cc,v 1.8 2011/10/05 09:08:20 icali Exp $
 //
 //
  
@@ -79,9 +78,9 @@ class SiStripBaselineAnalyzer : public edm::EDAnalyzer {
 
 
    private:
-      virtual void beginJob() ;
-      virtual void analyze(const edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
+      virtual void beginJob() override ;
+      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
       
 	  std::auto_ptr<SiStripPedestalsSubtractor>   subtractorPed_;
           edm::ESHandle<SiStripPedestals> pedestalsHandle;

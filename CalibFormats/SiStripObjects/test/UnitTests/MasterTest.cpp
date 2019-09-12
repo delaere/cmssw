@@ -6,7 +6,6 @@
  * class description:
  *
  *
- * Version: $Id: MasterTest.cpp,v 1.1 2010/04/15 12:48:14 demattia Exp $
  */
 
 #include <cppunit/TestFixture.h>

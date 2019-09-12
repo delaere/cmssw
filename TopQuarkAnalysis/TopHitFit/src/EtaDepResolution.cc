@@ -1,5 +1,4 @@
 //
-//     $Id: EtaDepResolution.cc,v 1.2 2011/10/13 12:34:16 snaumann Exp $
 //
 // File   : src/EtaDepResolution.cc
 // Author : Haryo Sumowidagdo <Suharyo.Sumowidagdo@cern.ch>

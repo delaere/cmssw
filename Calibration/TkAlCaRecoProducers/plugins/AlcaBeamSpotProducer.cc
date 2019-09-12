@@ -7,7 +7,6 @@
    author: Francisco Yumiceva, Fermilab (yumiceva@fnal.gov)
    Geng-Yuan Jeng, UC Riverside (Geng-Yuan.Jeng@cern.ch)
 
-   version $Id: AlcaBeamSpotProducer.cc,v 1.4 2013/05/17 20:25:11 chrjones Exp $
 
    ________________________________________________________________**/
 
@@ -21,6 +20,7 @@
 
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Framework/interface/EventSetup.h"
@@ -40,7 +40,7 @@ AlcaBeamSpotProducer::AlcaBeamSpotProducer(const edm::ParameterSet& iConfig){
   resetFitNLumi_   = iConfig.getParameter<edm::ParameterSet>("AlcaBeamSpotProducerParameters").getUntrackedParameter<int>("resetEveryNLumi",-1);
   runbeamwidthfit_ = iConfig.getParameter<edm::ParameterSet>("AlcaBeamSpotProducerParameters").getParameter<bool>("RunBeamWidthFit");
   
-  theBeamFitter = new BeamFitter(iConfig);
+  theBeamFitter = new BeamFitter(iConfig, consumesCollector());
   theBeamFitter->resetTrkVector();
   theBeamFitter->resetLSRange();
   theBeamFitter->resetCutFlow();

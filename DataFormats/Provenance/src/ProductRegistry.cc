@@ -18,6 +18,7 @@
 #include "FWCore/Utilities/interface/TypeWithDict.h"
 #include "FWCore/Utilities/interface/WrappedClassName.h"
 
+#include <cassert>
 #include <iterator>
 #include <limits>
 #include <sstream>
@@ -53,7 +54,6 @@ namespace edm {
       runNextIndexValue_(0),
 
       branchIDToIndex_(),
-      producedBranchListIndex_(std::numeric_limits<BranchListIndex>::max()),
       missingDictionaries_() {
     for(bool& isProduced : productProduced_) isProduced = false;
   }
@@ -72,14 +72,13 @@ namespace edm {
     runNextIndexValue_ = 0;
 
     branchIDToIndex_.clear();
-    producedBranchListIndex_ = std::numeric_limits<BranchListIndex>::max();
     missingDictionaries_.clear();
   }
 
   ProductRegistry::ProductRegistry(ProductList const& productList, bool toBeFrozen) :
       productList_(productList),
       transient_() {
-    frozen() = toBeFrozen;
+    freezeIt(toBeFrozen);
   }
 
   void
@@ -116,7 +115,6 @@ namespace edm {
   ProductRegistry::copyProduct(BranchDescription const& productDesc) {
     assert(!productDesc.produced());
     throwIfFrozen();
-    productDesc.init();
     BranchKey k = BranchKey(productDesc);
     ProductList::iterator iter = productList_.find(k);
     if(iter == productList_.end()) {
@@ -147,9 +145,9 @@ namespace edm {
   }
 
   void
-  ProductRegistry::setFrozen(bool initializeLookupInfo) const {
+  ProductRegistry::setFrozen(bool initializeLookupInfo) {
     if(frozen()) return;
-    frozen() = true;
+    freezeIt();
     if(initializeLookupInfo) {
       initializeLookupTables();
     }
@@ -214,7 +212,6 @@ namespace edm {
   std::string
   ProductRegistry::merge(ProductRegistry const& other,
         std::string const& fileName,
-        BranchDescription::MatchMode parametersMustMatch,
         BranchDescription::MatchMode branchesMustMatch) {
     std::ostringstream differences;
 
@@ -234,7 +231,7 @@ namespace edm {
           differences << "    but not in previous files.\n";
         } else {
           productList_.insert(*i);
-          transient_.branchIDToIndex_[i->second.branchID()] = nextIndexValue(i->second.branchType());
+          transient_.branchIDToIndex_[i->second.branchID()] = getNextIndexValue(i->second.branchType());
           ++nextIndexValue(i->second.branchType());
         }
         ++i;
@@ -245,9 +242,9 @@ namespace edm {
         }
         ++j;
       } else {
-        std::string difs = match(j->second, i->second, fileName, parametersMustMatch);
+        std::string difs = match(j->second, i->second, fileName);
         if(difs.empty()) {
-          if(parametersMustMatch == BranchDescription::Permissive) j->second.merge(i->second);
+          j->second.merge(i->second);
         } else {
           differences << difs;
         }
@@ -264,11 +261,11 @@ namespace edm {
     for(auto const& product : productList_) {
       auto const& key = product.first;
       auto const& desc = product.second;
-      constProductList().insert(std::make_pair(key, ConstBranchDescription(desc)));
+      constProductList().insert(std::make_pair(key, BranchDescription(desc)));
     }
   }
 
-  void ProductRegistry::initializeLookupTables() const {
+  void ProductRegistry::initializeLookupTables() {
 
     StringSet missingDicts;
     transient_.branchIDToIndex_.clear();
@@ -278,7 +275,7 @@ namespace edm {
       auto const& key = product.first;
       auto const& desc = product.second;
 
-      constProductList().insert(std::make_pair(key, ConstBranchDescription(desc)));
+      constProductList().insert(std::make_pair(key, BranchDescription(desc)));
 
       if(desc.produced()) {
         setProductProduced(desc.branchType());
@@ -312,17 +309,17 @@ namespace edm {
     for(auto const& product : productList_) {
       auto const& desc = product.second;
       if (transient_.branchIDToIndex_.find(desc.branchID()) == transient_.branchIDToIndex_.end()) {
-        transient_.branchIDToIndex_[desc.branchID()] = nextIndexValue(desc.branchType());
+        transient_.branchIDToIndex_[desc.branchID()] = getNextIndexValue(desc.branchType());
         ++nextIndexValue(desc.branchType());
       }
     }
 
-    missingDictionaries().reserve(missingDicts.size());
-    copy_all(missingDicts, std::back_inserter(missingDictionaries()));
+    missingDictionariesForUpdate().reserve(missingDicts.size());
+    copy_all(missingDicts, std::back_inserter(missingDictionariesForUpdate()));
   }
 
   ProductHolderIndex ProductRegistry::indexFrom(BranchID const& iID) const {
-    std::map<BranchID, ProductHolderIndex>::iterator itFind = transient_.branchIDToIndex_.find(iID);
+    std::map<BranchID, ProductHolderIndex>::const_iterator itFind = transient_.branchIDToIndex_.find(iID);
     if(itFind == transient_.branchIDToIndex_.end()) {
       return ProductHolderIndexInvalid;
     }
@@ -343,7 +340,7 @@ namespace edm {
   }
 
   ProductHolderIndex&
-  ProductRegistry::nextIndexValue(BranchType branchType) const {
+  ProductRegistry::nextIndexValue(BranchType branchType) {
     if (branchType == InEvent) return transient_.eventNextIndexValue_;
     if (branchType == InLumi) return  transient_.lumiNextIndexValue_;
     return transient_.runNextIndexValue_;

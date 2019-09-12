@@ -4,8 +4,6 @@
 /*
  * \file DQMEventInfo.h
  *
- * $Date: 2010/09/13 12:43:25 $
- * $Revision: 1.17 $
  * \author M. Zanetti - INFN Padova
  *
 */
@@ -21,6 +19,7 @@
 
 #include <DQMServices/Core/interface/DQMStore.h>
 #include <DQMServices/Core/interface/MonitorElement.h>
+#include <DQMServices/Core/interface/DQMEDAnalyzer.h>
 
 #include <memory>
 #include <iostream>
@@ -30,13 +29,13 @@
 #include <map>
 #include <sys/time.h>
 
-class DQMEventInfo: public edm::EDAnalyzer{
+class DQMEventInfo: public DQMEDAnalyzer{
 
 public:
 
   /// Constructor
   DQMEventInfo(const edm::ParameterSet& ps);
-  
+
   /// Destructor
   virtual ~DQMEventInfo();
 
@@ -44,7 +43,8 @@ protected:
 
   /// Analyze
   void analyze(const edm::Event& e, const edm::EventSetup& c);
-  void beginRun(const edm::Run& r, const edm::EventSetup& c) ;
+  void bookHistograms(DQMStore::IBooker &, edm::Run const &, edm::EventSetup const &) override;
+  void dqmBeginRun(const edm::Run& r, const edm::EventSetup& c) ;
   void beginLuminosityBlock(const edm::LuminosityBlock& l, const edm::EventSetup& c);
 
 private:
@@ -55,7 +55,8 @@ private:
 
   edm::ParameterSet parameters_;
   std::string eventInfoFolder_;
-  
+  std::string subsystemname_;
+
 //  timeval currentTime_, lastUpdateTime_, lastAvgTime_;
 //  timeval runStartTime_;
 //  float evtRateWindow_;
@@ -66,7 +67,7 @@ private:
   int64_t pEvent_;
 
   //////////////////////////////////////////////////////////////////
-  ///These MEs are filled with the info from the most recent event 
+  ///These MEs are filled with the info from the most recent event
   ///   by the module
   //////////////////////////////////////////////////////////////////
   MonitorElement * runId_;

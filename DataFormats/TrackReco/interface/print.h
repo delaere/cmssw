@@ -4,7 +4,6 @@
  *
  * \author Luca Lista, INFN
  *
- * \version $Id: print.h,v 1.3 2006/05/08 07:52:54 llista Exp $
  * 
  */
 #include "FWCore/Utilities/interface/Verbosity.h"

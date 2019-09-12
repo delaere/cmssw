@@ -8,9 +8,7 @@
  *
  * \author Christian Veelken, LLR
  *
- * \version $Revision: 1.1 $
  *
- * $Id: Type0PFMETcorrInputProducer.h,v 1.1 2012/04/19 17:59:40 veelken Exp $
  *
  */
 
@@ -19,6 +17,10 @@
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Utilities/interface/InputTag.h"
+
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
+
+#include "CommonTools/RecoUtils/interface/PFCand_AssoMapAlgos.h"
 
 #include <TFormula.h>
 
@@ -37,8 +39,8 @@ class Type0PFMETcorrInputProducer : public edm::EDProducer
 
   std::string moduleLabel_;
 
-  edm::InputTag srcPFCandidateToVertexAssociations_; // key = vertex, value = list of PFCandidates
-  edm::InputTag srcHardScatterVertex_;
+  edm::EDGetTokenT<reco::VertexCollection> hardScatterVertexToken_;
+  edm::EDGetTokenT<PFCandToVertexAssMap> pfCandidateToVertexAssociationsToken_;
 
   TFormula* correction_;
 

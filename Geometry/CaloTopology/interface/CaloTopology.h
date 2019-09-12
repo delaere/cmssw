@@ -10,8 +10,7 @@ class CaloSubdetectorTopology;
 
 /** \class CaloTopology
       
-$Date: 2011/09/27 09:11:27 $
-$Revision: 1.5 $
+$Revision: 1.4 $
 
 \author J. Mans and P. Meridiani
 */

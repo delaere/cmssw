@@ -6,7 +6,6 @@
  * class description:
  * 
  *
- * Version: $Id: MasterTestSiStripDCS.cpp,v 1.1 2010/01/18 12:26:26 demattia Exp $
  */
 
 // In case this does not work anymore uncomment the rest

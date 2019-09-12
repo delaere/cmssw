@@ -13,7 +13,6 @@
 //
 // Original Author:  Sridhara Dasu
 //         Created:  Mon Jul 16 23:48:35 CEST 2007
-// $Id: RCTConfigProducers.cc,v 1.12 2010/05/07 14:41:48 bachtis Exp $
 //
 //
 

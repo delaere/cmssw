@@ -9,7 +9,6 @@
 
  author: Francisco Yumiceva, Fermilab (yumiceva@fnal.gov)
 
- version $Id: BeamSpotOnlineProducer.h,v 1.7 2010/09/10 12:13:16 vlimant Exp $
 
 ________________________________________________________________**/
 
@@ -18,6 +17,9 @@ ________________________________________________________________**/
 #include "DataFormats/Common/interface/Handle.h"
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Framework/interface/EventSetup.h"
+#include "DataFormats/Scalers/interface/BeamSpotOnline.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerEvmReadoutRecord.h"
+
 
 class BeamSpotOnlineProducer: public edm::EDProducer {
 
@@ -33,11 +35,11 @@ class BeamSpotOnlineProducer: public edm::EDProducer {
 	virtual void produce(edm::Event& iEvent, const edm::EventSetup& iSetup);
 
   private:
-	
-	edm::InputTag scalertag_;
+
 	bool changeFrame_;
 	double theMaxZ,theMaxR2,theSetSigmaZ;
-	edm::InputTag thel1GtEvmReadoutRecordTag;
+	edm::EDGetTokenT<BeamSpotOnlineCollection> scalerToken_;
+	edm::EDGetTokenT<L1GlobalTriggerEvmReadoutRecord> l1GtEvmReadoutRecordToken_;
 };
 
 #endif

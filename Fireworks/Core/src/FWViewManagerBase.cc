@@ -8,7 +8,6 @@
 //
 // Original Author:
 //         Created:  Sat Jan  5 10:56:17 EST 2008
-// $Id: FWViewManagerBase.cc,v 1.16 2011/07/08 04:40:00 amraktad Exp $
 //
 
 // system include files

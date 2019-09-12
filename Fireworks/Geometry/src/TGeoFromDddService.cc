@@ -8,7 +8,6 @@
 //
 // Original Author:  
 //         Created:  Fri Jul  2 16:11:42 CEST 2010
-// $Id: TGeoFromDddService.cc,v 1.5 2012/07/31 22:52:53 amraktad Exp $
 //
 
 // system include files

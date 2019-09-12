@@ -16,7 +16,6 @@
 //
 // Original Author:  
 //         Created:  Mon Nov 14 11:56:05 EST 2005
-// $Id: SensitiveDetectorMaker.h,v 1.3 2007/05/08 23:11:53 sunanda Exp $
 //
 
 // system include files

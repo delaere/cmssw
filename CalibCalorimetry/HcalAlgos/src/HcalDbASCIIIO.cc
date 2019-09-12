@@ -1,6 +1,5 @@
 //
 // F.Ratnikov (UMd), Oct 28, 2005
-// $Id: HcalDbASCIIIO.cc,v 1.68 2012/11/12 20:40:40 dlange Exp $
 //
 #include <vector>
 #include <string>

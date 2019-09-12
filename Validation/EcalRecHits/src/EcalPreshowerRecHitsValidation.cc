@@ -1,7 +1,6 @@
 /*
  * \file EcalPreshowerRecHitsValidation.cc
  *
- * $Date: 2010/05/20 11:27:43 $
  * \author C. Rovelli
  *
  */
@@ -20,9 +19,9 @@ EcalPreshowerRecHitsValidation::EcalPreshowerRecHitsValidation(const ParameterSe
 
 
   // ----------------------
-  EEuncalibrechitCollection_ = ps.getParameter<edm::InputTag>("EEuncalibrechitCollection");
-  EErechitCollection_        = ps.getParameter<edm::InputTag>("EErechitCollection");
-  ESrechitCollection_        = ps.getParameter<edm::InputTag>("ESrechitCollection");
+  EEuncalibrechitCollection_token_ = consumes<EEUncalibratedRecHitCollection>(ps.getParameter<edm::InputTag>("EEuncalibrechitCollection"));
+  EErechitCollection_token_        = consumes<EERecHitCollection>(ps.getParameter<edm::InputTag>("EErechitCollection"));
+  ESrechitCollection_token_        = consumes<ESRecHitCollection>(ps.getParameter<edm::InputTag>("ESrechitCollection"));
 
 
   // ---------------------- 
@@ -143,7 +142,7 @@ void EcalPreshowerRecHitsValidation::analyze(const Event& e, const EventSetup& c
 
   const ESRecHitCollection *ESRecHit = 0;
   Handle<ESRecHitCollection> EcalRecHitES;
-  e.getByLabel( ESrechitCollection_, EcalRecHitES);
+  e.getByToken( ESrechitCollection_token_, EcalRecHitES);
   if (EcalRecHitES.isValid()) {
     ESRecHit = EcalRecHitES.product ();
   } else {
@@ -153,7 +152,7 @@ void EcalPreshowerRecHitsValidation::analyze(const Event& e, const EventSetup& c
   bool skipEE = false;
   const EERecHitCollection *EERecHit = 0;
   Handle<EERecHitCollection> EcalRecHitEE;
-  e.getByLabel( EErechitCollection_, EcalRecHitEE);
+  e.getByToken( EErechitCollection_token_, EcalRecHitEE);
   if (EcalRecHitEE.isValid()){   
     EERecHit = EcalRecHitEE.product ();  
   } else {
@@ -162,7 +161,7 @@ void EcalPreshowerRecHitsValidation::analyze(const Event& e, const EventSetup& c
 
   const EEUncalibratedRecHitCollection *EEUncalibRecHit = 0;
   Handle< EEUncalibratedRecHitCollection > EcalUncalibRecHitEE;
-  e.getByLabel( EEuncalibrechitCollection_, EcalUncalibRecHitEE);
+  e.getByToken( EEuncalibrechitCollection_token_, EcalUncalibRecHitEE);
   if (EcalUncalibRecHitEE.isValid()) {
     EEUncalibRecHit = EcalUncalibRecHitEE.product() ;
   } else {

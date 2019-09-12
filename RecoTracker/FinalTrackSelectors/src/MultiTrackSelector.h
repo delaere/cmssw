@@ -6,9 +6,7 @@
  * 
  * \author David Lange
  *
- * \version $Revision: 1.12 $
  *
- * $Id: MultiTrackSelector.h,v 1.12 2013/06/04 12:24:17 speer Exp $
  *
  */
 
@@ -66,12 +64,12 @@ namespace reco { namespace modules {
 	    void processMVA(edm::Event& evt, const edm::EventSetup& es);
 
             /// source collection label
-            edm::InputTag src_;
-            edm::InputTag beamspot_;
+            edm::EDGetTokenT<reco::TrackCollection> src_;
+            edm::EDGetTokenT<reco::BeamSpot> beamspot_;
             bool          useVertices_;
             bool          useVtxError_;
 	    bool          useAnyMVA_;
-            edm::InputTag vertices_;
+            edm::EDGetTokenT<reco::VertexCollection> vertices_;
             
             /// do I have to set a quality bit?
 	    std::vector<bool> setQualityBit_;

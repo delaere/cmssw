@@ -10,8 +10,6 @@
  *  using the static build() method. 
  *  (The normal constructors will become private in the future).
  *
- *  $Date: 2012/12/23 18:07:15 $
- *  $Revision: 1.4 $
  */
 
 #include "DataFormats/GeometrySurface/interface/Surface.h"

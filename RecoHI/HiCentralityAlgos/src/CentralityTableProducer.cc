@@ -13,7 +13,6 @@
 //
 // Original Author:  Yetkin Yilmaz
 //         Created:  Wed May  2 21:41:30 EDT 2007
-// $Id: CentralityTableProducer.cc,v 1.13 2011/05/20 17:17:29 wmtan Exp $
 //
 //
 
@@ -62,8 +61,8 @@ class CentralityTableProducer : public edm::EDAnalyzer {
 
    private:
       virtual void beginRun(const edm::EventSetup&) ;
-      virtual void analyze(const edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
+      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
    void printBin(const CentralityTable::CBin*);
       // ----------member data ---------------------------
 

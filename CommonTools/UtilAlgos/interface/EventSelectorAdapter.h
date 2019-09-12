@@ -3,13 +3,13 @@
 
 /** \class EventSelectorAdapter
  *
- * Provide classes derrived from EventSelectorBase with an EDFilter interface 
- * 
+ * Provide classes derrived from EventSelectorBase with an EDFilter interface
+ *
  * \author Christian Veelken, UC Davis
  *
- * \version $Revision: 1.2 $
+ * \version $Revision: 1.1 $
  *
- * $Id: EventSelectorAdapter.h,v 1.2 2013/02/28 00:34:12 wmtan Exp $
+ * $Id: EventSelectorAdapter.h,v 1.1 2009/03/03 13:07:26 llista Exp $
  *
  */
 
@@ -19,20 +19,20 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 template<typename T>
-class EventSelectorAdapter : public edm::EDFilter 
+class EventSelectorAdapter : public edm::EDFilter
 {
  public:
-  // constructor 
-  explicit EventSelectorAdapter(const edm::ParameterSet& cfg) : 
-    eventSelector_( cfg ) {
+  // constructor
+  explicit EventSelectorAdapter(const edm::ParameterSet& cfg) :
+    eventSelector_( cfg, consumesCollector() ) {
   }
-    
+
   // destructor
   virtual ~EventSelectorAdapter() {}
-    
+
  private:
-  bool filter(edm::Event& evt, const edm::EventSetup& es) override { return eventSelector_(evt, es); } 
-  
+  bool filter(edm::Event& evt, const edm::EventSetup& es) override { return eventSelector_(evt, es); }
+
   T eventSelector_;
 };
 

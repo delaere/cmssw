@@ -11,7 +11,6 @@
  **
  **
  **  $Id: PhotonPostprocessing
- **  $Date: 2013/06/11 15:57:19 $
  **  author:
  **   Nancy Marinelli, U. of Notre Dame, US
  **
@@ -108,7 +107,6 @@ void PhotonPostprocessing::runPostprocessing()
   //  Photon reconstruction efficiencies
   string histname = "recoEffVsEta";
   phoRecoEffEta_ =  dbe_->book1D(histname,"Photon reconstruction efficiency vs simulated #eta",etaBin,etaMin, etaMax);
-
   histname = "recoEffVsPhi";
   phoRecoEffPhi_ =  dbe_->book1D(histname,"Photon reconstruction efficiency vs simulated #phi",phiBin,phiMin, phiMax);
   histname = "recoEffVsEt";
@@ -252,9 +250,9 @@ void PhotonPostprocessing::endLuminosityBlock(const edm::LuminosityBlock& lumi, 
 
 void  PhotonPostprocessing::dividePlots(MonitorElement* dividend, MonitorElement* numerator, MonitorElement* denominator, std::string type ){
   double value,err;
-  
   for (int j=1; j<=numerator->getNbinsX(); j++){
     dividend->setEfficiencyFlag();
+
     if (denominator->getBinContent(j)!=0){
       if (type=="effic")
 	value = ((double) numerator->getBinContent(j))/((double) denominator->getBinContent(j));

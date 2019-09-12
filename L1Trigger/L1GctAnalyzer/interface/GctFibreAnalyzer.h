@@ -14,7 +14,6 @@ Description: Analyzer individual fibre channels from the source card.
 //
 // Original Author:  Alex Tapper
 //         Created:  Thu Jul 12 14:21:06 CEST 2007
-// $Id: GctFibreAnalyzer.h,v 1.5 2008/05/22 15:07:30 tapper Exp $
 //
 //
 

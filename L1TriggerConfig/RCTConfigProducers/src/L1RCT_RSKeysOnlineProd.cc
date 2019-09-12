@@ -13,7 +13,6 @@
 //
 // Original Author:  Werner Man-Li Sun
 //         Created:  Fri Aug 22 19:51:36 CEST 2008
-// $Id: L1RCT_RSKeysOnlineProd.cc,v 1.1 2009/03/11 10:15:45 jleonard Exp $
 //
 //
 
@@ -37,7 +36,7 @@ public:
   L1RCT_RSKeysOnlineProd(const edm::ParameterSet& iConfig);
   ~L1RCT_RSKeysOnlineProd() {}
 
-      virtual void fillObjectKeys( ReturnType pL1TriggerKey ) ;
+      virtual void fillObjectKeys( ReturnType pL1TriggerKey ) override ;
    private:
       // ----------member data ---------------------------
        bool m_enableL1RCTChannelMask;

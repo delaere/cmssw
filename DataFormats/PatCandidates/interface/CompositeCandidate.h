@@ -1,5 +1,4 @@
 //
-// $Id: CompositeCandidate.h,v 1.2 2008/11/28 19:25:02 lowette Exp $
 //
 
 #ifndef DataFormats_PatCandidates_CompositeCandidate_h
@@ -13,7 +12,6 @@
    namespace.
 
   \author   Sal Rappoccio
-  \version  $Id: CompositeCandidate.h,v 1.2 2008/11/28 19:25:02 lowette Exp $
 */
 
 #include "DataFormats/Candidate/interface/CompositeCandidate.h"

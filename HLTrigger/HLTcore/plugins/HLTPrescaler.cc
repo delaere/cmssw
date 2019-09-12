@@ -7,8 +7,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-#include "FWCore/Framework/interface/CurrentProcessingContext.h"
+#include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 #include "FWCore/Framework/interface/LuminosityBlock.h"
+#include "FWCore/ServiceRegistry/interface/PathContext.h"
+#include "FWCore/ServiceRegistry/interface/PlaceInPathContext.h"
+#include "FWCore/ServiceRegistry/interface/ModuleCallingContext.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
@@ -26,16 +29,17 @@ const unsigned int HLTPrescaler::prescaleSeed_ = 65537;
 ///////////////////////////////////////////////////////////////////////////////
 
 //_____________________________________________________________________________
-HLTPrescaler::HLTPrescaler(edm::ParameterSet const& iConfig) :
+HLTPrescaler::HLTPrescaler(edm::ParameterSet const& iConfig, const trigger::Efficiency* efficiency) :
   prescaleSet_(0)
   , prescaleFactor_(1)
   , eventCount_(0)
   , acceptCount_(0)
   , offsetCount_(0)
-  , offsetPhase_(iConfig.existsAs<unsigned int>("offset") ? iConfig.getParameter<unsigned int>("offset") : 0)
+  , offsetPhase_(iConfig.getParameter<unsigned int>("offset"))
   , prescaleService_(0)
   , newLumi_(true)
-  , gtDigi_ (iConfig.getParameter<edm::InputTag>("L1GtReadoutRecordTag"))
+  , gtDigiTag_ (iConfig.getParameter<edm::InputTag>("L1GtReadoutRecordTag"))
+  , gtDigiToken_ (consumes<L1GlobalTriggerReadoutRecord>(gtDigiTag_))
 {
   if(edm::Service<edm::service::PrescaleService>().isAvailable())
     prescaleService_ = edm::Service<edm::service::PrescaleService>().operator->();
@@ -49,10 +53,16 @@ HLTPrescaler::~HLTPrescaler()
   
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // implementation of member functions
 ////////////////////////////////////////////////////////////////////////////////
+
+void HLTPrescaler::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+  edm::ParameterSetDescription desc;
+  desc.add<unsigned int>("offset",0);
+  desc.add<edm::InputTag>("L1GtReadoutRecordTag",edm::InputTag("hltGtDigis"));
+  descriptions.add("hltPrescaler", desc);
+}
 
 //______________________________________________________________________________
 void HLTPrescaler::beginLuminosityBlock(edm::LuminosityBlock const& lb,
@@ -73,12 +83,12 @@ bool HLTPrescaler::filter(edm::Event& iEvent, const edm::EventSetup&)
     bool needsInit (eventCount_==0);
 
     if (prescaleService_) {
-      std::string const & pathName = * currentContext()->pathName();
+      std::string const & pathName = iEvent.moduleCallingContext()->placeInPathContext()->pathContext()->pathName();
       const unsigned int oldSet(prescaleSet_);
       const unsigned int oldPrescale(prescaleFactor_);
 
       edm::Handle<L1GlobalTriggerReadoutRecord> handle;
-      iEvent.getByLabel(gtDigi_ , handle);
+      iEvent.getByToken(gtDigiToken_,handle);
       if (handle.isValid()) {
         prescaleSet_ = handle->gtFdlWord().gtPrescaleFactorIndexAlgo();
         // gtPrescaleFactorIndexTech() is also available
@@ -116,12 +126,27 @@ bool HLTPrescaler::filter(edm::Event& iEvent, const edm::EventSetup&)
 
 
 //_____________________________________________________________________________
-void HLTPrescaler::endJob()
+void HLTPrescaler::endStream()
 {
+  //since these are std::atomic, it is safe to increment them
+  // even if multiple endStreams are being called.
+  globalCache()->eventCount_ += eventCount_;
+  globalCache()->acceptCount_ += acceptCount_; 
+  return;
+}
+
+//_____________________________________________________________________________
+void HLTPrescaler::globalEndJob(const trigger::Efficiency* efficiency)
+{
+  unsigned int accept(efficiency->acceptCount_);
+  unsigned int event (efficiency->eventCount_);
   edm::LogInfo("PrescaleSummary")
-    << acceptCount_<< "/" <<eventCount_
+    << accept << "/" << event
     << " ("
-    << 100.*acceptCount_/static_cast<double>(std::max(1u,eventCount_))
+    << 100.*accept/static_cast<double>(std::max(1u,event))
     << "% of events accepted).";
   return;
 }
+
+#include "FWCore/Framework/interface/MakerMacros.h"
+DEFINE_FWK_MODULE(HLTPrescaler);

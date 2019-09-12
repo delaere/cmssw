@@ -5,9 +5,12 @@
 
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/TriggerEvent.h"
+#include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
+#include <iterator>
+#include <vector>
 
-namespace {
-  struct dictionary {
+namespace DataFormats_PatCandidates {
+  struct dictionarytrigger {
 
   pat::TriggerObjectCollection v_p_to;
   pat::TriggerObjectCollection::const_iterator v_p_to_ci;
@@ -87,6 +90,19 @@ namespace {
 
   edm::Wrapper<pat::TriggerEvent> w_p_te;
 
+  edm::Wrapper<pat::PackedTriggerPrescales> w_p_ptp;
+
+  std::iterator<std::random_access_iterator_tag,edm::Ref<std::vector<pat::TriggerPath>,pat::TriggerPath,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerPath>,pat::TriggerPath> >,long,edm::Ref<std::vector<pat::TriggerPath>,pat::TriggerPath,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerPath>,pat::TriggerPath> >*,edm::Ref<std::vector<pat::TriggerPath>,pat::TriggerPath,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerPath>,pat::TriggerPath> >&> iter_big_1;
+
+  std::iterator<std::random_access_iterator_tag,edm::Ref<std::vector<pat::TriggerObjectStandAlone>,pat::TriggerObjectStandAlone,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerObjectStandAlone>,pat::TriggerObjectStandAlone> >,long,edm::Ref<std::vector<pat::TriggerObjectStandAlone>,pat::TriggerObjectStandAlone,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerObjectStandAlone>,pat::TriggerObjectStandAlone> >*,edm::Ref<std::vector<pat::TriggerObjectStandAlone>,pat::TriggerObjectStandAlone,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerObjectStandAlone>,pat::TriggerObjectStandAlone> >&> iter_big_2;
+
+  std::iterator<std::random_access_iterator_tag,edm::Ref<std::vector<pat::TriggerFilter>,pat::TriggerFilter,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerFilter>,pat::TriggerFilter> >,long,edm::Ref<std::vector<pat::TriggerFilter>,pat::TriggerFilter,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerFilter>,pat::TriggerFilter> >*,edm::Ref<std::vector<pat::TriggerFilter>,pat::TriggerFilter,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerFilter>,pat::TriggerFilter> >&> iter_big_3;
+
+  std::iterator<std::random_access_iterator_tag,edm::Ref<std::vector<pat::TriggerObject>,pat::TriggerObject,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerObject>,pat::TriggerObject> >,long,edm::Ref<std::vector<pat::TriggerObject>,pat::TriggerObject,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerObject>,pat::TriggerObject> >*,edm::Ref<std::vector<pat::TriggerObject>,pat::TriggerObject,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerObject>,pat::TriggerObject> >&> iter_big_4;
+
+  std::iterator<std::random_access_iterator_tag,edm::Ref<std::vector<pat::TriggerCondition>,pat::TriggerCondition,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerCondition>,pat::TriggerCondition> >,long,edm::Ref<std::vector<pat::TriggerCondition>,pat::TriggerCondition,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerCondition>,pat::TriggerCondition> >*,edm::Ref<std::vector<pat::TriggerCondition>,pat::TriggerCondition,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerCondition>,pat::TriggerCondition> >&> iter_big_5;
+
+  std::iterator<std::random_access_iterator_tag,edm::Ref<std::vector<pat::TriggerAlgorithm>,pat::TriggerAlgorithm,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerAlgorithm>,pat::TriggerAlgorithm> >,long,edm::Ref<std::vector<pat::TriggerAlgorithm>,pat::TriggerAlgorithm,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerAlgorithm>,pat::TriggerAlgorithm> >*,edm::Ref<std::vector<pat::TriggerAlgorithm>,pat::TriggerAlgorithm,edm::refhelper::FindUsingAdvance<std::vector<pat::TriggerAlgorithm>,pat::TriggerAlgorithm> >&> iter_big_6;
   };
 
 }

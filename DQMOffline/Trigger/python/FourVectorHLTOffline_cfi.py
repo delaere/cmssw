@@ -1,6 +1,5 @@
 import FWCore.ParameterSet.Config as cms
 
-# $Id: FourVectorHLTOffline_cfi.py,v 1.45 2011/05/04 10:20:00 rekovic Exp $
 hltResults = cms.EDAnalyzer("FourVectorHLTOffline",
     dirname = cms.untracked.string("HLT/FourVector/paths"),
     muonRecoCollectionName = cms.untracked.string("muons"),

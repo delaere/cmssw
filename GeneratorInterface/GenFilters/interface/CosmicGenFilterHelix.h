@@ -13,7 +13,6 @@
 ///
 /// Original Author:  Gero FLUCKE
 ///     Created:  Mon Mar  5 16:32:01 CET 2007
-/// $Id: CosmicGenFilterHelix.h,v 1.7 2010/02/11 00:12:02 wmtan Exp $
 ///
 
 

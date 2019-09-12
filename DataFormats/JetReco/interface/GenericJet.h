@@ -11,7 +11,6 @@
  * \author Fedor Ratnikov, UMd
  *
  * \version   Mar 23, 2007 by F.R.
- * \version   $Id: GenericJet.h,v 1.8 2007/08/24 17:35:23 fedor Exp $
  ************************************************************/
 #include <string>
 #include "DataFormats/Candidate/interface/CompositeRefBaseCandidate.h"

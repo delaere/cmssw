@@ -13,7 +13,6 @@
 //
 // Original Author:  Igor Volobouev
 //         Created:  Thu Apr 21 15:52:11 CDT 2011
-// $Id: FFTJetImageRecorder.cc,v 1.1 2011/06/03 05:10:07 igv Exp $
 //
 //
 
@@ -54,9 +53,9 @@ private:
     FFTJetImageRecorder(const FFTJetImageRecorder&);
     FFTJetImageRecorder& operator=(const FFTJetImageRecorder&);
 
-    virtual void beginJob() ;
-    virtual void analyze(const edm::Event&, const edm::EventSetup&);
-    virtual void endJob() ;
+    virtual void beginJob() override ;
+    virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+    virtual void endJob() override ;
 
     edm::InputTag histoLabel;
     unsigned long counter;

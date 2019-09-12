@@ -2,15 +2,12 @@
 //
 // Original Author:  Gena Kukartsev Mar 11, 2009
 // Adapted from HcalDbOmds.h
-// $Id: HcalDbOmds.h,v 1.13 2010/08/06 20:24:09 wmtan Exp $
 //
 #ifndef HcalDbOmds_h
 #define HcalDbOmds_h
 
 #include <iostream>
 
-#include "xgi/Utils.h"
-#include "toolbox/string.h"
 #include "OnlineDB/Oracle/interface/Oracle.h"
 
 #include "DataFormats/HcalDetId/interface/HcalDetId.h"

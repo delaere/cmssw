@@ -13,7 +13,6 @@
 //
 // Original Author:  Jim Brooke
 //         Created:  Thu May 18 16:45:23 CEST 2006
-// $Id: DumpGctDigis.h,v 1.4 2010/02/17 17:50:10 wmtan Exp $
 //
 //
 

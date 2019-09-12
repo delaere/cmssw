@@ -6,7 +6,7 @@
  *  Changed by Viji on 06/07/2005
  */
 
-#include <cppunit/extensions/HelperMacros.h>
+#include "cppunit/extensions/HelperMacros.h"
 
 #include "FWCore/Framework/interface/EventSetupRecordImplementation.h"
 #include "FWCore/Framework/interface/EventSetupRecordProviderTemplate.h"
@@ -36,7 +36,7 @@ class DummyRecord : public edm::eventsetup::EventSetupRecordImplementation<Dummy
 HCTYPETAG_HELPER_METHODS(eventsetuprecord_t::DummyRecord)
 
 //create an instance of the factory
-static eventsetup::EventSetupRecordProviderFactoryTemplate<eventsetuprecord_t::DummyRecord> s_factory;
+static eventsetup::EventSetupRecordProviderFactoryTemplate<eventsetuprecord_t::DummyRecord> const s_factory;
 
 namespace eventsetuprecord_t {
 class Dummy {};

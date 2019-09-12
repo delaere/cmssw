@@ -7,8 +7,6 @@
  *  etc.) 
  *  Useful for defining a BarrelDetLayer from a group of DetUnits.
  *
- *  $Date: 2007/08/22 16:07:44 $
- *  $Revision: 1.4 $
  */
 
 #include "Geometry/CommonDetUnit/interface/GeomDet.h"

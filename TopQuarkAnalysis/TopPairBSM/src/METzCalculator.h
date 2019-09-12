@@ -6,7 +6,7 @@
 
  author: Francisco Yumiceva, Fermilab (yumiceva@fnal.gov)
 
- version $Id: METzCalculator.h,v 1.1 2012/10/11 14:26:45 eulisse Exp $
+ version $Id: METzCalculator.h,v 1.3 2009/07/30 06:02:19 jengbou Exp $
 
 ________________________________________________________________**/
 
@@ -28,13 +28,13 @@ class METzCalculator {
 	virtual ~METzCalculator();
 	/// Set MET
 	void SetMET(const pat::MET &MET) { MET_ = MET; } ;
-	void SetMET(TLorentzVector MET) {
+	void SetMET(const TLorentzVector& MET) {
 		pat::Particle::LorentzVector p(MET.Px(),MET.Py(),MET.Pz(),MET.E());
 		MET_.setP4(p);
 	}
     /// Set Muon
 	void SetMuon(const pat::Particle &lepton) { lepton_ = lepton; };
-	void SetMuon(TLorentzVector lepton) {
+	void SetMuon(const TLorentzVector& lepton) {
 		pat::Particle::LorentzVector p(lepton.Px(), lepton.Py(), lepton.Pz(), lepton.E() );
 		lepton_.setP4(p);
 	}

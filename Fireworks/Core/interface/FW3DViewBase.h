@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Thu Feb 21 11:22:37 EST 2008
-// $Id: FW3DViewBase.h,v 1.15 2013/04/25 18:45:32 amraktad Exp $
 //
 
 // system include files

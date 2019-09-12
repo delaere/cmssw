@@ -14,7 +14,6 @@
 //
 // Original Author:  Ursula Berthon
 //         Created:  Mon Mar 27 13:22:06 CEST 2006
-// $Id: GsfElectronDataAnalyzer.cc,v 1.41 2012/09/13 20:08:32 wdd Exp $
 //
 //
 
@@ -1155,7 +1154,7 @@ GsfElectronDataAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup
 
 	// supercluster related distributions
 	reco::SuperClusterRef sclRef = gsfIter->superCluster();
-	if (!gsfIter->ecalDrivenSeed()&&gsfIter->trackerDrivenSeed()) sclRef = gsfIter->pflowSuperCluster();
+	if (!gsfIter->ecalDrivenSeed()&&gsfIter->trackerDrivenSeed()) sclRef = gsfIter->parentSuperCluster();
         histSclEn_->Fill(sclRef->energy());
         double R=TMath::Sqrt(sclRef->x()*sclRef->x() + sclRef->y()*sclRef->y() +sclRef->z()*sclRef->z());
         double Rt=TMath::Sqrt(sclRef->x()*sclRef->x() + sclRef->y()*sclRef->y());

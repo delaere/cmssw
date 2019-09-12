@@ -12,7 +12,6 @@
 //
 // Original Author:  Marco DE MATTIA
 //         Created:  2010/03/10 10:51:00
-// $Id: FilterTrackerOn.h,v 1.2 2010/03/29 12:32:37 demattia Exp $
 //
 //
 

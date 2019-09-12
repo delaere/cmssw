@@ -1,6 +1,5 @@
 #ifndef Math_LorentzVector_h
 #define Math_LorentzVector_h
-// $Id: LorentzVector.h,v 1.10 2007/07/31 15:20:15 ratnik Exp $
 #include "Math/PtEtaPhiE4D.h"
 #include "Math/PtEtaPhiM4D.h"
 #include "Math/LorentzVector.h"

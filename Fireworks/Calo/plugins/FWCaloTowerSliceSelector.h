@@ -16,7 +16,6 @@
 //
 // Original Author:  Alja Mrak-Tadel
 //         Created:  Wed Jun  2 19:21:19 CEST 2010
-// $Id: FWCaloTowerSliceSelector.h,v 1.3 2010/12/01 21:40:31 amraktad Exp $
 //
 
 // system include files

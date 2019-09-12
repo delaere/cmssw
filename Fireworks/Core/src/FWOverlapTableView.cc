@@ -8,7 +8,6 @@
 //
 // Original Author:  
 //         Created:  Wed Jan  4 00:06:35 CET 2012
-// $Id: FWOverlapTableView.cc,v 1.17 2013/04/19 04:21:29 amraktad Exp $
 //
 
 // system include files
@@ -21,13 +20,12 @@
 #include "Fireworks/Core/src/FWEveOverlap.h"
 #include "Fireworks/Core/interface/FWGeometryTableViewManager.h"
 #include "Fireworks/Core/interface/CmsShowViewPopup.h"
-#include "Fireworks/Core/src/FWEveDigitSetScalableMarker.cc"
 #include "Fireworks/Core/src/FWPopupMenu.cc"
 #include "Fireworks/Core/interface/fwLog.h"
 
 #include "Fireworks/Core/src/FWGUIValidatingTextEntry.h"
 #include "Fireworks/Core/src/FWValidatorBase.h"
-#include "Fireworks/Core/src/FWEveDigitSetScalableMarker.cc"
+#include "Fireworks/Core/src/FWEveDigitSetScalableMarker.h"
 
 #include "TEveScene.h"
 #include "TEveSceneInfo.h"

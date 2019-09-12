@@ -13,7 +13,6 @@
 //
 // Original Author:  Tomasz Maciej Frueboes
 //         Created:  Wed Apr  9 14:03:40 CEST 2008
-// $Id: TestHWConfig.cc,v 1.5 2010/02/26 15:51:02 fruboes Exp $
 //
 //
 

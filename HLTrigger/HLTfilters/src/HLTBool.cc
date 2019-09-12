@@ -2,8 +2,6 @@
  *
  * See header file for documentation
  *
- *  $Date: 2012/01/22 22:15:43 $
- *  $Revision: 1.6 $
  *
  *  \author Martin Grunewald
  *

@@ -27,8 +27,6 @@
 
 /** \class HcalRawDataMonitor
  *
- * $Date: 2012/06/21 13:40:22 $
- * $Revision: 1.6 $
  * \author J. St. John - Boston University
  */
 class HcalRawDataMonitor: public HcalBaseDQMonitor {
@@ -58,6 +56,10 @@ class HcalRawDataMonitor: public HcalBaseDQMonitor {
 
   edm::InputTag FEDRawDataCollection_;
   edm::InputTag digiLabel_;
+ 
+  edm::EDGetTokenT<FEDRawDataCollection> tok_raw_; 
+  edm::EDGetTokenT<HcalUnpackerReport> tok_unpack_;
+
   const HcalElectronicsMap*    readoutMap_;
   //Electronics map -> geographic channel map
   inline int hashup(uint32_t d=0, uint32_t s=0, uint32_t c=1) {

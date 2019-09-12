@@ -5,8 +5,6 @@
  *   Setup the L1 barrel Muon Trigger Track Finder
  *
  *
- *   $Date: 2007/03/30 08:51:21 $
- *   $Revision: 1.2 $
  *
  *   N. Neumeister            CERN EP
  */

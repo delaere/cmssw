@@ -13,7 +13,6 @@
 //
 // Original Author:  Puljak Ivica
 //         Created:  Wed Apr 18 12:52:31 CEST 2007
-// $Id: HZZ4lFilter.cc,v 1.6 2010/09/07 11:45:07 fabstoec Exp $
 //
 //
 

@@ -20,7 +20,6 @@
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 
-
 #include "Geometry/CaloTopology/interface/CaloTopology.h"
 #include "Geometry/CaloGeometry/interface/CaloGeometry.h"
 #include "Geometry/CaloGeometry/interface/CaloSubdetectorGeometry.h"
@@ -33,11 +32,8 @@
 #include "DataFormats/EcalDetId/interface/EBDetId.h"
 #include "DataFormats/EcalDetId/interface/EEDetId.h"
 #include "DataFormats/EcalDetId/interface/ESDetId.h"
-#include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
 #include "DataFormats/EgammaReco/interface/SuperCluster.h"
-#include "DataFormats/EgammaReco/interface/SuperClusterFwd.h"
 #include "DataFormats/EgammaReco/interface/BasicCluster.h"
-#include "DataFormats/EgammaReco/interface/BasicClusterFwd.h"
 #include "RecoEcal/EgammaCoreTools/interface/EcalClusterTools.h"
 #include "RecoEcal/EgammaCoreTools/interface/EcalTools.h"
 #include "RecoLocalCalo/EcalRecAlgos/interface/EcalSeverityLevelAlgo.h"
@@ -71,10 +67,12 @@ EBRecoSummary::EBRecoSummary(const edm::ParameterSet& ps)
   prefixME_ = ps.getUntrackedParameter<std::string>("prefixME", "");
 
   //now do what ever initialization is needed
-  recHitCollection_EB_       = ps.getParameter<edm::InputTag>("recHitCollection_EB");
-  redRecHitCollection_EB_    = ps.getParameter<edm::InputTag>("redRecHitCollection_EB");
-  basicClusterCollection_EB_ = ps.getParameter<edm::InputTag>("basicClusterCollection_EB");
-  superClusterCollection_EB_ = ps.getParameter<edm::InputTag>("superClusterCollection_EB");
+  recHitCollection_EB_       = consumes<EcalRecHitCollection>(ps.getParameter<edm::InputTag>("recHitCollection_EB"));
+  redRecHitCollection_EB_    = consumes<EcalRecHitCollection>(ps.getParameter<edm::InputTag>("redRecHitCollection_EB"));
+  basicClusterCollection_EB_ = consumes<edm::View<reco::CaloCluster> >(ps.getParameter<edm::InputTag>("basicClusterCollection_EB"));
+  superClusterCollection_EB_ = consumes<reco::SuperClusterCollection>(ps.getParameter<edm::InputTag>("superClusterCollection_EB"));
+
+  std::cout << "EBRecoSummary " << ps.getParameter<edm::InputTag>("basicClusterCollection_EB") << std::endl;
 
   ethrEB_                    = ps.getParameter<double>("ethrEB");
 
@@ -140,7 +138,7 @@ void EBRecoSummary::analyze(const edm::Event& ev, const edm::EventSetup& iSetup)
 
   // --- REDUCED REC HITS ------------------------------------------------------------------------------------- 
   edm::Handle<EcalRecHitCollection> redRecHitsEB;
-  ev.getByLabel( redRecHitCollection_EB_, redRecHitsEB );
+  ev.getByToken( redRecHitCollection_EB_, redRecHitsEB );
   const EcalRecHitCollection* theBarrelEcalredRecHits = redRecHitsEB.product () ;
   if ( ! redRecHitsEB.isValid() ) {
     edm::LogWarning("EBRecoSummary") << "redRecHitsEB not found"; 
@@ -158,7 +156,7 @@ void EBRecoSummary::analyze(const edm::Event& ev, const edm::EventSetup& iSetup)
   
   // ... barrel
   edm::Handle<EcalRecHitCollection> recHitsEB;
-  ev.getByLabel( recHitCollection_EB_, recHitsEB );
+  ev.getByToken( recHitCollection_EB_, recHitsEB );
   const EcalRecHitCollection* theBarrelEcalRecHits = recHitsEB.product () ;
   if ( ! recHitsEB.isValid() ) {
     edm::LogWarning("EBRecoSummary") << "recHitsEB not found"; 
@@ -197,32 +195,34 @@ void EBRecoSummary::analyze(const edm::Event& ev, const edm::EventSetup& iSetup)
   //--- BASIC CLUSTERS --------------------------------------------------------------
 
   // ... barrel
-  edm::Handle<reco::BasicClusterCollection> basicClusters_EB_h;
-  ev.getByLabel( basicClusterCollection_EB_, basicClusters_EB_h );
-  const reco::BasicClusterCollection* theBarrelBasicClusters = basicClusters_EB_h.product () ;
-  if ( ! basicClusters_EB_h.isValid() ) {
-    edm::LogWarning("EBRecoSummary") << "basicClusters_EB_h not found"; 
-  }
+  edm::Handle<edm::View<reco::CaloCluster> > basicClusters_EB_h;
+  if(ev.getByToken( basicClusterCollection_EB_, basicClusters_EB_h )){
 
-  for (reco::BasicClusterCollection::const_iterator itBC = theBarrelBasicClusters->begin(); 
-       itBC != theBarrelBasicClusters->end(); ++itBC ) {
+    const edm::View<reco::CaloCluster>* theBarrelBasicClusters = basicClusters_EB_h.product () ;
+
+    for (edm::View<reco::CaloCluster>::const_iterator itBC = theBarrelBasicClusters->begin(); 
+         itBC != theBarrelBasicClusters->end(); ++itBC ) {
          
-    //Get the associated RecHits
-    const std::vector<std::pair<DetId,float> > & hits= itBC->hitsAndFractions();
-    for (std::vector<std::pair<DetId,float> > ::const_iterator rh = hits.begin(); rh!=hits.end(); ++rh){
+      //Get the associated RecHits
+      const std::vector<std::pair<DetId,float> > & hits= itBC->hitsAndFractions();
+      for (std::vector<std::pair<DetId,float> > ::const_iterator rh = hits.begin(); rh!=hits.end(); ++rh){
       
-      EBRecHitCollection::const_iterator itrechit = theBarrelEcalRecHits->find((*rh).first);
-      if (itrechit==theBarrelEcalRecHits->end()) continue;
-      h_basicClusters_recHits_EB_recoFlag -> Fill ( itrechit -> recoFlag() );
+        EBRecHitCollection::const_iterator itrechit = theBarrelEcalRecHits->find((*rh).first);
+        if (itrechit==theBarrelEcalRecHits->end()) continue;
+        h_basicClusters_recHits_EB_recoFlag -> Fill ( itrechit -> recoFlag() );
     
-    }
+      }
   
+    }
+  }
+  else{
+    //    edm::LogWarning("EBRecoSummary") << "basicClusters_EB_h not found"; 
   }
  
   // Super Clusters
   // ... barrel
   edm::Handle<reco::SuperClusterCollection> superClusters_EB_h;
-  ev.getByLabel( superClusterCollection_EB_, superClusters_EB_h );
+  ev.getByToken( superClusterCollection_EB_, superClusters_EB_h );
   const reco::SuperClusterCollection* theBarrelSuperClusters = superClusters_EB_h.product () ;
   if ( ! superClusters_EB_h.isValid() ) {
     edm::LogWarning("EBRecoSummary") << "superClusters_EB_h not found"; 

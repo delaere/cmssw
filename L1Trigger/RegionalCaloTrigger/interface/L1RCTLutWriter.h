@@ -16,7 +16,6 @@
 //
 // Original Author:  jleonard
 //         Created:  Fri Apr 11 16:27:07 CEST 2008
-// $Id: L1RCTLutWriter.h,v 1.5 2010/08/07 14:55:58 wmtan Exp $
 //
 //
 

@@ -5,8 +5,6 @@
  *  Factory of seal plugins for vDrfit computation.
  *  The plugins are concrete implementations of DTVDriftBaseAlgo.
  *
- *  $Date: 2012/03/02 19:47:32 $
- *  $Revision: 1.2 $
  *  \author A. Vilela Pereira
  */
 

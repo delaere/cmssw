@@ -1,4 +1,3 @@
-// $Id: SealModule.cc,v 1.30 2012/05/18 09:25:28 srimanob Exp $
 
 #include "DQMOffline/Trigger/interface/FourVectorHLTClient.h"
 #include "DQMOffline/Trigger/interface/FourVectorHLTOffline.h"

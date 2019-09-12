@@ -6,8 +6,6 @@
  *   map which contains all sector processors
  *
  *
- *   $Date: 2007/02/27 11:44:00 $
- *   $Revision: 1.2 $
  *
  *   N. Neumeister            CERN EP
  */

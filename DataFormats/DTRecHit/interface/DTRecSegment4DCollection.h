@@ -5,8 +5,6 @@
  *  
  *  Collection of DTRecSegment4D. See \ref DTRecSegment4DCollection.h for details
  *
- *  $Date: 2010/03/11 16:26:20 $
- *  $Revision: 1.6 $
  *  \author R. Bellan - INFN Torino
  */
 

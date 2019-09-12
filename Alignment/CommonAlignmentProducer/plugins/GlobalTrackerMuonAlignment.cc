@@ -16,7 +16,7 @@
 // Original Author:  Alexandre Spiridonov
 //         Created:  Fri Oct 16 15:59:05 CEST 2009
 //
-// $Id: GlobalTrackerMuonAlignment.cc,v 1.12 2013/04/12 13:16:37 innocent Exp $
+// $Id: GlobalTrackerMuonAlignment.cc,v 1.11 2012/07/16 12:17:53 eulisse Exp $
 //
 
 // system include files
@@ -138,16 +138,16 @@ class GlobalTrackerMuonAlignment : public edm::EDAnalyzer {
 		     GlobalVector&, GlobalVector&, AlgebraicVector4&, 
 		     TrajectoryStateOnSurface&, TrajectoryStateOnSurface&);
   void writeGlPosRcd(CLHEP::HepVector& d3); 
-  inline double CLHEP_dot(CLHEP::HepVector a, CLHEP::HepVector b)
+  inline double CLHEP_dot(const CLHEP::HepVector& a, const CLHEP::HepVector& b)
   {
     return a(1)*b(1)+a(2)*b(2)+a(3)*b(3);
   }
 
  private:
 
-  virtual void beginJob() ;
-  virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  virtual void endJob() ;
+  virtual void beginJob() override ;
+  virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+  virtual void endJob() override ;
   
   // ----------member data ---------------------------
 

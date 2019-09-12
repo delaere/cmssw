@@ -7,8 +7,6 @@
  *  tool which take as input a muon track and return a vector 
  *  with the segments used to fit it
  *
- *  $Date: 2012/10/24 10:16:27 $
- *  $Revision: 1.3 $
  *  \author C. Botta, G. Mila - INFN Torino
  */
 
@@ -30,6 +28,11 @@
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "DataFormats/TrackReco/interface/Track.h"
 
+#include "DataFormats/DTRecHit/interface/DTRecSegment4DCollection.h"
+#include "DataFormats/CSCRecHit/interface/CSCSegmentCollection.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
+
+
 
 namespace edm {class ParameterSet; class Event; class EventSetup;}
 
@@ -39,7 +42,7 @@ class SegmentsTrackAssociator{
 public:
   
   /// Constructor
-  SegmentsTrackAssociator (const edm::ParameterSet& );
+  SegmentsTrackAssociator (const edm::ParameterSet& ,edm::ConsumesCollector& iC);
   
   /// Destructor 
   virtual ~SegmentsTrackAssociator();
@@ -60,6 +63,10 @@ private:
   edm::InputTag theDTSegmentLabel;
   edm::InputTag theCSCSegmentLabel;
   edm::InputTag theSegmentContainerName;
+
+  edm::EDGetTokenT<DTRecSegment4DCollection> dtSegmentsToken;
+  edm::EDGetTokenT<CSCSegmentCollection> cscSegmentsToken;
+
 
   std::string metname;
  

@@ -16,7 +16,6 @@
 //
 // Original Author:  Alja Mrak-Tadel
 //         Created:  Thu Oct 22 22:59:29 EST 20q0
-// $Id: makeEveJetCone.h,v 1.1 2010/10/22 14:34:44 amraktad Exp $
 //
 
 // system include files

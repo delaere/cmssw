@@ -13,12 +13,12 @@
 //
 // Original Author:  Werner Man-Li Sun
 //         Created:  Fri Aug 22 19:51:36 CEST 2008
-// $Id: RCTObjectKeysOnlineProd.cc,v 1.9 2012/11/20 11:04:33 eulisse Exp $
 //
 //
 
 
 // system include files
+#include <iostream>
 
 // user include files
 #include "CondTools/L1Trigger/interface/L1ObjectKeysOnlineProdBase.h"
@@ -34,7 +34,7 @@ class RCTObjectKeysOnlineProd : public L1ObjectKeysOnlineProdBase {
       RCTObjectKeysOnlineProd(const edm::ParameterSet&);
       ~RCTObjectKeysOnlineProd();
 
-      virtual void fillObjectKeys( ReturnType pL1TriggerKey ) ;
+      virtual void fillObjectKeys( ReturnType pL1TriggerKey ) override ;
    private:
       // ----------member data ---------------------------
 };

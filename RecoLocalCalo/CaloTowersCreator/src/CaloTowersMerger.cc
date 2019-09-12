@@ -13,7 +13,6 @@
 //
 // Original Author:  Jean-Roch Vlimant,40 3-A28,+41227671209,
 //         Created:  Thu Nov  4 16:36:30 CET 2010
-// $Id: CaloTowersMerger.cc,v 1.2 2010/11/24 19:52:16 anastass Exp $
 //
 //
 
@@ -49,16 +48,18 @@ class CaloTowersMerger : public edm::EDProducer {
       explicit CaloTowersMerger(const edm::ParameterSet&);
       ~CaloTowersMerger();
 
-  CaloTower mergedTower(CaloTower t1, CaloTower t2);
+  CaloTower mergedTower(const CaloTower& t1, const CaloTower& t2);
 
    private:
-      virtual void beginJob() ;
-      virtual void produce(edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
+      virtual void beginJob() override ;
+      virtual void produce(edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
       
       // ----------member data ---------------------------
 
   edm::InputTag regularTowerTag,extraTowerTag;
+  edm::EDGetTokenT<CaloTowerCollection> tok_reg_;
+  edm::EDGetTokenT<CaloTowerCollection> tok_ext_;
 };
 
 //
@@ -77,6 +78,10 @@ CaloTowersMerger::CaloTowersMerger(const edm::ParameterSet& iConfig)
 {
   regularTowerTag=iConfig.getParameter<edm::InputTag>("regularTowerTag");
   extraTowerTag=iConfig.getParameter<edm::InputTag>("extraTowerTag");
+
+  // register for data access
+  tok_reg_ = consumes<CaloTowerCollection>(regularTowerTag);
+  tok_ext_ = consumes<CaloTowerCollection>(extraTowerTag);
 
    //register your products
    produces<CaloTowerCollection>();
@@ -102,8 +107,8 @@ CaloTowersMerger::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   edm::Handle<CaloTowerCollection> regTower,extraTower;
 
-  iEvent.getByLabel(regularTowerTag,regTower);
-  iEvent.getByLabel(extraTowerTag,extraTower);
+  iEvent.getByToken(tok_reg_,regTower);
+  iEvent.getByToken(tok_ext_,extraTower);
 
   std::auto_ptr<CaloTowerCollection> output;
 
@@ -186,7 +191,7 @@ CaloTowersMerger::endJob() {
 // This functionlaity it to be used only for testing the effects 
 // of rejected bad hits.
 
-CaloTower CaloTowersMerger::mergedTower(const CaloTower rt, const CaloTower et) {
+CaloTower CaloTowersMerger::mergedTower(const CaloTower& rt, const CaloTower& et) {
 
   double newOuterE = 0;
 

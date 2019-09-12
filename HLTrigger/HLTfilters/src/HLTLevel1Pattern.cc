@@ -5,8 +5,6 @@
  *  that checks for a specific pattern of L1 accept/reject in 5 BX's for a given L1 bit
  *  It can be configured to use or ignore the L1 trigger mask
  *
- *  $Date: 2012/01/23 00:18:04 $
- *  $Revision: 1.9 $
  *
  *  \author Andrea Bocci
  *
@@ -26,6 +24,7 @@
 #include "CondFormats/DataRecord/interface/L1GtTriggerMenuRcd.h"
 #include "CondFormats/DataRecord/interface/L1GtTriggerMaskTechTrigRcd.h"
 #include "CondFormats/DataRecord/interface/L1GtTriggerMaskAlgoTrigRcd.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
 
 //
 // class declaration
@@ -36,10 +35,11 @@ public:
   explicit HLTLevel1Pattern(const edm::ParameterSet&);
   ~HLTLevel1Pattern();
   static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
-  virtual bool filter(edm::Event&, const edm::EventSetup&);
+  virtual bool filter(edm::Event&, const edm::EventSetup&) override;
 
 private:
   edm::InputTag     m_gtReadoutRecord;
+  edm::EDGetTokenT<L1GlobalTriggerReadoutRecord> m_gtReadoutRecordToken;
   std::string       m_triggerBit;
   std::vector<int>  m_bunchCrossings;
   std::vector<int>  m_triggerPattern;
@@ -63,7 +63,6 @@ private:
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "CondFormats/L1TObjects/interface/L1GtTriggerMenu.h"
 #include "CondFormats/L1TObjects/interface/L1GtTriggerMask.h"
-#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
 
 //
 // constructors and destructor
@@ -81,6 +80,7 @@ HLTLevel1Pattern::HLTLevel1Pattern(const edm::ParameterSet & config) :
   m_invert(          config.getParameter<bool>              ("invert") ),
   m_throw (          config.getParameter<bool>              ("throw" ) )
 {
+  m_gtReadoutRecordToken = consumes<L1GlobalTriggerReadoutRecord>(m_gtReadoutRecord);
   std::vector<int> pattern( config.getParameter<std::vector<int> > ("triggerPattern") );
   if (pattern.size() != m_bunchCrossings.size())
     throw cms::Exception("Configuration") << "\"bunchCrossings\" and \"triggerPattern\" parameters do not match";
@@ -186,7 +186,7 @@ HLTLevel1Pattern::filter(edm::Event& event, const edm::EventSetup& setup)
 
   // access the L1 decisions
   edm::Handle<L1GlobalTriggerReadoutRecord> h_gtReadoutRecord;
-  event.getByLabel(m_gtReadoutRecord, h_gtReadoutRecord);
+  event.getByToken(m_gtReadoutRecordToken, h_gtReadoutRecord);
 
   // check the L1 algorithms results
   for (unsigned int i = 0; i < m_bunchCrossings.size(); ++i) {

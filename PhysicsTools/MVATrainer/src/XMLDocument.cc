@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <ext/stdio_filebuf.h>
 
-#include <xercesc/util/PlatformUtils.hpp>
+#include "FWCore/Concurrency/interface/Xerces.h"
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/XMLUni.hpp>
 #include <xercesc/util/BinInputStream.hpp>
@@ -49,7 +49,7 @@ namespace { // anonymous
 		virtual ~XMLInputSourceWrapper() {}
 
 		virtual XERCES_CPP_NAMESPACE_QUALIFIER BinInputStream*
-							makeStream() const
+							makeStream() const override
 		{ return new T(*obj); }
 
 	    private:
@@ -64,10 +64,10 @@ namespace { // anonymous
 	        STLInputStream(std::istream &in) : in(in) {}
 	        virtual ~STLInputStream() {}
 
-	        virtual unsigned int curPos() const { return pos; }
+	        virtual unsigned int curPos() const override { return pos; }
 
 	        virtual unsigned int readBytes(XMLByte *const buf,
-	                                       const unsigned int size);
+	                                       const unsigned int size) override;
 
 	    private:
 	        std::istream    &in;
@@ -124,10 +124,10 @@ XMLDocument::XercesPlatform::XercesPlatform()
 {
 	if (!instances++) {
 		try {
-			XMLPlatformUtils::Initialize();
+			cms::concurrency::xercesInitialize();
 		} catch(const XMLException &e) {
 			throw cms::Exception("XMLDocument")
-				<< "XMLPlatformUtils::Initialize failed "
+				<< "cms::concurrency::xercesInitialize failed "
 				   "because of: "
 				<< XMLSimpleStr(e.getMessage()) << std::endl;
 		}
@@ -137,7 +137,7 @@ XMLDocument::XercesPlatform::XercesPlatform()
 XMLDocument::XercesPlatform::~XercesPlatform()
 {
 	if (!--instances)
-		XMLPlatformUtils::Terminate();
+		cms::concurrency::xercesTerminate();
 }
 
 XMLDocument::XMLDocument(const std::string &fileName, bool write) :

@@ -2,8 +2,6 @@
  *  
  *  Class to fill dqm monitor elements from existing EDM file
  *
- *  $Date: 2012/08/12 16:13:29 $
- *  $Revision: 1.1 $
  */
  
 #include "Validation/EventGenerator/interface/HiggsValidation.h"
@@ -21,7 +19,7 @@
 using namespace edm;
 
 HiggsValidation::HiggsValidation(const edm::ParameterSet& iPSet): 
-  _wmanager(iPSet),
+  wmanager_(iPSet,consumesCollector()),
   hepmcCollection_(iPSet.getParameter<edm::InputTag>("hepmcCollection")),
   particle_id(iPSet.getParameter<int>("pdg_id")),
   particle_name(iPSet.getParameter<std::string>("particleName"))
@@ -31,6 +29,7 @@ HiggsValidation::HiggsValidation(const edm::ParameterSet& iPSet):
   
   monitoredDecays = new MonitoredDecays(iPSet);
 
+  hepmcCollectionToken_=consumes<HepMCProduct>(hepmcCollection_);
 }
 
 HiggsValidation::~HiggsValidation() {}
@@ -84,12 +83,12 @@ void HiggsValidation::beginRun(const edm::Run& iRun,const edm::EventSetup& iSetu
 void HiggsValidation::endRun(const edm::Run& iRun,const edm::EventSetup& iSetup){return;}
 void HiggsValidation::analyze(const edm::Event& iEvent,const edm::EventSetup& iSetup)
 { 
-  double weight = _wmanager.weight(iEvent);  
+  double weight =   wmanager_.weight(iEvent);  
   nEvt->Fill(0.5,weight);
   
   //Gathering the HepMCProduct information
   edm::Handle<HepMCProduct> evt;
-  iEvent.getByLabel(hepmcCollection_, evt);
+  iEvent.getByToken(hepmcCollectionToken_, evt);
   
   //Get EVENT
   HepMC::GenEvent *myGenEvent = new HepMC::GenEvent(*(evt->GetEvent()));
@@ -121,9 +120,7 @@ void HiggsValidation::analyze(const edm::Event& iEvent,const edm::EventSetup& iS
 }//analyze
 
 int HiggsValidation::findHiggsDecayChannel(const HepMC::GenParticle* genParticle,std::vector<HepMC::GenParticle*> &decayprod){
-  
   if(genParticle->status() == 1) return monitoredDecays->stable();
-  
   std::vector<int> children;
   if ( genParticle->end_vertex() ) {
     HepMC::GenVertex::particle_iterator des;
@@ -140,7 +137,9 @@ int HiggsValidation::findHiggsDecayChannel(const HepMC::GenParticle* genParticle
     }
   }
   
-  if(children.size() == 2 && children.at(0) != 0 && children.at(1) != 0) return monitoredDecays->position(children.at(0),children.at(1));
+  if(children.size() == 2 && children.at(0) != 0 && children.at(1) != 0){
+    return monitoredDecays->position(children.at(0),children.at(1));
+  }
   return monitoredDecays->undetermined();
 }
 

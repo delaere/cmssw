@@ -7,7 +7,6 @@
  *
  *         Author:  Evan K. Friis, UC Davis
  *
- *         $Id $
  *
  * =====================================================================================
  */
@@ -71,7 +70,7 @@ class CollectionDumper : public edm::EDAnalyzer {
       src_(pset.getParameter<edm::InputTag>("src")),
       moduleName_(pset.getParameter<std::string>("@module_label")){}
     virtual ~CollectionDumper() {}
-    virtual void analyze(const edm::Event& evt, const edm::EventSetup& es);
+    virtual void analyze(const edm::Event& evt, const edm::EventSetup& es) override;
   private:
     edm::InputTag src_;
     std::string moduleName_;

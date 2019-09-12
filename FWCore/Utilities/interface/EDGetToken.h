@@ -20,7 +20,6 @@ The templated form, EDGetTokenT<T>, is the same as EDGetToken except when used t
 //
 // Original Author:  Chris Jones
 //         Created:  Wed, 03 Apr 2013 17:54:11 GMT
-// $Id: EDGetToken.h,v 1.3 2013/06/04 15:07:14 wdd Exp $
 //
 
 // system include files
@@ -44,17 +43,14 @@ namespace edm {
     EDGetToken(EDGetTokenT<T> iOther): m_value{iOther.m_value} {}
 
     // ---------- const member functions ---------------------
-    unsigned int index() const {return m_value & s_indexMask;}
-    bool willSkipCurrentProcess() const { return 0 != (m_value & s_skipMask); }
-    bool isUnitialized() const { return m_value == s_uninitializedValue; }
+    unsigned int index() const { return m_value; }
+    bool isUninitialized() const { return m_value == s_uninitializedValue; }
 
   private:
 
     static const unsigned int s_uninitializedValue = 0xFFFFFFFF;
-    static const unsigned int s_indexMask = 0x7FFFFFFF;
-    static const unsigned int s_skipMask = 1U << 31;
 
-    explicit EDGetToken(unsigned int iValue, bool skipCurrentProcess) : m_value{(iValue & s_indexMask) | (skipCurrentProcess ? s_skipMask : 0)} { }
+    explicit EDGetToken(unsigned int iValue) : m_value(iValue) { }
 
     // ---------- member data --------------------------------
     unsigned int m_value;
@@ -71,17 +67,14 @@ namespace edm {
     EDGetTokenT() : m_value{s_uninitializedValue} {}
   
     // ---------- const member functions ---------------------
-    unsigned int index() const {return m_value & s_indexMask;}
-    bool willSkipCurrentProcess() const { return 0 != (m_value & s_skipMask); }
-    bool isUnitialized() const { return m_value == s_uninitializedValue; }
+    unsigned int index() const { return m_value; }
+    bool isUninitialized() const { return m_value == s_uninitializedValue; }
 
   private:
 
     static const unsigned int s_uninitializedValue = 0xFFFFFFFF;
-    static const unsigned int s_indexMask = 0x7FFFFFFF;
-    static const unsigned int s_skipMask = 1U << 31;
 
-    explicit EDGetTokenT(unsigned int iValue, bool skipCurrentProcess) : m_value{(iValue & s_indexMask) | (skipCurrentProcess ? s_skipMask : 0)} { }
+    explicit EDGetTokenT(unsigned int iValue) : m_value(iValue) { }
 
     // ---------- member data --------------------------------
     unsigned int m_value;

@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Sat Oct 18 11:36:41 EDT 2008
-// $Id: FWItemSingleAccessor.h,v 1.6 2012/08/03 18:20:28 wmtan Exp $
 //
 
 // system include files

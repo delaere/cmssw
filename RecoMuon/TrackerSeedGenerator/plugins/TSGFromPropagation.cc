@@ -2,8 +2,6 @@
 
 /** \class TSGFromPropagation
  *
- *  $Date: 2013/01/08 17:08:25 $
- *  $Revision: 1.40 $
  *  \author Chang Liu - Purdue University 
  */
 
@@ -28,17 +26,13 @@
  
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 
-TSGFromPropagation::TSGFromPropagation(const edm::ParameterSet & iConfig) :theTkLayerMeasurements (0), theTracker(0), theMeasTracker(0), theNavigation(0), theService(0), theEstimator(0), theTSTransformer(0), theSigmaZ(0), theConfig (iConfig)
+TSGFromPropagation::TSGFromPropagation(const edm::ParameterSet & iConfig, edm::ConsumesCollector& iC): TSGFromPropagation(iConfig, iC, nullptr) {}
+
+TSGFromPropagation::TSGFromPropagation(const edm::ParameterSet & iConfig, edm::ConsumesCollector& iC, const MuonServiceProxy* service) : theTkLayerMeasurements (), theTracker(0), theMeasTracker(0), theNavigation(0), theService(service),theUpdator(0), theEstimator(0), theTSTransformer(0), theSigmaZ(0), theConfig (iConfig)
 {
   theCategory = "Muon|RecoMuon|TSGFromPropagation";
   theMeasTrackerName = iConfig.getParameter<std::string>("MeasurementTrackerName");
-
-}
-
-TSGFromPropagation::TSGFromPropagation(const edm::ParameterSet & iConfig, const MuonServiceProxy* service) : theTkLayerMeasurements (0), theTracker(0), theMeasTracker(0), theNavigation(0), theService(service),theUpdator(0), theEstimator(0), theTSTransformer(0), theSigmaZ(0), theConfig (iConfig)
-{
-  theCategory = "Muon|RecoMuon|TSGFromPropagation";
-  theMeasTrackerName = iConfig.getParameter<std::string>("MeasurementTrackerName");
+  theMeasurementTrackerEventTag = iConfig.getParameter<edm::InputTag>("MeasurementTrackerEvent");
 }
 
 TSGFromPropagation::~TSGFromPropagation()
@@ -48,9 +42,7 @@ TSGFromPropagation::~TSGFromPropagation()
   if ( theNavigation ) delete theNavigation;
   if ( theUpdator ) delete theUpdator;
   if ( theEstimator ) delete theEstimator;
-  if ( theTkLayerMeasurements ) delete theTkLayerMeasurements;
   if ( theErrorMatrixAdjuster ) delete theErrorMatrixAdjuster;
-
 }
 
 void TSGFromPropagation::trackerSeeds(const TrackCand& staMuon, const TrackingRegion& region, const TrackerTopology *tTopo, std::vector<TrajectorySeed> & result) {
@@ -193,9 +185,6 @@ void TSGFromPropagation::init(const MuonServiceProxy* service) {
 }
 
 void TSGFromPropagation::setEvent(const edm::Event& iEvent) {
-
-  bool measTrackerChanged = false;
-
   //edm::Handle<reco::BeamSpot> beamSpot;
   iEvent.getByLabel(theBeamSpotInputTag, beamSpot);
 
@@ -205,14 +194,11 @@ void TSGFromPropagation::setEvent(const edm::Event& iEvent) {
     LogTrace(theCategory) << "Measurment Tracker Geometry changed!";
     theCacheId_MT = newCacheId_MT;
     theService->eventSetup().get<CkfComponentsRecord>().get(theMeasTrackerName,theMeasTracker);
-    measTrackerChanged = true;
   }
 
-  if ( theUpdateStateFlag ) theMeasTracker->update(iEvent);
-
-  if ( measTrackerChanged && (&*theMeasTracker) ) {
-     if ( theTkLayerMeasurements ) delete theTkLayerMeasurements;
-     theTkLayerMeasurements = new LayerMeasurements(&*theMeasTracker);
+  if ( theUpdateStateFlag ) {
+     iEvent.getByLabel(theMeasurementTrackerEventTag, theMeasTrackerEvent);
+     theTkLayerMeasurements = LayerMeasurements(*theMeasTracker,*theMeasTrackerEvent);
   }
 
   bool trackerGeomChanged = false;
@@ -305,7 +291,7 @@ std::vector<TrajectoryMeasurement> TSGFromPropagation::findMeasurements_new(cons
   for (std::vector<DetLayer::DetWithState>::const_iterator idws = compatDets.begin(); idws != compatDets.end(); ++idws) {
      if ( idws->second.isValid() && (idws->first) )  {
          std::vector<TrajectoryMeasurement> tmptm = 
-           theMeasTracker->idToDet(idws->first->geographicalId())->fastMeasurements(idws->second, idws->second, *propagator(), *estimator());
+           theMeasTrackerEvent->idToDet(idws->first->geographicalId()).fastMeasurements(idws->second, idws->second, *propagator(), *estimator());
          validMeasurements(tmptm);
 //         if ( tmptm.size() > 2 ) {
 //            std::stable_sort(tmptm.begin(),tmptm.end(),increasingEstimate());

@@ -1,4 +1,3 @@
-// $Id: NamedCompositeCandidate.cc,v 1.4 2008/07/22 06:07:44 llista Exp $
 #include "DataFormats/Candidate/interface/NamedCompositeCandidate.h"
 #include "FWCore/Utilities/interface/Exception.h"
 

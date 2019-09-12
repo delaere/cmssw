@@ -5,8 +5,6 @@
     
     Container for ADC<->fQ conversion constants for HCAL QIE
    $Author: ratnikov
-   $Date: 2006/04/13 22:40:40 $
-   $Revision: 1.3 $
 */
 
 class QieShape;

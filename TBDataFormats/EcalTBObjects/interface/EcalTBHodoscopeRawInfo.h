@@ -9,7 +9,6 @@
  *  Simple container for plane RawHits 
  *
  *
- *  $Id: EcalTBHodoscopeRawInfo.h,v 1.2 2006/06/06 15:37:00 meridian Exp $
  */
 #include "TBDataFormats/EcalTBObjects/interface/EcalTBHodoscopePlaneRawHits.h"
 

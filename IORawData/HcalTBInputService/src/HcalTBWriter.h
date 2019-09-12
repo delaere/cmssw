@@ -20,8 +20,6 @@ class CDFEventInfo;
   *  
   * Writes HCAL-style ROOT files from the RawData block
   *
-  * $Date: 2012/09/27 15:40:32 $
-  * $Revision: 1.3 $
   * \author J. Mans - Minnesota
   */
 class HcalTBWriter : public edm::EDAnalyzer {
@@ -42,6 +40,6 @@ private:
   std::map<int,int> chunkMap_;
   CDFChunk* chunkList_[1024];
   int trigChunk_;
-  edm::InputTag fedRawDataCollectionTag_;
+  edm::EDGetTokenT<FEDRawDataCollection> tok_raw_;
 };
 #endif

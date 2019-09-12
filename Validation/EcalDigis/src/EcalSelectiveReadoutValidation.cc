@@ -1,8 +1,6 @@
 /*
  * \file EcalSelectiveReadoutValidation.cc
  *
- * $Date: 2011/05/23 13:46:48 $
- * $Revision: 1.32 $
  *
  */
 
@@ -2130,7 +2128,7 @@ EcalSelectiveReadoutValidation::getFIRWeights(const std::vector<double>&
 }
 
 void
-EcalSelectiveReadoutValidation::configFirWeights(vector<double> weightsForZsFIR){
+EcalSelectiveReadoutValidation::configFirWeights(const vector<double>& weightsForZsFIR){
   bool notNormalized  = false;
   bool notInt = false;
   for(unsigned i=0; i < weightsForZsFIR.size(); ++i){

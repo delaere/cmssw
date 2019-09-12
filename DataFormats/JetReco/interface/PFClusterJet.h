@@ -13,7 +13,6 @@
  *
  * \author Salvatore Rappoccio
  *
- * $Id: PFClusterJet.h,v 1.2 2012/03/21 22:09:44 slava77 Exp $
  *
  ************************************************************/
 

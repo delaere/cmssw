@@ -11,7 +11,6 @@
 //
 // Original Author:  Traczyk Piotr
 //         Created:  Thu Oct 11 15:01:28 CEST 2007
-// $Id: DTTimingExtractor.cc,v 1.16 2013/05/28 16:31:01 gartung Exp $
 //
 //
 
@@ -73,7 +72,7 @@ class MuonServiceProxy;
 //
 // constructors and destructor
 //
-DTTimingExtractor::DTTimingExtractor(const edm::ParameterSet& iConfig)
+DTTimingExtractor::DTTimingExtractor(const edm::ParameterSet& iConfig,edm::ConsumesCollector& iC)
   :
   DTSegmentTags_(iConfig.getParameter<edm::InputTag>("DTsegments")),
   theHitsMin_(iConfig.getParameter<int>("HitsMin")),
@@ -91,7 +90,7 @@ DTTimingExtractor::DTTimingExtractor(const edm::ParameterSet& iConfig)
   
   edm::ParameterSet matchParameters = iConfig.getParameter<edm::ParameterSet>("MatchParameters");
 
-  theMatcher = new MuonSegmentMatcher(matchParameters, theService);
+  theMatcher = new MuonSegmentMatcher(matchParameters, theService,iC);
 }
 
 

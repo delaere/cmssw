@@ -24,8 +24,8 @@ class PFRecoTauDiscriminationByDeltaE : public PFTauDiscriminationProducerBase  
 
       	~PFRecoTauDiscriminationByDeltaE(){}
 
-	void beginEvent(const edm::Event&, const edm::EventSetup&);
-	double discriminate(const reco::PFTauRef&);
+	void beginEvent(const edm::Event&, const edm::EventSetup&) override;
+	double discriminate(const reco::PFTauRef&) override;
 
     private:
 	double DeltaE(const PFTauRef&);
@@ -48,7 +48,7 @@ double PFRecoTauDiscriminationByDeltaE::discriminate(const PFTauRef& tau){
 
 double PFRecoTauDiscriminationByDeltaE::DeltaE(const PFTauRef& tau){
 	double tracksE = 0;
-	PFCandidateRefVector signalTracks = tau->signalPFChargedHadrCands();
+	const std::vector<PFCandidatePtr>& signalTracks = tau->signalPFChargedHadrCands();
 	for(size_t i = 0; i < signalTracks.size(); ++i){
 		TLorentzVector p4;
 		p4.SetXYZM(signalTracks[i]->px(),

@@ -8,9 +8,9 @@
 //
 // Original Author:  Gena Kukartsev
 //         Created:  Sun Aug 16 20:44:05 CEST 2009
-// $Id: HcalO2OManager.cc,v 1.43 2012/02/15 15:26:07 andreasp Exp $
 //
 
+#include <iostream>
 
 #include "CaloOnlineTools/HcalOnlineDb/interface/HcalO2OManager.h"
 
@@ -29,10 +29,13 @@
 
 #include "CaloOnlineTools/HcalOnlineDb/interface/ConnectionManager.h"
 #include "CaloOnlineTools/HcalOnlineDb/interface/ConfigurationDatabaseException.hh"
-#include "xgi/Utils.h"
-#include "toolbox/string.h"
 #include "OnlineDB/Oracle/interface/Oracle.h"
 
+#ifdef HAVE_XDAQ
+#include <toolbox/string.h>
+#else
+#include "CaloOnlineTools/HcalOnlineDb/interface/xdaq_compat.h"  // Replaces toolbox::toString
+#endif
 
 using namespace oracle::occi;
 

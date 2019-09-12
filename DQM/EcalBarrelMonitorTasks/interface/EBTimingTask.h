@@ -4,8 +4,6 @@
 /*
  * \file EBTimingTask.h
  *
- * $Date: 2012/04/27 13:46:01 $
- * $Revision: 1.24 $
  * \author G. Della Ricca
  *
 */
@@ -13,6 +11,10 @@
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
+#include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerEvmReadoutRecord.h"
 
 class MonitorElement;
 class DQMStore;
@@ -69,9 +71,9 @@ bool mergeRuns_;
 
 float energyThreshold_;
 
-edm::InputTag EcalRawDataCollection_;
-edm::InputTag EcalRecHitCollection_;
-edm::InputTag L1GtEvmReadoutRecord_;
+edm::EDGetTokenT<EcalRawDataCollection> EcalRawDataCollection_;
+edm::EDGetTokenT<EcalRecHitCollection> EcalRecHitCollection_;
+edm::EDGetTokenT<L1GlobalTriggerEvmReadoutRecord> L1GtEvmReadoutRecord_;
 
 MonitorElement* meTime_[36];
 MonitorElement* meTimeMap_[36];

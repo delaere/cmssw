@@ -6,9 +6,7 @@
  *
  * \author: Luca Lista, INFN
  *
- * \version $Revision: 1.2 $
  *
- * $Id: PDTRecord.h,v 1.2 2006/03/30 12:21:24 llista Exp $
  */
 
 #include "FWCore/Framework/interface/EventSetupRecordImplementation.h"

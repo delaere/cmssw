@@ -12,9 +12,6 @@
 // Original Author: Oliver Gutsche, gutsche@fnal.gov
 // Created:         Sat Jan 14 22:00:00 UTC 2006
 //
-// $Author: wmtan $
-// $Date: 2006/12/26 20:41:24 $
-// $Revision: 1.5 $
 //
 
 #include <vector>

@@ -16,7 +16,6 @@
 //
 // Original Author:  
 //         Created:  Wed Jan  4 00:06:31 CET 2012
-// $Id: FWOverlapTableView.h,v 1.6 2013/04/14 20:41:07 amraktad Exp $
 //
 
 #include "Fireworks/Core/interface/FWGeometryTableViewBase.h"

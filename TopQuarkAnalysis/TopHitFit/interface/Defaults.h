@@ -1,5 +1,4 @@
 //
-// $Id: Defaults.h,v 1.1 2011/05/26 09:46:53 mseidel Exp $
 //
 // File: hitfit/Defaults.h
 // Purpose: Define an interface for getting parameter settings.

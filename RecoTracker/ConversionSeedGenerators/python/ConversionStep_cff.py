@@ -14,8 +14,7 @@ convClusters = cms.EDProducer("TrackClusterRemover",
                               Common = cms.PSet(maxChi2 = cms.double(30.0))
                               )
 
-convLayerPairs = cms.ESProducer("SeedingLayersESProducer",
-                                ComponentName = cms.string('convLayerPairs'),
+convLayerPairs = cms.EDProducer("SeedingLayersEDProducer",
                                 layerList = cms.vstring('BPix1+BPix2', 
 
                                                         'BPix2+BPix3', 
@@ -102,19 +101,13 @@ convLayerPairs = cms.ESProducer("SeedingLayersESProducer",
                                                         ),
 
                                 BPix = cms.PSet(
-                                    hitErrorRZ = cms.double(0.006),
-                                    hitErrorRPhi = cms.double(0.0027),
                                     TTRHBuilder = cms.string('TTRHBuilderWithoutAngle4PixelPairs'),
                                     HitProducer = cms.string('siPixelRecHits'),
-                                    useErrorsFromParam = cms.bool(True),
                                     skipClusters = cms.InputTag('convClusters'),
                                     ),
                                 FPix = cms.PSet(
-                                    hitErrorRZ = cms.double(0.0036),
-                                    hitErrorRPhi = cms.double(0.0051),
                                     TTRHBuilder = cms.string('TTRHBuilderWithoutAngle4PixelPairs'),
                                     HitProducer = cms.string('siPixelRecHits'),
-                                    useErrorsFromParam = cms.bool(True),
                                     skipClusters = cms.InputTag('convClusters'),
                                     ),
                                 TIB1 = cms.PSet(
@@ -233,7 +226,6 @@ convCkfTrajectoryBuilder = RecoTracker.CkfPattern.GroupedCkfTrajectoryBuilderESP
     ComponentName = 'convCkfTrajectoryBuilder',
     trajectoryFilterName = 'convCkfTrajectoryFilter',
     minNrOfHitsForRebuild = 3,
-    clustersToSkip = cms.InputTag('convClusters'),
     maxCand = 2
     )
 
@@ -241,6 +233,7 @@ convCkfTrajectoryBuilder = RecoTracker.CkfPattern.GroupedCkfTrajectoryBuilderESP
 import RecoTracker.CkfPattern.CkfTrackCandidates_cfi
 convTrackCandidates = RecoTracker.CkfPattern.CkfTrackCandidates_cfi.ckfTrackCandidates.clone(
     src = cms.InputTag('photonConvTrajSeedFromSingleLeg:convSeedCandidates'),
+    clustersToSkip = cms.InputTag('convClusters'),
     TrajectoryBuilder = 'convCkfTrajectoryBuilder'
 )
 
@@ -313,6 +306,7 @@ convStepSelector = RecoTracker.FinalTrackSelectors.multiTrackSelector_cfi.multiT
     ) #end of clone
 
 ConvStep = cms.Sequence( convClusters 
+                         + convLayerPairs
                          + photonConvTrajSeedFromSingleLeg 
                          + convTrackCandidates
                          + convStepTracks

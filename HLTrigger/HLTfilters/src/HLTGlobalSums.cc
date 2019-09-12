@@ -2,8 +2,6 @@
  *
  * See header file for documentation
  *
- *  $Date: 2012/02/24 13:13:47 $
- *  $Revision: 1.15 $
  *
  *  \author Martin Grunewald
  *
@@ -27,6 +25,7 @@
 template<typename T>
 HLTGlobalSums<T>::HLTGlobalSums(const edm::ParameterSet& iConfig) : HLTFilter(iConfig),
   inputTag_   (iConfig.template getParameter<edm::InputTag>("inputTag")),
+  inputToken_ (consumes<std::vector<T> >(inputTag_)),
   triggerType_(iConfig.template getParameter<int>("triggerType")),
   observable_ (iConfig.template getParameter<std::string>("observable")),
   min_        (iConfig.template getParameter<double>("Min")),
@@ -34,7 +33,7 @@ HLTGlobalSums<T>::HLTGlobalSums(const edm::ParameterSet& iConfig) : HLTFilter(iC
   min_N_      (iConfig.template getParameter<int>("MinN")),
   tid_(triggerType_)
 {
-   LogDebug("") << "InputTags and cuts : " 
+   LogDebug("") << "InputTags and cuts : "
 		<< inputTag_.encode() << " "
 		<< triggerType_ << " "
 		<< observable_
@@ -88,9 +87,9 @@ HLTGlobalSums<T>::fillDescriptions(edm::ConfigurationDescriptions& descriptions)
 //
 
 // ------------ method called to produce the data  ------------
-template<typename T> 
+template<typename T>
 bool
-HLTGlobalSums<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct)
+HLTGlobalSums<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) const
 {
    using namespace std;
    using namespace edm;
@@ -112,7 +111,7 @@ HLTGlobalSums<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, t
 
    // get hold of MET product from Event
    Handle<TCollection>   objects;
-   iEvent.getByLabel(inputTag_,objects);
+   iEvent.getByToken(inputToken_,objects);
    if (!objects.isValid()) {
      LogDebug("") << inputTag_ << " collection not found!";
      return false;

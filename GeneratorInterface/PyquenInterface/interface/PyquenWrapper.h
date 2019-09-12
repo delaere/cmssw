@@ -4,7 +4,6 @@
 /*
  *
  * Wrapper for FORTRAN version of PYQUEN
- * $Id: PyquenWrapper.h,v 1.7 2008/12/19 17:51:49 yilmaz Exp $
  *
  * Camelia Mironov
  *

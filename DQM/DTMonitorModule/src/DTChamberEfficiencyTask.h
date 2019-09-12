@@ -4,14 +4,12 @@
 
 /** \class DTChamberEfficiencyTask
  *  DQM Analysis of 4D DT segments, it produces plots about: <br>
- *      - single chamber efficiency 
+ *      - single chamber efficiency
  *  All histos are produced per Chamber
  *
  *  Class based on the code written by S. Lacaprara :
  *  RecoLocalMuon / DTSegment / test / DTEffAnalyzer.h
  *
- *  $Date: 2010/01/05 10:14:40 $
- *  $Revision: 1.7 $
  *  \author G. Mila - INFN Torino
  */
 
@@ -71,11 +69,11 @@ private:
   LocalPoint interpolate(const DTRecSegment4D& seg1,
 			 const DTRecSegment4D& seg3,
 			 const DTChamberId& MB2) const;
-  void bookHistos(DTChamberId chId); 
+  void bookHistos(DTChamberId chId);
 
 
   DQMStore* theDbe;
-  
+
   // Switch for verbosity
   bool debug;
   // The running mode
@@ -84,7 +82,7 @@ private:
   bool detailedAnalysis;
 
   // Lable of 4D segments in the event
-  std::string theRecHits4DLabel;
+  edm::EDGetTokenT<DTRecSegment4DCollection> recHits4DToken_;
 
   edm::ParameterSet parameters;
 
@@ -99,3 +97,8 @@ private:
 
 };
 #endif
+
+/* Local Variables: */
+/* show-trailing-whitespace: t */
+/* truncate-lines: t */
+/* End: */

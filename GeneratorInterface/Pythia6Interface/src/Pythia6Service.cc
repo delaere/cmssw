@@ -11,7 +11,7 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 
-#include <CLHEP/Random/RandomEngine.h>
+#include "CLHEP/Random/RandomEngine.h"
 
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 
@@ -78,7 +78,7 @@ using namespace edm;
 Pythia6Service* Pythia6Service::fPythia6Owner = 0;
 
 Pythia6Service::Pythia6Service()
-  : fRandomEngine(&getEngineReference()), fUnitSLHA(24), fUnitPYUPDA(25)
+  : fRandomEngine(nullptr), fUnitSLHA(24), fUnitPYUPDA(25)
 {
 }
 

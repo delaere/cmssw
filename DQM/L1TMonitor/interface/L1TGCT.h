@@ -5,16 +5,7 @@
 /*
  * \file L1TGCT.h
  *
- * $Date: 2012/04/04 09:56:36 $
- * $Revision: 1.25 $
  * \author J. Berryhill
- * $Id: L1TGCT.h,v 1.25 2012/04/04 09:56:36 ghete Exp $
- * $Log: L1TGCT.h,v $
- * Revision 1.25  2012/04/04 09:56:36  ghete
- * Clean up L1TDEMON, add TriggerType hist to RCT, GCT, enable correlation condition tests in GT, clean up HCAL files.
- *
- * Revision 1.24  2012/03/29 21:16:48  rovere
- * Removed all instances of hltTriggerTypeFilter from L1T DQM Code.
  *
  * Revision 1.23  2010/05/30 10:01:58  tapper
  * Added one histogram, correlation of sum ET and HT and changed a few labels for the better.
@@ -121,7 +112,7 @@
 // DQM
 #include "DQMServices/Core/interface/DQMStore.h"
 #include "DQMServices/Core/interface/MonitorElement.h"
-
+#include "DataFormats/L1GlobalCaloTrigger/interface/L1GctCollections.h"
 
 
 
@@ -222,7 +213,7 @@ private:
   std::string outputFile_; //file name for ROOT ouput
   bool verbose_;
   bool monitorDaemon_;
-  ofstream logFile_;
+  std::ofstream logFile_;
 
   edm::InputTag gctCenJetsSource_;
   edm::InputTag gctForJetsSource_;
@@ -233,6 +224,20 @@ private:
 
   /// filter TriggerType
   int filterTriggerType_;
+
+  //define Token(-s)
+  edm::EDGetTokenT<L1GctEmCandCollection> gctIsoEmSourceToken_;
+  edm::EDGetTokenT<L1GctEmCandCollection> gctNonIsoEmSourceToken_;
+  edm::EDGetTokenT<L1GctJetCandCollection> gctCenJetsSourceToken_;
+  edm::EDGetTokenT<L1GctJetCandCollection> gctForJetsSourceToken_;
+  edm::EDGetTokenT<L1GctJetCandCollection> gctTauJetsSourceToken_;
+  edm::EDGetTokenT<L1GctHFRingEtSumsCollection> gctEnergySumsSourceToken_;
+  edm::EDGetTokenT<L1GctHFBitCountsCollection> l1HFCountsToken_;
+  edm::EDGetTokenT<L1GctEtMissCollection> l1EtMissToken_;
+  edm::EDGetTokenT<L1GctHtMissCollection> l1HtMissToken_;
+  edm::EDGetTokenT<L1GctEtHadCollection> l1EtHadToken_;
+  edm::EDGetTokenT<L1GctEtTotalCollection> l1EtTotalToken_;
+
 };
 
 #endif

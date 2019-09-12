@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripCcu.h,v 1.3 2007/03/28 09:11:51 bainbrid Exp $
 
 #ifndef CalibFormats_SiStripObjects_SiStripCcu_H
 #define CalibFormats_SiStripObjects_SiStripCcu_H

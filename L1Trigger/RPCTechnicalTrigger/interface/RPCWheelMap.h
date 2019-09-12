@@ -1,4 +1,3 @@
-// $Id: RPCWheelMap.h,v 1.3 2009/05/26 17:40:37 aosorio Exp $
 #ifndef RPCWHEELMAP_H 
 #define RPCWHEELMAP_H 1
 

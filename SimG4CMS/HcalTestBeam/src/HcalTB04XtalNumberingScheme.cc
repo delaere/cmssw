@@ -8,7 +8,6 @@
 //
 // Original Author:
 //         Created:  Tue 16 10:14:34 CEST 2006
-// $Id: HcalTB04XtalNumberingScheme.cc,v 1.3 2006/11/13 10:32:15 sunanda Exp $
 //
   
 // system include files

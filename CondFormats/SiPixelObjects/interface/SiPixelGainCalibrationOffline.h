@@ -16,7 +16,7 @@
 // Original Author:  Vincenzo Chiochia
 //         Modified: Evan Friis
 //         Created:  Tue 8 12:31:25 CEST 2007
-// $Id: SiPixelGainCalibrationOffline.h,v 1.6 2009/02/17 19:04:13 rougny Exp $
+// $Id: SiPixelGainCalibrationOffline.h,v 1.5 2009/02/10 17:26:50 rougny Exp $
 //
 //
 #include<vector>
@@ -52,7 +52,10 @@ class SiPixelGainCalibrationOffline {
   // Constructors
   SiPixelGainCalibrationOffline();
   SiPixelGainCalibrationOffline(float minPed, float maxPed, float minGain, float maxGain);
-  virtual ~SiPixelGainCalibrationOffline(){};
+  ~SiPixelGainCalibrationOffline(){}
+
+  void initialize() const{}
+
 
   bool  put(const uint32_t& detID,Range input, const int& nCols);
   const Range getRange(const uint32_t& detID) const;

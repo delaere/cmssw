@@ -5,8 +5,6 @@
  *
  * Interface to the Data Quality Monitoring Module.
  *  
- *  $Date: 2008/10/10 09:48:32 $
- *  $Revision: 1.5 $
  *
  * \author M. Zanetti - INFN Padova
  *

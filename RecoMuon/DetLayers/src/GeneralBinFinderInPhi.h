@@ -4,8 +4,6 @@
 /** \class GeneralBinFinderInPhi
  * A phi bin finder for a non-periodic group of detectors.
  *
- *  $Date: 2012/07/16 07:32:42 $
- *  $Revision: 1.6 $
  *  \author N. Amapane - INFN Torino
  */
 
@@ -51,7 +49,7 @@ public:
     
     const std::string metname = "Muon|RecoMuon|RecoMuonDetLayers|GeneralBinFinderInPhi";
 
-    static T epsilon = 10*std::numeric_limits<T>::epsilon();
+    static const T epsilon = 10*std::numeric_limits<T>::epsilon();
     // Assume -pi, pi range in pi (which is the case for Geom::Phi
 
     LogTrace(metname) << "GeneralBinFinderInPhi::binIndex,"

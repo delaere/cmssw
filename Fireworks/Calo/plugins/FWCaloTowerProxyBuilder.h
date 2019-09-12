@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Wed Dec  3 11:28:08 EST 2008
-// $Id: FWCaloTowerProxyBuilder.h,v 1.16 2010/12/16 11:39:38 amraktad Exp $
 //
 
 #include "Rtypes.h"

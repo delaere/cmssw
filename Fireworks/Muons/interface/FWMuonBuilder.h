@@ -5,7 +5,6 @@
 // Package:     Muons
 // Class  :     FWMuonBuilder
 //
-// $Id: FWMuonBuilder.h,v 1.8 2010/04/30 12:29:29 amraktad Exp $
 //
 #include "Fireworks/Core/interface/FWEvePtr.h"
 

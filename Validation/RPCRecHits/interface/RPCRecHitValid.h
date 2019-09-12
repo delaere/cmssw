@@ -13,6 +13,11 @@
 #include "DQMServices/Core/interface/DQMStore.h"
 #include "DQMServices/Core/interface/MonitorElement.h"
 
+#include "SimDataFormats/TrackingHit/interface/PSimHitContainer.h"
+#include "DataFormats/RPCRecHit/interface/RPCRecHitCollection.h"
+#include "DataFormats/TrackingRecHit/interface/TrackingRecHitFwd.h"
+#include "DataFormats/MuonReco/interface/MuonFwd.h"
+#include "SimGeneral/TrackingAnalysis/interface/SimHitTPAssociationProducer.h"
 #include "Validation/RPCRecHits/interface/RPCValidHistograms.h"
 
 #include <string>
@@ -30,10 +35,17 @@ public:
   void endJob();
 
 private:
+  typedef edm::PSimHitContainer SimHits;
+  typedef RPCRecHitCollection RecHits;
+  typedef TrackingParticleCollection SimParticles;
+  typedef SimHitTPAssociationProducer::SimHitTPAssociationList SimHitAssoc;
+
   std::string subDir_;
-  edm::InputTag simHitLabel_, recHitLabel_;
-  edm::InputTag simTrackLabel_;
-  edm::InputTag muonLabel_;
+  edm::EDGetTokenT<SimHits> simHitToken_;
+  edm::EDGetTokenT<RecHits> recHitToken_;
+  edm::EDGetTokenT<SimParticles> simParticleToken_;
+  edm::EDGetTokenT<SimHitAssoc>  simHitAssocToken_;
+  edm::EDGetTokenT<reco::MuonCollection> muonToken_;
 
   DQMStore* dbe_;
 
@@ -50,7 +62,7 @@ private:
   MEP h_recoMuonBarrel_pt, h_recoMuonOverlap_pt, h_recoMuonEndcap_pt, h_recoMuonNoRPC_pt;
   MEP h_recoMuonBarrel_eta, h_recoMuonOverlap_eta, h_recoMuonEndcap_eta, h_recoMuonNoRPC_eta;
   MEP h_recoMuonBarrel_phi, h_recoMuonOverlap_phi, h_recoMuonEndcap_phi, h_recoMuonNoRPC_phi;
-  MEP h_simTrackPType, h_simTrackPTypeBarrel, h_simTrackPTypeEndcap;
+  MEP h_simParticleType, h_simParticleTypeBarrel, h_simParticleTypeEndcap;
 
   MEP h_refPunchOccupancyBarrel_wheel, h_refPunchOccupancyEndcap_disk, h_refPunchOccupancyBarrel_station;
   MEP h_refPunchOccupancyBarrel_wheel_station, h_refPunchOccupancyEndcap_disk_ring;

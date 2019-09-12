@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <stdint.h>
+#include <vector>
 
 #include <HepMC/GenEvent.h>
 #include <HepMC/GenParticle.h>
@@ -24,6 +25,7 @@
 #include "GeneratorInterface/Pythia8Interface/plugins/EmissionVetoHook.h"
 #include "GeneratorInterface/Pythia8Interface/plugins/EmissionVetoHook1.h"
 
+#include "FWCore/Concurrency/interface/SharedResourceNames.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "FWCore/Utilities/interface/RandomNumberGenerator.h"
@@ -42,6 +44,10 @@
 
 #include "GeneratorInterface/ExternalDecays/interface/ExternalDecayDriver.h"
 
+namespace CLHEP {
+  class HepRandomEngine;
+}
+
 using namespace gen;
 using namespace Pythia8;
 
@@ -52,18 +58,24 @@ class Pythia8Hadronizer : public BaseHadronizer, public Py8InterfaceBase {
     Pythia8Hadronizer(const edm::ParameterSet &params);
    ~Pythia8Hadronizer();
  
-    bool initializeForInternalPartons();
+    bool initializeForInternalPartons() override;
     bool initializeForExternalPartons();
 	
-    bool generatePartonsAndHadronize();
+    bool generatePartonsAndHadronize() override;
     bool hadronize();
-    void finalizeEvent();
 
-    void statistics();
+    virtual bool residualDecay();
 
-    const char *classname() const { return "Pythia8Hadronizer"; }
+    void finalizeEvent() override;
+
+    void statistics() override;
+
+    const char *classname() const override { return "Pythia8Hadronizer"; }
 
   private:
+
+    virtual void doSetRandomEngine(CLHEP::HepRandomEngine* v) override { p8SetRandomEngine(v); }
+    virtual std::vector<std::string> const& doSharedResources() const override { return p8SharedResources; }
 
     /// Center-of-Mass energy
     double       comEnergy;
@@ -99,8 +111,10 @@ class Pythia8Hadronizer : public BaseHadronizer, public Py8InterfaceBase {
     int  EV1_pTdefMode;
     bool EV1_MPIvetoOn;
 
+    static const std::vector<std::string> p8SharedResources;
 };
 
+const std::vector<std::string> Pythia8Hadronizer::p8SharedResources = { edm::SharedResourceNames::kPythia8 };
 
 Pythia8Hadronizer::Pythia8Hadronizer(const edm::ParameterSet &params) :
   BaseHadronizer(params), Py8InterfaceBase(params),
@@ -172,6 +186,10 @@ Pythia8Hadronizer::Pythia8Hadronizer(const edm::ParameterSet &params) :
   //
   if( params.exists( "reweightGen" ) )
     fReweightUserHook = new PtHatReweightUserHook();
+
+  if( params.exists( "useUserHook" ) )
+    throw edm::Exception(edm::errors::Configuration,"Pythia8Interface")
+      <<" Obsolete parameter: useUserHook \n Please use the actual one instead \n";
 
   // PS matching prototype
   //
@@ -283,6 +301,20 @@ bool Pythia8Hadronizer::initializeForInternalPartons()
 
   fMasterGen->settings.listChanged();
 
+  if ( pythiaPylistVerbosity > 10 )
+  {
+    if ( pythiaPylistVerbosity == 11 || pythiaPylistVerbosity == 13 )
+           fMasterGen->settings.listAll();
+    if ( pythiaPylistVerbosity == 12 || pythiaPylistVerbosity == 13 )
+           fMasterGen->particleData.listAll();
+  }
+
+  // init decayer
+  fDecayer->readString("ProcessLevel:all = off"); // trick
+  fDecayer->readString("Standalone:allowResDec=on");
+  // pythia->readString("ProcessLevel::resonanceDecays=on");
+  fDecayer->init();
+
   return true;
 }
 
@@ -315,8 +347,21 @@ bool Pythia8Hadronizer::initializeForExternalPartons()
 
   }
   
-   return true;
+  if ( pythiaPylistVerbosity > 10 )
+  {
+    if ( pythiaPylistVerbosity == 11 || pythiaPylistVerbosity == 13 )
+           fMasterGen->settings.listAll();
+    if ( pythiaPylistVerbosity == 12 || pythiaPylistVerbosity == 13 )
+           fMasterGen->particleData.listAll();
+  }
 
+  // init decayer
+  fDecayer->readString("ProcessLevel:all = off"); // trick
+  fDecayer->readString("Standalone:allowResDec=on");
+  // pythia->readString("ProcessLevel::resonanceDecays=on");
+  fDecayer->init();
+
+  return true;
 }
 
 #if 0
@@ -384,6 +429,82 @@ bool Pythia8Hadronizer::hadronize()
 }
 
 
+bool Pythia8Hadronizer::residualDecay()
+{
+  
+  Event* pythiaEvent = &(fMasterGen->event);
+  
+  int NPartsBeforeDecays = pythiaEvent->size();
+  int NPartsAfterDecays = event().get()->particles_size();
+  int NewBarcode = NPartsAfterDecays;
+
+  for ( int ipart=NPartsAfterDecays; ipart>NPartsBeforeDecays; ipart-- )
+  {
+  
+    HepMC::GenParticle* part = event().get()->barcode_to_particle( ipart );
+ 
+    if ( part->status() == 1 )
+    {
+      fDecayer->event.reset();
+      Particle py8part(  part->pdg_id(), 93, 0, 0, 0, 0, 0, 0,
+                         part->momentum().x(),
+                         part->momentum().y(),
+                         part->momentum().z(),
+                         part->momentum().t(),
+                         part->generated_mass() );
+      HepMC::GenVertex* ProdVtx = part->production_vertex();
+      py8part.vProd( ProdVtx->position().x(), ProdVtx->position().y(),
+                     ProdVtx->position().z(), ProdVtx->position().t() );
+      py8part.tau( (fDecayer->particleData).tau0( part->pdg_id() ) );
+      fDecayer->event.append( py8part );
+      int nentries = fDecayer->event.size();
+      if ( !fDecayer->event[nentries-1].mayDecay() ) continue;
+      fDecayer->next();
+      int nentries1 = fDecayer->event.size(); 
+      // fDecayer->event.list(std::cout);
+      if ( nentries1 <= nentries ) continue; //same number of particles, no decays...
+                         
+      part->set_status(2);
+      
+      Particle& py8daughter = fDecayer->event[nentries]; // the 1st daughter
+      HepMC::GenVertex* DecVtx = new HepMC::GenVertex( HepMC::FourVector(py8daughter.xProd(),
+                                                       py8daughter.yProd(),
+                                                       py8daughter.zProd(),
+                                                       py8daughter.tProd()) );
+      
+      DecVtx->add_particle_in( part ); // this will cleanup end_vertex if exists, replace with the new one
+                                       // I presume (vtx) barcode will be given automatically
+
+      HepMC::FourVector pmom( py8daughter.px(), py8daughter.py(), py8daughter.pz(), py8daughter.e() );
+                        
+      HepMC::GenParticle* daughter =
+                        new HepMC::GenParticle( pmom, py8daughter.id(), 1 );
+        
+      NewBarcode++;
+      daughter->suggest_barcode( NewBarcode );
+      DecVtx->add_particle_out( daughter );
+
+      for ( int ipart1=nentries+1; ipart1<nentries1; ipart1++ )
+      {
+        py8daughter = fDecayer->event[ipart1];
+        HepMC::FourVector pmomN( py8daughter.px(), py8daughter.py(), py8daughter.pz(), py8daughter.e() );
+        HepMC::GenParticle* daughterN =
+                        new HepMC::GenParticle( pmomN, py8daughter.id(), 1 );
+        NewBarcode++;
+        daughterN->suggest_barcode( NewBarcode );
+        DecVtx->add_particle_out( daughterN );
+      }
+      
+      event().get()->add_vertex( DecVtx );
+      // fCurrentEventState->add_vertex( DecVtx );
+
+    }
+ }
+ return true;
+                        
+}
+
+
 void Pythia8Hadronizer::finalizeEvent()
 {
   bool lhe = lheEvent() != 0;
@@ -417,7 +538,6 @@ void Pythia8Hadronizer::finalizeEvent()
     }
   }
 }
-
 
 typedef edm::GeneratorFilter<Pythia8Hadronizer, ExternalDecayDriver> Pythia8GeneratorFilter;
 DEFINE_FWK_MODULE(Pythia8GeneratorFilter);

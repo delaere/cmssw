@@ -11,7 +11,6 @@
  *  Crystal/cell identifier class for the ECAL endcap
  *
  *
- *  $Id: EEDetId.h,v 1.28 2012/11/05 17:36:08 innocent Exp $
  */
 class EEDetId : public DetId {
 public:

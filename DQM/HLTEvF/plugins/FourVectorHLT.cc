@@ -1,4 +1,3 @@
-// $Id: FourVectorHLT.cc,v 1.13 2010/02/17 22:53:25 wdd Exp $
 // See header file for information. 
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "DataFormats/Common/interface/Handle.h"
@@ -64,6 +63,9 @@ FourVectorHLT::FourVectorHLT(const edm::ParameterSet& iConfig):
   }
   triggerSummaryLabel_ = 
     iConfig.getParameter<edm::InputTag>("triggerSummaryLabel");
+
+  //set Token(-s)
+  triggerSummaryToken_ = consumes<trigger::TriggerEvent>(iConfig.getParameter<edm::InputTag>("triggerSummaryLabel"));
 }
 
 
@@ -90,7 +92,7 @@ FourVectorHLT::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   LogDebug("Status")<< "analyze" ;
   
   edm::Handle<TriggerEvent> triggerObj;
-  iEvent.getByLabel(triggerSummaryLabel_,triggerObj); 
+  iEvent.getByToken(triggerSummaryToken_, triggerObj);
   if(!triggerObj.isValid()) { 
     edm::LogInfo("Status") << "Summary HLT object (TriggerEvent) not found, "
       "skipping event"; 

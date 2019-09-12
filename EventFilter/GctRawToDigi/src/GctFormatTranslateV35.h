@@ -8,8 +8,6 @@
 * \brief Unpacks/packs the V35 raw format
 *
 * \author Robert Frazier
-* $Revision: 1.2 $
-* $Date: 2009/04/21 15:33:17 $
 */ 
 
 // ************************************************************************

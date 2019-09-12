@@ -4,8 +4,6 @@
 /** KFSwitching1DUpdatorESProducer
  *  ESProducer for KFSwitching1DUpdator class.
  *
- *  $Date: 2009/09/09 15:40:39 $
- *  $Revision: 1.1 $
  *  \author cerati
  */
 

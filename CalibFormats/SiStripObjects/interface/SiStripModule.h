@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripModule.h,v 1.12 2008/02/06 16:40:42 bainbrid Exp $
 
 #ifndef CalibFormats_SiStripObjects_SiStripModule_H
 #define CalibFormats_SiStripObjects_SiStripModule_H

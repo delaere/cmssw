@@ -1,7 +1,5 @@
 /** \file
  * 
- *  $Date: 2013/01/18 04:21:50 $
- *  $Revision: 1.1 $
  *
  * \author Vadim Khotilovich
  */

@@ -2,13 +2,11 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2009/12/22 17:42:44 $
- *  $Revision: 1.11 $
  *  \author G. Mila - INFN Torino
  */
 
 
-#include <DQMOffline/Muon/src/MuonRecoTest.h>
+#include <DQMOffline/Muon/interface/MuonRecoTest.h>
 
 // Framework
 #include <FWCore/Framework/interface/Event.h>

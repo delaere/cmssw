@@ -9,6 +9,10 @@
 
 #include "HLTrigger/HLTcore/interface/HLTFilter.h"
 
+#include "DataFormats/HLTReco/interface/TriggerFilterObjectWithRefs.h"
+#include "DataFormats/JetReco/interface/CaloJetCollection.h"
+#include "DataFormats/JetReco/interface/PFJetCollection.h"
+
 namespace edm {
    class ConfigurationDescriptions;
 }
@@ -24,9 +28,13 @@ class HLTAlphaTFilter : public HLTFilter {
       explicit HLTAlphaTFilter(const edm::ParameterSet&);
       ~HLTAlphaTFilter();
       static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
-      virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct);
-      
+      virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct) const override;
+
    private:
+
+      edm::EDGetTokenT<std::vector<T>> m_theRecoJetToken;
+      edm::EDGetTokenT<std::vector<T>> m_theFastJetToken;
+
       edm::InputTag inputJetTag_;           // input tag identifying jets
       edm::InputTag inputJetTagFastJet_;    // input tag identifying a second collection of jets
       std::vector<double> minPtJet_;

@@ -11,7 +11,6 @@
 //
 // Original Author:  Ursula Berthon
 //         Created:  Thu Jul 4 11:38:38 CEST 2005
-// $Id: EcalTPInputAnalyzer.cc,v 1.5 2008/01/17 13:40:52 uberthon Exp $
 //
 //
 

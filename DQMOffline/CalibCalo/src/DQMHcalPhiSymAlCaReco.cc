@@ -3,8 +3,6 @@
  *
  * \author Olga Kodolova
  * 
- * $Date: 2010/10/15 22:44:31 $
- * $Revision: 1.17 $
  *
  *
  * Description: Monitoring of Phi Symmetry Calibration Stream  
@@ -22,14 +20,12 @@
 #include "DQMServices/Core/interface/MonitorElement.h"
 
 // work on collections
-#include "DataFormats/HcalRecHit/interface/HcalRecHitCollections.h"
 
 #include "Geometry/CaloGeometry/interface/CaloSubdetectorGeometry.h"
 #include "Geometry/CaloGeometry/interface/CaloCellGeometry.h"
 #include "DataFormats/HcalDetId/interface/HcalSubdetector.h"
 #include "DataFormats/HcalDetId/interface/HcalDetId.h"
 
-#include "DataFormats/FEDRawData/interface/FEDRawDataCollection.h"
 #include "DataFormats/FEDRawData/interface/FEDRawData.h"
 #include "DataFormats/FEDRawData/interface/FEDNumbering.h"
 #include "DataFormats/FEDRawData/interface/FEDHeader.h"
@@ -55,15 +51,15 @@ eventCounter_(0)
   //
   folderName_   = ps.getUntrackedParameter<string>("FolderName","ALCAStreamHcalPhiSym");
   
-  hbherecoMB    = ps.getParameter<edm::InputTag>("hbheInputMB");
+  hbherecoMB    = consumes<HBHERecHitCollection>(ps.getParameter<edm::InputTag>("hbheInputMB"));
   horecoMB      = ps.getParameter<edm::InputTag>("hoInputMB");
-  hfrecoMB      = ps.getParameter<edm::InputTag>("hfInputMB");
+  hfrecoMB      = consumes<HFRecHitCollection>(ps.getParameter<edm::InputTag>("hfInputMB"));
   
-  hbherecoNoise = ps.getParameter<edm::InputTag>("hbheInputNoise");
+  hbherecoNoise = consumes<HBHERecHitCollection>(ps.getParameter<edm::InputTag>("hbheInputNoise"));
   horecoNoise   = ps.getParameter<edm::InputTag>("hoInputNoise");
-  hfrecoNoise   = ps.getParameter<edm::InputTag>("hfInputNoise");
+  hfrecoNoise   = consumes<HFRecHitCollection>(ps.getParameter<edm::InputTag>("hfInputNoise"));
 
-  rawInLabel_   = ps.getParameter<edm::InputTag>("rawInputLabel");
+  rawInLabel_   = consumes<FEDRawDataCollection>(ps.getParameter<edm::InputTag>("rawInputLabel"));
 
   period_       = ps.getParameter<unsigned int>("period") ;
 
@@ -317,7 +313,7 @@ void DQMHcalPhiSymAlCaReco::analyze(const Event& iEvent,
   eventCounter_++;
  
   edm::Handle<FEDRawDataCollection> rawIn;
-  iEvent.getByLabel(rawInLabel_,rawIn);
+  iEvent.getByToken(rawInLabel_,rawIn);
 
   if(!rawIn.isValid()){
      LogDebug("") << "HcalCalibAlgos: Error! can't get hbhe product!" << std::endl;
@@ -376,7 +372,7 @@ void DQMHcalPhiSymAlCaReco::analyze(const Event& iEvent,
   hL1Id->Fill( (header.lvl1ID())%period_ );
  
   edm::Handle<HBHERecHitCollection> hbheNS;
-  iEvent.getByLabel(hbherecoNoise, hbheNS);
+  iEvent.getByToken(hbherecoNoise, hbheNS);
   
   if(!hbheNS.isValid()){
     LogDebug("") << "HcalCalibAlgos: Error! can't get hbhe product!" << std::endl;
@@ -384,7 +380,7 @@ void DQMHcalPhiSymAlCaReco::analyze(const Event& iEvent,
   }
   
   edm::Handle<HBHERecHitCollection> hbheMB;
-  iEvent.getByLabel(hbherecoMB, hbheMB);
+  iEvent.getByToken(hbherecoMB, hbheMB);
   
   if(!hbheMB.isValid()){
     LogDebug("") << "HcalCalibAlgos: Error! can't get hbhe product!" << std::endl;
@@ -392,7 +388,7 @@ void DQMHcalPhiSymAlCaReco::analyze(const Event& iEvent,
   }
   
   edm::Handle<HFRecHitCollection> hfNS;
-  iEvent.getByLabel(hfrecoNoise, hfNS);
+  iEvent.getByToken(hfrecoNoise, hfNS);
   
   if(!hfNS.isValid()){
     LogDebug("") << "HcalCalibAlgos: Error! can't get hbhe product!" << std::endl;
@@ -400,7 +396,7 @@ void DQMHcalPhiSymAlCaReco::analyze(const Event& iEvent,
   }
   
   edm::Handle<HFRecHitCollection> hfMB;
-  iEvent.getByLabel(hfrecoMB, hfMB);
+  iEvent.getByToken(hfrecoMB, hfMB);
   
   if(!hfMB.isValid()){
     LogDebug("") << "HcalCalibAlgos: Error! can't get hbhe product!" << std::endl;

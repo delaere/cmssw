@@ -4,8 +4,6 @@
 /*
  * \file DTDigiTask.h
  *
- * $Date: 2012/09/24 16:08:06 $
- * $Revision: 1.36 $
  * \author M. Zanetti - INFN Padova
  *
 */
@@ -21,6 +19,9 @@
 #include "CondFormats/DTObjects/interface/DTReadOutMapping.h"
 
 #include "DataFormats/LTCDigi/interface/LTCDigi.h"
+#include <DataFormats/DTDigi/interface/DTDigi.h>
+#include <DataFormats/DTDigi/interface/DTDigiCollection.h>
+
 
 #include <FWCore/Framework/interface/LuminosityBlock.h>
 #include "FWCore/Utilities/interface/InputTag.h"
@@ -48,7 +49,7 @@ public:
 
   /// Constructor
   DTDigiTask(const edm::ParameterSet& ps);
-  
+
   /// Destructor
   virtual ~DTDigiTask();
 
@@ -81,7 +82,7 @@ protected:
   std::string triggerSource();
 
 private:
-  
+
   std::string topFolder() const;
 
   int nevents;
@@ -118,10 +119,10 @@ private:
 
   // Parameters from config file
 
-  // The label to retrieve the digis 
-  edm::InputTag dtDigiLabel;
+  // The label to retrieve the digis
+  edm::EDGetTokenT<DTDigiCollection> dtDigiToken_;
 
-  edm::InputTag ltcDigiCollectionTag;
+  edm::EDGetTokenT<LTCDigiCollection> ltcDigiCollectionToken_;
 
   // Set to true to read the ttrig from DB (useful to determine in-time and out-of-time hits)
   bool readTTrigDB;
@@ -162,3 +163,8 @@ private:
 };
 
 #endif
+
+/* Local Variables: */
+/* show-trailing-whitespace: t */
+/* truncate-lines: t */
+/* End: */

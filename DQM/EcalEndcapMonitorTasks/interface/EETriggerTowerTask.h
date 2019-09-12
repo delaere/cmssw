@@ -4,8 +4,6 @@
 /*
  * \file EETriggerTowerTask.h
  *
- * $Date: 2012/04/27 13:46:13 $
- * $Revision: 1.29 $
  *
 */
 
@@ -14,6 +12,7 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 #include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
 
 #include <vector>
 
@@ -129,16 +128,16 @@ class EETriggerTowerTask : public edm::EDAnalyzer {
   bool mergeRuns_;
 
   /// to find the input collection of real digis 
-  edm::InputTag realCollection_;
+  edm::EDGetTokenT<EcalTrigPrimDigiCollection> realCollection_;
 
   /// to find the input collection of emulated digis
-  edm::InputTag emulCollection_;
+  edm::EDGetTokenT<EcalTrigPrimDigiCollection> emulCollection_;
   
   /// to find the input collection of crystal digis
-  edm::InputTag EEDigiCollection_;
+  edm::EDGetTokenT<EEDigiCollection> EEDigiCollection_;
 
   /// to find the input collection of HLT bits
-  edm::InputTag HLTResultsCollection_;
+  edm::EDGetTokenT<edm::TriggerResults> HLTResultsCollection_;
   std::string HLTCaloHLTBit_;
   std::string HLTMuonHLTBit_;
 

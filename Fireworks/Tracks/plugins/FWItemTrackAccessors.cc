@@ -7,10 +7,9 @@
 //
 // Original Author:  Tom McCauley
 //         Created:  Thu Feb 18 15:19:44 EDT 2008
-// $Id: FWItemTrackAccessors.cc,v 1.9 2011/03/23 14:30:05 amraktad Exp $
 //
 
-#include <assert.h>
+#include <cassert>
 
 #include "TClass.h"
 

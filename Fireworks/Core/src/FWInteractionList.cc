@@ -8,7 +8,6 @@
 //
 // Original Author:  Alja Mrak-Tadel
 //         Created:  Mon Apr 19 12:48:18 CEST 2010
-// $Id: FWInteractionList.cc,v 1.15 2012/09/21 09:26:26 eulisse Exp $
 //
 
 // user include files

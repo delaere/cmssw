@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Mon Jan 12 09:48:04 EST 2009
-// $Id: FWDetailViewFactory.h,v 1.4 2009/10/31 22:37:35 chrjones Exp $
 //
 
 // system include files

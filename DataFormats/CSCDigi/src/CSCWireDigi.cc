@@ -2,8 +2,6 @@
  *
  * Digi for CSC anode wires.
  *
- * $Date: 2010/07/15 22:58:01 $
- * $Revision: 1.12 $
  */
 
 #include "DataFormats/CSCDigi/interface/CSCWireDigi.h"

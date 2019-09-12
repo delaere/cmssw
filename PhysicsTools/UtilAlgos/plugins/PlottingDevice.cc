@@ -13,7 +13,6 @@
 //
 // Original Author:  Jean-Roch Vlimant
 //         Created:  Thu May 15 14:37:59 CEST 2008
-// $Id: PlottingDevice.cc,v 1.7 2009/12/18 17:52:25 wmtan Exp $
 //
 //
 
@@ -43,9 +42,9 @@ class PlottingDevice : public edm::EDAnalyzer {
 
 
    private:
-      virtual void beginJob() ;
-      virtual void analyze(const edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
+      virtual void beginJob() override ;
+      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
 
       // ----------member data ---------------------------
   std::string vHelperInstance_;

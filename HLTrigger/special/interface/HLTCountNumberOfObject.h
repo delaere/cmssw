@@ -29,25 +29,38 @@ public:
     src_(iConfig.getParameter<edm::InputTag>("src")),
     minN_(iConfig.getParameter<int>("MinN")),
     maxN_(iConfig.getParameter<int>("MaxN"))
-  { }
-  
+  {
+    srcToken_ = consumes<OColl>(src_);
+  }
+
   ~HLTCountNumberOfObject() { }
-  
+
+  static void fillDescriptions(edm::ConfigurationDescriptions & descriptions)
+    {
+      edm::ParameterSetDescription desc;
+      makeHLTFilterDescription(desc);
+      desc.add<edm::InputTag>("src",edm::InputTag(""));
+      desc.add<int>("MinN",0);
+      desc.add<int>("MaxN",99999);
+      descriptions.add(std::string("hlt")+std::string(typeid(HLTCountNumberOfObject<OColl>).name()),desc);
+    }
+
 private:
-  virtual bool hltFilter(edm::Event& iEvent, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct)
+  virtual bool hltFilter(edm::Event& iEvent, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct) const override
   {
     edm::Handle<OColl> oHandle;
-    iEvent.getByLabel(src_, oHandle);
+    iEvent.getByToken(srcToken_, oHandle);
     int s=oHandle->size();
     bool answer=true;
     if (minN_!=-1) answer = answer && (s>=minN_);
     if (maxN_!=-1) answer = answer && (s<=maxN_);
-    LogDebug("HLTCountNumberOfObject")<<module()<<" sees: "<<s<<" objects. Filtere answer is: "<<(answer?"true":"false");
+    LogDebug("HLTCountNumberOfObject")<<module(iEvent)<<" sees: "<<s<<" objects. Filtere answer is: "<<(answer?"true":"false");
 
     return answer;
   }
- 
+
   edm::InputTag src_;
+  edm::EDGetTokenT<OColl> srcToken_;
   int minN_,maxN_;
 };
 

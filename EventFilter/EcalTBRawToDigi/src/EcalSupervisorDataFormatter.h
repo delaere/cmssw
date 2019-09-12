@@ -2,7 +2,6 @@
 #define EcalSupervisorTBDataFormatter_H
 /** \class EcalSupervisorTBDataFormatter
  *
- *  $Id: EcalSupervisorDataFormatter.h,v 1.4 2007/10/20 10:58:01 franzoni Exp $
  */
 
 #include <TBDataFormats/EcalTBObjects/interface/EcalTBCollections.h>

@@ -1,4 +1,3 @@
-// $Id: TTULogicUnit.cc,v 1.7 2009/10/26 12:52:15 aosorio Exp $
 // Include files 
 
 

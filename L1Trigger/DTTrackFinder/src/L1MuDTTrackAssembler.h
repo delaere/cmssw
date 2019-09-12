@@ -14,8 +14,6 @@
  *   model b_sts_7 version 7 )
  *
  *
- *   $Date: 2007/03/30 09:05:32 $
- *   $Revision: 1.3 $
  *
  *   N. Neumeister            CERN EP
  */

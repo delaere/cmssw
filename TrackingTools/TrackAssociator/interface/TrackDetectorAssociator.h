@@ -14,7 +14,6 @@
 //
 // Original Author:  Dmytro Kovalskyi
 //         Created:  Fri Apr 21 10:59:41 PDT 2006
-// $Id: TrackDetectorAssociator.h,v 1.22 2012/03/10 21:40:27 dmytro Exp $
 //
 //
 

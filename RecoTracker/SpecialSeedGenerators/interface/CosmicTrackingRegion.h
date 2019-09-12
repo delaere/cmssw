@@ -9,26 +9,21 @@
  */
 
 #include "RecoTracker/TkTrackingRegions/interface/TrackingRegionBase.h"
-#include "RecoTracker/TkTrackingRegions/interface/TkTrackingRegionsMargin.h"
-//#include "CommonDet/TrajectoryParametrization/interface/GlobalTrajectoryParameters.h"
 #include "RecoTracker/TkTrackingRegions/interface/HitRZConstraint.h"
-#include "RecoTracker/TkTrackingRegions/interface/OuterHitPhiPrediction.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "RecoTracker/TkSeedingLayers/interface/SeedingLayer.h"
 #include <vector>
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
-class OuterEstimator;
-class BarrelDetLayer;
-class ForwardDetLayer;
+
 typedef TransientTrackingRecHit::ConstRecHitPointer SeedingHit;
 
 class CosmicTrackingRegion : public TrackingRegionBase {
 public:
-  
-  //  typedef TkTrackingRegionsMargin<float> Margin;
+
 
  virtual ~CosmicTrackingRegion() { }
+
  /** constructor (symmetric eta and phi margins). <BR>
   * dir        - the direction around which region is constructed <BR>
   *              the initial direction of the momentum of the particle 
@@ -81,6 +76,11 @@ public:
       const edm::EventSetup& es, 
       const ctfseeding::SeedingLayer* layer) const;
 
+   TrackingRegion::Hits hits(
+      const edm::Event& ev,
+      const edm::EventSetup& es,
+      const SeedingLayerSetsHits::SeedingLayer& layer) const override;
+
    virtual HitRZCompatibility* checkRZ(
       const DetLayer* layer,
       const Hit & outerHit,
@@ -93,6 +93,11 @@ public:
    std::string name() const { return "CosmicTrackingRegion"; }
 
 private:
+  template <typename T>
+  TrackingRegion::Hits hits_(
+      const edm::Event& ev,
+      const edm::EventSetup& es,
+      const T& layer) const;
 
    std::string measurementTrackerName_;
 };

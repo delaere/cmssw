@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Tue Nov 25 14:42:13 EST 2008
-// $Id: FWTrackProxyBuilder.cc,v 1.15 2012/06/27 20:26:29 amraktad Exp $
 //
 
 // system include files
@@ -36,7 +35,7 @@ private:
 
    const FWTrackProxyBuilder& operator=(const FWTrackProxyBuilder&); // stop default
 
-   void build(const reco::Track& iData, unsigned int iIndex,TEveElement& oItemHolder, const FWViewContext*);
+   void build(const reco::Track& iData, unsigned int iIndex,TEveElement& oItemHolder, const FWViewContext*) override;
 };
 
 FWTrackProxyBuilder::FWTrackProxyBuilder()

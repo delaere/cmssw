@@ -11,7 +11,6 @@
 //
 // Original Author:  Traczyk Piotr
 //         Created:  Thu Oct 11 15:01:28 CEST 2007
-// $Id: CSCTimingExtractor.cc,v 1.10 2011/04/16 20:30:57 ptraczyk Exp $
 //
 //
 
@@ -67,7 +66,7 @@ class MuonServiceProxy;
 //
 // constructors and destructor
 //
-CSCTimingExtractor::CSCTimingExtractor(const edm::ParameterSet& iConfig)
+CSCTimingExtractor::CSCTimingExtractor(const edm::ParameterSet& iConfig,edm::ConsumesCollector& iC)
   :
   CSCSegmentTags_(iConfig.getParameter<edm::InputTag>("CSCsegments")),
   thePruneCut_(iConfig.getParameter<double>("PruneCut")),
@@ -84,7 +83,7 @@ CSCTimingExtractor::CSCTimingExtractor(const edm::ParameterSet& iConfig)
   
   edm::ParameterSet matchParameters = iConfig.getParameter<edm::ParameterSet>("MatchParameters");
 
-  theMatcher = new MuonSegmentMatcher(matchParameters, theService);
+  theMatcher = new MuonSegmentMatcher(matchParameters, theService,iC);
 }
 
 

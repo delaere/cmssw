@@ -5,8 +5,6 @@
  *
  *  2D parametrization of MTCC data
  *
- *  $Date: 2011/04/16 10:20:40 $
- *  $Revision: 1.1 $
  *  \author V. Maroussov
  */
 
@@ -45,7 +43,7 @@ public:
    
    void SetField(double B);
    void GetField(double r,   double z,   double phi,
-                 double &Br, double &Bz, double &Bphi);
+                 double &Br, double &Bz, double &Bphi) const;
 };
 }
 

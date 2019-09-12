@@ -16,7 +16,6 @@
 //
 // Original Author: 
 //         Created:  Tue May 16 10:14:34 CEST 2006
-// $Id: CastorNumberingScheme.h,v 1.5 2009/09/02 20:41:25 sunanda Exp $
 //
  
 // system include files

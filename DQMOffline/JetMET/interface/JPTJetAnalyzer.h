@@ -5,8 +5,6 @@
  *
  *  DQM monitoring source for JPT Jets
  *
- *  $Date: 2012/09/24 09:39:53 $
- *  $Revision: 1.14 $
  *  \author N. Cripps - Imperial
  */
 

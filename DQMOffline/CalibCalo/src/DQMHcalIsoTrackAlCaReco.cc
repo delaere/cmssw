@@ -13,7 +13,6 @@
 //
 // Original Author:  Grigory SAFRONOV
 //         Created:  Tue Oct  14 16:10:31 CEST 2008
-// $Id: DQMHcalIsoTrackAlCaReco.cc,v 1.9 2011/03/01 21:21:29 safronov Exp $
 //
 //
 
@@ -73,17 +72,17 @@ private:
 
   DQMStore* dbe_;  
 
-  virtual void beginJob() ;
-  virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  virtual void endJob() ;
+  virtual void beginJob() override ;
+  virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+  virtual void endJob() override ;
 
   std::string folderName_;
   bool saveToFile_;
   std::string outRootFileName_;
-  edm::InputTag hltEventTag_;
+  edm::EDGetTokenT<trigger::TriggerEvent> hltEventTag_;
   std::string l1FilterTag_;
   std::vector<std::string> hltFilterTag_;
-  edm::InputTag arITrLabel_;
+  edm::EDGetTokenT<reco::IsolatedPixelTrackCandidateCollection> arITrLabel_;
   edm::InputTag recoTrLabel_;
   double pThr_;
   double heLow_;
@@ -175,12 +174,12 @@ DQMHcalIsoTrackAlCaReco::DQMHcalIsoTrackAlCaReco(const edm::ParameterSet& iConfi
   folderName_ = iConfig.getParameter<std::string>("folderName");
   saveToFile_=iConfig.getParameter<bool>("saveToFile");
   outRootFileName_=iConfig.getParameter<std::string>("outputRootFileName");
-  hltEventTag_=iConfig.getParameter<edm::InputTag>("hltTriggerEventLabel");
+  hltEventTag_= consumes<trigger::TriggerEvent>(iConfig.getParameter<edm::InputTag>("hltTriggerEventLabel"));
   l1FilterTag_=iConfig.getParameter<std::string>("l1FilterLabel");
   hltFilterTag_=iConfig.getParameter<std::vector<std::string> >("hltL3FilterLabels");
   nameLength_=iConfig.getUntrackedParameter<int>("filterNameLength",27);
   l1nameLength_=iConfig.getUntrackedParameter<int>("l1filterNameLength",11);
-  arITrLabel_=iConfig.getParameter<edm::InputTag>("alcarecoIsoTracksLabel");
+  arITrLabel_= consumes<reco::IsolatedPixelTrackCandidateCollection>(iConfig.getParameter<edm::InputTag>("alcarecoIsoTracksLabel"));
   recoTrLabel_=iConfig.getParameter<edm::InputTag>("recoTracksLabel");
   pThr_=iConfig.getUntrackedParameter<double>("pThrL3",0);
   heLow_=iConfig.getUntrackedParameter<double>("lowerHighEnergyCut",40);
@@ -199,10 +198,10 @@ void DQMHcalIsoTrackAlCaReco::analyze(const edm::Event& iEvent, const edm::Event
   nTotal++;
 
   edm::Handle<trigger::TriggerEvent> trEv;
-  iEvent.getByLabel(hltEventTag_,trEv);
+  iEvent.getByToken(hltEventTag_,trEv);
   
   edm::Handle<reco::IsolatedPixelTrackCandidateCollection> recoIsoTracks;
-  iEvent.getByLabel(arITrLabel_,recoIsoTracks);
+  iEvent.getByToken(arITrLabel_,recoIsoTracks);
 
   const trigger::TriggerObjectCollection& TOCol(trEv->getObjects());
 

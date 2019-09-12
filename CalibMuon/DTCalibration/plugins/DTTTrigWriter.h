@@ -4,8 +4,6 @@
 /* Program to evaluate ttrig and sigma ttrig from TB histograms
  *  and write the results to a file for each SL
  
- *  $Date: 2008/12/09 22:44:10 $
- *  $Revision: 1.2 $
  *  \author S. Bolognesi
  */
 

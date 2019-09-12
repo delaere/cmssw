@@ -7,7 +7,6 @@
  *
  * \author Luca Lista, INFN
  *
- * \version $Id: VertexCompositeCandidate.h,v 1.9 2009/11/02 21:46:53 srappocc Exp $
  *
  */
 #include "DataFormats/Candidate/interface/VertexCompositeCandidateFwd.h"

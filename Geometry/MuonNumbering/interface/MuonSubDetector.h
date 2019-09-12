@@ -10,8 +10,6 @@
  * the function suIdName() returns the detector SuId
  * for the ROU factory
  *  
- *  $Date: 2012/10/18 12:47:41 $
- *  $Revision: 1.2 $
  * \author Arno Straessner, CERN <arno.straessner@cern.ch>
  *
  */

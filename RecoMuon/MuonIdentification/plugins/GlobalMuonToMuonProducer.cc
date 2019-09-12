@@ -1,8 +1,6 @@
 /** \class GlobalMuonToMuonProducer
  *  No description available.
  *
- *  $Date: 2011/05/31 14:44:35 $
- *  $Revision: 1.1 $
  *  \author R. Bellan - INFN Torino <riccardo.bellan@cern.ch>
  */
 
@@ -13,9 +11,6 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 
-#include "DataFormats/MuonReco/interface/Muon.h"
-#include "DataFormats/MuonReco/interface/MuonTrackLinks.h"
-#include "DataFormats/MuonReco/interface/MuonFwd.h"
 
 // tmp
 #include "Geometry/Records/interface/GlobalTrackingGeometryRecord.h"
@@ -32,6 +27,8 @@ GlobalMuonToMuonProducer::GlobalMuonToMuonProducer(const edm::ParameterSet& pSet
 
   setAlias(pSet.getParameter<std::string>("@module_label"));
   produces<reco::MuonCollection>().setBranchAlias(theAlias + "s");
+  trackLinkToken_ = consumes<reco::MuonTrackLinksCollection>(theLinksCollectionLabel);
+  
 }
 
 /// Destructor
@@ -69,7 +66,7 @@ void GlobalMuonToMuonProducer::produce(edm::Event& event, const edm::EventSetup&
    
 
    edm::Handle<reco::MuonTrackLinksCollection> linksCollection; 
-   event.getByLabel(theLinksCollectionLabel,linksCollection);
+   event.getByToken(trackLinkToken_,linksCollection);
 
    if(linksCollection->empty()) {
      event.put(muonCollection);

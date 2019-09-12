@@ -13,7 +13,6 @@
 //
 // Original Author:  Andrea Rizzi
 //         Created:  Thu Jan 18 10:34:18 CET 2007
-// $Id: CallgrindAnalyzer.cc,v 1.6 2012/01/31 13:56:04 eulisse Exp $
 //
 //
 
@@ -44,9 +43,9 @@ public:
 
 
 private:
-  virtual void beginJob() ;
-  virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  virtual void endJob() ;
+  virtual void beginJob() override ;
+  virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+  virtual void endJob() override ;
   
   // ----------member data ---------------------------
       int m_firstEvent;

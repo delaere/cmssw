@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripDigiToRawModule.h,v 1.7 2010/01/13 22:42:01 wmtan Exp $
 
 #ifndef EventFilter_SiStripRawToDigi_SiStripDigiToRawModule_H
 #define EventFilter_SiStripRawToDigi_SiStripDigiToRawModule_H

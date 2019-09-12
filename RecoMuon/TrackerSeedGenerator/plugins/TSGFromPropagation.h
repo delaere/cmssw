@@ -5,8 +5,6 @@
  *  Tracker Seed Generator by propagating and updating a standAlone muon
  *  to the first 2 (or 1) rechits it meets in tracker system 
  *
- *  $Date: 2013/01/08 17:08:25 $
- *  $Revision: 1.15 $
  *  \author Chang Liu - Purdue University 
  */
 
@@ -17,9 +15,10 @@
 #include "TrackingTools/PatternTools/interface/TrajectoryMeasurement.h"
 #include "TrackingTools/PatternTools/interface/TrajectoryStateUpdator.h"
 #include "RecoMuon/TrackingTools/interface/MuonErrorMatrix.h"
+#include "RecoTracker/MeasurementDet/interface/MeasurementTrackerEvent.h"
+#include "TrackingTools/MeasurementDet/interface/LayerMeasurements.h"
 #include "DataFormats/BeamSpot/interface/BeamSpot.h"
 
-class LayerMeasurements;
 class Chi2MeasurementEstimator;
 class Propagator;
 class MeasurementTracker;
@@ -32,9 +31,9 @@ class TSGFromPropagation : public TrackerSeedGenerator {
 
 public:
   /// constructor
-  TSGFromPropagation(const edm::ParameterSet &pset);
+  TSGFromPropagation(const edm::ParameterSet &pset, edm::ConsumesCollector& iC);
 
-  TSGFromPropagation(const edm::ParameterSet& par, const MuonServiceProxy*);
+  TSGFromPropagation(const edm::ParameterSet& par, edm::ConsumesCollector& iC, const MuonServiceProxy*);
 
   /// destructor
   virtual ~TSGFromPropagation();
@@ -54,7 +53,7 @@ private:
 
   TrajectoryStateOnSurface outerTkState(const TrackCand&) const;
 
-  const LayerMeasurements* tkLayerMeasurements() const { return theTkLayerMeasurements; } 
+  const LayerMeasurements* tkLayerMeasurements() const { return &theTkLayerMeasurements; } 
 
   const TrajectoryStateUpdator* updator() const {return theUpdator;}
 
@@ -110,12 +109,14 @@ private:
 
   std::string theCategory;
 
-  const LayerMeasurements*  theTkLayerMeasurements;
+  LayerMeasurements  theTkLayerMeasurements;
 
   edm::ESHandle<GeometricSearchTracker> theTracker;
 
   std::string theMeasTrackerName;
   edm::ESHandle<MeasurementTracker> theMeasTracker;
+  edm::InputTag theMeasurementTrackerEventTag;
+  edm::Handle<MeasurementTrackerEvent> theMeasTrackerEvent;
 
   const DirectTrackerNavigation* theNavigation;
 

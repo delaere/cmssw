@@ -25,6 +25,7 @@ For its usage, see "FWCore/Framework/interface/PrincipalGetAdapter.h"
 #include "FWCore/Framework/interface/PrincipalGetAdapter.h"
 #include "FWCore/Utilities/interface/EDGetToken.h"
 #include "FWCore/Utilities/interface/ProductKindOfType.h"
+#include "FWCore/Utilities/interface/LuminosityBlockIndex.h"
 
 
 #include "boost/shared_ptr.hpp"
@@ -36,16 +37,36 @@ For its usage, see "FWCore/Framework/interface/PrincipalGetAdapter.h"
 #include <vector>
 
 namespace edm {
+  class ModuleCallingContext;
   class ProducerBase;
+  namespace stream {
+    template< typename T> class ProducingModuleAdaptorBase;
+  }
+
 
   class LuminosityBlock : public LuminosityBlockBase {
   public:
-    LuminosityBlock(LuminosityBlockPrincipal& lbp, ModuleDescription const& md);
+    LuminosityBlock(LuminosityBlockPrincipal& lbp, ModuleDescription const& md,
+                    ModuleCallingContext const*);
     ~LuminosityBlock();
 
     // AUX functions are defined in LuminosityBlockBase
     LuminosityBlockAuxiliary const& luminosityBlockAuxiliary() const {return aux_;}
 
+    /**\return Reusable index which can be used to separate data for different simultaneous LuminosityBlocks.
+     */
+    LuminosityBlockIndex index() const;
+    
+    /**If you are caching data from the LuminosityBlock, you should also keep
+     this number.  If this number changes then you know that
+     the data you have cached is invalid.
+     The value of '0' will never be returned so you can use that to
+     denote that you have not yet checked the value.
+     */
+    typedef unsigned long CacheIdentifier_t;
+    CacheIdentifier_t
+    cacheIdentifier() const;
+    
     //Used in conjunction with EDGetToken
     void setConsumer(EDConsumerBase const* iConsumer);
     template <typename PROD>
@@ -102,6 +123,8 @@ namespace edm {
     ProcessHistory const&
     processHistory() const;
 
+    ModuleCallingContext const* moduleCallingContext() const { return moduleCallingContext_; }
+
   private:
     LuminosityBlockPrincipal const&
     luminosityBlockPrincipal() const;
@@ -112,7 +135,7 @@ namespace edm {
     // Override version from LuminosityBlockBase class
     virtual BasicHandle getByLabelImpl(std::type_info const& iWrapperType, std::type_info const& iProductType, InputTag const& iTag) const;
 
-    typedef std::vector<std::pair<WrapperOwningHolder, ConstBranchDescription const*> > ProductPtrVec;
+    typedef std::vector<std::pair<WrapperOwningHolder, BranchDescription const*> > ProductPtrVec;
     ProductPtrVec& putProducts() {return putProducts_;}
     ProductPtrVec const& putProducts() const {return putProducts_;}
 
@@ -121,9 +144,10 @@ namespace edm {
     // alternative is not great either.  Putting it into the
     // public interface is asking for trouble
     friend class InputSource;
-    friend class DaqSource;
     friend class RawInputSource;
     friend class ProducerBase;
+    template<typename T> friend class stream::ProducingModuleAdaptorBase;
+
 
     void commit_();
     void addToGotBranchIDs(Provenance const& prov) const;
@@ -134,6 +158,7 @@ namespace edm {
     boost::shared_ptr<Run const> const run_;
     typedef std::set<BranchID> BranchIDSet;
     mutable BranchIDSet gotBranchIDs_;
+    ModuleCallingContext const* moduleCallingContext_;
 
     static const std::string emptyString_;
   };
@@ -153,7 +178,7 @@ namespace edm {
       DoNotPostInsert<PROD> >::type maybe_inserter;
     maybe_inserter(product.get());
 
-    ConstBranchDescription const& desc =
+    BranchDescription const& desc =
       provRecorder_.getBranchDescription(TypeID(*product), productInstanceName);
 
     WrapperOwningHolder edp(new Wrapper<PROD>(product), Wrapper<PROD>::getInterface());
@@ -178,9 +203,9 @@ namespace edm {
       principal_get_adapter_detail::throwOnPrematureRead("Lumi", TypeID(typeid(PROD)), label, productInstanceName);
     }
     result.clear();
-    BasicHandle bh = provRecorder_.getByLabel_(TypeID(typeid(PROD)), label, productInstanceName, emptyString_);
-    convert_handle(bh, result);  // throws on conversion error
-    if (bh.failedToGet()) {
+    BasicHandle bh = provRecorder_.getByLabel_(TypeID(typeid(PROD)), label, productInstanceName, emptyString_, moduleCallingContext_);
+    convert_handle(std::move(bh), result);  // throws on conversion error
+    if (result.failedToGet()) {
       return false;
     }
     return true;
@@ -194,9 +219,9 @@ namespace edm {
       principal_get_adapter_detail::throwOnPrematureRead("Lumi", TypeID(typeid(PROD)), tag.label(), tag.instance());
     }
     result.clear();
-    BasicHandle bh = provRecorder_.getByLabel_(TypeID(typeid(PROD)), tag);
-    convert_handle(bh, result);  // throws on conversion error
-    if (bh.failedToGet()) {
+    BasicHandle bh = provRecorder_.getByLabel_(TypeID(typeid(PROD)), tag, moduleCallingContext_);
+    convert_handle(std::move(bh), result);  // throws on conversion error
+    if (result.failedToGet()) {
       return false;
     }
     return true;
@@ -209,9 +234,9 @@ namespace edm {
       principal_get_adapter_detail::throwOnPrematureRead("Lumi", TypeID(typeid(PROD)), token);
     }
     result.clear();
-    BasicHandle bh = provRecorder_.getByToken_(TypeID(typeid(PROD)),PRODUCT_TYPE, token);
-    convert_handle(bh, result);  // throws on conversion error
-    if (bh.failedToGet()) {
+    BasicHandle bh = provRecorder_.getByToken_(TypeID(typeid(PROD)),PRODUCT_TYPE, token, moduleCallingContext_);
+    convert_handle(std::move(bh), result);  // throws on conversion error
+    if (result.failedToGet()) {
       return false;
     }
     return true;
@@ -224,9 +249,9 @@ namespace edm {
       principal_get_adapter_detail::throwOnPrematureRead("Lumi", TypeID(typeid(PROD)), token);
     }
     result.clear();
-    BasicHandle bh = provRecorder_.getByToken_(TypeID(typeid(PROD)),PRODUCT_TYPE, token);
-    convert_handle(bh, result);  // throws on conversion error
-    if (bh.failedToGet()) {
+    BasicHandle bh = provRecorder_.getByToken_(TypeID(typeid(PROD)),PRODUCT_TYPE, token, moduleCallingContext_);
+    convert_handle(std::move(bh), result);  // throws on conversion error
+    if (result.failedToGet()) {
       return false;
     }
     return true;
@@ -239,7 +264,7 @@ namespace edm {
     if(!provRecorder_.checkIfComplete<PROD>()) {
       principal_get_adapter_detail::throwOnPrematureRead("Lumi", TypeID(typeid(PROD)));
     }
-    return provRecorder_.getManyByType(results);
+    return provRecorder_.getManyByType(results, moduleCallingContext_);
   }
 
 }

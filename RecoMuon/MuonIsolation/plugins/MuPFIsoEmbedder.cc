@@ -13,7 +13,6 @@
 //
 // Original Author:  Michail Bachtis,32 3-B16,+41227675567,
 //         Created:  Thu Jun  9 01:36:17 CEST 2011
-// $Id: MuPFIsoEmbedder.cc,v 1.3 2013/02/25 21:46:26 chrjones Exp $
 //
 //
 
@@ -32,6 +31,7 @@
 #include "RecoMuon/MuonIsolation/interface/MuPFIsoHelper.h"
 #include "DataFormats/MuonReco/interface/Muon.h"
 #include "DataFormats/MuonReco/interface/MuonFwd.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 //
 // class declaration
@@ -39,18 +39,18 @@
 
 class MuPFIsoEmbedder : public edm::EDProducer {
    public:
-      explicit MuPFIsoEmbedder(const edm::ParameterSet&);
+  explicit MuPFIsoEmbedder(const edm::ParameterSet&);
       ~MuPFIsoEmbedder();
 
       static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
    private:
-      virtual void produce(edm::Event&, const edm::EventSetup&);
+      virtual void produce(edm::Event&, const edm::EventSetup&) override;
       
 
       // ----------member data ---------------------------
   edm::InputTag muons_;
-
+  edm::EDGetTokenT<reco::MuonCollection> muonToken_;
   MuPFIsoHelper *helper_;
 
 };
@@ -79,9 +79,8 @@ MuPFIsoEmbedder::MuPFIsoEmbedder(const edm::ParameterSet& iConfig):
     //Fill the label,pet map and initialize MuPFIsoHelper
     for( std::vector<std::string>::const_iterator label = isolationLabels.begin();label != isolationLabels.end();++label)
       psetMap[*label] =iConfig.getParameter<edm::ParameterSet >(*label); 
-
-    helper_ = new MuPFIsoHelper(psetMap);
-
+    helper_ = new MuPFIsoHelper(psetMap,consumesCollector());
+    muonToken_ = consumes<reco::MuonCollection>(muons_);
   produces<reco::MuonCollection>();
 }
 
@@ -110,7 +109,7 @@ MuPFIsoEmbedder::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    helper_->beginEvent(iEvent);
   
    edm::Handle<reco::MuonCollection > muons;
-   iEvent.getByLabel(muons_,muons);
+   iEvent.getByToken(muonToken_,muons);
 
 
    std::auto_ptr<MuonCollection> out(new MuonCollection);

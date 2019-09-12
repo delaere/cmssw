@@ -1,5 +1,4 @@
 //
-// $Id: PATObject.h,v 1.38 2012/01/20 08:51:05 cbern Exp $
 //
 
 #ifndef DataFormats_PatCandidates_PATObject_h
@@ -15,7 +14,6 @@
    https://hypernews.cern.ch/HyperNews/CMS/get/physTools.html
 
   \author   Steven Lowette, Giovanni Petrucciani, Frederic Ronga, Volker Adler, Sal Rappoccio
-  \version  $Id: PATObject.h,v 1.38 2012/01/20 08:51:05 cbern Exp $
 */
 
 
@@ -196,6 +194,10 @@ namespace pat {
       };
       /// add a trigger match
       void addTriggerObjectMatch( const TriggerObjectStandAlone & trigObj ) { triggerObjectMatchesEmbedded_.push_back( trigObj ); };
+      /// unpack path names of matched trigger objects (if they were packed before embedding, which is not normally the case)
+      void unpackTriggerObjectPathNames( const edm::TriggerNames &names ) {
+        for (std::vector<TriggerObjectStandAlone>::iterator it = triggerObjectMatchesEmbedded_.begin(), ed = triggerObjectMatchesEmbedded_.end(); it != ed; ++it) it->unpackPathNames(names);
+      }
 
       /// Returns an efficiency given its name
       const pat::LookupTableRecord       & efficiency(const std::string &name) const ;

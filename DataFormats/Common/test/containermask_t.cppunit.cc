@@ -1,8 +1,7 @@
-// $Id: containermask_t.cppunit.cc,v 1.1 2011/12/01 13:02:18 vlimant Exp $
 
 #include <algorithm>
 
-#include <cppunit/extensions/HelperMacros.h>
+#include "cppunit/extensions/HelperMacros.h"
 #include "DataFormats/Common/interface/TestHandle.h"
 #include "DataFormats/Common/interface/ContainerMask.h"
 #include "DataFormats/Common/interface/RefProd.h"

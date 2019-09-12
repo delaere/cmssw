@@ -8,7 +8,6 @@
 //
 // Original Author:  Werner Sun
 //         Created:  Mon Oct 16 23:19:38 EDT 2006
-// $Id: L1ExtraParticleMapProd.cc,v 1.30 2009/05/27 11:12:11 fabiocos Exp $
 //
 //
 

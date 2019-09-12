@@ -5,7 +5,6 @@
 // 
 // Original Author:  R. Cavanaugh (taken from F.Ratnikov, UMd)
 //         Created:  June 6, 2006
-// $Id: CaloSpecificAlgo.cc,v 1.32 2012/06/09 21:19:30 sakuma Exp $
 //
 //
 #include "RecoMET/METAlgorithms/interface/CaloSpecificAlgo.h"
@@ -24,11 +23,11 @@ using namespace reco;
 //____________________________________________________________________________||
 
 //____________________________________________________________________________||
-reco::CaloMET CaloSpecificAlgo::addInfo(edm::Handle<edm::View<Candidate> > towers, CommonMETData met, bool noHF, double globalThreshold)
+reco::CaloMET CaloSpecificAlgo::addInfo(edm::Handle<edm::View<Candidate> > towers, const CommonMETData& umet, bool noHF, double globalThreshold)
 { 
   SpecificCaloMETData specific;
   initializeSpecificCaloMETData(specific);
-
+  CommonMETData met = umet;
   double totalEt = 0.0; 
   double totalEm = 0.0;
 

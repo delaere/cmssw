@@ -7,7 +7,6 @@
 // Package:    PatCandidates
 // Class:      pat::TriggerObject
 //
-// $Id: TriggerObject.h,v 1.14 2013/06/11 13:24:49 vadler Exp $
 //
 /**
   \class    pat::TriggerObject TriggerObject.h "DataFormats/PatCandidates/interface/TriggerObject.h"
@@ -18,7 +17,6 @@
    https://twiki.cern.ch/twiki/bin/view/CMS/SWGuidePATTrigger#TriggerObject
 
   \author   Volker Adler
-  \version  $Id: TriggerObject.h,v 1.14 2013/06/11 13:24:49 vadler Exp $
 */
 
 

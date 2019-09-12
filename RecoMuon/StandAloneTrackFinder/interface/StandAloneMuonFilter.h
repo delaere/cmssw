@@ -4,8 +4,6 @@
 /** \class StandAloneMuonFilter
  *  The inward-outward fitter (starts from seed state).
  *
- *  $Date: 2009/05/11 10:14:52 $
- *  $Revision: 1.4 $
  *  \author R. Bellan - INFN Torino <riccardo.bellan@cern.ch>
  *          D. Trocino - INFN Torino <daniele.trocino@to.infn.it>
  */
@@ -16,6 +14,7 @@
 #include "DataFormats/TrajectorySeed/interface/PropagationDirection.h"
 
 #include "RecoMuon/TrackingTools/interface/MuonBestMeasurementFinder.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 class Propagator;
 class DetLayer;
@@ -31,7 +30,7 @@ class StandAloneMuonFilter {
 
  public:
     /// Constructor
-  StandAloneMuonFilter(const edm::ParameterSet& par, const MuonServiceProxy* service);
+  StandAloneMuonFilter(const edm::ParameterSet& par, const MuonServiceProxy* service,edm::ConsumesCollector& iC);
 
   /// Destructor
   virtual ~StandAloneMuonFilter();
@@ -125,7 +124,7 @@ private:
  
   /// Set the rigth Navigation
   std::vector<const DetLayer*> compatibleLayers(const DetLayer *initialLayer,
-						FreeTrajectoryState& fts,
+						const FreeTrajectoryState& fts,
 						PropagationDirection propDir);
 
   bool update(const DetLayer * layer, 

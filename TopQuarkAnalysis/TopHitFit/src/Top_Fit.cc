@@ -1,5 +1,4 @@
 //
-// $Id: Top_Fit.cc,v 1.1 2011/05/26 09:47:00 mseidel Exp $
 //
 // File: src/Top_Fit.cc
 // Purpose: Handle jet permutations.

@@ -13,7 +13,6 @@
 */
 //
 // Original Author:  Dmytro Kovalskyi
-// $Id: TrackAssociatorParameters.h,v 1.9 2011/04/07 08:17:31 innocent Exp $
 //
 //
 

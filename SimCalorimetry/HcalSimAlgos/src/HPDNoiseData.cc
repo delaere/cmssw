@@ -2,7 +2,6 @@
 // Object to store correlated noise data for one HPD 
 // Project: HPD noise library
 // Author: F.Ratnikov UMd, Jan. 15, 2008
-// $Id: HPDNoiseData.cc,v 1.2 2012/06/07 18:12:43 wmtan Exp $
 // --------------------------------------------------------
 
 #include "SimCalorimetry/HcalSimAlgos/interface/HPDNoiseData.h"

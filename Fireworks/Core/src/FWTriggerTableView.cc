@@ -2,12 +2,13 @@
 //
 // Package:     Core
 // Class  :     FWTriggerTableView
-// $Id: FWTriggerTableView.cc,v 1.18 2013/04/05 21:05:04 amraktad Exp $
 //
 
 // system include files
 #include <fstream>
 #include <cassert>
+
+#include "boost/bind.hpp"
 
 #include "TEveWindow.h"
 #include "TGComboBox.h"

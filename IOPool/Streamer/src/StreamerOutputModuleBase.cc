@@ -16,10 +16,9 @@
 #include "DataFormats/Provenance/interface/ParameterSetID.h"
 
 #include <string>
+#include <sys/time.h>
 #include <unistd.h>
 #include "zlib.h"
-
-static SerializeDataBuffer serialize_databuffer;
 
 namespace {
   //A utility function that packs bits from source into bytes, with
@@ -61,6 +60,7 @@ namespace edm {
     compressionLevel_(ps.getUntrackedParameter<int>("compression_level")),
     lumiSectionInterval_(ps.getUntrackedParameter<int>("lumiSection_interval")),
     serializer_(selections_),
+    serializeDataBuffer_(),
     hltsize_(0),
     lumi_(0),
     l1bit_(0),
@@ -89,7 +89,7 @@ namespace edm {
         compressionLevel_ = 9;
       }
     }
-    serialize_databuffer.bufs_.resize(maxEventSize_);
+    serializeDataBuffer_.bufs_.resize(maxEventSize_);
     int got_host = gethostname(host_name_, 255);
     if(got_host != 0) strncpy(host_name_, "noHostNameFoundOrTooLong", sizeof(host_name_));
     //loadExtraClasses();
@@ -104,14 +104,14 @@ namespace edm {
   StreamerOutputModuleBase::~StreamerOutputModuleBase() {}
 
   void
-  StreamerOutputModuleBase::beginRun(RunPrincipal const&) {
+  StreamerOutputModuleBase::beginRun(RunPrincipal const&, ModuleCallingContext const*) {
     start();
     std::auto_ptr<InitMsgBuilder>  init_message = serializeRegistry();
     doOutputHeader(*init_message);
   }
 
   void
-  StreamerOutputModuleBase::endRun(RunPrincipal const&) {
+  StreamerOutputModuleBase::endRun(RunPrincipal const&, ModuleCallingContext const*) {
     stop();
   }
 
@@ -124,27 +124,27 @@ namespace edm {
   }
 
   void
-  StreamerOutputModuleBase::writeRun(RunPrincipal const&) {}
+  StreamerOutputModuleBase::writeRun(RunPrincipal const&, ModuleCallingContext const*) {}
 
   void
-  StreamerOutputModuleBase::writeLuminosityBlock(LuminosityBlockPrincipal const&) {}
+  StreamerOutputModuleBase::writeLuminosityBlock(LuminosityBlockPrincipal const&, ModuleCallingContext const*) {}
 
   void
-  StreamerOutputModuleBase::write(EventPrincipal const& e) {
-    std::auto_ptr<EventMsgBuilder> msg = serializeEvent(e);
+  StreamerOutputModuleBase::write(EventPrincipal const& e, ModuleCallingContext const* mcc) {
+    std::auto_ptr<EventMsgBuilder> msg = serializeEvent(e, mcc);
     doOutputEvent(*msg); // You can't use msg in StreamerOutputModuleBase after this point
   }
 
   std::auto_ptr<InitMsgBuilder>
   StreamerOutputModuleBase::serializeRegistry() {
 
-    serializer_.serializeRegistry(serialize_databuffer, *branchIDLists());
+    serializer_.serializeRegistry(serializeDataBuffer_, *branchIDLists());
 
     // resize bufs_ to reflect space used in serializer_ + header
     // I just added an overhead for header of 50000 for now
-    unsigned int src_size = serialize_databuffer.currentSpaceUsed();
+    unsigned int src_size = serializeDataBuffer_.currentSpaceUsed();
     unsigned int new_size = src_size + 50000;
-    if(serialize_databuffer.header_buf_.size() < new_size) serialize_databuffer.header_buf_.resize(new_size);
+    if(serializeDataBuffer_.header_buf_.size() < new_size) serializeDataBuffer_.header_buf_.resize(new_size);
 
     //Build the INIT Message
     //Following values are strictly DUMMY and will be replaced
@@ -152,8 +152,7 @@ namespace edm {
     uint32 run = 1;
 
     //Get the Process PSet ID
-    pset::Registry* reg = pset::Registry::instance();
-    ParameterSetID toplevel = pset::getProcessParameterSetID(reg);
+    ParameterSetID toplevel = pset::getProcessParameterSetID();
 
     //In case we need to print it
     //  cms::Digest dig(toplevel.compactForm());
@@ -175,31 +174,31 @@ namespace edm {
 
     std::string moduleLabel = description().moduleLabel();
     uLong crc = crc32(0L, Z_NULL, 0);
-    Bytef* buf = (Bytef*) moduleLabel.data();
+    Bytef const* buf = (Bytef const*)(moduleLabel.data());
     crc = crc32(crc, buf, moduleLabel.length());
     outputModuleId_ = static_cast<uint32>(crc);
 
     std::auto_ptr<InitMsgBuilder> init_message(
-        new InitMsgBuilder(&serialize_databuffer.header_buf_[0], serialize_databuffer.header_buf_.size(),
-                           run, Version((uint8*)toplevel.compactForm().c_str()),
+        new InitMsgBuilder(&serializeDataBuffer_.header_buf_[0], serializeDataBuffer_.header_buf_.size(),
+                           run, Version((uint8 const*)toplevel.compactForm().c_str()),
                            getReleaseVersion().c_str() , processName.c_str(),
                            moduleLabel.c_str(), outputModuleId_,
                            hltTriggerNames, hltTriggerSelections_, l1_names,
-                           (uint32)serialize_databuffer.adler32_chksum(), host_name_));
+                           (uint32)serializeDataBuffer_.adler32_chksum()));
 
     // copy data into the destination message
-    unsigned char* src = serialize_databuffer.bufferPointer();
+    unsigned char* src = serializeDataBuffer_.bufferPointer();
     std::copy(src, src + src_size, init_message->dataAddress());
     init_message->setDataLength(src_size);
     return init_message;
   }
 
   void
-  StreamerOutputModuleBase::setHltMask(EventPrincipal const& e) {
+  StreamerOutputModuleBase::setHltMask(EventPrincipal const& e, ModuleCallingContext const* mcc) {
 
     hltbits_.clear();  // If there was something left over from last event
 
-    Handle<TriggerResults> const& prod = getTriggerResults(e);
+    Handle<TriggerResults> const& prod = getTriggerResults(e, mcc);
     //Trig const& prod = getTrigMask(e);
     std::vector<unsigned char> vHltState;
 
@@ -236,7 +235,7 @@ namespace edm {
   }
 
   std::auto_ptr<EventMsgBuilder>
-  StreamerOutputModuleBase::serializeEvent(EventPrincipal const& e) {
+  StreamerOutputModuleBase::serializeEvent(EventPrincipal const& e, ModuleCallingContext const* mcc) {
     //Lets Build the Event Message first
 
     //Following is strictly DUMMY Data for L! Trig and will be replaced with actual
@@ -246,7 +245,7 @@ namespace edm {
     l1bit_.push_back(false);
     //End of dummy data
 
-    setHltMask(e);
+    setHltMask(e, mcc);
 
     if (lumiSectionInterval_ == 0) {
       lumi_ = e.luminosityBlock();
@@ -254,19 +253,19 @@ namespace edm {
       setLumiSection();
     }
 
-    serializer_.serializeEvent(e, selectorConfig(), useCompression_, compressionLevel_, serialize_databuffer);
+    serializer_.serializeEvent(e, selectorConfig(), useCompression_, compressionLevel_, serializeDataBuffer_, mcc);
 
     // resize bufs_ to reflect space used in serializer_ + header
     // I just added an overhead for header of 50000 for now
-    unsigned int src_size = serialize_databuffer.currentSpaceUsed();
+    unsigned int src_size = serializeDataBuffer_.currentSpaceUsed();
     unsigned int new_size = src_size + 50000;
-    if(serialize_databuffer.bufs_.size() < new_size) serialize_databuffer.bufs_.resize(new_size);
+    if(serializeDataBuffer_.bufs_.size() < new_size) serializeDataBuffer_.bufs_.resize(new_size);
 
     std::auto_ptr<EventMsgBuilder>
-      msg(new EventMsgBuilder(&serialize_databuffer.bufs_[0], serialize_databuffer.bufs_.size(), e.id().run(),
+      msg(new EventMsgBuilder(&serializeDataBuffer_.bufs_[0], serializeDataBuffer_.bufs_.size(), e.id().run(),
                               e.id().event(), lumi_, outputModuleId_, 0,
                               l1bit_, (uint8*)&hltbits_[0], hltsize_,
-                              (uint32)serialize_databuffer.adler32_chksum(), host_name_) );
+                              (uint32)serializeDataBuffer_.adler32_chksum(), host_name_) );
     msg->setOrigDataSize(origSize_); // we need this set to zero
 
     // copy data into the destination message
@@ -278,10 +277,10 @@ namespace edm {
     // size + overhead for header because we will not know the actual
     // compressed size.
 
-    unsigned char* src = serialize_databuffer.bufferPointer();
+    unsigned char* src = serializeDataBuffer_.bufferPointer();
     std::copy(src,src + src_size, msg->eventAddr());
     msg->setEventLength(src_size);
-    if(useCompression_) msg->setOrigDataSize(serialize_databuffer.currentEventSize());
+    if(useCompression_) msg->setOrigDataSize(serializeDataBuffer_.currentEventSize());
 
     l1bit_.clear();  //Clear up for the next event to come.
     return msg;

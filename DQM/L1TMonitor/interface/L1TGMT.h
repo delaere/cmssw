@@ -4,8 +4,6 @@
 /*
  * \file L1TGMT.h
  *
- * $Date: 2010/01/14 09:16:16 $
- * $Revision: 1.11 $
  * \author J. Berryhill, I. Mikulec
  *
 */
@@ -112,8 +110,8 @@ private:
   std::string outputFile_; //file name for ROOT ouput
   bool verbose_;
   bool monitorDaemon_;
-  ofstream logFile_;
-  edm::InputTag gmtSource_ ;
+  std::ofstream logFile_;
+  edm::EDGetTokenT<L1MuGMTReadoutCollection> gmtSource_ ;
   
   int evnum_old_; // event number of previous event
   int bxnum_old_; // bx of previous event

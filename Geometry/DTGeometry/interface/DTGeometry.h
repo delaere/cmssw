@@ -8,8 +8,6 @@
  *  The geometry owns the DTChamber s; these own their DTSuperLayer s which 
  *  in turn own their DTLayer s.
  *
- *  $Date: 2012/07/24 15:05:21 $
- *  $Revision: 1.8 $
  *  \author N. Amapane - CERN
  */
 
@@ -119,9 +117,9 @@ class DTGeometry : public TrackingGeometry {
 
     // Replace local static with mutable members
     // to allow lazy evaluation if (ever) needed.
-    mutable DetTypeContainer  theDetTypes;
-    mutable DetIdContainer    theDetUnitIds;
-    mutable DetIdContainer    theDetIds;
+    DetTypeContainer  theDetTypes;
+    DetIdContainer    theDetUnitIds;
+    DetIdContainer    theDetIds;
 };
 
 #endif

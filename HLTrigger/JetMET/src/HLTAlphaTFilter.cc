@@ -16,9 +16,6 @@
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "DataFormats/Math/interface/deltaPhi.h"
 #include "DataFormats/Common/interface/Handle.h"
-#include "DataFormats/HLTReco/interface/TriggerFilterObjectWithRefs.h"
-#include "DataFormats/JetReco/interface/CaloJetCollection.h"
-#include "DataFormats/JetReco/interface/PFJetCollection.h"
 #include "HLTrigger/JetMET/interface/HLTAlphaTFilter.h"
 #include "HLTrigger/JetMET/interface/AlphaT.h"
 
@@ -28,18 +25,18 @@ typedef ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<double> > LorentzV  ;
 // constructors and destructor
 //
 template<typename T>
-HLTAlphaTFilter<T>::HLTAlphaTFilter(const edm::ParameterSet& iConfig) : HLTFilter(iConfig) 
+HLTAlphaTFilter<T>::HLTAlphaTFilter(const edm::ParameterSet& iConfig) : HLTFilter(iConfig)
 {
-  inputJetTag_         = iConfig.getParameter< edm::InputTag > ("inputJetTag"); 
-  inputJetTagFastJet_  = iConfig.getParameter< edm::InputTag > ("inputJetTagFastJet"); 
-  minPtJet_            = iConfig.getParameter<std::vector<double> > ("minPtJet"); 
-  etaJet_              = iConfig.getParameter<std::vector<double> > ("etaJet"); 
-  maxNJets_            = iConfig.getParameter<unsigned int> ("maxNJets"); 
-  minHt_               = iConfig.getParameter<double> ("minHt"); 
+  inputJetTag_         = iConfig.getParameter< edm::InputTag > ("inputJetTag");
+  inputJetTagFastJet_  = iConfig.getParameter< edm::InputTag > ("inputJetTagFastJet");
+  minPtJet_            = iConfig.getParameter<std::vector<double> > ("minPtJet");
+  etaJet_              = iConfig.getParameter<std::vector<double> > ("etaJet");
+  maxNJets_            = iConfig.getParameter<unsigned int> ("maxNJets");
+  minHt_               = iConfig.getParameter<double> ("minHt");
   minAlphaT_           = iConfig.getParameter<double> ("minAlphaT");
   triggerType_         = iConfig.getParameter<int>("triggerType");
   // sanity checks
-  
+
   if (       (minPtJet_.size()    !=  etaJet_.size())
 	     || (  (minPtJet_.size()<1) || (etaJet_.size()<1) )
 	     || ( ((minPtJet_.size()<2) || (etaJet_.size()<2))))
@@ -48,6 +45,8 @@ HLTAlphaTFilter<T>::HLTAlphaTFilter(const edm::ParameterSet& iConfig) : HLTFilte
     }
 
   //register your products
+  m_theRecoJetToken = consumes<std::vector<T>>(inputJetTag_);
+  m_theFastJetToken = consumes<std::vector<T>>(inputJetTagFastJet_);
 }
 
 template<typename T>
@@ -56,7 +55,7 @@ HLTAlphaTFilter<T>::~HLTAlphaTFilter(){}
 template<typename T>
 void HLTAlphaTFilter<T>::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   edm::ParameterSetDescription desc;
-  makeHLTFilterDescription(desc); 
+  makeHLTFilterDescription(desc);
   desc.add<edm::InputTag>("inputJetTag",edm::InputTag("hltMCJetCorJetIcone5HF07"));
   desc.add<edm::InputTag>("inputJetTagFastJet",edm::InputTag("hltMCJetCorJetIcone5HF07"));
 
@@ -86,7 +85,7 @@ void HLTAlphaTFilter<T>::fillDescriptions(edm::ConfigurationDescriptions& descri
 
 // ------------ method called to produce the data  ------------
 template<typename T>
-bool HLTAlphaTFilter<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct)
+bool HLTAlphaTFilter<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) const
 {
 
   using namespace std;
@@ -98,19 +97,19 @@ bool HLTAlphaTFilter<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& iS
   typedef Ref<TCollection> TRef;
 
   // The filter object
-  if (saveTags()) filterproduct.addCollectionTag(inputJetTag_);  
+  if (saveTags()) filterproduct.addCollectionTag(inputJetTag_);
 
   TRef ref;
   // Get the Candidates
   Handle<TCollection> recojets;
-  iEvent.getByLabel(inputJetTag_,recojets);
+  iEvent.getByToken(m_theRecoJetToken,recojets);
 
   // We have to also look at the L1 FastJet Corrections, at the same time we look at our other jets.
   // We calcualte our HT from the FastJet collection and AlphaT from the standard collection.
   CaloJetRef ref_FastJet;
   // Get the Candidates
   Handle<TCollection> recojetsFastJet;
-  iEvent.getByLabel(inputJetTagFastJet_,recojetsFastJet);
+  iEvent.getByToken(m_theFastJetToken,recojetsFastJet);
 
 
 
@@ -127,7 +126,7 @@ bool HLTAlphaTFilter<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& iS
     std::vector<LorentzV> jets;
     typename TCollection::const_iterator ijet     = recojets->begin();
     typename TCollection::const_iterator ijetFast = recojetsFastJet->begin();
-    typename TCollection::const_iterator jjet     = recojets->end(); 
+    typename TCollection::const_iterator jjet     = recojets->end();
 
 
 
@@ -148,9 +147,9 @@ bool HLTAlphaTFilter<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& iS
 	    // Add to HT
 	    htFast += ijetFast->et();
 	  }
-	}      
-    
-	// Add to JetVector    
+	}
+
+	// Add to JetVector
 	LorentzV JetLVec(ijet->pt(),ijet->eta(),ijet->phi(),ijet->mass());
 	jets.push_back( JetLVec );
 	double aT = AlphaT(jets).value();

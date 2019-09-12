@@ -1,6 +1,5 @@
 /** \file CSCRangeMapAccessor.cc
  *
- *  $Date: 2009/02/03 21:56:18 $
  *  \author Matteo Sani
  */
 

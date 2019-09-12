@@ -19,7 +19,7 @@
 
 #include "boost/shared_ptr.hpp"
 
-#include "FWCore/Framework/interface/EDProducer.h"
+#include "FWCore/Framework/interface/one/EDProducer.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "Mixing/Base/interface/PileUp.h"
 #include "FWCore/Framework/interface/ESWatcher.h"
@@ -27,7 +27,7 @@
 
 
 namespace edm {
-  class BMixingModule : public edm::EDProducer {
+  class BMixingModule : public edm::one::EDProducer<edm::one::SharedResources, edm::one::WatchRuns, edm::one::WatchLuminosityBlocks> {
     public:
       /** standard constructor*/
       explicit BMixingModule(const edm::ParameterSet& ps);
@@ -46,8 +46,8 @@ namespace edm {
       virtual void beginRun(const edm::Run& r, const edm::EventSetup& setup) override;
       virtual void beginLuminosityBlock(const edm::LuminosityBlock& l, const edm::EventSetup& setup) override;
 
-      virtual void endRun(const edm::Run& r, const edm::EventSetup& setup) override {}
-      virtual void endLuminosityBlock(const edm::LuminosityBlock& l, const edm::EventSetup& setup) override {}
+      virtual void endRun(const edm::Run& r, const edm::EventSetup& setup) override;
+      virtual void endLuminosityBlock(const edm::LuminosityBlock& l, const edm::EventSetup& setup) override;
 
       // to be overloaded by dependent class
       virtual void reload(const edm::EventSetup & setup){};
@@ -71,11 +71,13 @@ namespace edm {
       virtual void getEventStartInfo(edm::Event & e,const unsigned int source) {;} //to be set locally
 
   protected:
+      void setupPileUpEvent(const edm::EventSetup& setup);
       void dropUnwantedBranches(std::vector<std::string> const& wantedBranches);
-      virtual void endJob();
+      virtual void beginJob() override;
+      virtual void endJob() override;
       //      std::string type_;
       int bunchSpace_;
-      static int vertexoffset;
+      int vertexOffset_;
       bool checktof_;
       int minBunch_;
       int maxBunch_;

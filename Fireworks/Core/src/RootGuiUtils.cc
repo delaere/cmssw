@@ -1,4 +1,3 @@
-// @(#)root/eve:$Id: RootGuiUtils.cc,v 1.1 2011/02/21 18:50:54 matevz Exp $
 // Author: Matevz Tadel 2011
 
 #include "Fireworks/Core/interface/RootGuiUtils.h"

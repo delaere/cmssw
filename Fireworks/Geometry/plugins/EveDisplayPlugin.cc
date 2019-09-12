@@ -13,7 +13,6 @@
 //
 // Original Author:  Chris D Jones
 //         Created:  Wed Sep 26 08:27:23 EDT 2007
-// $Id: EveDisplayPlugin.cc,v 1.1 2010/04/01 21:58:00 chrjones Exp $
 //
 //
 
@@ -48,7 +47,7 @@ class EveDisplayPlugin : public fireworks::geometry::DisplayPlugin {
 
 
    private:
-      virtual void run(const edm::EventSetup&);
+      virtual void run(const edm::EventSetup&) override;
 
 };
 

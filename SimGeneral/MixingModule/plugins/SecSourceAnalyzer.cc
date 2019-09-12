@@ -13,7 +13,6 @@
 //
 // Original Author:  Emilia Lubenova Becheva
 //         Created:  Wed Apr 22 16:54:31 CEST 2009
-// $Id: SecSourceAnalyzer.cc,v 1.8 2012/01/30 18:23:36 fwyzard Exp $
 //
 //
 
@@ -28,12 +27,16 @@
 
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
+#include "FWCore/Framework/interface/ModuleContextSentry.h"
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "SimDataFormats/Track/interface/SimTrackContainer.h"
 #include "SimDataFormats/CrossingFrame/interface/PCrossingFrame.h"
 
 #include "FWCore/Framework/interface/InputSourceDescription.h"
+#include "FWCore/ServiceRegistry/interface/InternalContext.h"
+#include "FWCore/ServiceRegistry/interface/ModuleCallingContext.h"
+#include "FWCore/ServiceRegistry/interface/ParentContext.h"
 #include "FWCore/Sources/interface/VectorInputSourceFactory.h"
 
 #include "FWCore/Sources/interface/VectorInputSource.h"
@@ -100,7 +103,7 @@ SecSourceAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 	   input_->readPileUp( iEvent.id(),
                                vectorEventIDs_[ ibx-minBunch_ ],
 			       boost::bind(&SecSourceAnalyzer::getBranches, 
-					   this, _1), ibx
+					   this, _1, iEvent.moduleCallingContext()), ibx
 			       );
 	 }
        else
@@ -120,8 +123,14 @@ SecSourceAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 	     << " bunch." << std::endl;
 }
 
-void  SecSourceAnalyzer::getBranches(EventPrincipal const &ep)
+void  SecSourceAnalyzer::getBranches(EventPrincipal const &ep,
+                                     ModuleCallingContext const* mcc)
   { 
+    InternalContext internalContext(ep.id(), mcc);
+    ParentContext parentContext(&internalContext);
+    ModuleCallingContext moduleCallingContext(&moduleDescription());
+    ModuleContextSentry moduleContextSentry(&moduleCallingContext, parentContext);
+
     std::cout <<"-> Get the event:  id " << ep.id() << std::endl;
     std::cout << "-> dataStep2_ = " << dataStep2_ << std::endl;
     tag_ = InputTag(label_);
@@ -134,7 +143,7 @@ void  SecSourceAnalyzer::getBranches(EventPrincipal const &ep)
         
 	// default version changed to transmit vertexoffset
         boost::shared_ptr<Wrapper<std::vector<SimTrack> > const> shPtr =
-        getProductByTag<std::vector<SimTrack> >(ep, tag_);
+          getProductByTag<std::vector<SimTrack> >(ep, tag_, &moduleCallingContext);
     
         if (shPtr) 
 		std::cout << "-> Could get SimTrack !" << std::endl;
@@ -148,7 +157,7 @@ void  SecSourceAnalyzer::getBranches(EventPrincipal const &ep)
         // default version changed to transmit vertexoffset
 	tag_ = InputTag("CFwriter","g4SimHits");
         boost::shared_ptr<Wrapper<PCrossingFrame<SimTrack> > const> shPtr =
-        getProductByTag<PCrossingFrame<SimTrack> >(ep, tag_);
+          getProductByTag<PCrossingFrame<SimTrack> >(ep, tag_, &moduleCallingContext);
         
 	if (shPtr) 
 		std::cout << "-> Could get PCrossingFrame<SimTrack> !" << std::endl;

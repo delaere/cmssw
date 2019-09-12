@@ -2,8 +2,6 @@
  *  
  *  See header file for description of class
  *
- *  $Date: 2011/08/09 08:25:25 $
- *  $Revision: 1.8 $
  *  \author M. Strang SUNY-Buffalo
  *  Testing by Ken Smith
  */
@@ -33,6 +31,7 @@ GlobalRecHitsHistogrammer::GlobalRecHitsHistogrammer(const edm::ParameterSet& iP
 
   //get Labels to use to extract information
   GlobalRecHitSrc_ = iPSet.getParameter<edm::InputTag>("GlobalRecHitSrc");
+  GlobalRecHitSrc_Token_ = consumes<PGlobalRecHit>(iPSet.getParameter<edm::InputTag>("GlobalRecHitSrc"));
   // ECalEBSrc_ = iPSet.getParameter<edm::InputTag>("ECalEBSrc");
   //ECalUncalEBSrc_ = iPSet.getParameter<edm::InputTag>("ECalUncalEBSrc");
   //ECalEESrc_ = iPSet.getParameter<edm::InputTag>("ECalEESrc");
@@ -345,7 +344,8 @@ void GlobalRecHitsHistogrammer::analyze(const edm::Event& iEvent,
   }
 
 edm::Handle<PGlobalRecHit> srcGlobalRecHits;
-  iEvent.getByLabel(GlobalRecHitSrc_,srcGlobalRecHits);
+//  iEvent.getByLabel(GlobalRecHitSrc_,srcGlobalRecHits);
+  iEvent.getByToken(GlobalRecHitSrc_Token_,srcGlobalRecHits);
   if (!srcGlobalRecHits.isValid()) {
     edm::LogWarning(MsgLoggerCat)
       << "Unable to find PGlobalRecHit in event!";

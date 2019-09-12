@@ -8,8 +8,6 @@
 
 /** \class CastorPacker
   *  
-  * $Date: 2009/02/20 17:46:27 $
-  * $Revision: 1.2 $
   * \author J. Mans - Minnesota
   */
 class CastorPacker {

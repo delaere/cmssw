@@ -1,8 +1,8 @@
 /** \file MaterialProperties.cc
  *  
  *
- *  $Date: 2009/05/12 07:17:48 $
- *  $Revision: 1.4 $
+ *  $Date: 2007/06/11 14:44:29 $
+ *  $Revision: 1.3 $
  *  \author Maarten Thomas
  */
 
@@ -10,6 +10,8 @@
 #include "G4LogicalVolumeStore.hh" 
 
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
+
+#include "G4SystemOfUnits.hh"
 
 	MaterialProperties::MaterialProperties(int DebugLevel, double SiAbsLengthScale) 
 	: theMaterialTable(), theMPDebugLevel(0), 

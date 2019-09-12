@@ -4,9 +4,6 @@
 /** \class GEDPhotonCoreProducer
  **  
  **
- **  $Id: GEDPhotonCoreProducer.cc,v 1.1 2013/05/07 12:33:37 nancy Exp $ 
- **  $Date: 2013/05/07 12:33:37 $ 
- **  $Revision: 1.1 $
  **  \author Nancy Marinelli, U. of Notre Dame, US
  **
  ***/
@@ -42,11 +39,17 @@ GEDPhotonCoreProducer::GEDPhotonCoreProducer(const edm::ParameterSet& config) :
 {
 
   // use onfiguration file to setup input/output collection names
-  pfEgammaCandidates_      = conf_.getParameter<edm::InputTag>("pfEgammaCandidates");
+  pfEgammaCandidates_ = 
+    consumes<reco::PFCandidateCollection>(conf_.getParameter<edm::InputTag>("pfEgammaCandidates"));
+  pixelSeedProducer_ = 
+    consumes<reco::ElectronSeedCollection>(conf_.getParameter<edm::InputTag>("pixelSeedProducer"));
+
   GEDPhotonCoreCollection_ = conf_.getParameter<std::string>("gedPhotonCoreCollection");
 
+
+
   // Register the product
-  produces< reco::PhotonCoreCollection >(GEDPhotonCoreCollection_);
+  produces<reco::PhotonCoreCollection>(GEDPhotonCoreCollection_);
   produces<reco::ConversionCollection>(PFConversionCollection_);
 
 }
@@ -70,25 +73,36 @@ void GEDPhotonCoreProducer::produce(edm::Event &theEvent, const edm::EventSetup&
 
   // Get the  PF refined cluster  collection
   Handle<reco::PFCandidateCollection> pfCandidateHandle;
-  theEvent.getByLabel(pfEgammaCandidates_,pfCandidateHandle);
+  theEvent.getByToken(pfEgammaCandidates_,pfCandidateHandle);
   if (!pfCandidateHandle.isValid()) {
-    edm::LogError("GEDPhotonCoreProducer") << "Error! Can't get the product "<<pfEgammaCandidates_.label();
+    edm::LogError("GEDPhotonCoreProducer") 
+      << "Error! Can't get the pfEgammaCandidates";
   }
+
+
+ // Get ElectronPixelSeeds
+  validPixelSeeds_=true;
+  Handle<reco::ElectronSeedCollection> pixelSeedHandle;
+  reco::ElectronSeedCollection pixelSeeds;
+  theEvent.getByToken(pixelSeedProducer_, pixelSeedHandle);
+  if (!pixelSeedHandle.isValid()) {
+    validPixelSeeds_=false;
+  }
+
 
  
   //  std::cout <<  "  GEDPhotonCoreProducer::produce input PFcandidate size " <<   pfCandidateHandle->size() << std::endl;
 
 
   // Loop over PF candidates and get only photons
-
+  reco::ElectronSeedCollection::const_iterator pixelSeedItr;
   for(unsigned int lCand=0; lCand < pfCandidateHandle->size(); lCand++) {
     reco::PFCandidateRef candRef (reco::PFCandidateRef(pfCandidateHandle,lCand));
-    if(candRef->particleId()!=reco::PFCandidate::gamma) continue;
 
     // Retrieve stuff from the pfPhoton
     reco::PFCandidateEGammaExtraRef pfPhoRef =  candRef->egammaExtraRef();
     reco::SuperClusterRef  refinedSC= pfPhoRef->superClusterRef();
-    reco::SuperClusterRef  boxSC= pfPhoRef->superClusterBoxRef();
+    reco::SuperClusterRef  boxSC= pfPhoRef->superClusterPFECALRef();
     const reco::ConversionRefVector & doubleLegConv = pfPhoRef->conversionRef();
     reco::CaloClusterPtr refinedSCPtr= edm::refToPtr(refinedSC);
 
@@ -100,7 +114,7 @@ void GEDPhotonCoreProducer::produce(edm::Event &theEvent, const edm::EventSetup&
     newCandidate.setPFlowPhoton(true);
     newCandidate.setStandardPhoton(false);
     newCandidate.setSuperCluster(refinedSC);
-    newCandidate.setPflowSuperCluster(boxSC);
+    newCandidate.setParentSuperCluster(boxSC);
     // fill conversion infos
     
 
@@ -109,8 +123,17 @@ void GEDPhotonCoreProducer::produce(edm::Event &theEvent, const edm::EventSetup&
     } 
 
     //    std::cout << "newCandidate pf refined SC energy="<< newCandidate.superCluster()->energy()<<std::endl;
-    //std::cout << "newCandidate pf SC energy="<< newCandidate.pfSuperCluster()->energy()<<std::endl;
+    //std::cout << "newCandidate pf SC energy="<< newCandidate.parentSuperCluster()->energy()<<std::endl;
     //std::cout << "newCandidate  nconv2leg="<<newCandidate.conversions().size()<< std::endl;
+
+    if ( validPixelSeeds_) {
+      for( unsigned int icp = 0;  icp < pixelSeedHandle->size(); icp++) {
+        reco::ElectronSeedRef cpRef(pixelSeedHandle,icp);
+        if ( boxSC.isNonnull() && boxSC.id() == cpRef->caloCluster().id() && boxSC.key() == cpRef->caloCluster().key() ) {
+          newCandidate.addElectronPixelSeed(cpRef);     
+        }
+      } 
+    }
 
 
 
@@ -119,10 +142,10 @@ void GEDPhotonCoreProducer::produce(edm::Event &theEvent, const edm::EventSetup&
     outputPhotonCoreCollection.push_back(newCandidate);
   }
 
-
+  SingleLeg_p->assign(outputOneLegConversionCollection.begin(),outputOneLegConversionCollection.end()); 
   const edm::OrphanHandle<reco::ConversionCollection> singleLegConvOrhpHandle = theEvent.put(SingleLeg_p,PFConversionCollection_);
 
-  //  std::cout <<  "  GEDPhotonCoreProducer::produce orphanHandle to single legs " <<  singleLegConvOrhpHandle->size() << std::endl;
+  //std::cout <<  "  GEDPhotonCoreProducer::produce orphanHandle to single legs " <<  singleLegConvOrhpHandle->size() << std::endl;
   //std::cout <<  "  GEDPhotonCoreProducer::produce photon size " <<  outputPhotonCoreCollection.size() << std::endl;
 
   
@@ -138,7 +161,7 @@ void GEDPhotonCoreProducer::produce(edm::Event &theEvent, const edm::EventSetup&
     }
     // debug
     //    std::cout << "PhotonCoreCollection i="<<ipho<<" pf refined SC energy="<<gamIter->superCluster()->energy()<<std::endl;
-    //std::cout << "PhotonCoreCollection i="<<ipho<<" pf SC energy="<<gamIter->pfSuperCluster()->energy()<<std::endl;
+    //std::cout << "PhotonCoreCollection i="<<ipho<<" pf SC energy="<<gamIter->parentSuperCluster()->energy()<<std::endl;
     //std::cout << "PhotonCoreCollection i="<<ipho<<" nconv2leg="<<gamIter->conversions().size()<<" nconv1leg="<<gamIter->conversionsOneLeg().size()<<std::endl;
     ipho++;
   }
@@ -156,12 +179,12 @@ void GEDPhotonCoreProducer::produce(edm::Event &theEvent, const edm::EventSetup&
 } 
 
 
-void GEDPhotonCoreProducer::createSingleLegConversions(reco::CaloClusterPtr sc,  std::vector<reco::TrackRef>  conv, std::vector<float> mva,  reco::ConversionCollection &oneLegConversions) {
+void GEDPhotonCoreProducer::createSingleLegConversions(reco::CaloClusterPtr sc,  const std::vector<reco::TrackRef>&  conv, const std::vector<float>& mva,  reco::ConversionCollection &oneLegConversions) {
   // this method translates the single track into the Conversion Data Format
 
   math::Error<3>::type error;
   for (unsigned int itk=0; itk<conv.size(); itk++){
-    const reco::Vertex  * convVtx = new reco::Vertex(conv[itk]->innerPosition(), error);
+    const reco::Vertex convVtx(conv[itk]->innerPosition(), error);
     std::vector<reco::TrackRef> OneLegConvVector;
     OneLegConvVector.push_back(conv[itk]);
     std::vector< float > OneLegMvaVector;
@@ -191,7 +214,7 @@ void GEDPhotonCoreProducer::createSingleLegConversions(reco::CaloClusterPtr sc, 
     reco::Conversion singleLegConvCandidate(scPtrVec, 
 					OneLegConvVector,
 					trackPositionAtEcalVec,
-					*convVtx,
+					convVtx,
 					dummymatchingBC,
 					DCA,
 					innPointVec,

@@ -5,7 +5,7 @@
 
  author: Francisco Yumiceva, Fermilab (yumiceva@fnal.gov)
 
- version $Id: JetCombinatorics.cc,v 1.4 2012/10/11 14:25:45 eulisse Exp $
+ version $Id: JetCombinatorics.cc,v 1.3 2009/07/30 06:02:21 jengbou Exp $
 
 ________________________________________________________________**/
 
@@ -209,7 +209,7 @@ std::map< int, std::string > JetCombinatorics::NestedCombinatorics() {
 }
 
 //______________________________________________________________
-void JetCombinatorics::FourJetsCombinations(std::vector<TLorentzVector> jets, std::vector<double> bdiscriminators ) {
+void JetCombinatorics::FourJetsCombinations(const std::vector<TLorentzVector>& jets, const std::vector<double>& bdiscriminators ) {
 
 
 	int n = 0; // total number of combos

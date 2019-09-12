@@ -17,7 +17,6 @@
 //
 // Original Author:  Lorenzo AGOSTINO
 //         Created:  Mon Jul 17 18:07:01 CEST 2006
-// $Id: AlCaECALRecHitReducer.h,v 1.1 2012/07/12 18:49:41 shervin Exp $
 //
 //
 

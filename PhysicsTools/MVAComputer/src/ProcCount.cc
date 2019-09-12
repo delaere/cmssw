@@ -9,7 +9,6 @@
 //
 // Author:      Christophe Saout
 // Created:     Fri May 18 20:05 CEST 2007
-// $Id: ProcCount.cc,v 1.2 2007/07/15 22:31:46 saout Exp $
 //
 
 #include "FWCore/Utilities/interface/Exception.h"
@@ -31,8 +30,8 @@ class ProcCount : public VarProcessor {
 	          const MVAComputer *computer);
 	virtual ~ProcCount() {}
 
-	virtual void configure(ConfIterator iter, unsigned int n);
-	virtual void eval(ValueIterator iter, unsigned int n) const;
+	virtual void configure(ConfIterator iter, unsigned int n) override;
+	virtual void eval(ValueIterator iter, unsigned int n) const override;
 };
 
 static ProcCount::Registry registry("ProcCount");

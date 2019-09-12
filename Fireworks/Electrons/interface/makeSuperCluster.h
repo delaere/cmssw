@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Fri Dec  5 15:32:20 EST 2008
-// $Id: makeSuperCluster.h,v 1.4 2010/04/20 20:49:42 amraktad Exp $
 //
 
 // system include files

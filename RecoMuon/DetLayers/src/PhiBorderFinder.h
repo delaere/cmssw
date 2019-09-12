@@ -5,8 +5,6 @@
  *  Find the phi binning of a list of detector according to several 
  *  definitions.
  *
- *  $Date: 2007/03/07 13:20:54 $
- *  $Revision: 1.10 $
  *  \author N. Amapane - INFN Torino
  */
 
@@ -33,8 +31,9 @@ public:
   typedef geomsort::ExtractPhi<Det,float> DetPhi;
 
 
-  PhiBorderFinder(std::vector<const Det*> theDets) 
-    : theNbins(theDets.size()), isPhiPeriodic_(false), isPhiOverlapping_(false) {
+  PhiBorderFinder(const std::vector<const Det*>& utheDets) 
+    : theNbins(utheDets.size()), isPhiPeriodic_(false), isPhiOverlapping_(false) {
+    std::vector<const Det*> theDets = utheDets;
     precomputed_value_sort(theDets.begin(), theDets.end(), DetPhi());
 
     const std::string metname = "Muon|RecoMuon|RecoMuonDetLayers|PhiBorderFinder";

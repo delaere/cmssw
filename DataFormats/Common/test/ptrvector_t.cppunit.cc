@@ -5,7 +5,7 @@
 #include "DataFormats/Common/interface/Wrapper.h"
 #include "DataFormats/Common/interface/IntValues.h"
 
-#include <cppunit/extensions/HelperMacros.h>
+#include "cppunit/extensions/HelperMacros.h"
 
 #include <algorithm>
 #include <iostream>
@@ -41,9 +41,13 @@ namespace testPtr {
 
   struct TestGetter : public edm::EDProductGetter {
     edm::WrapperHolder hold_;
-    edm::WrapperHolder getIt(edm::ProductID const&) const {
+    virtual edm::WrapperHolder getIt(edm::ProductID const&) const override {
       return hold_;
     }
+    virtual unsigned int transitionIndex_() const override {
+    return 0U;
+    }
+
     TestGetter() : hold_() {}
   };
 }

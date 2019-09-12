@@ -15,8 +15,6 @@
  *  See the file doc/README for more detailed documentation, including
  *  advantages, disadvantages, and use philosophy.
  *  
- *  $Date: 2010/01/19 11:49:24 $
- *  $Revision: 1.4 $
  *  \author Burt Betchart - University of Rochester <burton.andrew.betchart@cern.ch>
  */
 

@@ -11,8 +11,6 @@ class CastorMergerData;
  *  Interpretive class for an CastorCTDCHeader
  *   
  *
- *  $Date: 2009/02/20 17:46:27 $
- *  $Revision: 1.1 $
  *  \author A. Campbell - DESY
  */
 

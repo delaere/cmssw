@@ -11,8 +11,6 @@
  *  combination of one lepton + jets cleaned against this leptons satisfy the cuts.
  *  These jets are then added to a cleaned jet collection which is put into the event.
  *
- *  $Date: 2012/02/06 15:09:21 $
- *  $Revision: 1.4 $
  *
  *  \author Lukasz Kreczko
  *
@@ -27,6 +25,9 @@
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
+#include "DataFormats/HLTReco/interface/TriggerFilterObjectWithRefs.h"
+#include "DataFormats/JetReco/interface/CaloJetCollection.h"
+#include "DataFormats/JetReco/interface/PFJetCollection.h"
 
 namespace edm {
    class ConfigurationDescriptions;
@@ -45,6 +46,8 @@ template <typename jetType> class HLTJetCollectionsForLeptonPlusJets: public edm
   private:
     virtual void produce(edm::Event&, const edm::EventSetup&);
 
+    edm::EDGetTokenT<trigger::TriggerFilterObjectWithRefs> m_theLeptonToken;
+    edm::EDGetTokenT<std::vector<jetType>> m_theJetToken;
     edm::InputTag hltLeptonTag;
     edm::InputTag sourceJetTag;
 

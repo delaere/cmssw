@@ -10,8 +10,6 @@
  *                regional Calorimeter Trigger
 */
 //
-//   $Date: 2007/04/12 13:21:14 $
-//   $Revision: 1.3 $
 //
 //   Author :
 //   N. Neumeister            CERN EP 

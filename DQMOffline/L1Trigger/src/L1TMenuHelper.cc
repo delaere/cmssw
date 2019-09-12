@@ -1,9 +1,6 @@
-
-/*
+/**
  * \file L1TMenuHelper.cc
  *
- * $Date: 2012/11/20 14:57:08 $
- * $Revision: 1.1 $
  * \author J. Pela, P. Musella
  *
 */
@@ -65,7 +62,6 @@ L1TMenuHelper::~L1TMenuHelper(){}
 //   * Get Lowest Unprescaled Single Object Triggers and Energy Sums
 //-------------------------------------------------------------------------------------
 map<string,string> L1TMenuHelper::getLUSOTrigger(map<string,bool> iCategories, int IndexRefPrescaleFactors){
-
   map<string,string> out;
 
   // Getting information from the menu
@@ -324,7 +320,6 @@ map<string,string> L1TMenuHelper::getLUSOTrigger(map<string,bool> iCategories, i
 }
 
 map<string,string> L1TMenuHelper::testAlgos(map<string,string> iAlgos){
-
   // Getting information from the menu
   const AlgorithmMap *theAlgoMap = &m_l1GtMenu->gtAlgorithmAliasMap();
 
@@ -438,7 +433,7 @@ string L1TMenuHelper::enumToStringL1GtConditionCategory(L1GtConditionCategory iC
 }
 
 //__________________________________________________________________
-int L1TMenuHelper::getPrescaleByAlias(TString iCategory,TString iAlias){
+int L1TMenuHelper::getPrescaleByAlias(const TString& iCategory,const TString& iAlias){
 
     int out = -1;
 
@@ -471,7 +466,7 @@ int L1TMenuHelper::getPrescaleByAlias(TString iCategory,TString iAlias){
 }
 
 //__________________________________________________________________
-unsigned int L1TMenuHelper::getEtaRangeByAlias(TString iCategory,TString iAlias){
+unsigned int L1TMenuHelper::getEtaRangeByAlias(const TString& iCategory,const TString& iAlias){
 
     unsigned int out = -1;
 
@@ -504,7 +499,7 @@ unsigned int L1TMenuHelper::getEtaRangeByAlias(TString iCategory,TString iAlias)
 }
 
 //__________________________________________________________________
-unsigned int L1TMenuHelper::getQualityAlias(TString iCategory,TString iAlias){
+unsigned int L1TMenuHelper::getQualityAlias(const TString& iCategory,const TString& iAlias){
 
     unsigned int out = -1;
 

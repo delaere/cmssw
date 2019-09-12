@@ -2,7 +2,7 @@
                           main.cpp  -  description
                              -------------------
     begin                : Wed Oct 24 17:36:15 PDT 2001
-    copyright            : (C) 2001 by Michael Case
+    author               : Michael Case
     email                : case@ucdhep.ucdavis.edu
  ***************************************************************************/
 
@@ -26,7 +26,6 @@
 
 #include "DetectorDescription/Parser/interface/DDLParser.h"
 #include "DetectorDescription/Parser/interface/FIPConfiguration.h"
-#include "DetectorDescription/Algorithm/src/AlgoInit.h"
 #include "DetectorDescription/Core/src/DDCheck.h"
 #include "DetectorDescription/Core/interface/DDExpandedView.h"
 #include "DetectorDescription/Core/interface/DDExpandedNode.h"
@@ -78,10 +77,6 @@ int main(int argc, char *argv[])
     edm::ServiceRegistry::Operate operate(tempToken);
 
     // END Copy from example stand-alone program in Message Logger July 18, 2007
-
-    std::cout << "main:: initialize" << std::endl;
-
-    AlgoInit();
 
     std::cout << "main::initialize DDL parser" << std::endl;
     DDCompactView cpv;

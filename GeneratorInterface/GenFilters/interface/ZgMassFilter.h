@@ -15,7 +15,6 @@
 //
 // Original Author:  Alexey Ferapontov
 //         Created:  Thu July 26 11:57:54 CDT 2012
-// $Id: ZgMassFilter.h,v 1.1 2012/08/10 12:46:29 lenzip Exp $
 //
 //
 

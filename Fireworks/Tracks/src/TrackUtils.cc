@@ -2,7 +2,6 @@
 //
 // Package:     Tracks
 // Class  :     TrackUtils
-// $Id: TrackUtils.cc,v 1.43 2013/02/28 14:24:18 yana Exp $
 //
 
 // system include files

@@ -4,6 +4,7 @@
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
+#include <FWCore/Utilities/interface/ESInputTag.h>
 
 #include "MagneticField/Engine/interface/MagneticField.h"
 #include "Geometry/TrackerGeometryBuilder/interface/TrackerGeometry.h"
@@ -25,6 +26,7 @@
 #include <TrackingTools/KalmanUpdators/interface/Chi2MeasurementEstimator.h>
 #include <TrackingTools/DetLayers/interface/GeometricSearchDet.h> 
 #include <RecoTracker/MeasurementDet/interface/MeasurementTracker.h>
+#include <RecoTracker/MeasurementDet/interface/MeasurementTrackerEvent.h>
 #include <TrackingTools/MeasurementDet/interface/MeasurementDet.h>
 #include "RecoTracker/Record/interface/CkfComponentsRecord.h"
 
@@ -55,7 +57,20 @@ TrackProducerBase<T>::getFromES(const edm::EventSetup& setup,
   //get magnetic field
   //
   LogDebug("TrackProducer") << "get magnetic field" << "\n";
-  setup.get<IdealMagneticFieldRecord>().get(theMF);  
+  // 2014/02/11 mia:
+  // we should get rid of the boolean parameter useSimpleMF,
+  // and use only a string magneticField [instead of SimpleMagneticField]
+  // or better an edm::ESInputTag (at the moment HLT does not handle ESInputTag)
+  bool useSimpleMF = false;
+  if (conf_.exists("useSimpleMF")) useSimpleMF = conf_.getParameter<bool>("useSimpleMF");
+  std::string mfName = "";			
+  if (useSimpleMF){
+     mfName = conf_.getParameter<std::string>("SimpleMagneticField"); 
+  }
+  setup.get<IdealMagneticFieldRecord>().get(mfName, theMF);  
+  //  edm::ESInputTag mfESInputTag(mfName);
+  //  setup.get<IdealMagneticFieldRecord>().get(mfESInputTag, theMF);  
+
   //
   // get the fitter from the ES
   //
@@ -105,11 +120,11 @@ TrackProducerBase<T>::getFromEvt(edm::Event& theEvent,edm::Handle<TrackCandidate
   //
   LogDebug("TrackProducer") << 
     "get the TrackCandidateCollection from the event, source is " << src_<<"\n";
-    theEvent.getByLabel(src_,theTCCollection );  
+    theEvent.getByToken(src_,theTCCollection );  
 
   //get the BeamSpot
   edm::Handle<reco::BeamSpot> recoBeamSpotHandle;
-  theEvent.getByLabel(bsSrc_,recoBeamSpotHandle);
+  theEvent.getByToken(bsSrc_,recoBeamSpotHandle);
   bs = *recoBeamSpotHandle;
 }
 
@@ -121,11 +136,11 @@ TrackProducerBase<T>::getFromEvt(edm::Event& theEvent,edm::Handle<TrackCollectio
   //
   LogDebug("TrackProducer") << 
     "get the TrackCollection from the event, source is " << src_<<"\n";
-    theEvent.getByLabel(src_,theTCollection );  
+    theEvent.getByToken(src_,theTCollection );  
 
   //get the BeamSpot
   edm::Handle<reco::BeamSpot> recoBeamSpotHandle;
-  theEvent.getByLabel(bsSrc_,recoBeamSpotHandle);
+  theEvent.getByToken(bsSrc_,recoBeamSpotHandle);
   bs = *recoBeamSpotHandle;
 }
 
@@ -134,7 +149,7 @@ TrackProducerBase<T>::getFromEvt(edm::Event& theEvent,edm::Handle<TrackCollectio
 
 template <class T> void
 TrackProducerBase<T>::setSecondHitPattern(Trajectory* traj, T& track, 
-					  const Propagator* prop, const MeasurementTracker* measTk){
+					  const Propagator* prop, const MeasurementTrackerEvent* measTk){
   using namespace std;
   /// have to clone the propagator in order to change its propagation direction. Have to remember to delete the clone!!
   Propagator* localProp = prop->clone();
@@ -146,8 +161,8 @@ TrackProducerBase<T>::setSecondHitPattern(Trajectory* traj, T& track,
   // Therefore the lastMeasurement is the inner one (for LHC-like tracks)
   if(traj->firstMeasurement().updatedState().isValid() &&
      traj->lastMeasurement().updatedState().isValid()){
-    FreeTrajectoryState*  outerState = traj->firstMeasurement().updatedState().freeState();    
-    FreeTrajectoryState*  innerState = traj->lastMeasurement().updatedState().freeState(); 
+    const FreeTrajectoryState*  outerState = traj->firstMeasurement().updatedState().freeState();    
+    const FreeTrajectoryState*  innerState = traj->lastMeasurement().updatedState().freeState(); 
     TrajectoryStateOnSurface outerTSOS = traj->firstMeasurement().updatedState();
     TrajectoryStateOnSurface innerTSOS = traj->lastMeasurement().updatedState();
     const DetLayer* outerLayer = traj->firstMeasurement().layer();
@@ -204,9 +219,9 @@ TrackProducerBase<T>::setSecondHitPattern(Trajectory* traj, T& track,
       vector< GeometricSearchDet::DetWithState > detWithState = (*it)->compatibleDets(innerTSOS,*localProp,estimator);
       if(!detWithState.size()) continue;
       DetId id = detWithState.front().first->geographicalId();
-      const MeasurementDet* measDet = measTk->idToDet(id);	
+      MeasurementDetWithData measDet = measTk->idToDet(id);	
       //if(measDet->isActive() && !measDet->hasBadComponents(detWithState.front().second)){	
-      if(measDet->isActive()){	  
+      if(measDet.isActive()){	  
 	InvalidTrackingRecHit  tmpHit(id,TrackingRecHit::missing);
 	track.setTrackerExpectedHitsInner(tmpHit,counter); counter++;
 	//cout << "WARNING: this hit is marked as lost because the detector was marked as active" << endl;
@@ -228,9 +243,9 @@ TrackProducerBase<T>::setSecondHitPattern(Trajectory* traj, T& track,
       vector< GeometricSearchDet::DetWithState > detWithState = (*it)->compatibleDets(outerTSOS,*localProp,estimator);
       if(!detWithState.size()) continue;
       DetId id = detWithState.front().first->geographicalId();
-      const MeasurementDet* measDet = measTk->idToDet(id);	
+      MeasurementDetWithData measDet = measTk->idToDet(id);	
       //if(measDet->isActive() && !measDet->hasBadComponents(detWithState.front().second)){	
-      if(measDet->isActive()){	  
+      if(measDet.isActive()){	  
 	InvalidTrackingRecHit  tmpHit(id,TrackingRecHit::missing);
 	track.setTrackerExpectedHitsOuter(tmpHit,counter); counter++;
 	//cout << "WARNING: this hit is marked as lost because the detector was marked as active" << endl;

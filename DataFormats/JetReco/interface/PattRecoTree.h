@@ -6,7 +6,6 @@
  * Applications should use fftjet::SparseClusteringTree
  *
  * \author Igor Volobouev, TTU, June 16, 2010
- * \version   $Id: PattRecoTree.h,v 1.1 2010/11/22 23:27:57 igv Exp $
  ************************************************************/
 
 #ifndef DataFormats_JetReco_PattRecoTree_h

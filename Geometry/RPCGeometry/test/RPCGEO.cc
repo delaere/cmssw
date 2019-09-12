@@ -13,7 +13,6 @@
 //
 // Original Author:  pts/91
 //         Created:  Wed Sep 26 17:08:29 CEST 2007
-// $Id: RPCGEO.cc,v 1.8 2011/10/18 13:23:18 yana Exp $
 //
 //
 

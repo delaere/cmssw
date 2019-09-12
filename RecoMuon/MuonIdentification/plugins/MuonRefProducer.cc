@@ -5,7 +5,6 @@
 // 
 //
 // Original Author:  Dmytro Kovalskyi
-// $Id: MuonRefProducer.cc,v 1.5 2010/03/25 14:08:49 jribnik Exp $
 //
 //
 
@@ -31,6 +30,8 @@
 MuonRefProducer::MuonRefProducer(const edm::ParameterSet& iConfig)
 {
    theReferenceCollection_ = iConfig.getParameter<edm::InputTag>("ReferenceCollection");
+   muonToken_ = consumes<reco::MuonCollection> (theReferenceCollection_);
+
    type_ = muon::TMLastStation; // default type
    std::string type = iConfig.getParameter<std::string>("algorithmType");
    if ( type.compare("TMLastStation") != 0 )
@@ -66,7 +67,7 @@ void MuonRefProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    std::auto_ptr<edm::RefVector<std::vector<reco::Muon> > > outputCollection(new edm::RefVector<std::vector<reco::Muon> >);
 
    edm::Handle<reco::MuonCollection> muons;
-   iEvent.getByLabel(theReferenceCollection_, muons);
+   iEvent.getByToken(muonToken_, muons);
    
    // loop over input collection
    for ( unsigned int i=0; i<muons->size(); ++i ) 

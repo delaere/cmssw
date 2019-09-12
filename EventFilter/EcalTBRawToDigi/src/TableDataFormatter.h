@@ -2,7 +2,6 @@
 #define TableDataFormatter_H
 /** \class TableDataFormatter
  *
- *  $Id: TableDataFormatter.h,v 1.5 2007/04/12 08:36:47 franzoni Exp $
  */
 
 #include <TBDataFormats/EcalTBObjects/interface/EcalTBCollections.h>

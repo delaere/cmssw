@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Wed Dec  3 13:55:42 EST 2008
-// $Id: fw3dlego_xbins.h,v 1.3 2010/06/07 18:58:17 matevz Exp $
 //
 
 namespace fw3dlego

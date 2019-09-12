@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripConfigDb.h,v 1.79 2009/11/10 15:51:58 lowette Exp $
 
 #ifndef OnlineDB_SiStripConfigDb_SiStripConfigDb_h
 #define OnlineDB_SiStripConfigDb_SiStripConfigDb_h

@@ -1,8 +1,6 @@
 /*
  * \file EETriggerTowerTask.cc
  *
- * $Date: 2012/04/27 13:46:16 $
- * $Revision: 1.82 $
  * \author G. Della Ricca
  * \author E. Di Marco
  *
@@ -13,7 +11,6 @@
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 
-#include "DataFormats/Common/interface/TriggerResults.h"
 #include "DataFormats/EcalDetId/interface/EEDetId.h"
 #include "DQMServices/Core/interface/MonitorElement.h"
 #include "DQMServices/Core/interface/DQMStore.h"
@@ -68,10 +65,10 @@ EETriggerTowerTask::EETriggerTowerTask(const edm::ParameterSet& ps) {
   reserveArray(meEmulMatch_);
   reserveArray(meVetoEmulError_);
 
-  realCollection_ =  ps.getParameter<edm::InputTag>("EcalTrigPrimDigiCollectionReal");
-  emulCollection_ =  ps.getParameter<edm::InputTag>("EcalTrigPrimDigiCollectionEmul");
-  EEDigiCollection_ = ps.getParameter<edm::InputTag>("EEDigiCollection");
-  HLTResultsCollection_ = ps.getParameter<edm::InputTag>("HLTResultsCollection");
+  realCollection_ =  consumes<EcalTrigPrimDigiCollection>(ps.getParameter<edm::InputTag>("EcalTrigPrimDigiCollectionReal"));
+  emulCollection_ =  consumes<EcalTrigPrimDigiCollection>(ps.getParameter<edm::InputTag>("EcalTrigPrimDigiCollectionEmul"));
+  EEDigiCollection_ = consumes<EEDigiCollection>(ps.getParameter<edm::InputTag>("EEDigiCollection"));
+  HLTResultsCollection_ = consumes<edm::TriggerResults>(ps.getParameter<edm::InputTag>("HLTResultsCollection"));
 
   HLTCaloHLTBit_ = ps.getUntrackedParameter<std::string>("HLTCaloHLTBit", "");
   HLTMuonHLTBit_ = ps.getUntrackedParameter<std::string>("HLTMuonHLTBit", "");
@@ -350,7 +347,7 @@ void EETriggerTowerTask::analyze(const edm::Event& e, const edm::EventSetup& c){
 
   edm::Handle<EcalTrigPrimDigiCollection> realDigis;
 
-  if ( e.getByLabel(realCollection_, realDigis) ) {
+  if ( e.getByToken(realCollection_, realDigis) ) {
 
     int neetpd = realDigis->size();
     LogDebug("EETriggerTowerTask") << "event " << ievt_ << " trigger primitive digi collection size: " << neetpd;
@@ -361,24 +358,16 @@ void EETriggerTowerTask::analyze(const edm::Event& e, const edm::EventSetup& c){
                   meVetoReal_);
 
   } else {
-    edm::LogWarning("EETriggerTowerTask") << realCollection_ << " not available";
+    edm::LogWarning("EETriggerTowerTask") << "realCollection not available";
   }
 
   edm::Handle<EcalTrigPrimDigiCollection> emulDigis;
 
-  if ( e.getByLabel(emulCollection_, emulDigis) ) {
+  if ( e.getByToken(emulCollection_, emulDigis) ) {
 
     edm::Handle<edm::TriggerResults> hltResults;
 
-    if ( !e.getByLabel(HLTResultsCollection_, hltResults) ) {
-      HLTResultsCollection_ = edm::InputTag(HLTResultsCollection_.label(), HLTResultsCollection_.instance(), "HLT");
-    }
-
-    if ( !e.getByLabel(HLTResultsCollection_, hltResults) ) {
-      HLTResultsCollection_ = edm::InputTag(HLTResultsCollection_.label(), HLTResultsCollection_.instance(), "FU");
-    }
-
-    if ( e.getByLabel(HLTResultsCollection_, hltResults) ) {
+    if ( e.getByToken(HLTResultsCollection_, hltResults) ) {
 
       processDigis( e,
                     emulDigis,
@@ -388,11 +377,11 @@ void EETriggerTowerTask::analyze(const edm::Event& e, const edm::EventSetup& c){
                     hltResults);
 
     } else {
-      edm::LogWarning("EETriggerTowerTask") << HLTResultsCollection_ << " not available";
+      edm::LogWarning("EETriggerTowerTask") << "HLTResultsCollection not available";
     }
 
   } else {
-    edm::LogInfo("EETriggerTowerTask") << emulCollection_ << " not available";
+    edm::LogInfo("EETriggerTowerTask") << "emulCollection not available";
   }
 
 }
@@ -418,7 +407,7 @@ EETriggerTowerTask::processDigis( const edm::Event& e, const edm::Handle<EcalTri
 
     edm::Handle<EEDigiCollection> crystalDigis;
 
-    if ( e.getByLabel(EEDigiCollection_, crystalDigis) ) {
+    if ( e.getByToken(EEDigiCollection_, crystalDigis) ) {
 
       for ( EEDigiCollection::const_iterator cDigiItr = crystalDigis->begin(); cDigiItr != crystalDigis->end(); ++cDigiItr ) {
 
@@ -435,7 +424,7 @@ EETriggerTowerTask::processDigis( const edm::Event& e, const edm::Handle<EcalTri
       }
 
     } else {
-      edm::LogWarning("EETriggerTowerTask") << EEDigiCollection_ << " not available";
+      edm::LogWarning("EETriggerTowerTask") << "EEDigiCollection not available";
     }
 
   }

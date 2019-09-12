@@ -1,9 +1,6 @@
-# $Id: Makefile,v 1.9 2009/10/20 10:13:22 aryd Exp $
 
 #########################################################################
 # XDAQ Components for Distributed Data Acquisition                      #
-# Copyright (C) 2007, Cornell U.  			                #
-# All rights reserved.                                                  #
 # Authors: A. Ryd                					#
 #                                                                       #
 #########################################################################

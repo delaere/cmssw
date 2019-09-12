@@ -14,7 +14,6 @@
      <Notes on implementation>
 */
 //
-// $Id: ZeeCalibration.h,v 1.15 2012/02/09 08:01:42 eulisse Exp $
 //
 //
 
@@ -133,7 +132,7 @@ class ZeeCalibration : public edm::ESProducerLooper {
 
   void printStatistics();
 
-  std::pair<DetId, double> getHottestDetId(std::vector<std::pair<DetId, float> > mySCRecHits, const EBRecHitCollection* ebhits , const EERecHitCollection* eehits);
+  std::pair<DetId, double> getHottestDetId(const std::vector<std::pair<DetId, float> >& mySCRecHits, const EBRecHitCollection* ebhits , const EERecHitCollection* eehits);
 
   bool xtalIsOnModuleBorder( EBDetId myEBDetId );
 

@@ -6,7 +6,6 @@
  * Send a file to the browser, forcing a download dialogue
  * Credit given below
  *
- * $Id: download.php,v 1.2 2006/07/23 16:47:58 egeland Exp $
  */
 
 /*

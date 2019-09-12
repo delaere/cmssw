@@ -1,4 +1,3 @@
-// $Id: RBCLogicUnit.cc,v 1.3 2009/06/07 21:18:50 aosorio Exp $
 // Include files 
 
 

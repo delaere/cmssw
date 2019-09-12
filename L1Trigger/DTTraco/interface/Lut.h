@@ -4,7 +4,6 @@
  *
  *   Class for computing single Traco LUT from given parameters
  * 
- *   $Date: 2011/02/10 12:41:00 $
  * 
  *   \author S. Vanini
  */
@@ -34,15 +33,15 @@ class Lut {
 
  public:
   Lut() {}; 
-  Lut(DTConfigLUTs* conf, int ntc, float SL_shift);
+  Lut(const DTConfigLUTs* conf, int ntc, float SL_shift);
   ~Lut();
 
   // set lut parameters methods
   void setForTestBeam( int station, int board, int traco );
 
   // get luts
-  int get_x( int addr );
-  int get_k( int addr );
+  int get_x( int addr ) const;
+  int get_k( int addr ) const;
 
   // DSP <-> IEEE32 conversions
   void IEEE32toDSP(float f, short *DSPmantissa, short *DSPexp);
@@ -57,7 +56,7 @@ public:
 private:
   float m_pitch_d_ST;	//=pitch/ST private:
 
-  DTConfigLUTs* _conf_luts;
+  const DTConfigLUTs* _conf_luts;
 
 };
 #endif

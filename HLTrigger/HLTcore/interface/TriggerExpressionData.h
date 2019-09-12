@@ -1,19 +1,20 @@
 #ifndef HLTrigger_HLTfilters_TriggerExpressionData_h
 #define HLTrigger_HLTfilters_TriggerExpressionData_h
 
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 #include "FWCore/Utilities/interface/InputTag.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "DataFormats/Provenance/interface/ParameterSetID.h"
 #include "DataFormats/Provenance/interface/EventID.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
 
 namespace edm {
   class Event;
   class EventSetup;
-  class TriggerResults;
   class TriggerNames;
 }
 
-class L1GlobalTriggerReadoutRecord;
 class L1GtTriggerMenu;
 class L1GtTriggerMask;
 
@@ -25,7 +26,9 @@ public:
   Data() :
     // configuration
     m_hltResultsTag(""),
+    m_hltResultsToken(),
     m_l1tResultsTag(""),
+    m_l1tResultsToken(),
     m_daqPartitions(0x01),
     m_l1tIgnoreMask(false),
     m_l1techIgnorePrescales(false),
@@ -47,10 +50,12 @@ public:
   { }
 
   // explicit c'tor from a ParameterSet
-  explicit Data(const edm::ParameterSet & config) :
+  explicit Data(const edm::ParameterSet & config, edm::ConsumesCollector && iC) :
     // configuration
     m_hltResultsTag(config.getParameter<edm::InputTag>("hltResults")),
+    m_hltResultsToken(),
     m_l1tResultsTag(config.getParameter<edm::InputTag>("l1tResults")),
+    m_l1tResultsToken(),
     m_daqPartitions(config.getParameter<unsigned int>("daqPartitions")),
     m_l1tIgnoreMask(config.getParameter<bool>("l1tIgnoreMask")),
     m_l1techIgnorePrescales(config.getParameter<bool>("l1techIgnorePrescales")),
@@ -69,7 +74,10 @@ public:
     m_hltUpdated(false),
     // event values
     m_eventNumber()
-  { }
+      {
+	if (not m_hltResultsTag.label().empty()) m_hltResultsToken = iC.consumes<edm::TriggerResults>(m_hltResultsTag);
+	if (not m_l1tResultsTag.label().empty()) m_l1tResultsToken = iC.consumes<L1GlobalTriggerReadoutRecord>(m_l1tResultsTag);
+      }
 
   // explicit c'tor from single arguments
   Data(
@@ -78,11 +86,13 @@ public:
     unsigned int          daqPartitions,
     bool                  l1tIgnoreMask,
     bool                  l1techIgnorePrescales,
-    bool                  doThrow
-  ) :
+    bool                  doThrow,
+    edm::ConsumesCollector && iC  ) :
     // configuration
     m_hltResultsTag(hltResultsTag),
+    m_hltResultsToken(),
     m_l1tResultsTag(l1tResultsTag),
+    m_l1tResultsToken(),
     m_daqPartitions(daqPartitions),
     m_l1tIgnoreMask(l1tIgnoreMask),
     m_l1techIgnorePrescales(l1techIgnorePrescales),
@@ -101,7 +111,10 @@ public:
     m_hltUpdated(false),
     // event values
     m_eventNumber()
-  { }
+      {
+	if (not m_hltResultsTag.label().empty()) m_hltResultsToken = iC.consumes<edm::TriggerResults>(m_hltResultsTag);
+	if (not m_l1tResultsTag.label().empty()) m_l1tResultsToken = iC.consumes<L1GlobalTriggerReadoutRecord>(m_l1tResultsTag);
+      }
 
   // set the new event
   bool setEvent(const edm::Event & event, const edm::EventSetup & setup);
@@ -200,8 +213,10 @@ public:
 
 private:
   // configuration
-  edm::InputTag m_hltResultsTag;
-  edm::InputTag m_l1tResultsTag;
+  edm::InputTag                                  m_hltResultsTag;
+  edm::EDGetTokenT<edm::TriggerResults>          m_hltResultsToken;
+  edm::InputTag                                  m_l1tResultsTag;
+  edm::EDGetTokenT<L1GlobalTriggerReadoutRecord> m_l1tResultsToken;
   unsigned int  m_daqPartitions;
   bool          m_l1tIgnoreMask;
   bool          m_l1techIgnorePrescales;

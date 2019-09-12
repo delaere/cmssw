@@ -10,7 +10,6 @@
 /** \class LTCDigi
  *  Data from the Local Trigger Controller (LTC)
  *
- * $Id: LTCDigi.h,v 1.5 2011/08/25 20:18:06 wmtan Exp $
  */
 
 

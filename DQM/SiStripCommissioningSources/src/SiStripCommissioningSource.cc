@@ -72,6 +72,11 @@ SiStripCommissioningSource::SiStripCommissioningSource( const edm::ParameterSet&
   view_( pset.getUntrackedParameter<std::string>("View", "Default") ),
   parameters_(pset)
 {
+  inputModuleSummaryToken_     = consumes<SiStripEventSummary>(edm::InputTag(inputModuleLabelSummary_) );
+  digiVirginRawToken_          = mayConsume<edm::DetSetVector<SiStripRawDigi> >(edm::InputTag(inputModuleLabel_,"VirginRaw") );
+  digiScopeModeToken_          = mayConsume<edm::DetSetVector<SiStripRawDigi> >(edm::InputTag(inputModuleLabel_,"ScopeMode") );
+  digiFineDelaySelectionToken_ = mayConsume<edm::DetSetVector<SiStripRawDigi> >(edm::InputTag(inputModuleLabel_,"FineDelaySelection") );
+
   LogTrace(mlDqmSource_)
     << "[SiStripCommissioningSource::" << __func__ << "]"
     << " Constructing object...";
@@ -131,7 +136,7 @@ void SiStripCommissioningSource::beginRun( edm::Run const & run, const edm::Even
   fedCabling_ = const_cast<SiStripFedCabling*>( fed_cabling.product() ); 
   LogDebug(mlDqmSource_)
     << "[SiStripCommissioningSource::" << __func__ << "]"
-    << "Initialized FED cabling. Number of FEDs is " << fedCabling_->feds().size();
+    << "Initialized FED cabling. Number of FEDs is " << fedCabling_->fedIds().size();
   fecCabling_ = new SiStripFecCabling( *fed_cabling );
   if ( fecCabling_->crates().empty() ) {
     std::stringstream ss;
@@ -178,11 +183,10 @@ void SiStripCommissioningSource::endJob() {
     // All tasks except cabling 
     uint16_t fed_id = 0;
     uint16_t fed_ch = 0;
-    std::vector<uint16_t>::const_iterator ifed = fedCabling_->feds().begin(); 
-    for ( ; ifed != fedCabling_->feds().end(); ifed++ ) { 
-      const std::vector<FedChannelConnection>& conns = fedCabling_->connections(*ifed);
-      std::vector<FedChannelConnection>::const_iterator iconn = conns.begin();
-      for ( ; iconn != conns.end(); iconn++ ) {
+    auto ifed = fedCabling_->fedIds().begin();
+    for ( ; ifed != fedCabling_->fedIds().end(); ifed++ ) { 
+      auto conns = fedCabling_->fedConnections(*ifed);
+      for ( auto iconn = conns.begin(); iconn != conns.end(); iconn++ ) {
   	if ( !iconn->isConnected() ) { continue; }
   	fed_id = iconn->fedId();
   	fed_ch = iconn->fedCh();
@@ -259,7 +263,8 @@ void SiStripCommissioningSource::analyze( const edm::Event& event,
 					  const edm::EventSetup& setup ) {
   // Retrieve commissioning information from "event summary" 
   edm::Handle<SiStripEventSummary> summary;
-  event.getByLabel( inputModuleLabelSummary_, summary );
+  //  event.getByLabel( inputModuleLabelSummary_, summary );
+  event.getByToken( inputModuleSummaryToken_,summary );
 
   // Check if EventSummary has info attached
   if ( ( summary->runType() == sistrip::UNDEFINED_RUN_TYPE ||
@@ -299,9 +304,11 @@ void SiStripCommissioningSource::analyze( const edm::Event& event,
   edm::Handle< edm::DetSetVector<SiStripRawDigi> > raw;
   if ( task_ == sistrip::DAQ_SCOPE_MODE ) { 
     if ( summary->fedReadoutMode() == FED_VIRGIN_RAW ) {
-      event.getByLabel( inputModuleLabel_, "VirginRaw", raw );
+      //      event.getByLabel( inputModuleLabel_, "VirginRaw", raw );
+      event.getByToken( digiVirginRawToken_, raw );
     } else if ( summary->fedReadoutMode() == FED_SCOPE_MODE ) {
-      event.getByLabel( inputModuleLabel_, "ScopeMode", raw );
+      //      event.getByLabel( inputModuleLabel_, "ScopeMode", raw );
+      event.getByToken( digiScopeModeToken_, raw );
     } else {
       std::stringstream ss;
       ss << "[SiStripCommissioningSource::" << __func__ << "]"
@@ -315,7 +322,8 @@ void SiStripCommissioningSource::analyze( const edm::Event& event,
 	      task_ == sistrip::APV_TIMING ||
 	      task_ == sistrip::FED_TIMING ||
 	      task_ == sistrip::OPTO_SCAN ) { 
-    event.getByLabel( inputModuleLabel_, "ScopeMode", raw );
+    //    event.getByLabel( inputModuleLabel_, "ScopeMode", raw );
+    event.getByToken( digiScopeModeToken_, raw );
   } else if ( task_ == sistrip::VPSP_SCAN ||
               task_ == sistrip::CALIBRATION ||
               task_ == sistrip::CALIBRATION_DECO ||
@@ -325,10 +333,12 @@ void SiStripCommissioningSource::analyze( const edm::Event& event,
 	      task_ == sistrip::PEDS_ONLY ||
 	      task_ == sistrip::NOISE ||
 	      task_ == sistrip::PEDS_FULL_NOISE ) {
-    event.getByLabel( inputModuleLabel_, "VirginRaw", raw );
+    //    event.getByLabel( inputModuleLabel_, "VirginRaw", raw );
+    event.getByToken( digiVirginRawToken_, raw );
   } else if ( task_ == sistrip::APV_LATENCY ||
 	      task_ == sistrip::FINE_DELAY ) {
-    event.getByLabel( inputModuleLabel_, "FineDelaySelection", raw );
+    //    event.getByLabel( inputModuleLabel_, "FineDelaySelection", raw );
+    event.getByToken( digiFineDelaySelectionToken_, raw );
   } else {
     std::stringstream ss;
     ss << "[SiStripCommissioningSource::" << __func__ << "]"
@@ -398,8 +408,7 @@ void SiStripCommissioningSource::fillCablingHistos( const SiStripEventSummary* c
   }
   
   // Iterate through FED ids
-  std::vector<uint16_t>::const_iterator ifed = fedCabling_->feds().begin(); 
-  for ( ; ifed != fedCabling_->feds().end(); ifed++ ) {
+  for (auto ifed = fedCabling_->fedIds().begin() ; ifed != fedCabling_->fedIds().end(); ifed++ ) {
 
     // Check if FedId is non-zero
     if ( *ifed == sistrip::invalid_ ) { continue; }
@@ -595,13 +604,12 @@ void SiStripCommissioningSource::fillHistos( const SiStripEventSummary* const su
 					     const edm::DetSetVector<SiStripRawDigi>& raw ) {
 
     // Iterate through FED ids and channels
-    std::vector<uint16_t>::const_iterator ifed = fedCabling_->feds().begin();
-    for ( ; ifed != fedCabling_->feds().end(); ifed++ ) {
+    auto ifed = fedCabling_->fedIds().begin();
+    for ( ; ifed != fedCabling_->fedIds().end(); ifed++ ) {
 
       // Iterate through connected FED channels
-      const std::vector<FedChannelConnection>& conns = fedCabling_->connections(*ifed);
-      std::vector<FedChannelConnection>::const_iterator iconn = conns.begin();
-      for ( ; iconn != conns.end(); iconn++ ) {
+      auto conns = fedCabling_->fedConnections(*ifed);
+      for (auto iconn = conns.begin() ; iconn != conns.end(); iconn++ ) {
 
         if ( !(iconn->fedId()) || iconn->fedId() > sistrip::valid_ ) { continue; }
      
@@ -952,15 +960,13 @@ void SiStripCommissioningSource::createTasks( sistrip::RunType run_type, const e
   } else { // now do any other task
 
     // Iterate through FED ids and channels 
-    std::vector<uint16_t>::const_iterator ifed = fedCabling_->feds().begin();
-    for ( ; ifed != fedCabling_->feds().end(); ifed++ ) {
+    for (auto ifed = fedCabling_->fedIds().begin() ; ifed != fedCabling_->fedIds().end(); ++ifed ) {
 
       // Iterate through connected FED channels
       // S.L.: currently copy the vector, because it changes later when
       // reading in peds for calibration run -> not understood memory corruption!
-      std::vector<FedChannelConnection> conns = fedCabling_->connections(*ifed);
-      std::vector<FedChannelConnection>::const_iterator iconn = conns.begin();
-      for ( ; iconn != conns.end(); iconn++ ) {
+      auto conns = fedCabling_->fedConnections(*ifed);
+      for (auto iconn = conns.begin() ; iconn != conns.end(); ++iconn ) {
 
         // Create FEC key
         SiStripFecKey fec_key( iconn->fecCrate(), 

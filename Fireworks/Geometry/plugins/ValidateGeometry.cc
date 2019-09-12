@@ -1,6 +1,5 @@
 // -*- C++ -*-
 //
-// $Id: ValidateGeometry.cc,v 1.37 2013/02/28 14:23:43 yana Exp $
 //
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -67,9 +66,9 @@ public:
   ~ValidateGeometry();
 
 private:
-  virtual void beginJob();
-  virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  virtual void endJob();  
+  virtual void beginJob() override;
+  virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+  virtual void endJob() override;  
 
   void validateRPCGeometry(const int regionNumber, 
                            const char* regionName);

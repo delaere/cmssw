@@ -1,4 +1,5 @@
-#!/bin/csh
+#!/bin/csh -x
+##!/bin/csh
 
 #This script can be used to generate a web page to compare histograms from 
 #two input root files produced using the EDAnalyzers in RecoEgamma/Examples,
@@ -16,13 +17,14 @@
 #which can then be viewed in a web browser using validation.html.
 
 #=============BEGIN CONFIGURATION=================
-setenv TYPE Photons
-setenv CMSSWver1 6_2_0
-setenv RELEASE 6_2_0
-setenv PRERELEASE pre6_patch1 
+setenv TYPE GEDPhotons
+setenv ANALYZERNAME pfPhotonValidator
+setenv CMSSWver1 7_0_0
+setenv RELEASE 7_0_0
+setenv PRERELEASE pre12
 
-setenv FULLGLOBALTAG PRE_ST62_V6-v1
-setenv FASTGLOBALTAG PRE_ST62_V6_FastSim-v1
+setenv FULLGLOBALTAG POSTLS170_V1-v1
+setenv FASTGLOBALTAG START70_V5_FastSim-v1
 
 setenv RELEASE ${RELEASE}_${PRERELEASE}
 #setenv RELEASE ${RELEASE}
@@ -64,10 +66,10 @@ setenv FASTSIM ${WorkDir1}/PhotonValidationRelVal${RELEASE}_SingleGammaFlatPt10T
 
 else if ($SAMPLE == H130GGgluonfusion) then 
 
-setenv HISTOPATHNAME_Efficiencies DQMData/Run\ 1/EgammaV/Run\ summary/PhotonValidator/Efficiencies
-setenv HISTOPATHNAME_Photons DQMData/Run\ 1/EgammaV/Run\ summary/PhotonValidator/Photons
-setenv HISTOPATHNAME_Conversions DQMData/Run\ 1/EgammaV/Run\ summary/PhotonValidator/ConversionInfo
-setenv FULLSIM ${WorkDir1}/DQM_V0001_R000000001__RelValH130GGgluonfusion__CMSSW_${RELEASE}-${FULLGLOBALTAG}__DQM.root
+setenv HISTOPATHNAME_Efficiencies DQMData/Run\ 1/EgammaV/Run\ summary/${ANALYZERNAME}/Efficiencies
+setenv HISTOPATHNAME_Photons DQMData/Run\ 1/EgammaV/Run\ summary/${ANALYZERNAME}/Photons
+setenv HISTOPATHNAME_Conversions DQMData/Run\ 1/EgammaV/Run\ summary/${ANALYZERNAME}/ConversionInfo
+setenv FULLSIM ${WorkDir1}/DQM_V0001_R000000001__RelValH130GGgluonfusion_13__CMSSW_${RELEASE}-${FULLGLOBALTAG}__DQM.root
 setenv FASTSIM ${WorkDir1}/DQM_V0001_R000000001__RelValH130GGgluonfusion__CMSSW_${RELEASE}-${FASTGLOBALTAG}__DQM.root
 
 
@@ -126,7 +128,7 @@ cd $OUTDIR
 #The list of histograms to be compared for each TYPE can be configured below:
 
 
-if ( $TYPE == Photons ) then
+if ( $TYPE == Photons || $TYPE == GEDPhotons ) then
 
 
 cat > efficiencyForPhotons <<EOF
@@ -232,10 +234,8 @@ EOF
 
 
 cat > unscaledhistosForPhotons <<EOF
-pEResVsR9All
 pEResVsR9Barrel
 pEResVsR9Endcap
-scpEResVsR9All
 scpEResVsR9Barrel
 scpEResVsR9Endcap
 pEResVsEtAll
@@ -263,27 +263,6 @@ EOF
 
 
 
-cat > 2dhistosForPhotons <<EOF
-  R9VsEtaAll
-  R1VsEtaAll
-  R2VsEtaAll
-  sigmaIetaIetaVsEtaAll
-  isoTrkSolidConeDR04VsEtaAll
-  nTrkSolidConeDR04VsEtaAll
-  R9VsEtAll
-  R1VsEtAll
-  R2VsEtAll
-  sigmaIetaIetaVsEtAll
-  isoTrkSolidConeDR04VsEtAll
-  nTrkSolidConeDR04VsEtAll
-  eResVsR9All
-  eResVsR9Barrel
-  eResVsR9Endcap
-  sceResVsR9All
-  sceResVsR9Barrel
-  sceResVsR9Endcap
-
-EOF
 
 
 
@@ -519,29 +498,6 @@ end
 
 
 
-foreach i (`cat 2dhistosForPhotons`)
-  cat > temp$N.C <<EOF
-TCanvas *c$i = new TCanvas("c$i");
-c$i->SetFillColor(10);
-file_old->cd("$HISTOPATHNAME_Photons");
-$i->SetStats(0);
-$i->SetMinimum(0.);
-$i->SetMarkerColor(kPink+8);
-$i->SetMarkerStyle(2);
-$i->SetMarkerSize(0.2);
-$i->Draw();
-file_new->cd("$HISTOPATHNAME_Photons");
-$i->SetStats(0);
-$i->SetMarkerColor(kBlack);
-$i->SetMarkerStyle(2);
-$i->SetMarkerSize(0.2);
-$i->Draw("same");
-c$i->SaveAs("gifs/$i.gif");
-
-EOF
-  setenv N `expr $N + 1`
-end
-
 
 setenv NTOT `expr $N - 1`
 setenv N 1
@@ -561,8 +517,8 @@ rm end.C
 if ( $TYPE == PixelMatchGsfElectron ) then
   setenv ANALYZER PixelMatchGsfElectronAnalyzer
   setenv CFG read_gsfElectrons
-else if ( $TYPE == Photons ) then
-  setenv ANALYZER PhotonValidator
+else if ( $TYPE == Photons || $TYPE == GEDPhotons  ) then
+  setenv ANALYZER  ${ANALYZERNAME}
   setenv CFG PhotonValidator_cfg
 endif
 
@@ -609,7 +565,6 @@ rm  validationPlotsTemplate.html
 
 rm scaledhistosForPhotons
 rm unscaledhistosForPhotons
-rm 2dhistosForPhotons
 rm efficiencyForPhotons
 rm scaledhistosForPhotonsLogScale
 

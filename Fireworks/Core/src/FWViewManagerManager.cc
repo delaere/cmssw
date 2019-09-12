@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Tue Jan 15 10:27:12 EST 2008
-// $Id: FWViewManagerManager.cc,v 1.18 2010/06/18 10:17:16 yana Exp $
 //
 
 // system include files

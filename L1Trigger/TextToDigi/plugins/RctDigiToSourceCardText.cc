@@ -11,7 +11,6 @@ Description: Input RCT digis and output GCT text file to be loaded into the sour
 //
 // Original Author:  Alex Tapper
 //         Created:  Fri Feb 16 14:52:19 CET 2007
-// $Id: RctDigiToSourceCardText.cc,v 1.4 2010/08/06 20:24:40 wmtan Exp $
 //
 //
 

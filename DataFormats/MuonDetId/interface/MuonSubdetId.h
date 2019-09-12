@@ -3,8 +3,6 @@
 
 /** \class MuonSubdetId
  *
- *  $Date: 2012/09/25 13:35:20 $
- *  $Revision: 1.4 $
  * \author Stefano ARGIRO
  */
 

@@ -13,7 +13,6 @@
 //
 // Original Author:  Tomasz Maciej Frueboes
 //         Created:  Tue Mar 18 15:15:30 CET 2008
-// $Id: RPCConeConnectionsAna.cc,v 1.5 2009/12/21 11:50:40 fruboes Exp $
 //
 //
 

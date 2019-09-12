@@ -13,7 +13,7 @@
 //
 // Original Author:  Chi Nhan Nguyen
 //         Created:  Mon Feb 19 13:25:24 CST 2007
-// $Id: FastL1Region.cc,v 1.23 2009/03/23 11:41:28 chinhan Exp $
+// $Id: FastL1Region.cc,v 1.7 2009/02/09 17:01:38 chinhan Exp $
 //
 
 
@@ -87,7 +87,7 @@ FastL1Region::~FastL1Region()
 
 
 void
-FastL1Region::SetParameters(L1Config iconfig) 
+FastL1Region::SetParameters(const L1Config& iconfig) 
 { 
   Config = iconfig;
 }
@@ -524,6 +524,11 @@ FastL1Region::SetFGBit()
   
 }
 
+// Patterns with two or less contiguous bits set are passed
+  // rest are vetoed; 5=0101;7=0111;9=1001;10=1010;11=1011;13=1101;14=1110;15=1111
+  //  --- Alternate patterns
+  //  --- 9=1001;15=1111
+static const std::vector<unsigned> vetoPatterns = { 5, 7, 9, 10,11,13,14,15};
 
 void 
 FastL1Region::SetTauBit(edm::Event const& iEvent)
@@ -558,24 +563,7 @@ FastL1Region::SetTauBit(edm::Event const& iEvent)
 
   }
 
-  // Patterns with two or less contiguous bits set are passed
-  // rest are vetoed; 5=0101;7=0111;9=1001;10=1010;11=1011;13=1101;14=1110;15=1111
-  //  --- Alternate patterns
-  //  --- 9=1001;15=1111
-  static std::vector<unsigned> vetoPatterns;
-  if(vetoPatterns.size() == 0) {
-    vetoPatterns.push_back(5);
-    vetoPatterns.push_back(7);
-    vetoPatterns.push_back(9);
-    vetoPatterns.push_back(10);
-    vetoPatterns.push_back(11);
-    vetoPatterns.push_back(13);
-    vetoPatterns.push_back(14);
-    vetoPatterns.push_back(15);
-  }
-
-
-  for(std::vector<unsigned>::iterator i = vetoPatterns.begin();
+  for(std::vector<unsigned>::const_iterator i = vetoPatterns.begin();
       i != vetoPatterns.end();  i++) {
     unsigned etaPattern = emEtaPat | hadEtaPat;
     unsigned phiPattern = emPhiPat | hadPhiPat;

@@ -6,6 +6,7 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 #include "RecoTracker/ConversionSeedGenerators/interface/SeedForPhotonConversionFromQuadruplets.h"
 #include "RecoTracker/TkSeedGenerator/interface/FastHelix.h"
@@ -23,14 +24,15 @@
 #include "RecoTracker/SpecialSeedGenerators/interface/ClusterChecker.h"
 #include "RecoTracker/TkTrackingRegions/plugins/GlobalTrackingRegionProducerFromBeamSpot.h"
 
-#include "sstream"
+#include <sstream>
 #include "boost/foreach.hpp"
 
 class PhotonConversionTrajectorySeedProducerFromQuadrupletsAlgo{
 
  public:
-  PhotonConversionTrajectorySeedProducerFromQuadrupletsAlgo(const edm::ParameterSet &);
-  ~PhotonConversionTrajectorySeedProducerFromQuadrupletsAlgo(){};
+  PhotonConversionTrajectorySeedProducerFromQuadrupletsAlgo(const edm::ParameterSet &,
+	edm::ConsumesCollector && iC);
+  ~PhotonConversionTrajectorySeedProducerFromQuadrupletsAlgo();
 
   void init();
   void clear();
@@ -57,14 +59,14 @@ class PhotonConversionTrajectorySeedProducerFromQuadrupletsAlgo{
   const edm::ParameterSet _conf;
 
   TrajectorySeedCollection *seedCollection;
-  edm::ParameterSet hitsfactoryPSet,creatorPSet,regfactoryPSet;
+  edm::ParameterSet creatorPSet;
   ClusterChecker theClusterCheck;
   edm::ParameterSet SeedComparitorPSet,QuadCutPSet;
   bool theSilentOnClusterCheck;
 
-  CombinedHitQuadrupletGeneratorForPhotonConversion * theHitsGenerator;
+  std::unique_ptr<CombinedHitQuadrupletGeneratorForPhotonConversion> theHitsGenerator;
   SeedForPhotonConversionFromQuadruplets *theSeedCreator;
-  GlobalTrackingRegionProducerFromBeamSpot* theRegionProducer;
+  std::unique_ptr<GlobalTrackingRegionProducerFromBeamSpot> theRegionProducer;
 
 
   typedef std::vector<TrackingRegion* > Regions;
@@ -74,6 +76,7 @@ class PhotonConversionTrajectorySeedProducerFromQuadrupletsAlgo{
   edm::Handle<reco::VertexCollection> vertexHandle;
   reco::VertexCollection vertexCollection;
   reco::Vertex primaryVertex;
+  edm::EDGetTokenT<reco::VertexCollection> 	 token_vertex;
 
   const edm::EventSetup* myEsetup;
   const edm::Event* myEvent;

@@ -13,7 +13,6 @@
 //
 // Original Author:  Jean-Roch Vlimant
 //         Created:  Thu Oct 11 05:20:59 CEST 2007
-// $Id: TrajectoryCleanerESProducer.h,v 1.3 2010/04/15 17:56:05 vlimant Exp $
 //
 //
 

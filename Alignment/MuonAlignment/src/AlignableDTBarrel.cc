@@ -1,7 +1,7 @@
 /** \file
  *
- *  $Date: 2011/09/15 10:07:07 $
- *  $Revision: 1.8 $
+ *  $Date: 2008/04/10 16:36:41 $
+ *  $Revision: 1.7 $
  *  \author Andre Sznajder - UERJ(Brazil)
  */
  
@@ -14,7 +14,7 @@
 
 
 /// The constructor simply copies the vector of wheels and computes the surface from them
-AlignableDTBarrel::AlignableDTBarrel( const std::vector<AlignableDTWheel*> dtWheels ) 
+AlignableDTBarrel::AlignableDTBarrel( const std::vector<AlignableDTWheel*>& dtWheels ) 
    : AlignableComposite(dtWheels[0]->id(), align::AlignableDTBarrel)
 {
 

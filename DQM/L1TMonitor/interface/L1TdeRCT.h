@@ -7,16 +7,7 @@
  *
  * Version 0.0. A.Savin 2008/04/26
  *
- * $Date: 2012/03/29 12:17:55 $
- * $Revision: 1.16 $
  * \author P. Wittich
- * $Id: L1TdeRCT.h,v 1.16 2012/03/29 12:17:55 ghete Exp $
- * $Log: L1TdeRCT.h,v $
- * Revision 1.16  2012/03/29 12:17:55  ghete
- * Add filtering of events in analyze, to be able to remove the trigger type filter from L1 DQM sequence.
- *
- * Revision 1.15  2011/10/24 14:41:23  asavin
- * L1TdeRCT includes bit histos + cut of 2 GeV on EcalTPG hist
  *
  * Revision 1.14  2011/10/13 09:29:16  swanson
  * Added exper bit monitoring
@@ -99,6 +90,17 @@
 // DQM
 #include "DQMServices/Core/interface/DQMStore.h"
 #include "DQMServices/Core/interface/MonitorElement.h"
+
+// GCT and RCT data formats
+#include "DataFormats/L1CaloTrigger/interface/L1CaloCollections.h"
+#include "CondFormats/L1TObjects/interface/L1GtTriggerMenu.h"
+#include "CondFormats/DataRecord/interface/L1GtTriggerMenuRcd.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutSetupFwd.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutSetup.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
+// TPGs
+#include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
+#include "DataFormats/HcalDigi/interface/HcalDigiCollections.h"
 
 
 // Trigger Headers
@@ -335,13 +337,15 @@ private:
   bool verbose_;
   bool singlechannelhistos_;
   bool monitorDaemon_;
-  ofstream logFile_;
+  std::ofstream logFile_;
 
-  edm::InputTag rctSourceEmul_;
-  edm::InputTag rctSourceData_;
-  edm::InputTag ecalTPGData_;
-  edm::InputTag hcalTPGData_;
-  edm::InputTag gtDigisLabel_;
+  edm::EDGetTokenT<L1CaloRegionCollection> rctSourceEmul_rgnEmul_;
+  edm::EDGetTokenT<L1CaloEmCollection> rctSourceEmul_emEmul_;
+  edm::EDGetTokenT<L1CaloRegionCollection> rctSourceData_rgnData_;
+  edm::EDGetTokenT<L1CaloEmCollection> rctSourceData_emData_;
+  edm::EDGetTokenT<EcalTrigPrimDigiCollection> ecalTPGData_;
+  edm::EDGetTokenT<HcalTrigPrimDigiCollection> hcalTPGData_;
+  edm::EDGetTokenT<L1GlobalTriggerReadoutRecord> gtDigisLabel_;
   std::string gtEGAlgoName_; // name of algo to determine EG trigger threshold
   int doubleThreshold_; // value of ET at which to make 2-D eff plot
 

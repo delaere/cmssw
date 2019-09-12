@@ -14,7 +14,6 @@
  *
  * Original Author:  gbruno
  *         Created:  Wed Mar 22 12:24:20 CET 2006
- * $Id: SiStripGain.h,v 1.9 2010/04/19 16:17:18 demattia Exp $
  *
  * Modifications by M. De Mattia (demattia@pd.infn.it) on 11/11/2009:
  * It now holds a std::vector of pointers to ApvGain and a std::vector of corresponding
@@ -41,8 +40,7 @@
 class SiStripGain
 {
  public:
-  SiStripGain() {};
-  virtual ~SiStripGain() {};
+  SiStripGain() {}
 
   /// Kept for compatibility
   inline SiStripGain(const SiStripApvGain& apvgain, const double & factor) :
@@ -65,9 +63,11 @@ class SiStripGain
   // getters
   // For the product of all apvGains
   // -------------------------------
-  const SiStripApvGain::Range getRange(const uint32_t& detID) const;
-  float getStripGain(const uint16_t& strip, const SiStripApvGain::Range& range) const;
-  float getApvGain(const uint16_t& apv, const SiStripApvGain::Range& range) const;
+  const SiStripApvGain::Range getRange(uint32_t detID) const { return apvgain_->getRange(detID);}
+  SiStripApvGain::Range getRangeByPos(unsigned short pos) const { return apvgain_->getRangeByPos(pos);}
+  static float getStripGain(const uint16_t& strip, const SiStripApvGain::Range& range) { return  SiStripApvGain::getStripGain(strip, range);}
+  static float getApvGain(const uint16_t& apv, const SiStripApvGain::Range& range) {  return SiStripApvGain::getApvGain(apv, range); }
+
 
   // For a specific apvGain
   // ----------------------

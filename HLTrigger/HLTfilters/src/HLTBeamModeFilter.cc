@@ -7,13 +7,13 @@
  *
  * \author: Vasile Mihai Ghete - HEPHY Vienna
  *
- * $Date$
- * $Revision$
  *
  */
 
 // this class header
 #include "HLTrigger/HLTfilters/interface/HLTBeamModeFilter.h"
+
+#include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 
 // system include files
 #include <vector>
@@ -40,6 +40,7 @@ HLTBeamModeFilter::HLTBeamModeFilter(const edm::ParameterSet& parSet) : HLTFilte
 
     m_l1GtEvmReadoutRecordTag(parSet.getParameter<edm::InputTag>(
             "L1GtEvmReadoutRecordTag")),
+    m_l1GtEvmReadoutRecordToken(consumes<L1GlobalTriggerEvmReadoutRecord>(m_l1GtEvmReadoutRecordTag)),
     m_allowedBeamMode(parSet.getParameter<std::vector<unsigned int> >(
             "AllowedBeamMode")),
     m_isDebugEnabled(edm::isDebugEnabled()) {
@@ -71,8 +72,26 @@ HLTBeamModeFilter::~HLTBeamModeFilter() {
 }
 
 // member functions
+void HLTBeamModeFilter::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+  edm::ParameterSetDescription desc;
+  makeHLTFilterDescription(desc);
+  //    #
+  //    # InputTag for the L1 Global Trigger EVM readout record
+  //    #   gtDigis        GT Emulator
+  //    #   l1GtEvmUnpack  GT EVM Unpacker (default module name)
+  //    #   gtEvmDigis     GT EVM Unpacker in RawToDigi standard sequence
+  //    #
+  //    #   cloned GT unpacker in HLT = gtEvmDigis
+  desc.add<edm::InputTag>("L1GtEvmReadoutRecordTag",edm::InputTag("gtEvmDigis"));
+  //    #
+  //    # vector of allowed beam modes
+  //    # default value: 11 (STABLE)
+  std::vector<unsigned int> allowedBeamMode(1,11);
+  desc.add<std::vector<unsigned int> >("AllowedBeamMode",allowedBeamMode);
+  descriptions.add("hltBeamModeFilter", desc);
+}
 
-bool HLTBeamModeFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& evSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) {
+bool HLTBeamModeFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& evSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) const {
 
     // for MC samples, return always true (not even checking validity of L1GlobalTriggerEvmReadoutRecord)
     // eventually, the BST information will be filled also in MC simulation to spare this check
@@ -91,7 +110,7 @@ bool HLTBeamModeFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& evS
 
     // get L1GlobalTriggerEvmReadoutRecord and beam mode
     edm::Handle<L1GlobalTriggerEvmReadoutRecord> gtEvmReadoutRecord;
-    iEvent.getByLabel(m_l1GtEvmReadoutRecordTag, gtEvmReadoutRecord);
+    iEvent.getByToken(m_l1GtEvmReadoutRecordToken, gtEvmReadoutRecord);
 
     if (!gtEvmReadoutRecord.isValid()) {
         edm::LogWarning("HLTBeamModeFilter")

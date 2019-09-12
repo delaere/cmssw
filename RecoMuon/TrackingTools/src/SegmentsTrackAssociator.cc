@@ -3,8 +3,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2012/10/24 10:16:27 $
- *  $Revision: 1.4 $
  *  \author C. Botta, G. Mila - INFN Torino
  */
 
@@ -22,8 +20,6 @@
 #include "DataFormats/DTRecHit/interface/DTRecSegment4D.h"
 #include "DataFormats/TrackingRecHit/interface/RecSegment.h"
 
-#include "DataFormats/DTRecHit/interface/DTRecSegment4DCollection.h"
-#include "DataFormats/CSCRecHit/interface/CSCSegmentCollection.h"
 #include "DataFormats/RPCRecHit/interface/RPCRecHitCollection.h"
 #include "DataFormats/DTRecHit/interface/DTRecHitCollection.h"
 #include "DataFormats/CSCRecHit/interface/CSCRecHit2DCollection.h"
@@ -41,7 +37,7 @@ using namespace std;
 
 
 
-SegmentsTrackAssociator::SegmentsTrackAssociator(const ParameterSet& iConfig)
+SegmentsTrackAssociator::SegmentsTrackAssociator(const ParameterSet& iConfig,edm::ConsumesCollector& iC)
 {
   theDTSegmentLabel = iConfig.getUntrackedParameter<InputTag>("segmentsDt");
   theCSCSegmentLabel = iConfig.getUntrackedParameter<InputTag>("segmentsCSC");
@@ -51,6 +47,11 @@ SegmentsTrackAssociator::SegmentsTrackAssociator(const ParameterSet& iConfig)
   numRecHitDT=0;
   numRecHitCSC=0;
   metname = "SegmentsTrackAssociator";
+
+  dtSegmentsToken = iC.consumes<DTRecSegment4DCollection>(theDTSegmentLabel) ;
+  cscSegmentsToken = iC.consumes<CSCSegmentCollection>(theCSCSegmentLabel) ;
+
+
 }
 
 
@@ -61,9 +62,9 @@ MuonTransientTrackingRecHit::MuonRecHitContainer SegmentsTrackAssociator::associ
 
   // The segment collections
   Handle<DTRecSegment4DCollection> dtSegments;
-  iEvent.getByLabel(theDTSegmentLabel, dtSegments); 
+  iEvent.getByToken(dtSegmentsToken, dtSegments); 
   Handle<CSCSegmentCollection> cscSegments;
-  iEvent.getByLabel(theCSCSegmentLabel, cscSegments);
+  iEvent.getByToken(cscSegmentsToken, cscSegments);
   ESHandle<GlobalTrackingGeometry> theTrackingGeometry;
   iSetup.get<GlobalTrackingGeometryRecord>().get(theTrackingGeometry);
   

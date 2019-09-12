@@ -5,8 +5,6 @@
  *  Fit the Tmax histograms with a gaussian 
  *  returning the mean values and the sigmas.
  *
- *  $Date: 2013/05/23 15:28:44 $
- *  $Revision: 1.3 $
  *  \author S. Bolognesi - INFN Torino
  */
 #include <vector> 

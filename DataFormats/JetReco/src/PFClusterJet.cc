@@ -1,4 +1,3 @@
-// $Id: PFClusterJet.cc,v 1.1 2010/12/28 16:11:35 srappocc Exp $
 
 #include "DataFormats/JetReco/interface/PFClusterJet.h"
 

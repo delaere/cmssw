@@ -5,8 +5,6 @@
  *
  * Digi for CSC Cathode Strips.
  *
- *  $Date: 2013/04/22 22:39:23 $
- *  $Revision: 1.23 $
  *
  * \author M. Schmitt, Northwestern
  *

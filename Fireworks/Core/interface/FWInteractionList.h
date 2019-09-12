@@ -16,7 +16,6 @@
 //
 // Original Author:  Alja Mrak-Tadel 
 //         Created:  Mon Apr 19 12:48:12 CEST 2010
-// $Id: FWInteractionList.h,v 1.4 2010/12/03 20:38:57 amraktad Exp $
 //
 
 // system include files

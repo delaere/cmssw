@@ -15,7 +15,7 @@
 #include "DataFormats/Math/interface/deltaR.h"
 
 QuickTrackAssociatorByHits::QuickTrackAssociatorByHits( const edm::ParameterSet& config )
-	: pHitAssociator_(NULL), pEventForWhichAssociatorIsValid_(NULL),
+	: pHitAssociator_(nullptr), pEventForWhichAssociatorIsValid_(nullptr),
 	  absoluteNumberOfHits_( config.getParameter<bool>( "AbsoluteNumberOfHits" ) ),
 	  qualitySimToReco_( config.getParameter<double>( "Quality_SimToReco" ) ),
 	  puritySimToReco_( config.getParameter<double>( "Purity_SimToReco" ) ),
@@ -91,7 +91,7 @@ QuickTrackAssociatorByHits::QuickTrackAssociatorByHits( const QuickTrackAssociat
 	// Actually, need to check the other hit associator isn't null or the pointer dereference would
 	// probably cause a segmentation fault.
 	if( otherAssociator.pHitAssociator_ ) pHitAssociator_=new TrackerHitAssociator(*otherAssociator.pHitAssociator_);
-	else pHitAssociator_=NULL;
+	else pHitAssociator_=nullptr;
 }
 
 QuickTrackAssociatorByHits& QuickTrackAssociatorByHits::operator=( const QuickTrackAssociatorByHits& otherAssociator )
@@ -104,7 +104,7 @@ QuickTrackAssociatorByHits& QuickTrackAssociatorByHits::operator=( const QuickTr
 	// can be shallow copied from the other associator.
 	//
 	if( otherAssociator.pHitAssociator_ ) pHitAssociator_=new TrackerHitAssociator(*otherAssociator.pHitAssociator_);
-	else pHitAssociator_=NULL;
+	else pHitAssociator_=nullptr;
 	pEventForWhichAssociatorIsValid_=otherAssociator.pEventForWhichAssociatorIsValid_;
 	hitAssociatorParameters_=otherAssociator.hitAssociatorParameters_;
 	absoluteNumberOfHits_=otherAssociator.absoluteNumberOfHits_;
@@ -135,10 +135,10 @@ reco::RecoToSimCollection QuickTrackAssociatorByHits::associateRecoToSim( edm::H
 
 	pTrackCollectionHandle_=&trackCollectionHandle;
 	pTrackingParticleCollectionHandle_=&trackingParticleCollectionHandle;
-	pTrackCollection_=NULL;
-	pTrackingParticleCollection_=NULL;
+	pTrackCollection_=nullptr;
+	pTrackingParticleCollection_=nullptr;
 
-	// This method checks which collection type is set to NULL, and uses the other one.
+	// This method checks which collection type is set to null, and uses the other one.
 	return associateRecoToSimImplementation();
 }
 
@@ -154,10 +154,10 @@ reco::SimToRecoCollection QuickTrackAssociatorByHits::associateSimToReco( edm::H
 
 	pTrackCollectionHandle_=&trackCollectionHandle;
 	pTrackingParticleCollectionHandle_=&trackingParticleCollectionHandle;
-	pTrackCollection_=NULL;
-	pTrackingParticleCollection_=NULL;
+	pTrackCollection_=nullptr;
+	pTrackingParticleCollection_=nullptr;
 
-	// This method checks which collection type is set to NULL, and uses the other one.
+	// This method checks which collection type is set to null, and uses the other one.
 	return associateSimToRecoImplementation();
 }
 
@@ -172,12 +172,12 @@ reco::RecoToSimCollection QuickTrackAssociatorByHits::associateRecoToSim(const e
   if (useClusterTPAssociation_) prepareCluster2TPMap(pEvent);
   else initialiseHitAssociator( pEvent );
 
-  pTrackCollectionHandle_=NULL;
-  pTrackingParticleCollectionHandle_=NULL;
+  pTrackCollectionHandle_=nullptr;
+  pTrackingParticleCollectionHandle_=nullptr;
   pTrackCollection_=&trackCollection;
   pTrackingParticleCollection_=&trackingParticleCollection;
 
-  // This method checks which collection type is set to NULL, and uses the other one.
+  // This method checks which collection type is set to null, and uses the other one.
   return associateRecoToSimImplementation();
 }
 
@@ -191,12 +191,12 @@ reco::SimToRecoCollection QuickTrackAssociatorByHits::associateSimToReco(const e
   if (useClusterTPAssociation_) prepareCluster2TPMap(pEvent);
   else initialiseHitAssociator( pEvent );
 
-  pTrackCollectionHandle_=NULL;
-  pTrackingParticleCollectionHandle_=NULL;
+  pTrackCollectionHandle_=nullptr;
+  pTrackingParticleCollectionHandle_=nullptr;
   pTrackCollection_=&trackCollection;
   pTrackingParticleCollection_=&trackingParticleCollection;
 
-  // This method checks which collection type is set to NULL, and uses the other one.
+  // This method checks which collection type is set to null, and uses the other one.
   return associateSimToRecoImplementation();
 }
 
@@ -235,7 +235,7 @@ reco::RecoToSimCollection QuickTrackAssociatorByHits::associateRecoToSimImplemen
       //if electron subtract double counting
       if (abs(trackingParticleRef->pdgId())==11 && (trackingParticleRef->g4Track_end() - trackingParticleRef->g4Track_begin()) > 1 )
       {
-	numberOfSharedHits -= getDoubleCount( pTrack->recHitsBegin(), pTrack->recHitsEnd(), *trackingParticleRef );
+	numberOfSharedHits -= getDoubleCount( pTrack->recHitsBegin(), pTrack->recHitsEnd(), trackingParticleRef );
       }
 
       double quality;
@@ -295,6 +295,14 @@ reco::SimToRecoCollection QuickTrackAssociatorByHits::associateSimToRecoImplemen
 				// hits in the tracker.
 				numberOfSimulatedHits=trackingParticleRef->numberOfTrackerHits();
 			}
+
+
+			//if electron subtract double counting
+			if (abs(trackingParticleRef->pdgId())==11 && (trackingParticleRef->g4Track_end() - trackingParticleRef->g4Track_begin()) > 1 )
+			{
+			  numberOfSharedHits -= getDoubleCount( pTrack->recHitsBegin(), pTrack->recHitsEnd(), trackingParticleRef );
+			}
+
 
 			double purity=static_cast<double>(numberOfSharedHits)/static_cast<double>(numberOfValidTrackHits);
 			double quality;
@@ -392,6 +400,7 @@ template<typename iter> std::vector< std::pair<edm::Ref<TrackingParticleCollecti
     auto range = std::equal_range(pCluster2TPList_.begin(), pCluster2TPList_.end(), clusterTPpairWithDummyTP, clusterTPAssociationListGreater);
     if(range.first != range.second) {
       for(auto ip = range.first; ip != range.second; ++ip) {
+
         const TrackingParticleRef trackingParticle = (ip->second);
 
         // Ignore TrackingParticles with no hits
@@ -411,7 +420,7 @@ template<typename iter> std::vector< std::pair<edm::Ref<TrackingParticleCollecti
 	}
 	*/
         auto jpos = lmap.find(trackingParticle);     
-	if (jpos != lmap.end()) 
+	if (jpos != lmap.end())
 	  ++jpos->second; 
         else 
 	  lmap.insert(std::make_pair(trackingParticle, 1));
@@ -528,13 +537,10 @@ bool QuickTrackAssociatorByHits::trackingParticleContainsIdentifier( const Track
   return false;
 }
 
-template<typename iter> int QuickTrackAssociatorByHits::getDoubleCount( iter startIterator, iter endIterator, const TrackingParticle& associatedTrackingParticle ) const
+template<typename iter> int QuickTrackAssociatorByHits::getDoubleCount( iter startIterator, iter endIterator, TrackingParticleRef associatedTrackingParticle ) const
 {
   // This method is largely copied from the standard TrackAssociatorByHits. Once I've tested how much difference
   // it makes I'll go through and comment it properly.
-
-  //fixme: check indeed this is not needed in case of cluster-tp map
-  if (useClusterTPAssociation_) return 0;
 
   int doubleCount=0;
   std::vector<SimHitIdpr> SimTrackIdsDC;
@@ -542,20 +548,36 @@ template<typename iter> int QuickTrackAssociatorByHits::getDoubleCount( iter sta
   for( iter iHit=startIterator; iHit != endIterator; iHit++ )
     {
       int idcount=0;
-      SimTrackIdsDC.clear();
-      pHitAssociator_->associateHitId( *(getHitFromIter(iHit)), SimTrackIdsDC );
-      
-      if( SimTrackIdsDC.size() > 1 )
-	{
-	  for( TrackingParticle::g4t_iterator g4T=associatedTrackingParticle.g4Track_begin(); g4T != associatedTrackingParticle.g4Track_end(); ++g4T )
-	    {
-	      if( find( SimTrackIdsDC.begin(), SimTrackIdsDC.end(), SimHitIdpr( ( *g4T).trackId(), SimTrackIdsDC.begin()->second ) )
-		  != SimTrackIdsDC.end() )
-		{
-		  idcount++;
-		}
+
+      if (useClusterTPAssociation_) {
+	std::vector<OmniClusterRef> oClusters = getMatchedClusters(iHit, iHit+1);//only for the cluster being checked
+	for (std::vector<OmniClusterRef>::const_iterator it = oClusters.begin(); it != oClusters.end(); ++it) {	  
+	  std::pair<OmniClusterRef, TrackingParticleRef> clusterTPpairWithDummyTP(*it,TrackingParticleRef());//TP is dummy: for clusterTPAssociationListGreater sorting only the cluster is needed
+	  auto range = std::equal_range(pCluster2TPList_.begin(), pCluster2TPList_.end(), clusterTPpairWithDummyTP, clusterTPAssociationListGreater);
+	  if(range.first != range.second) {
+	    for(auto ip = range.first; ip != range.second; ++ip) {
+	      const TrackingParticleRef trackingParticle = (ip->second);
+	      if (associatedTrackingParticle==trackingParticle) {
+		idcount++;
+	      }
 	    }
+	  }
 	}
+      } else {
+	SimTrackIdsDC.clear();
+	pHitAssociator_->associateHitId( *(getHitFromIter(iHit)), SimTrackIdsDC );
+	if( SimTrackIdsDC.size() > 1 )
+	  {
+	    for( TrackingParticle::g4t_iterator g4T=associatedTrackingParticle->g4Track_begin(); g4T != associatedTrackingParticle->g4Track_end(); ++g4T )
+	      {
+		if( find( SimTrackIdsDC.begin(), SimTrackIdsDC.end(), SimHitIdpr( ( *g4T).trackId(), SimTrackIdsDC.begin()->second ) )
+		    != SimTrackIdsDC.end() )
+		  {
+		    idcount++;
+		  }
+	      }
+	  }
+      }
       if( idcount > 1 ) doubleCount+=(idcount - 1);
     }
   
@@ -570,7 +592,7 @@ void QuickTrackAssociatorByHits::initialiseHitAssociator( const edm::Event* pEve
 	// event). I was doing this by recording the event pointer and checking it hasn't changed
 	// but this doesn't appear to work. Until I find a way of uniquely identifying an event
 	// I'll just create it anew each time.
-//	if( pEventForWhichAssociatorIsValid_==pEvent && pEventForWhichAssociatorIsValid_!=NULL ) return; // Already set up so no need to do anything
+//	if( pEventForWhichAssociatorIsValid_==pEvent && pEventForWhichAssociatorIsValid_!=null ) return; // Already set up so no need to do anything
 
 	// Free up the previous instantiation
 	delete pHitAssociator_;
@@ -592,10 +614,10 @@ QuickTrackAssociatorByHits::associateRecoToSim(edm::Handle<edm::View<TrajectoryS
                                       << pSeedCollectionHandle_->size()<<" #TPs="<<trackingParticleCollectionHandle->size();
 
   initialiseHitAssociator( pEvent );
-  pTrackCollectionHandle_=NULL;
+  pTrackCollectionHandle_=nullptr;
   pTrackingParticleCollectionHandle_=&trackingParticleCollectionHandle;
-  pTrackCollection_=NULL;
-  pTrackingParticleCollection_=NULL;
+  pTrackCollection_=nullptr;
+  pTrackingParticleCollection_=nullptr;
 
   reco::RecoToSimCollectionSeed  returnValue;
 
@@ -621,7 +643,7 @@ QuickTrackAssociatorByHits::associateRecoToSim(edm::Handle<edm::View<TrajectoryS
 	  //if electron subtract double counting
 	  if( abs(trackingParticleRef->pdgId())==11 && (trackingParticleRef->g4Track_end() - trackingParticleRef->g4Track_begin()) > 1 )
 	    {
-	      numberOfSharedHits-=getDoubleCount( pSeed->recHits().first, pSeed->recHits().second, *trackingParticleRef );
+	      numberOfSharedHits-=getDoubleCount( pSeed->recHits().first, pSeed->recHits().second, trackingParticleRef );
 	    }
 	  
 	  double quality;
@@ -653,10 +675,10 @@ QuickTrackAssociatorByHits::associateSimToReco(edm::Handle<edm::View<TrajectoryS
                                       <<pSeedCollectionHandle_->size()<<" #TPs="<<trackingParticleCollectionHandle->size();
 
   initialiseHitAssociator( pEvent );
-  pTrackCollectionHandle_=NULL;
+  pTrackCollectionHandle_=nullptr;
   pTrackingParticleCollectionHandle_=&trackingParticleCollectionHandle;
-  pTrackCollection_=NULL;
-  pTrackingParticleCollection_=NULL;
+  pTrackCollection_=nullptr;
+  pTrackingParticleCollection_=nullptr;
 
   reco::SimToRecoCollectionSeed  returnValue;
 
@@ -679,6 +701,12 @@ QuickTrackAssociatorByHits::associateSimToReco(edm::Handle<edm::View<TrajectoryS
 	  size_t numberOfSimulatedHits=0; // Set a few lines below, but only if required.
 	  
 	  if( numberOfSharedHits==0 ) continue; // No point in continuing if there was no association
+
+	  //if electron subtract double counting
+	  if( abs(trackingParticleRef->pdgId())==11 && (trackingParticleRef->g4Track_end() - trackingParticleRef->g4Track_begin()) > 1 )
+	    {
+	      numberOfSharedHits-=getDoubleCount( pSeed->recHits().first, pSeed->recHits().second, trackingParticleRef );
+	    }
 	  
 	  if( simToRecoDenominator_==denomsim || (numberOfSharedHits<3 && threeHitTracksAreSpecial_) ) // the numberOfSimulatedHits is not always required, so can skip counting in some circumstances
 	    {

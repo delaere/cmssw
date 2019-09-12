@@ -6,7 +6,6 @@
  *
  * \author Luca Lista, INFN
  *
- * \version $Id: EgammaTrigger.h,v 1.2 2006/04/20 10:13:53 llista Exp $
  *
  */
 #include "DataFormats/EgammaReco/interface/EgammaTriggerFwd.h"

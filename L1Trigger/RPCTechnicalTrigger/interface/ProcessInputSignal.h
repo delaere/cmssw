@@ -1,4 +1,3 @@
-// $Id: ProcessInputSignal.h,v 1.1 2009/01/30 15:42:47 aosorio Exp $
 #ifndef INTERFACE_PROCESSINPUTSIGNAL_H 
 #define INTERFACE_PROCESSINPUTSIGNAL_H 1
 

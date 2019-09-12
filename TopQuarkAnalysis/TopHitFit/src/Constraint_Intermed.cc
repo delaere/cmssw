@@ -1,5 +1,4 @@
 //
-// $Id: Constraint_Intermed.cc,v 1.1 2011/05/26 09:46:59 mseidel Exp $
 //
 // File: src/Constraint_Intermed.cc
 // Purpose: Represent one side of a mass constraint equation.

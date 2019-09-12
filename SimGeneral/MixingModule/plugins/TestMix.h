@@ -10,7 +10,6 @@
 //
 // Original Author:  Ursula Berthon
 //         Created:  Fri Sep 23 11:38:38 CEST 2005
-// $Id: TestMix.h,v 1.2 2013/03/01 00:13:36 wmtan Exp $
 //
 //
 

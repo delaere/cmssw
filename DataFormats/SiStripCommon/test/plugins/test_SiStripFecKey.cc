@@ -1,4 +1,3 @@
-// Last commit: $Id: test_SiStripFecKey.cc,v 1.10 2010/07/20 02:58:29 wmtan Exp $
 
 #include "DataFormats/SiStripCommon/test/plugins/test_SiStripFecKey.h"
 #include "DataFormats/SiStripCommon/interface/SiStripConstants.h"

@@ -6,6 +6,7 @@
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "FWCore/Utilities/interface/isFinite.h"
+#include <FWCore/Utilities/interface/ESInputTag.h>
 
 #include "DataFormats/Common/interface/OwnVector.h"
 #include "DataFormats/TrackCandidate/interface/TrackCandidateCollection.h"
@@ -29,6 +30,8 @@
 #include "RecoTracker/CkfPattern/interface/SeedCleanerBySharedInput.h"
 #include "RecoTracker/CkfPattern/interface/CachingSeedCleanerBySharedInput.h"
 
+#include "RecoTracker/MeasurementDet/interface/MeasurementTrackerEvent.h"
+
 #include "RecoTracker/Record/interface/NavigationSchoolRecord.h"
 #include "TrackingTools/DetLayers/interface/NavigationSchool.h"
 
@@ -41,7 +44,7 @@ using namespace edm;
 using namespace std;
 
 namespace cms{
-  CkfTrackCandidateMakerBase::CkfTrackCandidateMakerBase(edm::ParameterSet const& conf) : 
+  CkfTrackCandidateMakerBase::CkfTrackCandidateMakerBase(edm::ParameterSet const& conf, edm::ConsumesCollector && iC) : 
 
     conf_(conf),
     theTrackCandidateOutput(true),
@@ -59,16 +62,25 @@ namespace cms{
     theNavigationSchoolName(conf.getParameter<std::string>("NavigationSchool")),
     theNavigationSchool(0),
     theSeedCleaner(0),
-    maxSeedsBeforeCleaning_(0)
+    maxSeedsBeforeCleaning_(0),
+    theMTELabel(iC.consumes<MeasurementTrackerEvent>(conf.getParameter<edm::InputTag>("MeasurementTrackerEvent"))),
+    skipClusters_(false)
   {  
     //produces<TrackCandidateCollection>();  
     // old configuration totally descoped.
     //    if (!conf.exists("src"))
     //      theSeedLabel = InputTag(conf_.getParameter<std::string>("SeedProducer"),conf_.getParameter<std::string>("SeedLabel"));
     //    else
-      theSeedLabel= conf.getParameter<edm::InputTag>("src");
+      theSeedLabel= iC.consumes<edm::View<TrajectorySeed> >(conf.getParameter<edm::InputTag>("src"));
       if ( conf.exists("maxSeedsBeforeCleaning") ) 
 	   maxSeedsBeforeCleaning_=conf.getParameter<unsigned int>("maxSeedsBeforeCleaning");
+
+      if (conf.existsAs<edm::InputTag>("clustersToSkip")) {
+        skipClusters_ = true;
+        maskPixels_ = iC.consumes<PixelClusterMask>(conf.getParameter<edm::InputTag>("clustersToSkip"));
+        maskStrips_ = iC.consumes<StripClusterMask>(conf.getParameter<edm::InputTag>("clustersToSkip"));
+        maskStripsLazy_ = iC.consumes<StripClusterLazyMask>(conf.getParameter<edm::InputTag>("clustersToSkip"));
+      }
 
     std::string cleaner = conf_.getParameter<std::string>("RedundantSeedCleaner");
     if (cleaner == "SeedCleanerByHitPosition") {
@@ -108,7 +120,12 @@ namespace cms{
 
     //services
     es.get<TrackerRecoGeometryRecord>().get( theGeomSearchTracker );
-    es.get<IdealMagneticFieldRecord>().get( theMagField );
+    std::string mfName = "";
+    if (conf_.exists("SimpleMagneticField"))
+      mfName = conf_.getParameter<std::string>("SimpleMagneticField");
+    es.get<IdealMagneticFieldRecord>().get(mfName,theMagField );
+    //    edm::ESInputTag mfESInputTag(mfName);
+    //    es.get<IdealMagneticFieldRecord>().get(mfESInputTag,theMagField );
 
     if (!theInitialState){
       // constructor uses the EventSetup, it must be in the setEventSetup were it has a proper value.
@@ -152,12 +169,34 @@ namespace cms{
     printHitsDebugger(e);
 
     // Step A: set Event for the TrajectoryBuilder
-    theTrajectoryBuilder->setEvent(e);        
+    edm::Handle<MeasurementTrackerEvent> data;
+    e.getByToken(theMTELabel, data);
+
+    std::auto_ptr<BaseCkfTrajectoryBuilder> trajectoryBuilder;
+    std::auto_ptr<MeasurementTrackerEvent> dataWithMasks;
+    if (skipClusters_) {
+        edm::Handle<PixelClusterMask> pixelMask;
+        e.getByToken(maskPixels_, pixelMask);
+        if (data->isStripRegional()) {
+            edm::Handle<StripClusterLazyMask> stripMask;
+            e.getByToken(maskStripsLazy_, stripMask);
+            dataWithMasks.reset(new MeasurementTrackerEvent(*data, *stripMask, *pixelMask));
+        } else {
+            edm::Handle<StripClusterMask> stripMask;
+            e.getByToken(maskStrips_, stripMask);
+            dataWithMasks.reset(new MeasurementTrackerEvent(*data, *stripMask, *pixelMask));
+        }
+        //std::cout << "Trajectory builder " << conf_.getParameter<std::string>("@module_label") << " created with masks, " << (!data->isStripRegional() ? "offline": "onDemand") << std::endl;
+        trajectoryBuilder.reset(theTrajectoryBuilder->clone(&*dataWithMasks));
+    } else {
+        //std::cout << "Trajectory builder " << conf_.getParameter<std::string>("@module_label") << " created without masks, " << (!data->isStripRegional() ? "offline": "onDemand") << std::endl;
+        trajectoryBuilder.reset(theTrajectoryBuilder->clone(&*data));
+    }
     
     // Step B: Retrieve seeds
     
     edm::Handle<View<TrajectorySeed> > collseed;
-    e.getByLabel(theSeedLabel, collseed);
+    e.getByToken(theSeedLabel, collseed);
     
     // Step C: Create empty output collection
     std::auto_ptr<TrackCandidateCollection> output(new TrackCandidateCollection);    
@@ -167,7 +206,6 @@ namespace cms{
       LogError("TooManySeeds")<<"Exceeded maximum numeber of seeds! theMaxNSeeds="<<theMaxNSeeds<<" nSeed="<<(*collseed).size();
       if (theTrackCandidateOutput){ e.put(output);}
       if (theTrajectoryOutput){e.put(outputT);}
-      theTrajectoryBuilder->unset();
       return;
     }
     
@@ -188,7 +226,9 @@ namespace cms{
       // Loop over seeds
       size_t collseed_size = collseed->size(); 
       for (size_t j = 0; j < collseed_size; j++){
-       
+
+	LogDebug("CkfPattern") << "======== Begin to look for trajectories from seed " << j << " ========"<<endl;
+	
 	// Check if seed hits already used by another track
 	if (theSeedCleaner && !theSeedCleaner->good( &((*collseed)[j])) ) {
           LogDebug("CkfTrackCandidateMakerBase")<<" Seed cleaning kills seed "<<j;
@@ -197,7 +237,7 @@ namespace cms{
 
 	// Build trajectory from seed outwards
         theTmpTrajectories.clear();
-	auto const & startTraj = theTrajectoryBuilder->buildTrajectories( (*collseed)[j], theTmpTrajectories, nullptr );
+	auto const & startTraj = trajectoryBuilder->buildTrajectories( (*collseed)[j], theTmpTrajectories, nullptr );
 	
        
 	LogDebug("CkfPattern") << "======== In-out trajectory building found " << theTmpTrajectories.size()
@@ -218,7 +258,7 @@ namespace cms{
 	// seed and if possible further inwards.
 	
 	if (doSeedingRegionRebuilding) {
-	  theTrajectoryBuilder->rebuildTrajectories(startTraj,(*collseed)[j],theTmpTrajectories);      
+	  trajectoryBuilder->rebuildTrajectories(startTraj,(*collseed)[j],theTmpTrajectories);      
 
   	  LogDebug("CkfPattern") << "======== Out-in trajectory building found " << theTmpTrajectories.size()
   			              << " valid/invalid trajectories from seed " << j << " ========"<<endl
@@ -386,9 +426,6 @@ namespace cms{
     // Step G: write output to file
     if (theTrackCandidateOutput){ e.put(output);}
     if (theTrajectoryOutput){e.put(outputT);}
-    
-    //reset the MT.
-    theTrajectoryBuilder->unset();
   }
   
 }

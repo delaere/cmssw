@@ -11,7 +11,6 @@ Description: Makes RCT digis from the file format specified by Pam Klabbers
 //
 // Original Author:  Alex Tapper
 //         Created:  Fri Mar  9 19:11:51 CET 2007
-// $Id: RctTextToRctDigi.cc,v 1.5 2010/08/06 20:24:40 wmtan Exp $
 
 // Rct Input File Format 
 // Line 1: Crossing no as "Crossing x" (2)     

@@ -1,5 +1,5 @@
 //
-// $Id: LogErrorEventFilter.cc,v 1.5 2013/05/17 21:41:49 chrjones Exp $
+// $Id: LogErrorEventFilter.cc,v 1.4 2013/04/09 10:06:10 davidlt Exp $
 //
 
 /**
@@ -7,7 +7,6 @@
   \brief    Use StandAlone track to define the 4-momentum of a PAT Muon (normally the global one is used)
             
   \author   Giovanni Petrucciani
-  \version  $Id: LogErrorEventFilter.cc,v 1.5 2013/05/17 21:41:49 chrjones Exp $
 */
 
 
@@ -25,6 +24,7 @@
 #include <set>
 #include <string>
 #include <iomanip>
+#include <iostream>
 #include <iterator>
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH
@@ -43,7 +43,7 @@ class LogErrorEventFilter : public edm::one::EDFilter<edm::one::WatchRuns,
         virtual void endLuminosityBlockProduce(edm::LuminosityBlock &lumi, const edm::EventSetup &iSetup) override;
         virtual void beginRun(const edm::Run &run, const edm::EventSetup &iSetup) override;
         virtual void endRun(const edm::Run &run, const edm::EventSetup &iSetup) override;
-        virtual void endJob();
+        virtual void endJob() override;
 
     private:
         typedef edm::ErrorSummaryEntry              Error;

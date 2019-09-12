@@ -9,7 +9,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Thu May 29 20:58:23 CDT 2008
-// $Id: CmsShowMainFrame.cc,v 1.122 2012/06/25 22:23:14 amraktad Exp $
 
 #include "FWCore/Common/interface/EventBase.h"
 
@@ -717,7 +716,7 @@ public:
    InfoFrame(const TGWindow* p, UInt_t w, UInt_t h, UInt_t opts) : TGMainFrame(p, w, h, opts) {}
    virtual ~InfoFrame() {}
    
-   virtual void CloseWindow()
+   virtual void CloseWindow() override
    {
       UnmapWindow();  
    }
@@ -744,7 +743,7 @@ CmsShowMainFrame::showFWorksInfo()
          TString infoFileName("/data/version.txt");
          fireworks::setPath(infoFileName);
          std::string line;
-         ifstream infoFile(infoFileName);
+         std::ifstream infoFile(infoFileName);
          while (std::getline(infoFile, line))
          {
             ++number_of_lines;

@@ -3,7 +3,6 @@
 
 /*
  *
- * $Id: EcalTBCrystalMap.h,v 1.3 2006/07/18 14:07:49 fabiocos Exp $
  *
  */
 

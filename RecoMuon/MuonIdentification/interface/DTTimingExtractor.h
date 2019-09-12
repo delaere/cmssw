@@ -9,7 +9,6 @@
 //
 // Original Author:  Traczyk Piotr
 //         Created:  Thu Oct 11 15:01:28 CEST 2007
-// $Id: DTTimingExtractor.h,v 1.9 2013/05/28 16:31:01 gartung Exp $
 //
 //
 
@@ -57,7 +56,7 @@ class DTTimingExtractor {
 public:
   
   /// Constructor
-  DTTimingExtractor(const edm::ParameterSet&);
+  DTTimingExtractor(const edm::ParameterSet&,edm::ConsumesCollector& iC);
   
   /// Destructor
   ~DTTimingExtractor();

@@ -5,9 +5,10 @@
 #include "FWCore/Utilities/interface/TypeWithDict.h"
 #include "FWCore/Utilities/interface/WrappedClassName.h"
 
+#include <cassert>
 #include <ostream>
 #include <sstream>
-#include <stdlib.h>
+#include <cstdlib>
 
 class TClass;
 /*----------------------------------------------------------------------
@@ -24,8 +25,6 @@ namespace edm {
     produced_(false),
     onDemand_(false),
     dropped_(false),
-    parameterSetIDs_(),
-    moduleNames_(),
     transient_(false),
     wrappedType_(),
     unwrappedType_(),
@@ -74,12 +73,12 @@ namespace edm {
       productInstanceName_(productInstanceName),
       branchAliases_(aliases),
       transient_() {
-    dropped() = false;
-    transient_.produced_ = produced,
-    onDemand() = false;
+    setDropped(false);
+    setProduced(produced);
+    setOnDemand(false);
     transient_.moduleName_ = moduleName;
     transient_.parameterSetID_ = parameterSetID;
-    unwrappedType() = theTypeWithDict;
+    setUnwrappedType(theTypeWithDict);
     init();
   }
 
@@ -97,17 +96,17 @@ namespace edm {
       branchAliases_(aliasForBranch.branchAliases()),
       aliasForBranchID_(aliasForBranch.branchID()),
       transient_() {
-    dropped() = false;
-    transient_.produced_ = aliasForBranch.produced(),
-    onDemand() = aliasForBranch.onDemand();
+    setDropped(false);
+    setProduced(aliasForBranch.produced());
+    setOnDemand(aliasForBranch.onDemand());
     transient_.moduleName_ = aliasForBranch.moduleName();
     transient_.parameterSetID_ = aliasForBranch.parameterSetID();
-    unwrappedType() = aliasForBranch.unwrappedType();
+    setUnwrappedType(aliasForBranch.unwrappedType());
     init();
   }
 
   void
-  BranchDescription::initBranchName() const {
+  BranchDescription::initBranchName() {
     if(!branchName().empty()) {
       return;  // already called
     }
@@ -136,96 +135,85 @@ namespace edm {
       << "' contains an underscore ('_'), which is illegal in a process name.\n";
     }
 
-    branchName().reserve(friendlyClassName().size() +
-                         moduleLabel().size() +
-                         productInstanceName().size() +
-                         processName().size() + 4);
-    branchName() += friendlyClassName();
-    branchName() += underscore;
-    branchName() += moduleLabel();
-    branchName() += underscore;
-    branchName() += productInstanceName();
-    branchName() += underscore;
-    branchName() += processName();
-    branchName() += period;
+    std::string& brName = transient_.branchName_;
+    brName.reserve(friendlyClassName().size() +
+                   moduleLabel().size() +
+                   productInstanceName().size() +
+                   processName().size() + 4);
+    brName += friendlyClassName();
+    brName += underscore;
+    brName += moduleLabel();
+    brName += underscore;
+    brName += productInstanceName();
+    brName += underscore;
+    brName += processName();
+    brName += period;
 
     if(!branchID_.isValid()) {
-      branchID_.setID(branchName());
+      branchID_.setID(brName);
     }
   }
 
   void
-  BranchDescription::initFromDictionary() const {
+  BranchDescription::initFromDictionary() {
     if(bool(wrappedType())) {
       return;  // already initialized;
     }
 
     throwIfInvalid_();
 
-    wrappedName() = wrappedClassName(fullClassName());
+    setWrappedName(wrappedClassName(fullClassName()));
 
     // unwrapped type.
-    unwrappedType() = TypeWithDict::byName(fullClassName());
+    setUnwrappedType(TypeWithDict::byName(fullClassName()));
     if(!bool(unwrappedType())) {
-      splitLevel() = invalidSplitLevel;
-      basketSize() = invalidBasketSize;
-      transient() = false;
+      setSplitLevel(invalidSplitLevel);
+      setBasketSize(invalidBasketSize);
+      setTransient(false);
       return;
     }
 
-    wrappedType() = TypeWithDict::byName(wrappedName());
+    setWrappedType(TypeWithDict::byName(wrappedName()));
     if(!bool(wrappedType())) {
-      splitLevel() = invalidSplitLevel;
-      basketSize() = invalidBasketSize;
+      setSplitLevel(invalidSplitLevel);
+      setBasketSize(invalidBasketSize);
       return;
     }
+    wrappedType().invokeByName(wrapperInterfaceBase(), "getInterface");
+    assert(wrapperInterfaceBase() != 0);
     Reflex::PropertyList wp = Reflex::Type::ByTypeInfo(wrappedType().typeInfo()).Properties();
-    transient() = (wp.HasProperty("persistent") ? wp.PropertyAsString("persistent") == std::string("false") : false);
+    setTransient((wp.HasProperty("persistent") ? wp.PropertyAsString("persistent") == std::string("false") : false));
     if(transient()) {
-      splitLevel() = invalidSplitLevel;
-      basketSize() = invalidBasketSize;
+      setSplitLevel(invalidSplitLevel);
+      setBasketSize(invalidBasketSize);
       return;
     }
     if(wp.HasProperty("splitLevel")) {
-      splitLevel() = strtol(wp.PropertyAsString("splitLevel").c_str(), 0, 0);
+      setSplitLevel(strtol(wp.PropertyAsString("splitLevel").c_str(), 0, 0));
       if(splitLevel() < 0) {
         throw cms::Exception("IllegalSplitLevel") << "' An illegal ROOT split level of " <<
         splitLevel() << " is specified for class " << wrappedName() << ".'\n";
       }
-      ++splitLevel(); //Compensate for wrapper
+      setSplitLevel(splitLevel() + 1); //Compensate for wrapper
     } else {
-      splitLevel() = invalidSplitLevel;
+      setSplitLevel(invalidSplitLevel);
     }
     if(wp.HasProperty("basketSize")) {
-      basketSize() = strtol(wp.PropertyAsString("basketSize").c_str(), 0, 0);
+      setBasketSize(strtol(wp.PropertyAsString("basketSize").c_str(), 0, 0));
       if(basketSize() <= 0) {
         throw cms::Exception("IllegalBasketSize") << "' An illegal ROOT basket size of " <<
         basketSize() << " is specified for class " << wrappedName() << "'.\n";
       }
     } else {
-      basketSize() = invalidBasketSize;
+      setBasketSize(invalidBasketSize);
     }
-  }
-
-  ParameterSetID const&
-    BranchDescription::psetID() const {
-    assert(!parameterSetIDs().empty());
-    if(parameterSetIDs().size() != 1) {
-      throw cms::Exception("Ambiguous")
-        << "Your application requires all events on Branch '" << branchName()
-        << "'\n to have the same provenance. This file has events with mixed provenance\n"
-        << "on this branch.  Use a different input file.\n";
-    }
-    return parameterSetIDs().begin()->second;
   }
 
   void
   BranchDescription::merge(BranchDescription const& other) {
-    parameterSetIDs().insert(other.parameterSetIDs().begin(), other.parameterSetIDs().end());
-    moduleNames().insert(other.moduleNames().begin(), other.moduleNames().end());
     branchAliases_.insert(other.branchAliases().begin(), other.branchAliases().end());
-    if(splitLevel() == invalidSplitLevel) splitLevel() = other.splitLevel();
-    if(basketSize() == invalidBasketSize) basketSize() = other.basketSize();
+    if(splitLevel() == invalidSplitLevel) setSplitLevel(other.splitLevel());
+    if(basketSize() == invalidBasketSize) setBasketSize(other.basketSize());
   }
 
   void
@@ -271,7 +259,7 @@ namespace edm {
   void
   BranchDescription::updateFriendlyClassName() {
     friendlyClassName_ = friendlyname::friendlyName(fullClassName());
-    branchName().clear();
+    clearBranchName();
     initBranchName();
   }
 
@@ -291,10 +279,6 @@ namespace edm {
     if(b.branchType() < a.branchType()) return false;
     if(a.branchID() < b.branchID()) return true;
     if(b.branchID() < a.branchID()) return false;
-    if(a.parameterSetIDs() < b.parameterSetIDs()) return true;
-    if(b.parameterSetIDs() < a.parameterSetIDs()) return false;
-    if(a.moduleNames() < b.moduleNames()) return true;
-    if(b.moduleNames() < a.moduleNames()) return false;
     if(a.branchAliases() < b.branchAliases()) return true;
     if(b.branchAliases() < a.branchAliases()) return false;
     if(a.present() < b.present()) return true;
@@ -318,15 +302,12 @@ namespace edm {
   operator==(BranchDescription const& a, BranchDescription const& b) {
     return combinable(a, b) &&
        (a.dropped() == b.dropped()) &&
-       (a.moduleNames() == b.moduleNames()) &&
-       (a.parameterSetIDs() == b.parameterSetIDs()) &&
        (a.branchAliases() == b.branchAliases());
   }
 
   std::string
   match(BranchDescription const& a, BranchDescription const& b,
-        std::string const& fileName,
-        BranchDescription::MatchMode m) {
+        std::string const& fileName) {
     std::ostringstream differences;
     if(a.branchName() != b.branchName()) {
       differences << "Branch name '" << b.branchName() << "' does not match '" << a.branchName() << "'.\n";
@@ -351,27 +332,11 @@ namespace edm {
     if(!b.dropped() && a.dropped()) {
       differences << "Branch '" << a.branchName() << "' was dropped in the first input file but is present in '" << fileName << "'.\n";
     }
-    if(m == BranchDescription::Strict) {
-        if(b.parameterSetIDs().size() > 1) {
-          differences << "Branch '" << b.branchName() << "' uses more than one parameter set in file '" << fileName << "'.\n";
-        } else if(a.parameterSetIDs().size() > 1) {
-          differences << "Branch '" << a.branchName() << "' uses more than one parameter set in previous files.\n";
-        } else if(a.parameterSetIDs() != b.parameterSetIDs()) {
-          differences << "Branch '" << b.branchName() << "' uses different parameter sets in file '" << fileName << "'.\n";
-          differences << "    than in previous files.\n";
-        }
-    }
     return differences.str();
   }
 
   WrapperInterfaceBase const*
   BranchDescription::getInterface() const {
-    if(wrapperInterfaceBase() == 0) {
-      // This could be done in init(), but we only want to do it on demand, for performance reasons.
-      TypeWithDict type = TypeWithDict::byName(wrappedName());
-      type.invokeByName(wrapperInterfaceBase(), "getInterface");
-      assert(wrapperInterfaceBase() != 0);
-    }
-    return wrapperInterfaceBase();
+    return transient_.wrapperInterfaceBase_;
   }
 }

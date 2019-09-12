@@ -4,8 +4,6 @@
 /*
  * \file L1TDTTF.h
  *
- * $Date: 2010/11/01 11:27:53 $
- * $Revision: 1.14 $
  * \author J. Berryhill
  *
  */
@@ -18,6 +16,9 @@
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
 
+#include "DataFormats/L1GlobalMuonTrigger/interface/L1MuGMTReadoutCollection.h"
+#include "DataFormats/L1DTTrackFinder/interface/L1MuDTTrackContainer.h"
+#include "DataFormats/MuonReco/interface/MuonFwd.h"
 //
 // class declaration
 //
@@ -57,8 +58,8 @@ class L1TDTTF : public edm::EDAnalyzer {
  private:
 
 
-  void fillMEs( std::vector<L1MuDTTrackCand> * trackContainer,
-		std::vector<L1MuRegionalCand> & gmtDttfCands );
+  void fillMEs( std::vector<L1MuDTTrackCand> const* trackContainer,
+		std::vector<L1MuRegionalCand>& gmtDttfCands );
   void setWheelLabel(MonitorElement *me);
   void setQualLabel(MonitorElement *me, int axis);
   void bookEta( int wh, int & nbins, float & start, float & stop );
@@ -107,6 +108,11 @@ class L1TDTTF : public edm::EDAnalyzer {
   int nev_dttf_; //Number of events with at least one DTTF track
   int nev_dttf_track2_; //Number of events with at least one DTTF 2nd track
   int numTracks[6][12];
+
+  //define Token(-s)
+  edm::EDGetTokenT<L1MuDTTrackContainer> trackInputToken_;
+  edm::EDGetTokenT<reco::MuonCollection> muonCollectionToken_;
+  edm::EDGetTokenT<L1MuGMTReadoutCollection> gmtSourceToken_;
 };
 
 #endif

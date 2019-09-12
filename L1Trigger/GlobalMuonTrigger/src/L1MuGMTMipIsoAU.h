@@ -11,8 +11,6 @@
  *           1 endcap MIP & ISO bit Assignment unit
  */          
 //
-//   $Date: 2007/03/23 18:51:35 $
-//   $Revision: 1.2 $
 //
 //   Author :
 //   H. Sakulin            CERN EP 

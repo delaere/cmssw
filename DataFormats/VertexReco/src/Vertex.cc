@@ -2,7 +2,6 @@
 #include <Math/GenVector/PxPyPzE4D.h>                                                                                                   
 #include <Math/GenVector/PxPyPzM4D.h>       
 
-// $Id: Vertex.cc,v 1.20 2011/03/03 05:25:19 dlange Exp $
 using namespace reco;
 using namespace std;
 

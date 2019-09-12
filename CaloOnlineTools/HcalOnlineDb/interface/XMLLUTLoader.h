@@ -16,7 +16,6 @@
 //
 // Original Author:  Gena Kukartsev, kukarzev@fnal.gov
 //         Created:  Tue Oct 23 14:30:33 CDT 2007
-// $Id: XMLLUTLoader.h,v 1.5 2013/05/23 15:17:36 gartung Exp $
 //
 
 // system include files

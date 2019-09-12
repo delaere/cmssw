@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Fri Jan 18 10:19:07 EST 2008
-// $Id: unittest_eventitemsmanager.cc,v 1.8 2010/10/27 16:27:23 amraktad Exp $
 //
 
 // system include files

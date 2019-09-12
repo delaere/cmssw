@@ -4,7 +4,6 @@
  *
  *    Muon Sector Collector Trigger Phi candidate 
  *
- *    $Date: 2007/04/27 08:45:51 $
  *    
  *
  *   \author S. Marcellini, D. Bonacorsi

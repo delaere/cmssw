@@ -4,8 +4,6 @@
 /*
  * \file EcalEndcapDigisValidation.h
  *
- * $Date: 2010/01/04 15:10:59 $
- * $Revision: 1.9 $
  * \author F. Cossutti
  *
 */
@@ -67,7 +65,7 @@ private:
  
  std::string outputFile_;
  
- edm::InputTag EEdigiCollection_;
+ edm::EDGetTokenT<EEDigiCollection> EEdigiCollectionToken_;
 
  std::map<int, double, std::less<int> > gainConv_;
 

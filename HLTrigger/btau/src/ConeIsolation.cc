@@ -13,7 +13,6 @@
 //
 // Original Author:  Simone Gennai
 //      Created:  Thu Apr  6 09:56:23 CEST 2006
-// $Id: ConeIsolation.cc,v 1.2 2011/10/12 09:00:41 fwyzard Exp $
 //
 //
 
@@ -34,13 +33,15 @@
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/BTauReco/interface/IsolatedTauTagInfo.h"
 
-#include <DataFormats/VertexReco/interface/Vertex.h>
-#include <DataFormats/VertexReco/interface/VertexFwd.h>
+#include "DataFormats/VertexReco/interface/Vertex.h"
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "DataFormats/BeamSpot/interface/BeamSpot.h"
+
+#include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 
 using namespace reco;
 using namespace edm;
@@ -51,17 +52,18 @@ using namespace std;
 //
 ConeIsolation::ConeIsolation(const edm::ParameterSet& iConfig)
 {
-  jetTrackSrc = iConfig.getParameter<InputTag>("JetTrackSrc");
-  vertexSrc = iConfig.getParameter<InputTag>("vertexSrc");
-  usingVertex = iConfig.getParameter<bool>("useVertex");
+  jetTrackTag   = iConfig.getParameter<InputTag>("JetTrackSrc");
+  jetTrackToken = consumes<reco::JetTracksAssociationCollection>(jetTrackTag);
+  vertexTag     = iConfig.getParameter<InputTag>("vertexSrc");
+  vertexToken   = consumes<reco::VertexCollection>(vertexTag);
+  beamSpotTag   = iConfig.getParameter<edm::InputTag>("BeamSpotProducer");
+  beamSpotToken = consumes<reco::BeamSpot>(beamSpotTag);
   usingBeamSpot = iConfig.getParameter<bool>("useBeamSpot"); //If false the OfflinePrimaryVertex will be used.
-  beamSpotProducer = iConfig.getParameter<edm::InputTag>("BeamSpotProducer");
+
   m_algo = new ConeIsolationAlgorithm(iConfig);
   
   produces<reco::JetTagCollection>(); 
-   produces<reco::IsolatedTauTagInfoCollection>();       
-
-
+  produces<reco::IsolatedTauTagInfoCollection>();       
 
 }
 
@@ -76,6 +78,18 @@ ConeIsolation::~ConeIsolation()
 //
 // member functions
 //
+
+void
+ConeIsolation::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+  edm::ParameterSetDescription desc;
+  desc.add<edm::InputTag>("JetTrackSrc",edm::InputTag("ic5JetTracksAssociatorAtVertex"));
+  desc.add<edm::InputTag>("vertexSrc",edm::InputTag("offlinePrimaryVertices"));
+  desc.add<edm::InputTag>("BeamSpotProducer",edm::InputTag("offlineBeamSpot"));
+  desc.add<bool>("useBeamSpot",false);
+  ConeIsolationAlgorithm::fillDescription(desc);
+  descriptions.add("coneIsolationTauJetTags", desc);
+}
+
 // ------------ method called to produce the data  ------------
 void
 ConeIsolation::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
@@ -83,7 +97,7 @@ ConeIsolation::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    using namespace edm;
    //Get jets with tracks
    Handle<reco::JetTracksAssociationCollection> jetTracksAssociation;
-   iEvent.getByLabel(jetTrackSrc,jetTracksAssociation);
+   iEvent.getByToken(jetTrackToken,jetTracksAssociation);
 
    std::auto_ptr<reco::JetTagCollection>             tagCollection;
    std::auto_ptr<reco::IsolatedTauTagInfoCollection> extCollection( new reco::IsolatedTauTagInfoCollection() );
@@ -104,7 +118,7 @@ if (not jetTracksAssociation->empty()) {
 
    //Get pixel vertices
    Handle<reco::VertexCollection> vertices;
-   iEvent.getByLabel(vertexSrc,vertices);
+   iEvent.getByToken(vertexToken,vertices);
    const reco::VertexCollection vertCollection = *(vertices.product());
    //Check if there is the PV!!!!
    if(vertCollection.begin() != vertCollection.end())
@@ -117,7 +131,7 @@ if (not jetTracksAssociation->empty()) {
    if(usingBeamSpot)
      {
        //Create a new vertex with the information on x0 and Y0 from the beamspot, to be used in HLT.
-       iEvent.getByLabel(beamSpotProducer,recoBeamSpotHandle);
+       iEvent.getByToken(beamSpotToken,recoBeamSpotHandle);
        vertexBeamSpot = *recoBeamSpotHandle;
        Vertex::Point bspoint(vertexBeamSpot.x0(),vertexBeamSpot.y0(),myPVtmp.z());
        Vertex combinedVertex = Vertex(bspoint,myPVtmp.error(),myPVtmp.chi2(),myPVtmp.ndof(),myPVtmp.tracksSize());

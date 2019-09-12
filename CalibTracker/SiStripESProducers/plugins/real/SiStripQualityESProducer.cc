@@ -13,7 +13,6 @@
 //
 // Original Author:  Domenico GIORDANO
 //         Created:  Wed Oct  3 12:11:10 CEST 2007
-// $Id: SiStripQualityESProducer.cc,v 1.9 2010/02/09 08:39:33 demattia Exp $
 //
 //
 

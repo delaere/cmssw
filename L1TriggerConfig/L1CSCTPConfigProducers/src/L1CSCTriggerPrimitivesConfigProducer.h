@@ -8,7 +8,6 @@
  *
  * \author Slava Valuev
  * Created: Thu Apr 12 11:26:54 CEST 2007
- * $Id: L1CSCTriggerPrimitivesConfigProducer.h,v 1.7 2010/08/04 10:11:35 slava Exp $
  *
  */
 

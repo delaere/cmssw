@@ -2,8 +2,6 @@
 
 /** \file RecoMuon/
  *
- *  $Date: 2011/12/22 21:12:08 $
- *  $Revision: 1.5 $
  *  \author Adam Evertt, Jean-Roch Vlimant
  */
 
@@ -45,6 +43,7 @@ MuonRoadTrajectoryBuilder::MuonRoadTrajectoryBuilder(const edm::ParameterSet & i
 {
 
   theMeasurementTracker = mt;
+  theMeasurementTrackerEvent = 0; // YES this will crash, Will fix later.
   theField = f;
   thePropagator = p;
 
@@ -96,10 +95,10 @@ MuonRoadTrajectoryBuilder::~MuonRoadTrajectoryBuilder()
   if (theHitEstimator) delete theHitEstimator;
   if (theUpdator) delete theUpdator;
   if (theSmoother) delete theSmoother;
+  delete theMeasurementTrackerEvent;
 }
 
 void MuonRoadTrajectoryBuilder::setEvent(const edm::Event & iEvent) const {
-  theMeasurementTracker->update(iEvent);
 }
 
 
@@ -147,7 +146,7 @@ void MuonRoadTrajectoryBuilder::makeTrajectories(const TrajectorySeed & seed, st
 
 //home grown tools
 //old implementation
-void MuonRoadTrajectoryBuilder::makeTrajectories_0(const TrajectorySeed & seed, std::vector<Trajectory> & result) const 
+void MuonRoadTrajectoryBuilder::makeTrajectories_0(const TrajectorySeed & seed, std::vector<Trajectory> & result) const
 {
   Trajectory basicTrajectory(seed,alongMomentum);
   //add the muon system measurement to the basicTrajectory
@@ -167,10 +166,10 @@ void MuonRoadTrajectoryBuilder::makeTrajectories_0(const TrajectorySeed & seed, 
  
   //initialization
   //----------------------
-  //  WARNING. this is mutable 
-  //  you should never remove this line
-  theFirstlayer=true;
-  theNumberOfHitPerModule = theNumberOfHitPerModuleDefault;
+  //
+  //
+  bool theFirstlayer=true;
+  unsigned int theNumberOfHitPerModule = theNumberOfHitPerModuleDefault;
   //----------------------
   int Nhits=0;
   GlobalPoint position;
@@ -228,7 +227,7 @@ void MuonRoadTrajectoryBuilder::makeTrajectories_0(const TrajectorySeed & seed, 
   while(inapart){
 
       //check on the trajectory list and stuff
-      if (!checkStep(Trajectories.head())) break;
+      if (!checkStep(Trajectories.head(),theNumberOfHitPerModule)) break;
       //................
 
     switch (whichpart){
@@ -254,7 +253,7 @@ void MuonRoadTrajectoryBuilder::makeTrajectories_0(const TrajectorySeed & seed, 
 	{/*z bigger than the TID min z: go to TID*/
 	  LogDebug(theCategory)<<"|z| ("<<z<<") bigger than the TID min z("<<tidlc[(z>0)][0]->surface().position().z()<<"): go to TID";
 	  whichpart = TID; indexinpart=-1; break;}
-      else  {/*gather hits in the corresponding TIB layer*/ Nhits+=GatherHits(TSOS,tiblc[indexinpart],Trajectories);}
+      else  {/*gather hits in the corresponding TIB layer*/ Nhits+=GatherHits(TSOS,tiblc[indexinpart],Trajectories,theFirstlayer,theNumberOfHitPerModule);}
       break;}
 
       //-------------- into TID----------------
@@ -285,7 +284,7 @@ void MuonRoadTrajectoryBuilder::makeTrajectories_0(const TrajectorySeed & seed, 
 	  whichpart = TOB; indexinpart=-1;break;}
       else  {/*gather hits in the corresponding TIB layer*/
 	LogDebug(theCategory)<<"collecting hits";
-	Nhits+=GatherHits(TSOS,tidlc[(z>0)][indexinpart],Trajectories);}
+	Nhits+=GatherHits(TSOS,tidlc[(z>0)][indexinpart],Trajectories,theFirstlayer,theNumberOfHitPerModule);}
       break;}
 
       //-------------- into TOB----------------
@@ -305,7 +304,7 @@ void MuonRoadTrajectoryBuilder::makeTrajectories_0(const TrajectorySeed & seed, 
 	{/*z bigger than the TOB layer max z: go to TEC*/
 	  LogDebug(theCategory)<<"|z| ("<<z<<") bigger than the TOB layer max z ("<< teclc[(z>0)][0]->surface().position().z()<<"): go to TEC";
 	  whichpart = TEC; indexinpart=-1;break;}
-      else {/*gather hits in the corresponding TOB layer*/Nhits+=GatherHits(TSOS,toblc[indexinpart],Trajectories);}
+      else {/*gather hits in the corresponding TOB layer*/Nhits+=GatherHits(TSOS,toblc[indexinpart],Trajectories,theFirstlayer,theNumberOfHitPerModule);}
       break;}
 
       //-------------- into TEC----------------
@@ -334,7 +333,7 @@ void MuonRoadTrajectoryBuilder::makeTrajectories_0(const TrajectorySeed & seed, 
 	{/*radius bigger than the TEC disk outer radius: I can stop here*/
 	  LogDebug(theCategory)<<"radius ("<<r<<") bigger than the TEC disk outer radius ("<<sdbounds->outerRadius()<<"): I can stop here";
 	  inapart=false;break;}
-      else {/*gather hits in the corresponding TEC layer*/Nhits+=GatherHits(TSOS,teclc[(z>0)][indexinpart],Trajectories);}
+      else {/*gather hits in the corresponding TEC layer*/Nhits+=GatherHits(TSOS,teclc[(z>0)][indexinpart],Trajectories,theFirstlayer,theNumberOfHitPerModule);}
 	  
       break;}
 
@@ -456,7 +455,8 @@ Trajectory MuonRoadTrajectoryBuilder::smooth(Trajectory & traj) const {
 }
 
 //function called for each layer during propagation
-int  MuonRoadTrajectoryBuilder::GatherHits( const TrajectoryStateOnSurface & step,const DetLayer * thislayer , TrajectoryCollectionFPair & Trajectories) const 
+int  MuonRoadTrajectoryBuilder::GatherHits( const TrajectoryStateOnSurface & step,const DetLayer * thislayer , TrajectoryCollectionFPair & Trajectories,
+                                            bool & theFirstlayer, unsigned int theNumberOfHitPerModule) const
 {
   TrajectoryStateOnSurface restep;
   bool atleastoneadded=false;
@@ -476,7 +476,7 @@ int  MuonRoadTrajectoryBuilder::GatherHits( const TrajectoryStateOnSurface & ste
 			     <<"(presentdetid.rawId()) "<<(presentdetid.rawId());
 
       //get the rechits on this module
-      TransientTrackingRecHit::ConstRecHitContainer  thoseHits = theMeasurementTracker->idToDet(presentdetid)->recHits(restep); 
+      TransientTrackingRecHit::ConstRecHitContainer  thoseHits = theMeasurementTrackerEvent->idToDet(presentdetid).recHits(restep); 
       int additionalHits =0;
 
       LogDebug(theCategory)<<"(thoseHits.size()) "<<(thoseHits.size());
@@ -555,7 +555,7 @@ int  MuonRoadTrajectoryBuilder::GatherHits( const TrajectoryStateOnSurface & ste
 		      combined.missedinarow=0;
 		      //add a new hits to the measurements
 		      combined.measurements.push_back(TrajectoryMeasurement(updatedState,*iTThit));
-		      TrajectoryMeasurement & trajMeasurement = (*combined.measurements.rbegin());
+		      const TrajectoryMeasurement & trajMeasurement = (*combined.measurements.rbegin());
 		      //assigne updated state
 		      combined.TSOS = updatedState;
 		      //add trajectory measurement 
@@ -662,7 +662,7 @@ int  MuonRoadTrajectoryBuilder::GatherHits( const TrajectoryStateOnSurface & ste
 }
 
 
-bool MuonRoadTrajectoryBuilder::checkStep(TrajectoryCollection & collection) const 
+bool MuonRoadTrajectoryBuilder::checkStep(TrajectoryCollection & collection, unsigned int & theNumberOfHitPerModule) const 
 {
   //dynamic cut on the max number of rechit allowed on a single module
   if (theDynamicMaxNumberOfHitPerModule) {
@@ -704,8 +704,8 @@ void MuonRoadTrajectoryBuilder::checkDuplicate(TrajectoryCollection & collection
 	  if (traj2 == traj1 ) continue; //skip itself of course
 
 	  //need to start from the back of the list of measurment
-	  std::list <TrajectoryMeasurement >::reverse_iterator h1 = traj1->measurements.rbegin();
-	  std::list <TrajectoryMeasurement >::reverse_iterator h2 = traj2->measurements.rbegin();
+	  std::list <TrajectoryMeasurement >::const_reverse_iterator h1 = traj1->measurements.rbegin();
+	  std::list <TrajectoryMeasurement >::const_reverse_iterator h2 = traj2->measurements.rbegin();
 		  
 	  bool break_different = false;
 	  while (h1 != traj1->measurements.rend() && h2!=traj2->measurements.rend())

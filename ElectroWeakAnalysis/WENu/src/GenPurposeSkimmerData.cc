@@ -40,7 +40,6 @@
 //
 // Original Author:  Nikolaos Rompotis
 //         Created:  Thu Oct 16 17:11:55 CEST 2008
-// $Id: GenPurposeSkimmerData.cc,v 1.4 2011/10/13 14:39:54 eulisse Exp $
 //
 //
 

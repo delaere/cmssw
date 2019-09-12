@@ -16,7 +16,6 @@
 //
 // Original Author:  Jim Brooke
 //         Created:  Wed Nov  1 11:57:10 CET 2006
-// $Id: TextToRaw.h,v 1.7 2009/12/03 18:35:58 nuno Exp $
 //
 //
 

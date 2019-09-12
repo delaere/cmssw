@@ -3,9 +3,6 @@
 /** \class PhotonCoreProducer
  **  
  **
- **  $Id: PhotonCoreProducer.h,v 1.4 2013/02/27 20:33:00 eulisse Exp $ 
- **  $Date: 2013/02/27 20:33:00 $ 
- **  $Revision: 1.4 $
  **  \author Nancy Marinelli, U. of Notre Dame, US
  **
  ***/
@@ -55,16 +52,13 @@ class PhotonCoreProducer : public edm::EDProducer {
 
 
   std::string PhotonCoreCollection_;
-  edm::InputTag scHybridBarrelProducer_;
-  edm::InputTag scIslandEndcapProducer_;
-  edm::InputTag scHybridBarrelCollection_;
-  edm::InputTag scIslandEndcapCollection_;
-
-  edm::InputTag conversionProducer_;
+  edm::EDGetTokenT<reco::SuperClusterCollection> scHybridBarrelProducer_;
+  edm::EDGetTokenT<reco::SuperClusterCollection> scIslandEndcapProducer_;
+  edm::EDGetTokenT<reco::ConversionCollection> conversionProducer_;
+  edm::EDGetTokenT<reco::ElectronSeedCollection> pixelSeedProducer_;
 
   double minSCEt_;
   bool validConversions_;
-  std::string pixelSeedProducer_;
   edm::ParameterSet conf_;
   bool validPixelSeeds_;
   bool risolveAmbiguity_;

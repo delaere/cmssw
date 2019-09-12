@@ -12,8 +12,6 @@ class HcalHTRData;
  *  Interpretive class for the header of a FED-format data block
  *  from the DTC -- the uTCA DAQ and timing card also called an AMC13
  *
- *  $Date: 2012/10/22 14:05:56 $
- *  $Revision: 1.1 $
  *  \author J. Mans - UMD
  */
 

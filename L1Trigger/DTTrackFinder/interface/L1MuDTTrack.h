@@ -5,8 +5,6 @@
  *   L1 Muon Track Candidate
  *
  *
- *   $Date: 2007/04/10 13:04:51 $
- *   $Revision: 1.5 $
  *
  *   N. Neumeister            CERN EP
  *   J. Troconiz              UAM Madrid

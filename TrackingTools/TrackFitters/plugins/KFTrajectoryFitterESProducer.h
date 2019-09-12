@@ -4,8 +4,6 @@
 /** \class KFTrajectoryFitterESProducer
  *  ESProducer for the KFTrajectoryFitter.
  *
- *  $Date: 2009/07/03 01:10:26 $
- *  $Revision: 1.3 $
  *  \author cerati
  */
 

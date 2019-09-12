@@ -36,8 +36,9 @@ class PreshowerPhiClusterProducer : public edm::EDProducer {
   int nEvt_;         // internal counter of events
 
   //clustering parameters:
-  edm::InputTag preshHitProducer_;         // name of module/plugin/producer producing hits
-  edm::InputTag endcapSClusterProducer_;   // ditto SuperClusters
+  edm::EDGetTokenT<EcalRecHitCollection> preshHitToken_; // name of module/plugin/producer 
+                                                         // producing hits
+  edm::EDGetTokenT<reco::SuperClusterCollection> endcapSClusterToken_;   // ditto SuperClusters
 
   // name out output collections
   std::string preshClusterCollectionX_;  
@@ -62,6 +63,8 @@ class PreshowerPhiClusterProducer : public edm::EDProducer {
   double alpha3_;
   double aEta_[4];
   double bEta_[4];
+
+  double etThresh_;
 
   PreshowerPhiClusterAlgo * presh_algo; // algorithm doing the real work
    // The set of used DetID's

@@ -31,7 +31,7 @@ public:
   bool readSettings( int ) { return true; }
   bool initializeForInternalPartons();
   bool declareStableParticles(const std::vector<int> &pdgIds);
-  bool declareSpecialSettings( const std::vector<std::string> ) { return true; }
+  bool declareSpecialSettings( const std::vector<std::string>& ) { return true; }
   void statistics();
   bool generatePartonsAndHadronize();
   bool decay();
@@ -60,7 +60,7 @@ public:
   CMS_SHERPA_RNG(){randomEngine = &gen::getEngineReference();};
 private: 
   CLHEP::HepRandomEngine* randomEngine;
-  double Get();
+  double Get() override;
 };
 
 

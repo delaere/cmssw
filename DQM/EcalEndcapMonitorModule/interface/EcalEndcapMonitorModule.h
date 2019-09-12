@@ -4,8 +4,6 @@
 /*
  * \file EcalEndcapMonitorModule.h
  *
- * $Date: 2012/04/26 07:45:14 $
- * $Revision: 1.23 $
  * \author G. Della Ricca
  *
 */
@@ -14,6 +12,10 @@
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
+
+#include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
+#include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
+#include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
 
 class MonitorElement;
 class DQMStore;
@@ -70,10 +72,10 @@ bool isPhysics_;
 
 int ievt_;
 
-edm::InputTag EcalRawDataCollection_;
-edm::InputTag EEDigiCollection_;
-edm::InputTag EcalRecHitCollection_;
-edm::InputTag EcalTrigPrimDigiCollection_;
+edm::EDGetTokenT<EcalRawDataCollection> EcalRawDataCollection_;
+edm::EDGetTokenT<EEDigiCollection> EEDigiCollection_;
+edm::EDGetTokenT<EcalRecHitCollection> EcalRecHitCollection_;
+edm::EDGetTokenT<EcalTrigPrimDigiCollection> EcalTrigPrimDigiCollection_;
 
 bool verbose_;
 bool debug_;

@@ -7,7 +7,6 @@
  author: Francisco Yumiceva, Fermilab (yumiceva@fnal.gov)
          Geng-Yuan Jeng, UC Riverside (Geng-Yuan.Jeng@cern.ch)
 
- version $Id: BeamSpotAnalyzer.cc,v 1.32 2011/02/22 17:52:25 friis Exp $
 
 ________________________________________________________________**/
 
@@ -22,6 +21,7 @@ ________________________________________________________________**/
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "FWCore/Framework/interface/LuminosityBlock.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 #include "TMath.h"
 
@@ -34,7 +34,7 @@ BeamSpotAnalyzer::BeamSpotAnalyzer(const edm::ParameterSet& iConfig)
   resetFitNLumi_  = iConfig.getParameter<edm::ParameterSet>("BSAnalyzerParameters").getUntrackedParameter<int>("resetEveryNLumi",-1);
   runbeamwidthfit_  = iConfig.getParameter<edm::ParameterSet>("BSAnalyzerParameters").getParameter<bool>("RunBeamWidthFit");
 
-  theBeamFitter = new BeamFitter(iConfig);
+  theBeamFitter = new BeamFitter(iConfig, consumesCollector());
   theBeamFitter->resetTrkVector();
   theBeamFitter->resetLSRange();
   theBeamFitter->resetCutFlow();

@@ -5,7 +5,6 @@
 // Object to store all timeslices of noise signal frame
 // Project: HPD noise library
 // Author: F.Ratnikov UMd, Jan. 15, 2008
-// $Id: HPDNoiseDataFrame.h,v 1.2 2008/08/04 22:07:08 fedor Exp $
 // --------------------------------------------------------
 
 #include "TObject.h"

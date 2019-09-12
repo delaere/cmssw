@@ -7,8 +7,6 @@
 
 /** \class CastorCalibrationWidthsSet
   *  
-  * $Date: 2009/03/26 17:55:06 $
-  * $Revision: 1.1 $
   * \author R.Ofierzynski
   * Adapted for CASTOR by L. Mundim
   */

@@ -1,4 +1,3 @@
-// $Id: RPCData.cc,v 1.4 2013/03/20 15:45:25 wdd Exp $
 // Include files 
 
 

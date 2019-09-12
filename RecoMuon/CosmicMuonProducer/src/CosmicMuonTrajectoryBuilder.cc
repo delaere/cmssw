@@ -4,8 +4,6 @@
  *  class to build trajectories of cosmic muons and beam-halo muons
  *
  *
- *  $Date: 2011/12/23 08:13:35 $
- *  $Revision: 1.56 $
  *  \author Chang Liu  - Purdue Univeristy
  */
 
@@ -43,7 +41,7 @@
 using namespace edm;
 using namespace std;
 
-CosmicMuonTrajectoryBuilder::CosmicMuonTrajectoryBuilder(const edm::ParameterSet& par, const MuonServiceProxy* service) : theService(service) { 
+CosmicMuonTrajectoryBuilder::CosmicMuonTrajectoryBuilder(const edm::ParameterSet& par, const MuonServiceProxy* service, edm::ConsumesCollector& iC) : theService(service) { 
 
   thePropagatorName = par.getParameter<string>("Propagator");
 
@@ -59,10 +57,10 @@ CosmicMuonTrajectoryBuilder::CosmicMuonTrajectoryBuilder(const edm::ParameterSet
 
 //  if(enableRPCMeasurement)
   InputTag RPCRecSegmentLabel = par.getParameter<InputTag>("RPCRecSegmentLabel");
-
   theLayerMeasurements= new MuonDetLayerMeasurements(DTRecSegmentLabel,
                                                      CSCRecSegmentLabel,
                                                      RPCRecSegmentLabel,
+						     iC,
 						     enableDTMeasurement,
 						     enableCSCMeasurement,
 						     enableRPCMeasurement);
@@ -124,8 +122,6 @@ void CosmicMuonTrajectoryBuilder::setEvent(const edm::Event& event) {
     theNavigation = new DirectMuonNavigation(theService->detLayerGeometry(), theNavigationPSet);
   }
 
-//  event.getByLabel("csc2DRecHits", cschits_);
-//  event.getByLabel("dt1DRecHits", dthits_);
 
 }
 
@@ -476,7 +472,7 @@ void CosmicMuonTrajectoryBuilder::build(const TrajectoryStateOnSurface& ts,
 
   if ( !ts.isValid() ) return;
 
-  FreeTrajectoryState* fts = ts.freeState();
+  const FreeTrajectoryState* fts = ts.freeState();
   if ( !fts ) return;
 
   vector<const DetLayer*> navLayers;

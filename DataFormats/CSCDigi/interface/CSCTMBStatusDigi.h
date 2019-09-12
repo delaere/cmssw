@@ -5,8 +5,6 @@
  *
  *  Digi for CSC TMB info available in DDU
  *  
- *  $Date: 2009/05/09 20:23:33 $
- *  $Revision: 1.10 $
  *
  */
 

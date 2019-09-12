@@ -5,8 +5,6 @@
 //   Description: L1 Global Muon Trigger
 //
 //
-//   $Date: 2010/02/12 12:07:37 $
-//   $Revision: 1.7 $
 //
 //   Author :
 //   Ivan Mikulec                    HEPHY Vienna

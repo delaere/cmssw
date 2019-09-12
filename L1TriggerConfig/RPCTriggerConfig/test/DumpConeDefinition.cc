@@ -13,7 +13,6 @@
 //
 // Original Author:  Tomasz Maciej Frueboes
 //         Created:  Wed Apr  9 14:03:40 CEST 2008
-// $Id: DumpConeDefinition.cc,v 1.4 2010/07/06 16:14:01 ghete Exp $
 //
 //
 

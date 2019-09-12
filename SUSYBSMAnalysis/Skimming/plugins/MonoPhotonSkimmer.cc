@@ -13,7 +13,6 @@
 //
 // Original Author:  Jie Chen
 //         Created:  Wed Nov 17 14:33:08 CST 2010
-// $Id: MonoPhotonSkimmer.cc,v 1.2 2013/02/27 22:47:59 wmtan Exp $
 //
 //
 
@@ -46,9 +45,9 @@ class MonoPhotonSkimmer : public edm::EDFilter {
       ~MonoPhotonSkimmer();
 
    private:
-      virtual void beginJob() ;
+      virtual void beginJob() override ;
       virtual bool filter(edm::Event&, const edm::EventSetup&) override;
-      virtual void endJob() ;
+      virtual void endJob() override ;
       
       // ----------member data ---------------------------
       edm::InputTag _phoTag;

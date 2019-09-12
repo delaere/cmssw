@@ -2,6 +2,10 @@
 
 #include <ostream>
 #include <sstream>
+#include <limits>
+#include <atomic>
+
+static std::atomic<unsigned int> s_id{0};
 
 /*----------------------------------------------------------------------
 
@@ -13,42 +17,40 @@ namespace edm {
     parameterSetID_(),
     moduleName_(),
     moduleLabel_(),
-    processConfigurationPtr_(nullptr) {}
+    processConfigurationPtr_(nullptr),
+    id_(invalidID()){}
 
   ModuleDescription::ModuleDescription(
 		ParameterSetID const& pid,
 		std::string const& modName,
-		std::string const& modLabel) : ModuleDescription{pid, modName, modLabel, nullptr} {}
+		std::string const& modLabel) : ModuleDescription{pid, modName, modLabel, nullptr, invalidID()} {}
 
   ModuleDescription::ModuleDescription(
 		ParameterSetID const& pid,
 		std::string const& modName,
 		std::string const& modLabel,
-		ProcessConfiguration const* procConfig) :
+		ProcessConfiguration const* procConfig,
+    unsigned int iID) :
 			parameterSetID_(pid),
 			moduleName_(modName),
 			moduleLabel_(modLabel),
-			processConfigurationPtr_(procConfig) {}
+			processConfigurationPtr_(procConfig),
+      id_(iID){}
 
   ModuleDescription::ModuleDescription(
 		std::string const& modName,
-		std::string const& modLabel) : ModuleDescription{ParameterSetID(), modName, modLabel, nullptr} {}
+		std::string const& modLabel) : ModuleDescription{ParameterSetID(), modName, modLabel, nullptr, invalidID()} {}
 
   ModuleDescription::ModuleDescription(
 		std::string const& modName,
 		std::string const& modLabel,
-		ProcessConfiguration const* procConfig) : ModuleDescription{ParameterSetID(), modName, modLabel, procConfig} {}
+		ProcessConfiguration const* procConfig) : ModuleDescription{ParameterSetID(), modName, modLabel, procConfig, invalidID()} {}
 
   ModuleDescription::~ModuleDescription() {}
 
   ProcessConfiguration const&
   ModuleDescription::processConfiguration() const {
     return *processConfigurationPtr_;
-  }
-
-  ProcessConfigurationID
-  ModuleDescription::processConfigurationID() const {
-    return processConfiguration().id();
   }
 
   std::string const&
@@ -95,6 +97,11 @@ namespace edm {
   bool
   ModuleDescription::operator!=(ModuleDescription const& rh) const {
     return !((*this) == rh);
+  }
+
+  unsigned int
+  ModuleDescription::getUniqueID() {
+    return s_id++;
   }
 
   void

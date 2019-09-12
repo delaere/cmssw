@@ -16,7 +16,7 @@
 #include "DQMServices/Core/interface/MonitorElement.h"
 #include "DataFormats/BeamSpot/interface/BeamSpot.h"
 #include "DataFormats/TrackReco/interface/Track.h"
-
+#include "DataFormats/HLTReco/interface/TriggerEventWithRefs.h"
 
 class PtGreaterRef { 
       public: 
@@ -32,10 +32,10 @@ class HLTOniaSource : public edm::EDAnalyzer {
 
 
    private:
-      virtual void beginJob() ;
-      virtual void beginRun(const edm::Run &, const edm::EventSetup &);
-      virtual void analyze(const edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
+      virtual void beginJob() override ;
+      virtual void beginRun(const edm::Run &, const edm::EventSetup &) override;
+      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
 
 
       reco::BeamSpot::Point BSPosition_;
@@ -71,7 +71,12 @@ class HLTOniaSource : public edm::EDAnalyzer {
       std::map<std::string, MonitorElement *> trackME_;
       std::map<std::string, MonitorElement *> massME_;
       bool hltConfigInit_;
-    
+
+      //define Token(-s)
+      edm::EDGetTokenT<reco::TrackCollection> pixelToken_;
+      edm::EDGetTokenT<reco::RecoChargedCandidateCollection> trackToken_;
+      edm::EDGetTokenT<reco::BeamSpot> beamSpotToken_;
+      edm::EDGetTokenT<trigger::TriggerEventWithRefs> triggerSummaryRAWToken_;
 };
 
 #endif

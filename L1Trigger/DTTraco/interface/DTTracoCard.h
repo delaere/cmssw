@@ -4,8 +4,6 @@
  *   Contains active DTTracoChips
  *
  *
- *   $Date: 2009/11/12 14:33:22 $
- *   $Revision: 1.10 $
  *
  *   \author C. Grandi, S. Vanini 
  *
@@ -107,7 +105,7 @@ class DTTracoCard : public TRACOCache, public DTGeomSupplier {
     virtual void reconstruct() { clearCache(); loadTRACO(); runTRACO(); }
 
     /// Return LUTS config for this chamber (=minicrate)
-    DTConfigLUTs* config_luts() const { return _conf_luts; } 
+    const DTConfigLUTs* config_luts() const { return _conf_luts; } 
 
    /// Return acceptance flag
    inline bool useAcceptParamFlag() { return _flag_acc; } 
@@ -145,7 +143,7 @@ class DTTracoCard : public TRACOCache, public DTGeomSupplier {
     TRACOContainer _tracomap;
     ConfTracoMap _conf_traco_map;	//bti configuration map for this chamber
 
-    DTConfigLUTs* _conf_luts;
+    const DTConfigLUTs* _conf_luts;
     
     bool _debug;
 

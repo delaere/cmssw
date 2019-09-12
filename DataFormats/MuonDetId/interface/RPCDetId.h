@@ -5,9 +5,6 @@
  * 
  *  DetUnit identifier for RPCs
  *
- *  $Date: 2012/10/19 08:00:32 $
- *  \version $Id: RPCDetId.h,v 1.25 2012/10/19 08:00:32 innocent Exp $
- *  $Revision: 1.25 $
  *  \author Ilaria Segoni
  */
 

@@ -11,8 +11,6 @@
  *    - two Assignment Units (AU)
  *
  *
- *   $Date: 2008/05/09 15:01:59 $
- *   $Revision: 1.4 $
  *
  *   N. Neumeister            CERN EP
  *   J. Troconiz              UAM Madrid

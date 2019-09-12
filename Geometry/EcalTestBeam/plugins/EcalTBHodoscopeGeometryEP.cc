@@ -12,7 +12,6 @@
 */
 //
 
-// $Id: EcalTBHodoscopeGeometryEP.cc,v 1.4 2010/03/26 19:51:48 sunanda Exp $
 //
 //
 

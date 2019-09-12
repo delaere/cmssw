@@ -1,4 +1,3 @@
-// $Id: ConversionTools.cc,v 1.3 2011/05/10 19:27:22 eulisse Exp $
 
 #include <TMath.h>
 #include "RecoEgamma/EgammaTools/interface/ConversionTools.h"
@@ -48,7 +47,7 @@ bool ConversionTools::isGoodConversion(const Conversion &conv, const math::XYZPo
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ConversionTools::matchesConversion(const reco::GsfElectron &ele, const reco::Conversion &conv, bool allowCkfMatch)
+bool ConversionTools::matchesConversion(const reco::GsfElectron &ele, const reco::Conversion &conv, bool allowCkfMatch, bool allowAmbiguousGsfMatch)
 {
 
   //check if a given GsfElectron matches a given conversion (no quality cuts applied)
@@ -57,8 +56,13 @@ bool ConversionTools::matchesConversion(const reco::GsfElectron &ele, const reco
 
   const std::vector<edm::RefToBase<reco::Track> > &convTracks = conv.tracks();
   for (std::vector<edm::RefToBase<reco::Track> >::const_iterator it=convTracks.begin(); it!=convTracks.end(); ++it) {
-    if ( ele.gsfTrack().isNonnull() && ele.gsfTrack().id()==it->id() && ele.gsfTrack().key()==it->key()) return true;
-    else if ( allowCkfMatch && ele.closestCtfTrackRef().isNonnull() && ele.closestCtfTrackRef().id()==it->id() && ele.closestCtfTrackRef().key()==it->key() ) return true;
+    if ( ele.reco::GsfElectron::gsfTrack().isNonnull() && ele.reco::GsfElectron::gsfTrack().id()==it->id() && ele.reco::GsfElectron::gsfTrack().key()==it->key()) return true;
+    else if ( allowCkfMatch && ele.reco::GsfElectron::closestCtfTrackRef().isNonnull() && ele.reco::GsfElectron::closestCtfTrackRef().id()==it->id() && ele.reco::GsfElectron::closestCtfTrackRef().key()==it->key() ) return true;
+    if (allowAmbiguousGsfMatch) {
+      for (reco::GsfTrackRefVector::const_iterator tk = ele.ambiguousGsfTracksBegin(); tk!=ele.ambiguousGsfTracksEnd(); ++tk) {
+        if (tk->isNonnull() && tk->id()==it->id() && tk->key()==it->key()) return true;
+      }
+    }
   }
 
   return false;
@@ -300,7 +304,7 @@ bool ConversionTools::hasMatchedPromptElectron(const reco::SuperClusterRef &sc, 
   
   for (GsfElectronCollection::const_iterator it = eleCol->begin(); it!=eleCol->end(); ++it) {
     //match electron to supercluster
-    if (it->superCluster()!=sc) continue;
+    if (it->reco::GsfElectron::superCluster()!=sc) continue;
 
     //check expected inner hits
     if (it->gsfTrack()->trackerExpectedHitsInner().numberOfHits()>0) continue;
@@ -332,7 +336,7 @@ reco::GsfElectronRef ConversionTools::matchedPromptElectron(const reco::SuperClu
   
   for (GsfElectronCollection::const_iterator it = eleCol->begin(); it!=eleCol->end(); ++it) {
     //match electron to supercluster
-    if (it->superCluster()!=sc) continue;
+    if (it->reco::GsfElectron::superCluster()!=sc) continue;
 
     //check expected inner hits
     if (it->gsfTrack()->trackerExpectedHitsInner().numberOfHits()>0) continue;

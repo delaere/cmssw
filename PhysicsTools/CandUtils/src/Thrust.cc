@@ -1,4 +1,3 @@
-// $Id: Thrust.cc,v 1.15 2011/10/12 15:30:11 gowdy Exp $
 #include "PhysicsTools/CandUtils/interface/Thrust.h"
 #include <cmath>
 using namespace reco;

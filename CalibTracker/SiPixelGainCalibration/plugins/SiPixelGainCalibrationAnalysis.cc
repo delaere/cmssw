@@ -13,7 +13,6 @@ Implementation:
 //
 // Original Author:  Freya Blekman
 //         Created:  Wed Nov 14 15:02:06 CET 2007
-// $Id: SiPixelGainCalibrationAnalysis.cc,v 1.41 2009/10/21 09:28:07 rougny Exp $
 //
 //
 

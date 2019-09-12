@@ -3,8 +3,6 @@
 /**  \class DTTSCand
  *    A Trigger Server Candidate
  *
- *   $Date: 2008/06/30 13:43:31 $
- *   $Revision: 1.5 $
  *
  *   \author C. Grandi, D. Bonacorsi, S. Marcellini
  */
@@ -79,7 +77,7 @@ class DTTSCand {
     inline void clear();
 
     /// Configuration set
-    inline DTConfigTSPhi* config() const { return _tss->config(); }
+    inline const DTConfigTSPhi* config() const { return _tss->config(); }
 
     /// Return associated TRACO trigger
     inline const DTTracoTrigData* tracoTr() const { return _tctrig; }

@@ -6,11 +6,9 @@
  *  Base class for Parsers used by DQM
  *
  *
- *  $Date: 2008/12/26 09:05:28 $
- *  $Revision: 1.3 $
  *  \author Suchandra Dutta
  */
-#include <xercesc/util/PlatformUtils.hpp>
+#include "FWCore/Concurrency/interface/Xerces.h"
 #include <xercesc/framework/StdOutFormatTarget.hpp>
 #include <xercesc/framework/LocalFileFormatTarget.hpp>
 

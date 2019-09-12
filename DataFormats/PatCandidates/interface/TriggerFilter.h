@@ -7,7 +7,6 @@
 // Package:    PatCandidates
 // Class:      pat::TriggerFilter
 //
-// $Id: TriggerFilter.h,v 1.10 2013/06/11 13:24:49 vadler Exp $
 //
 /**
   \class    pat::TriggerFilter TriggerFilter.h "DataFormats/PatCandidates/interface/TriggerFilter.h"
@@ -18,7 +17,6 @@
    https://twiki.cern.ch/twiki/bin/view/CMS/SWGuidePATTrigger#TriggerFilter
 
   \author   Volker Adler
-  \version  $Id: TriggerFilter.h,v 1.10 2013/06/11 13:24:49 vadler Exp $
 */
 
 

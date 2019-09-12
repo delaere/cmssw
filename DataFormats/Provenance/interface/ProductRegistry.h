@@ -12,7 +12,6 @@
 #include "DataFormats/Provenance/interface/BranchKey.h"
 #include "DataFormats/Provenance/interface/BranchListIndex.h"
 #include "DataFormats/Provenance/interface/BranchType.h"
-#include "DataFormats/Provenance/interface/ConstBranchDescription.h"
 #include "FWCore/Utilities/interface/ProductHolderIndex.h"
 
 #include "boost/array.hpp"
@@ -40,7 +39,7 @@ namespace edm {
 
     virtual ~ProductRegistry() {}
 
-    typedef std::map<BranchKey, ConstBranchDescription> ConstProductList;
+    typedef std::map<BranchKey, BranchDescription const> ConstProductList;
 
     void addProduct(BranchDescription const& productdesc, bool iFromListener = false);
 
@@ -48,11 +47,10 @@ namespace edm {
 
     void copyProduct(BranchDescription const& productdesc);
 
-    void setFrozen(bool initializeLookupInfo = true) const;
+    void setFrozen(bool initializeLookupInfo = true);
 
     std::string merge(ProductRegistry const& other,
         std::string const& fileName,
-        BranchDescription::MatchMode parametersMustMatch = BranchDescription::Permissive,
         BranchDescription::MatchMode branchesMustMatch = BranchDescription::Permissive);
 
     void updateFromInput(ProductList const& other);
@@ -98,7 +96,7 @@ namespace edm {
 
     bool anyProducts(BranchType const brType) const;
 
-    ConstProductList& constProductList() const {
+    ConstProductList& constProductList() {
        //throwIfNotFrozen();
        return transient_.constProductList_;
     }
@@ -110,19 +108,20 @@ namespace edm {
 
     bool productProduced(BranchType branchType) const {return transient_.productProduced_[branchType];}
     bool anyProductProduced() const {return transient_.anyProductProduced_;}
-    BranchListIndex producedBranchListIndex() const {return transient_.producedBranchListIndex_;}
 
-    void setProducedBranchListIndex(BranchListIndex blix) const {
-      transient_.producedBranchListIndex_ = blix;
+    std::vector<std::string> const& missingDictionaries() const {
+      return transient_.missingDictionaries_;
     }
 
-    std::vector<std::string>& missingDictionaries() const {
+    std::vector<std::string>& missingDictionariesForUpdate() {
       return transient_.missingDictionaries_;
     }
 
     ProductHolderIndex const& getNextIndexValue(BranchType branchType) const;
 
-    void initializeTransients() const {transient_.reset();}
+    void initializeTransients() {transient_.reset();}
+
+    bool frozen() const {return transient_.frozen_;}
 
     struct Transients {
       Transients();
@@ -143,29 +142,27 @@ namespace edm {
 
       std::map<BranchID, ProductHolderIndex> branchIDToIndex_;
 
-      BranchListIndex producedBranchListIndex_;
-
       std::vector<std::string> missingDictionaries_;
     };
 
   private:
-    void setProductProduced(BranchType branchType) const {
+    void setProductProduced(BranchType branchType) {
       transient_.productProduced_[branchType] = true;
       transient_.anyProductProduced_ = true;
     }
 
-    bool& frozen() const {return transient_.frozen_;}
+    void freezeIt(bool frozen = true) {transient_.frozen_ = frozen;}
 
     void updateConstProductRegistry();
-    void initializeLookupTables() const;
+    void initializeLookupTables();
     virtual void addCalled(BranchDescription const&, bool iFromListener);
     void throwIfNotFrozen() const;
     void throwIfFrozen() const;
 
-    ProductHolderIndex& nextIndexValue(BranchType branchType) const;
+    ProductHolderIndex& nextIndexValue(BranchType branchType);
 
     ProductList productList_;
-    mutable Transients transient_;
+    Transients transient_;
   };
 
   inline

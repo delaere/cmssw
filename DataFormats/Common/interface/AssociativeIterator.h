@@ -35,12 +35,11 @@
  *   }
  *
  *
- * \version $Id: AssociativeIterator.h,v 1.2 2009/11/04 15:30:19 wmtan Exp $
  *
  */
 
 #include "DataFormats/Provenance/interface/ProductID.h"
-#include <DataFormats/Common/interface/EDProductGetter.h>
+#include "DataFormats/Common/interface/EDProductGetter.h"
 
 namespace edm {
     struct Event;

@@ -6,8 +6,6 @@
 
 /** \class HcalTriggerPrimitiveSample
     
-  $Date: 2007/12/14 08:50:43 $
-  $Revision: 1.7 $
   \author J. Mans - Minnesota
 */
 class HcalTriggerPrimitiveSample {

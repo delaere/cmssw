@@ -1,6 +1,4 @@
 /*
- *  $Date: 2012/11/19 18:34:01 $
- *  $Revision: 1.9 $
  *  \author Philippe Gras CEA/Saclay
  */
 

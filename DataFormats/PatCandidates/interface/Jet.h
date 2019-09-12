@@ -1,5 +1,4 @@
 //
-// $Id: Jet.h,v 1.56 2011/08/10 13:50:38 eschliec Exp $
 //
 
 #ifndef DataFormats_PatCandidates_Jet_h
@@ -13,7 +12,6 @@
    'pat' namespace
 
   \author   Steven Lowette, Giovanni Petrucciani, Roger Wolf, Christian Autermann
-  \version  $Id: Jet.h,v 1.56 2011/08/10 13:50:38 eschliec Exp $
 */
 
 
@@ -32,6 +30,7 @@
 #include "DataFormats/BTauReco/interface/TrackProbabilityTagInfo.h"
 #include "DataFormats/BTauReco/interface/TrackCountingTagInfo.h"
 #include "DataFormats/BTauReco/interface/SoftLeptonTagInfo.h"
+#include "SimDataFormats/JetMatching/interface/JetFlavourInfo.h"
 
 #include "DataFormats/BTauReco/interface/SecondaryVertexTagInfo.h"
 #include "DataFormats/PatCandidates/interface/JetCorrFactors.h"
@@ -42,6 +41,7 @@
 
 #include "DataFormats/Common/interface/Ptr.h"
 #include "DataFormats/Common/interface/OwnVector.h"
+#include "DataFormats/Common/interface/AtomicPtrCache.h"
 
 
 // Define typedefs for convenience
@@ -60,6 +60,8 @@ namespace reco {
 // Class definition
 namespace pat {
 
+   class PATJetSlimmer;
+
   typedef reco::CaloJet::Specific CaloSpecific;
   typedef reco::JPTJet::Specific JPTSpecific;
   typedef reco::PFJet::Specific PFSpecific;
@@ -73,6 +75,7 @@ namespace pat {
     /// jet energy scale unequal to raw calling the private initializeJEC
     /// function, which should be non accessible to any other user
     friend class PATJetProducer;
+    friend class PATJetSlimmer;
 
     public:
 
@@ -95,8 +98,12 @@ namespace pat {
       const reco::GenParticle * genParton() const { return genParticle(); }
       /// return the matched generated jet
       const reco::GenJet * genJet() const;
-      /// return the flavour of the parton underlying the jet
+      /// return the parton-based flavour of the jet
       int partonFlavour() const;
+      /// return the hadron-based flavour of the jet
+      int hadronFlavour() const;
+      /// return the JetFlavourInfo of the jet
+      const reco::JetFlavourInfo & jetFlavourInfo() const;
 
   public:
       /// ---- methods for jet corrections ----
@@ -209,8 +216,12 @@ namespace pat {
       void setGenParton(const reco::GenParticleRef & gp, bool embed=false) { setGenParticleRef(gp, embed); }
       /// method to set the matched generated jet reference, embedding if requested
       void setGenJetRef(const edm::FwdRef<reco::GenJetCollection> & gj);
-      /// method to set the flavour of the parton underlying the jet
+      /// method to set the parton-based flavour of the jet
       void setPartonFlavour(int partonFl);
+      /// method to set the hadron-based flavour of the jet
+      void setHadronFlavour(int hadronFl);
+      /// method to set the JetFlavourInfo of the jet
+      void setJetFlavourInfo(const reco::JetFlavourInfo & jetFlavourInfo);
 
 
       /// methods for jet ID
@@ -242,17 +253,17 @@ namespace pat {
 	return specificPF_[0];
       }
       /// set the calo specific part of the jet
-      void setCaloSpecific(CaloSpecific newCaloSpecific) {
+      void setCaloSpecific(const CaloSpecific& newCaloSpecific) {
 	if (specificCalo_.empty()) throw cms::Exception("Type Mismatch") << "This PAT jet was not made from a CaloJet.\n";
 	specificCalo_[0] = newCaloSpecific;
       }
       /// set the jpt specific part of the jet
-      void setJPTSpecific(JPTSpecific newJPTSpecific) {
+      void setJPTSpecific(const JPTSpecific& newJPTSpecific) {
 	if (specificJPT_.empty()) throw cms::Exception("Type Mismatch") << "This PAT jet was not made from a JPTJet.\n";
 	specificJPT_[0] = newJPTSpecific;
       }
       /// set the pf specific part of the jet
-      void setPFSpecific(PFSpecific newPFSpecific) {
+      void setPFSpecific(const PFSpecific& newPFSpecific) {
 	if (specificPF_.empty()) throw cms::Exception("Type Mismatch") << "This PAT jet was not made from a PFJet.\n";
 	specificPF_[0] = newPFSpecific;
       }
@@ -457,7 +468,7 @@ namespace pat {
 
       /// Update bare FwdPtr and FwdRef "forward" pointers while keeping the
       /// "back" pointers the same (i.e. the ref "forwarding")
-      void updateFwdCaloTowerFwdPtr( unsigned int index, edm::Ptr<CaloTower> updateFwd ) {
+      void updateFwdCaloTowerFwdPtr( unsigned int index, const edm::Ptr<CaloTower>& updateFwd ) {
 	if ( index < caloTowersFwdPtr_.size() ) {
 	  caloTowersFwdPtr_[index] = CaloTowerFwdPtrVector::value_type( updateFwd, caloTowersFwdPtr_[index].backPtr() );
 	} else {
@@ -465,7 +476,7 @@ namespace pat {
 	}
       }
 
-      void updateFwdPFCandidateFwdPtr( unsigned int index, edm::Ptr<reco::PFCandidate> updateFwd ) {
+      void updateFwdPFCandidateFwdPtr( unsigned int index, const edm::Ptr<reco::PFCandidate>& updateFwd ) {
 	if ( index < pfCandidatesFwdPtr_.size() ) {
 	  pfCandidatesFwdPtr_[index] = reco::PFCandidateFwdPtrVector::value_type( updateFwd, pfCandidatesFwdPtr_[index].backPtr() );
 	} else {
@@ -474,7 +485,7 @@ namespace pat {
       }
 
 
-      void updateFwdTagInfoFwdPtr( unsigned int index, edm::Ptr<reco::BaseTagInfo> updateFwd ) {
+      void updateFwdTagInfoFwdPtr( unsigned int index, const edm::Ptr<reco::BaseTagInfo>& updateFwd ) {
 	if ( index < tagInfosFwdPtr_.size() ) {
 	  tagInfosFwdPtr_[index] = TagInfoFwdPtrCollection::value_type( updateFwd, tagInfosFwdPtr_[index].backPtr() );
 	} else {
@@ -494,13 +505,13 @@ namespace pat {
       // ---- for content embedding ----
 
       bool embeddedCaloTowers_;
-      mutable std::vector<CaloTowerPtr> caloTowersTemp_; // to simplify user interface
+      edm::AtomicPtrCache<std::vector<CaloTowerPtr> > caloTowersTemp_; // to simplify user interface
       CaloTowerCollection caloTowers_; // Compatibility embedding
       CaloTowerFwdPtrVector caloTowersFwdPtr_; // Refactorized content embedding
 
 
       bool embeddedPFCandidates_;
-      mutable std::vector<reco::PFCandidatePtr> pfCandidatesTemp_; // to simplify user interface
+      edm::AtomicPtrCache<std::vector<reco::PFCandidatePtr> > pfCandidatesTemp_; // to simplify user interface
       reco::PFCandidateCollection pfCandidates_; // Compatibility embedding
       reco::PFCandidateFwdPtrVector pfCandidatesFwdPtr_; // Refactorized content embedding
 
@@ -510,7 +521,7 @@ namespace pat {
       std::vector<reco::GenJet> genJet_;
       reco::GenJetRefVector genJetRef_;
       edm::FwdRef<reco::GenJetCollection>  genJetFwdRef_;
-      int partonFlavour_;
+      reco::JetFlavourInfo jetFlavourInfo_;
 
       // ---- energy scale correction factors ----
 
@@ -563,9 +574,7 @@ namespace pat {
       const JetCorrFactors * corrFactors_() const;
 
       /// cache calo towers
-      mutable bool isCaloTowerCached_;
       void cacheCaloTowers() const;
-      mutable bool isPFCandidateCached_;
       void cachePFCandidates() const;
 
   };

@@ -1,7 +1,7 @@
 //  \file AlignableNavigator.cc
 //
-//   $Revision: 1.23 $
-//   $Date: 2010/10/11 12:25:33 $
+//   $Revision: 1.22 $
+//   $Date: 2010/09/10 10:30:03 $
 //   (last update by $Author: mussgill $)
 
 #include "Alignment/CommonAlignment/interface/AlignableDet.h"
@@ -64,12 +64,12 @@ AlignableNavigator::AlignableNavigator(AlignableExtras* extras, Alignable* track
 }
 
 //_____________________________________________________________________________
-AlignableNavigator::AlignableNavigator( std::vector<Alignable*> alignables )
+AlignableNavigator::AlignableNavigator( const std::vector<Alignable*>& alignables )
 {
   theMap.clear();
 
   unsigned int numNonDets = 0;
-  for ( std::vector<Alignable*>::iterator it = alignables.begin(); it != alignables.end(); ++it ) {
+  for ( std::vector<Alignable*>::const_iterator it = alignables.begin(); it != alignables.end(); ++it ) {
     numNonDets += this->recursiveGetId(*it);
   }
   if (numNonDets) {

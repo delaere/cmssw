@@ -2,8 +2,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2012/02/02 13:30:02 $
- *  $Revision: 1.4 $
  */
 
 #include "DTResidualCalibration.h"

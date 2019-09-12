@@ -3,7 +3,6 @@
 /**   \Class DTSectCollThCand.h
  *    A Trigger Server Theta Candidate
  *
- *   $Date: 2008/06/30 13:44:28 $
  *  
  *
  *   \Author C. Battilana
@@ -55,7 +54,7 @@ class DTSectCollThCand {
   // Const methods
 
   //! Configuration set
-  inline DTConfigSectColl* config() const { return _tsc->config(); }
+  inline const DTConfigSectColl* config() const { return _tsc->config(); }
 
   //! Return the DTTSS
   inline DTSC* tsc() const { return _tsc; }

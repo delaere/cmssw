@@ -4,8 +4,6 @@
  *    Implementation of TS Phi trigger algorithm
  *
  *
- *   $Date: 2008/09/05 15:59:57 $
- *   $Revision: 1.7 $
  *
  *   \author C. Grandi, D. Bonacorsi, S. Marcellini
  */
@@ -63,7 +61,7 @@ class DTTSPhi : public DTTSPhiManager, public DTGeomSupplier {
   ~DTTSPhi();
 
   /// Return the configuration class
-  inline DTConfigTSPhi* config() const {return _config; }
+  inline const DTConfigTSPhi* config() const {return _config; }
 
   /// Set configuration
   void setConfig(const DTConfigManager *conf);
@@ -113,7 +111,7 @@ class DTTSPhi : public DTTSPhiManager, public DTGeomSupplier {
   
   DTTracoCard* _tracocard;
 
-  DTConfigTSPhi* _config;
+  const DTConfigTSPhi* _config;
   
   // Components
   std::vector<DTTSS*> _tss[DTConfigTSPhi::NSTEPL-DTConfigTSPhi::NSTEPF+1];

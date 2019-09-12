@@ -15,6 +15,7 @@ is the DataBlock.
 
 #include "DataFormats/Provenance/interface/LuminosityBlockAuxiliary.h"
 #include "DataFormats/Provenance/interface/RunID.h"
+#include "FWCore/Utilities/interface/LuminosityBlockIndex.h"
 #include "FWCore/Framework/interface/Principal.h"
 
 #include "boost/shared_ptr.hpp"
@@ -24,6 +25,8 @@ is the DataBlock.
 namespace edm {
 
   class HistoryAppender;
+  class ModuleCallingContext;
+  class ProcessHistoryRegistry;
   class RunPrincipal;
   class UnscheduledHandler;
 
@@ -35,11 +38,12 @@ namespace edm {
         boost::shared_ptr<LuminosityBlockAuxiliary> aux,
         boost::shared_ptr<ProductRegistry const> reg,
         ProcessConfiguration const& pc,
-        HistoryAppender* historyAppender);
+        HistoryAppender* historyAppender,
+        unsigned int index);
 
     ~LuminosityBlockPrincipal() {}
 
-    void fillLuminosityBlockPrincipal(DelayedReader* reader = 0);
+    void fillLuminosityBlockPrincipal(ProcessHistoryRegistry const& processHistoryRegistry, DelayedReader* reader = 0);
 
     RunPrincipal const& runPrincipal() const {
       return *runPrincipal_;
@@ -53,6 +57,10 @@ namespace edm {
       runPrincipal_ = rp;
     }
 
+    LuminosityBlockIndex index() const {
+      return index_;
+    }
+    
     LuminosityBlockID id() const {
       return aux().id();
     }
@@ -88,7 +96,7 @@ namespace edm {
     void setUnscheduledHandler(boost::shared_ptr<UnscheduledHandler>) {}
 
     void put(
-        ConstBranchDescription const& bd,
+        BranchDescription const& bd,
         WrapperOwningHolder const& edp);
 
     void readImmediate() const;
@@ -101,7 +109,10 @@ namespace edm {
 
     virtual bool isComplete_() const override {return complete_;}
 
-    virtual bool unscheduledFill(std::string const&) const override {return false;}
+    virtual bool unscheduledFill(std::string const&,
+                                 ModuleCallingContext const* mcc) const override {return false;}
+
+    virtual unsigned int transitionIndex_() const override;
 
     void resolveProductImmediate(ProductHolderBase const& phb) const;
 
@@ -109,6 +120,8 @@ namespace edm {
 
     boost::shared_ptr<LuminosityBlockAuxiliary> aux_;
 
+    LuminosityBlockIndex index_;
+    
     bool complete_;
   };
 }

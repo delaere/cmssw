@@ -46,7 +46,6 @@
 //
 // Original Author:  "Salvatore Rappoccio"
 //         Created:  Thu May  1 11:37:48 CDT 2008
-// $Id: BoostedTopProducer.h,v 1.1 2012/10/11 14:26:45 eulisse Exp $
 //
 //
 
@@ -111,7 +110,7 @@ class BoostedTopProducer : public edm::EDProducer {
       double        mTop_;           // input top mass
  
       // Rapidity-invariant deltaR
-      double Psi(TLorentzVector p1, TLorentzVector p2, double mass);
+      double Psi(const TLorentzVector& p1, const TLorentzVector& p2, double mass);
 };
 
 #endif

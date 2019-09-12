@@ -1,6 +1,5 @@
 // Original Author:  Anne-Marie Magnan
 //         Created:  2010/01/11
-// $Id: SiStripSpyMonitorModule.cc,v 1.1 2012/10/15 09:02:48 threus Exp $
 //
 
 #include <sstream>
@@ -9,6 +8,7 @@
 #include <algorithm>
 #include <cassert>
 
+#include "FWCore/Utilities/interface/EDGetToken.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
@@ -57,9 +57,9 @@ class SiStripSpyMonitorModule : public edm::EDAnalyzer
 
  private:
 
-  virtual void beginJob();
-  virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  virtual void endJob();
+  virtual void beginJob() override;
+  virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+  virtual void endJob() override;
 
 
   //check if contains pedsubtr data = 0
@@ -78,10 +78,19 @@ class SiStripSpyMonitorModule : public edm::EDAnalyzer
   edm::InputTag spyScopeRawDigisTag_;
   edm::InputTag spyPedSubtrDigisTag_;
 
+  edm::EDGetTokenT<edm::DetSetVector<SiStripRawDigi> > spyScopeRawDigisToken_;
+  edm::EDGetTokenT<edm::DetSetVector<SiStripRawDigi> > spyPedSubtrDigisToken_;
+
+
   //tag of l1A and apveAddress counters
   edm::InputTag spyL1Tag_;
   edm::InputTag spyTotCountTag_;
   edm::InputTag spyAPVeTag_;
+
+  edm::EDGetTokenT<std::vector<uint32_t> > spyL1Token_;
+  edm::EDGetTokenT<std::vector<uint32_t> > spyTotCountToken_;
+  edm::EDGetTokenT<std::vector<uint32_t> > spyAPVeToken_;
+  
 
   uint32_t minDigiRange_;
   uint32_t maxDigiRange_;
@@ -146,6 +155,13 @@ SiStripSpyMonitorModule::SiStripSpyMonitorModule(const edm::ParameterSet& iConfi
     outfileNames_(iConfig.getUntrackedParameter<std::vector<std::string> >("OutputErrors")),
     writeCabling_(iConfig.getUntrackedParameter<bool>("WriteCabling",false))
 {
+
+  spyScopeRawDigisToken_ = consumes<edm::DetSetVector<SiStripRawDigi> >(spyScopeRawDigisTag_);
+  spyPedSubtrDigisToken_ = consumes<edm::DetSetVector<SiStripRawDigi> >(spyPedSubtrDigisTag_);
+
+  spyL1Token_       = consumes<std::vector<uint32_t> >(spyL1Tag_);
+  spyTotCountToken_ = consumes<std::vector<uint32_t> >(spyTotCountTag_);
+  spyAPVeToken_     = consumes<std::vector<uint32_t> >(spyAPVeTag_);
 
   evt_ = 0;
   std::ostringstream pDebugStream;
@@ -222,7 +238,7 @@ SiStripSpyMonitorModule::analyze(const edm::Event& iEvent,
     lOutCabling.open("trackerDetId_FEDIdChNum_list.txt",std::ios::out);
     for (uint16_t lFedId = sistrip::FED_ID_MIN; lFedId <= sistrip::FED_ID_MAX; ++lFedId) {//loop on feds
       for (uint16_t lFedChannel = 0; lFedChannel < sistrip::FEDCH_PER_FED; lFedChannel++){//loop on channels
-	const FedChannelConnection & lConnection = lCabling->connection(lFedId,lFedChannel);
+	const FedChannelConnection & lConnection = lCabling->fedConnection(lFedId,lFedChannel);
 	if (!lConnection.isConnected()) continue;
 	uint32_t lDetId = lConnection.detId();
 	lOutCabling << "FED ID = " << lFedId 
@@ -239,9 +255,14 @@ SiStripSpyMonitorModule::analyze(const edm::Event& iEvent,
   //get map of TotalEventCount and L1ID, indexed by fedId, and APVaddress indexed by fedIndex.
   edm::Handle<std::vector<uint32_t> > lSpyL1IDHandle,lSpyTotCountHandle,lSpyAPVeHandle;
   try {
+    /*
     iEvent.getByLabel(spyL1Tag_,lSpyL1IDHandle);
     iEvent.getByLabel(spyTotCountTag_,lSpyTotCountHandle);
     iEvent.getByLabel(spyAPVeTag_,lSpyAPVeHandle);
+    */
+    iEvent.getByToken(spyL1Token_,lSpyL1IDHandle);
+    iEvent.getByToken(spyTotCountToken_,lSpyTotCountHandle);
+    iEvent.getByToken(spyAPVeToken_,lSpyAPVeHandle);
   }
   catch (const cms::Exception& e) {
     LogError("SiStripSpyMonitorModule") << e.what() ;
@@ -254,7 +275,8 @@ SiStripSpyMonitorModule::analyze(const edm::Event& iEvent,
   //retrieve the scope digis
   edm::Handle<edm::DetSetVector<SiStripRawDigi> > digisHandle;
   try {
-    iEvent.getByLabel(spyScopeRawDigisTag_, digisHandle);
+    //    iEvent.getByLabel(spyScopeRawDigisTag_, digisHandle);
+    iEvent.getByToken(spyScopeRawDigisToken_, digisHandle);
   }
   catch (const cms::Exception& e) {
     LogError("SiStripSpyMonitorModule") << e.what() ;
@@ -265,7 +287,8 @@ SiStripSpyMonitorModule::analyze(const edm::Event& iEvent,
   //retrieve the reordered payload digis
   edm::Handle<edm::DetSetVector<SiStripRawDigi> > payloadHandle;
   try {
-    iEvent.getByLabel(spyPedSubtrDigisTag_, payloadHandle);
+    //    iEvent.getByLabel(spyPedSubtrDigisTag_, payloadHandle);
+    iEvent.getByToken(spyPedSubtrDigisToken_, payloadHandle);
   }
   catch (const cms::Exception& e) {
     LogError("SiStripSpyMonitorModule") << e.what() ;
@@ -335,7 +358,7 @@ SiStripSpyMonitorModule::analyze(const edm::Event& iEvent,
       
       uint32_t lFedIndex = sistrip::FEDCH_PER_FED*lFedId + lFedChannel;
       
-      const FedChannelConnection & lConnection = lCabling->connection(lFedId,lFedChannel);
+      const FedChannelConnection & lConnection = lCabling->fedConnection(lFedId,lFedChannel);
 
       if (!lConnection.isConnected()) continue;
 

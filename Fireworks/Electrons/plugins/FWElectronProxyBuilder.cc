@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Tue Dec  2 14:17:03 EST 2008
-// $Id: FWElectronProxyBuilder.cc,v 1.19 2010/11/11 20:25:28 amraktad Exp $
 //
 #include "TEveCompound.h"
 #include "TEveTrack.h"
@@ -37,8 +36,8 @@ public:
    FWElectronProxyBuilder() ;
    virtual ~FWElectronProxyBuilder();
 
-   virtual bool haveSingleProduct() const { return false; }
-   virtual void cleanLocal();
+   virtual bool haveSingleProduct() const override { return false; }
+   virtual void cleanLocal() override;
 
    REGISTER_PROXYBUILDER_METHODS();
 
@@ -46,7 +45,7 @@ private:
    FWElectronProxyBuilder( const FWElectronProxyBuilder& ); // stop default
    const FWElectronProxyBuilder& operator=( const FWElectronProxyBuilder& ); // stop default
   
-   virtual void buildViewType(const reco::GsfElectron& iData, unsigned int iIndex, TEveElement& oItemHolder, FWViewType::EType type , const FWViewContext*);
+   virtual void buildViewType(const reco::GsfElectron& iData, unsigned int iIndex, TEveElement& oItemHolder, FWViewType::EType type , const FWViewContext*) override;
 
    TEveElementList* requestCommon();
 
@@ -138,7 +137,7 @@ private:
 
    const FWElectronGlimpseProxyBuilder& operator=(const FWElectronGlimpseProxyBuilder&); // stop default
 
-   virtual void build(const reco::GsfElectron& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext*);
+   virtual void build(const reco::GsfElectron& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext*) override;
 };
 
 void

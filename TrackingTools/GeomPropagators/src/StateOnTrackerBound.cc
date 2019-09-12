@@ -7,8 +7,6 @@
 #include "DataFormats/GeometrySurface/interface/BoundCylinder.h"
 
 //Ported from ORCA
-//  $Date: 2011/02/08 14:59:45 $
-//  $Revision: 1.9 $
 
 StateOnTrackerBound::StateOnTrackerBound( const Propagator* prop) :
   thePropagator( prop->clone())

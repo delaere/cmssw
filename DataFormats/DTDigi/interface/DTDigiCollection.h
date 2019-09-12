@@ -5,8 +5,6 @@
  *  The collection containing DT Digis in the event.
  *  Digis are grouped by DTLayerId.
  *
- *  $Date: 2006/02/07 23:27:28 $
- *  $Revision: 1.3 $
  *  \author Stefano ARGIRO
  */
 

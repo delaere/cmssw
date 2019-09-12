@@ -1,5 +1,4 @@
 //
-// $Id: Chisq_Constrainer.h,v 1.2 2011/10/13 09:49:48 snaumann Exp $
 //
 // File: hitfit/Chisq_Constrainer.h
 // Purpose: Minimize a chisq subject to a set of constraints.

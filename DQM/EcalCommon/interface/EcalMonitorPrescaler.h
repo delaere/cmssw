@@ -5,14 +5,14 @@
   \file EcalMonitorPrescaler.h
   \brief Ecal specific Prescaler 
   \author G. Della Ricca
-  \version $Revision: 1.8 $
-  \date $Date: 2010/08/06 12:28:07 $
 */
 
 #include "FWCore/Framework/interface/EDFilter.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
 
 class EcalMonitorPrescaler: public edm::EDFilter {
 
@@ -25,7 +25,7 @@ bool filter(edm::Event& e, const edm::EventSetup& c);
 
 private:
 
-edm::InputTag EcalRawDataCollection_;
+edm::EDGetTokenT<EcalRawDataCollection> EcalRawDataCollection_;
 
 int count_;
 

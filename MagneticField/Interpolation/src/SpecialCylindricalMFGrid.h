@@ -5,8 +5,6 @@
  *
  *  Interpolator for cylindrical grids type 5 or 6 (r,phi,z) 1/sin(phi) or 1/cos(phi)
  *
- *  $Date: 2011/04/16 12:47:37 $
- *  $Revision: 1.3 $
  *  \author T. Todorov - updated 08 N. Amapane
  */
 

@@ -1,16 +1,15 @@
 // -*- C++ -*-
 //
 // Class:      GlobalTest
-// 
+//
 /**\class GlobalTest
 
- Description: test suite for Mixing Module
+   Description: test suite for Mixing Module
 
 */
 //
 // Original Author:  Ursula Berthon
 //         Created:  Fri Sep 23 11:38:38 CEST 2005
-// $Id: GlobalTest.h,v 1.6 2012/10/10 14:39:02 wdd Exp $
 //
 //
 
@@ -25,6 +24,13 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Utilities/interface/InputTag.h"
 
+#include "SimDataFormats/CrossingFrame/interface/CrossingFrame.h"
+#include "SimDataFormats/CrossingFrame/interface/MixCollection.h"
+#include "SimDataFormats/TrackingHit/interface/PSimHit.h"
+
+#include "SimDataFormats/CaloHit/interface/PCaloHitContainer.h"
+#include "SimDataFormats/Track/interface/SimTrackContainer.h"
+
 //DQM services for histogram
 #include "DQMServices/Core/interface/DQMStore.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
@@ -38,7 +44,7 @@ class MonitorElement;
 //
 
 class GlobalTest : public edm::EDAnalyzer {
-public:
+ public:
   explicit GlobalTest(const edm::ParameterSet&);
   ~GlobalTest();
 
@@ -47,7 +53,7 @@ public:
 
   virtual void analyze(const edm::Event&, const edm::EventSetup&);
 
-private:
+ private:
   std::string filename_;
   int minbunch_;
   int maxbunch_;
@@ -62,11 +68,13 @@ private:
   MonitorElement * caloEnergyEEH_[nMaxH];
 
   DQMStore* dbe_;
-  
+
   const static int nrHistos=6;
   char * labels[nrHistos];
 
-  edm::InputTag cfTrackTag_;
-  edm::InputTag cfVertexTag_;
+  edm::EDGetTokenT<CrossingFrame<SimTrack> > cfTrackToken_;
+  edm::EDGetTokenT<CrossingFrame<SimTrack> > cfVertexToken_;
+  edm::EDGetTokenT<CrossingFrame<PCaloHit> > g4SimHits_EB_Token_;
+  edm::EDGetTokenT<CrossingFrame<PCaloHit> > g4SimHits_EE_Token_;
 };
 

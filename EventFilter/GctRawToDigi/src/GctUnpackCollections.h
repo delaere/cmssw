@@ -8,8 +8,6 @@
 *  Deliberately made non-copyable with const members and private copy ctor, etc.
 *
 * \author Robert Frazier
-* $Revision: 1.1 $
-* $Date: 2009/04/07 10:51:06 $
 */ 
 
 // CMSSW headers

@@ -13,7 +13,6 @@
 //
 // Original Author:  Evan Klose Friis
 //         Created:  Tue Nov  6 16:59:50 CET 2007
-// $Id: SiPixelCalibDigiFilter.h,v 1.1 2010/08/10 08:57:54 ursl Exp $
 //
 //
 
@@ -47,4 +46,5 @@ class SiPixelCalibDigiFilter : public edm::EDFilter {
       virtual void endJob() ;
       
       // ----------member data ---------------------------
+      edm::EDGetTokenT<edm::DetSetVector<SiPixelCalibDigi>> tPixelCalibDigi;
 };

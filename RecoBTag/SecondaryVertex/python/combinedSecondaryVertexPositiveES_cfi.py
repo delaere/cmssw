@@ -5,3 +5,14 @@ import RecoBTag.SecondaryVertex.combinedSecondaryVertexES_cfi
 combinedSecondaryVertexPositive = RecoBTag.SecondaryVertex.combinedSecondaryVertexES_cfi.combinedSecondaryVertex.clone()
 combinedSecondaryVertexPositive.trackSelection.sip3dSigMin = 0
 combinedSecondaryVertexPositive.trackPseudoSelection.sip3dSigMin = 0
+
+combinedSecondaryVertexV1Positive = RecoBTag.SecondaryVertex.combinedSecondaryVertexES_cfi.combinedSecondaryVertexV1.clone()
+combinedSecondaryVertexV1Positive.trackSelection.sip3dSigMin = 0
+combinedSecondaryVertexV1Positive.trackPseudoSelection.sip3dSigMin = 0
+
+combinedSecondaryVertexV2Positive = RecoBTag.SecondaryVertex.combinedSecondaryVertexES_cfi.combinedSecondaryVertexV2.clone()
+combinedSecondaryVertexV2Positive.trackSelection.sip3dSigMin = 0
+combinedSecondaryVertexV2Positive.trackPseudoSelection.sip3dSigMin = 0
+combinedSecondaryVertexV2Positive.trackSelection.qualityClass = cms.string('any')
+combinedSecondaryVertexV2Positive.trackPseudoSelection.qualityClass = cms.string('any')
+combinedSecondaryVertexV2Positive.trackMultiplicityMin = cms.uint32(2)

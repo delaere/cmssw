@@ -8,7 +8,6 @@
 //
 // Original Author:
 //         Created:  Thu Jan  3 14:59:23 EST 2008
-// $Id: FWEventItem.cc,v 1.60 2012/08/03 18:20:28 wmtan Exp $
 //
 
 // system include files

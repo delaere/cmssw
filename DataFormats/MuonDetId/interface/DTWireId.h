@@ -4,8 +4,6 @@
 /** \class DTWireId
  *  DetUnit identifier for DT wires
  *
- *  $Date: 2006/04/12 17:52:39 $
- *  $Revision: 1.3 $
  *  \author G. Cerminara - INFN Torino
  */
 

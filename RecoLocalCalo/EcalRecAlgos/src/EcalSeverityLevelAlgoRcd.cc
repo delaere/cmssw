@@ -1,4 +1,3 @@
-//$Id: EcalSeverityLevelAlgoRcd.cc,v 1.1 2011/01/16 08:35:53 argiro Exp $
 
 
 #include "RecoLocalCalo/EcalRecAlgos/interface/EcalSeverityLevelAlgoRcd.h"

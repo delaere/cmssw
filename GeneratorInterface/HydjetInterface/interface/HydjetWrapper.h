@@ -2,7 +2,6 @@
 #define GeneratorInterface_HydjetInterface_HydjetWrapper
 
 //
-// $Id: HydjetWrapper.h,v 1.6 2007/12/04 03:50:39 mironov Exp $
 //
 
 /*

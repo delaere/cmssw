@@ -8,7 +8,7 @@
 //
 // Original Author:  
 //         Created:  Mon Dec 15 21:03:24 CET 2008
-// $Id: L1TriggerKey.cc,v 1.3 2008/12/15 21:04:05 wsun Exp $
+// $Id$
 //
 
 // system include files
@@ -25,6 +25,6 @@
 // static data member definitions
 //
 
-std::string L1TriggerKey::kNullKey = "NULL" ;
-std::string L1TriggerKey::kEmptyKey = "" ;
+const std::string L1TriggerKey::kNullKey = "NULL" ;
+const std::string L1TriggerKey::kEmptyKey = "" ;
 

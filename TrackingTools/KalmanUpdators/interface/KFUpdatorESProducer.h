@@ -4,8 +4,6 @@
 /** KFUpdatorESProducer
  *  ESProducer for KFUpdator class.
  *
- *  $Date: 2007/05/09 13:50:25 $
- *  $Revision: 1.2 $
  *  \author cerati
  */
 

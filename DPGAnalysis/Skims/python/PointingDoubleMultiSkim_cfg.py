@@ -7,8 +7,8 @@ process.source = cms.Source("PoolSource",
                             )
 
 process.configurationMetadata = cms.untracked.PSet(
-    version = cms.untracked.string('$Revision: 1.5 $'),
-    name = cms.untracked.string('$Source: /local/reps/CMSSW/CMSSW/DPGAnalysis/Skims/python/PointingDoubleMultiSkim_cfg.py,v $'),
+    version = cms.untracked.string('$Revision: 1.4 $'),
+    name = cms.untracked.string('$Source: /cvs_server/repositories/CMSSW/CMSSW/DPGAnalysis/Skims/python/PointingDoubleMultiSkim_cfg.py,v $'),
     annotation = cms.untracked.string('CRUZET4 DoubleMuonPointing skim')
 )
 
@@ -28,7 +28,7 @@ process.load("Configuration.StandardSequences.ReconstructionCosmics_cff")
 ################ Tracker Pointing ################ 
 
 process.cosmicMuonsBarrelOnlyTkFilter = cms.EDFilter("HLTMuonPointingFilter",
-                                                     SALabel = cms.string("cosmicMuonsBarrelOnly"),
+                                                     SALabel = cms.InputTag("cosmicMuonsBarrelOnly"),
                                                      PropagatorName = cms.string("SteppingHelixPropagatorAny"),
                                                      radius = cms.double(90.0),
                                                      maxZ = cms.double(130.0)

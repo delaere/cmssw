@@ -13,7 +13,6 @@
 //
 // Original Author:  Hans Van Haevermaet, Benoit Roland
 //         Created:  Wed Jul  9 14:00:40 CEST 2008
-// $Id: CastorTowerProducer.cc,v 1.12 2013/01/07 15:32:45 hvanhaev Exp $
 //
 //
 
@@ -55,9 +54,9 @@ class CastorTowerProducer : public edm::EDProducer {
       ~CastorTowerProducer();
 
    private:
-      virtual void beginJob() ;
-      virtual void produce(edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
+      virtual void beginJob() override ;
+      virtual void produce(edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
       virtual void ComputeTowerVariable(const edm::RefVector<edm::SortedCollection<CastorRecHit> >& usedRecHits, double&  Ehot, double& depth);
       
       // member data
@@ -67,7 +66,7 @@ class CastorTowerProducer : public edm::EDProducer {
       typedef edm::SortedCollection<CastorRecHit> CastorRecHitCollection; 
       typedef std::vector<reco::CastorTower> CastorTowerCollection;
       typedef edm::RefVector<CastorRecHitCollection> CastorRecHitRefVector;
-      std::string input_;
+      edm::EDGetTokenT<CastorRecHitCollection> tok_input_;
       double towercut_;
       double mintime_;
       double maxtime_;
@@ -88,11 +87,11 @@ const double MYR2D = 180/M_PI;
 //
 
 CastorTowerProducer::CastorTowerProducer(const edm::ParameterSet& iConfig) :
-  input_(iConfig.getParameter<std::string>("inputprocess")),
   towercut_(iConfig.getParameter<double>("towercut")),
   mintime_(iConfig.getParameter<double>("mintime")),
   maxtime_(iConfig.getParameter<double>("maxtime"))
 {
+  tok_input_ = consumes<CastorRecHitCollection>(iConfig.getParameter<std::string>("inputprocess"));
   //register your products
   produces<CastorTowerCollection>();
   //now do what ever other initialization is needed
@@ -120,7 +119,7 @@ void CastorTowerProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSe
   // Produce CastorTowers from CastorCells
   
   edm::Handle<CastorRecHitCollection> InputRecHits;
-  iEvent.getByLabel(input_,InputRecHits);
+  iEvent.getByToken(tok_input_,InputRecHits);
 
   std::auto_ptr<CastorTowerCollection> OutputTowers (new CastorTowerCollection);
    

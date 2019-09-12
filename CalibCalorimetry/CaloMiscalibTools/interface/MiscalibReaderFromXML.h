@@ -5,8 +5,6 @@
  * *
  *  Parses the xml file to get miscalibration constants
  * 
- *  $Date: 2010/08/07 14:55:53 $
- *  $Revision: 1.2 $
  *  \author Lorenzo Agostino
   */
 
@@ -14,7 +12,7 @@
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/dom/DOMCharacterData.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
+#include "FWCore/Concurrency/interface/Xerces.h"
 #include <xercesc/framework/LocalFileFormatTarget.hpp>
 #include <xercesc/util/XMLUni.hpp>
 #include <xercesc/util/XMLURL.hpp>

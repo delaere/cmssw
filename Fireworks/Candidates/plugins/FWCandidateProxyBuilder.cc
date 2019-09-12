@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Fri Dec  5 09:56:09 EST 2008
-// $Id: FWCandidateProxyBuilder.cc,v 1.9 2010/11/11 20:25:27 amraktad Exp $
 //
 
 #include "TEveTrack.h"
@@ -33,7 +32,7 @@ private:
    FWCandidateProxyBuilder(const FWCandidateProxyBuilder&); // stop default
    const FWCandidateProxyBuilder& operator=(const FWCandidateProxyBuilder&); // stop default
 
-   void build(const reco::Candidate& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext*);
+   void build(const reco::Candidate& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext*) override;
 };
 
 

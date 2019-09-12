@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Tue Dec  2 14:17:03 EST 2008
-// $Id: FWVertexProxyBuilder.cc,v 1.16 2012/03/13 04:22:06 amraktad Exp $
 //
 // user include files// user include files
 #include "Fireworks/Core/interface/FWSimpleProxyBuilderTemplate.h"
@@ -42,7 +41,7 @@ public:
    FWVertexProxyBuilder() {}
    virtual ~FWVertexProxyBuilder() {}
    
-   virtual void setItem(const FWEventItem* iItem)
+   virtual void setItem(const FWEventItem* iItem) override
    {
       FWProxyBuilderBase::setItem(iItem);
       if (iItem)
@@ -61,10 +60,10 @@ private:
    FWVertexProxyBuilder(const FWVertexProxyBuilder&); // stop default
    const FWVertexProxyBuilder& operator=(const FWVertexProxyBuilder&); // stop default
 
-   virtual void build(const reco::Vertex& iData, unsigned int iIndex,TEveElement& oItemHolder, const FWViewContext*);
+   virtual void build(const reco::Vertex& iData, unsigned int iIndex,TEveElement& oItemHolder, const FWViewContext*) override;
 
    virtual void localModelChanges(const FWModelId& iId, TEveElement* iCompound,
-                                  FWViewType::EType viewType, const FWViewContext* vc);
+                                  FWViewType::EType viewType, const FWViewContext* vc) override;
 
 };
 

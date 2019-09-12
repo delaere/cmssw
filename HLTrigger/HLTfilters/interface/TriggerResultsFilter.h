@@ -3,15 +3,12 @@
 
 /** \class TriggerResultsFilter
  *
- *  
- *  This class is an HLTFilter (-> EDFilter) implementing filtering on
- *  arbitrary logical combinations of L1 and HLT results.
  *
- *  It has been written as an extension of the HLTHighLevel and HLTHighLevelDev 
- *  filters.
+ *  This class is an EDFilter implementing filtering on arbitrary logical combinations
+ *  of L1 and HLT results.
  *
- *  $Date: 2012/01/23 00:42:36 $
- *  $Revision: 1.12 $
+ *  It has been written as an extension of the HLTHighLevel and HLTHighLevelDev filters.
+ *
  *
  *  Authors: Martin Grunewald, Andrea Bocci
  *
@@ -28,6 +25,9 @@
 #include "HLTrigger/HLTcore/interface/TriggerExpressionData.h"
 
 // forward declaration
+namespace edm {
+  class ConfigurationDescriptions;
+}
 namespace triggerExpression {
   class Evaluator;
 }
@@ -40,7 +40,8 @@ class TriggerResultsFilter : public edm::EDFilter {
 public:
   explicit TriggerResultsFilter(const edm::ParameterSet &);
   ~TriggerResultsFilter();
-  virtual bool filter(edm::Event &, const edm::EventSetup &);
+  static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
+  bool filter(edm::Event &, const edm::EventSetup &) override;
 
 private:
   /// parse the logical expression into functionals

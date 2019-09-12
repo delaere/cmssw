@@ -9,8 +9,6 @@
  *
  * \author: Vasile Mihai Ghete - HEPHY Vienna
  *
- * $Date: 2009/10/29 16:37:57 $
- * $Revision: 1.9 $
  *
  */
 

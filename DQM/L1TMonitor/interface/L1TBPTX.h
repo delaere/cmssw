@@ -4,8 +4,6 @@
 /*
  * \file L1TBPTX.h
  *
- * $Date: 2012/08/20 12:10:13 $
- * $Revision: 1.1 $
  * \author J. Pela
  *
 */
@@ -30,6 +28,11 @@
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 
 #include "DQM/L1TMonitor/interface/L1TOMDSHelper.h"
+
+//Data Formats
+#include "DataFormats/Scalers/interface/Level1TriggerScalers.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerEvmReadoutRecord.h"
 
 #include <TString.h>
 
@@ -181,9 +184,9 @@ class L1TBPTX : public edm::EDAnalyzer {
     MonitorElement*                        m_ErrorMonitor;
 
     // Input tags
-    edm::InputTag                          m_scalersSource;       // Where to get L1 Scalers
-    edm::InputTag                          m_l1GtEvmSource;
-    edm::InputTag                          m_l1GtDataDaqInputTag;
+    edm::EDGetTokenT<Level1TriggerScalersCollection>  m_scalersSource;       // Where to get L1 Scalers
+    edm::EDGetTokenT<L1GlobalTriggerEvmReadoutRecord> m_l1GtEvmSource;
+    edm::EDGetTokenT<L1GlobalTriggerReadoutRecord>    m_l1GtDataDaqInputTag;
 
 };
 

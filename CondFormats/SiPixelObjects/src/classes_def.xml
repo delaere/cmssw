@@ -28,6 +28,8 @@
 
   <class name="SiPixelGainCalibrationForHLT" class_version="0">
      <field name="v_pedestals" mapping="blob"/>
+     <field name="pedPrecision" transient="true"/>
+     <field name="gainPrecision" transient="true"/>
   </class>
   <class name="SiPixelGainCalibrationForHLT::DetRegistry"/>
   <class name="std::vector<SiPixelGainCalibrationForHLT::DetRegistry>"/>
@@ -38,9 +40,10 @@
   <class name="SiPixelGainCalibrationOffline::DetRegistry"/>
   <class name="std::vector<SiPixelGainCalibrationOffline::DetRegistry>"/>
      
-  <class name="SiPixelPedestals" id="5bfc61c7aebd27b50882b745cb0d5365" class_version="0"/>
   <class name="SiPixelDbItem"/>
   <class name="std::vector<SiPixelDbItem>"/>
+  <class name="std::map<int,std::vector<SiPixelDbItem> >"/>
+  <class name="SiPixelPedestals" id="5bfc61c7aebd27b50882b745cb0d5365" class_version="0"/>
 
   <class name="SiPixelLorentzAngle" class_version="0"/>
 

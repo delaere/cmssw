@@ -4,8 +4,6 @@
 /*
  * \file EETimingTask.h
  *
- * $Date: 2011/09/15 21:54:51 $
- * $Revision: 1.22 $
  * \author G. Della Ricca
  *
 */
@@ -19,6 +17,10 @@
 
 #include "Geometry/CaloGeometry/interface/CaloGeometry.h"
 #include "Geometry/CaloGeometry/interface/CaloSubdetectorGeometry.h"
+
+#include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
+#include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerEvmReadoutRecord.h"
 
 class MonitorElement;
 class DQMStore;
@@ -75,9 +77,9 @@ bool mergeRuns_;
 
 float energyThreshold_;
 
-edm::InputTag EcalRawDataCollection_;
-edm::InputTag EcalRecHitCollection_;
-edm::InputTag L1GtEvmReadoutRecord_;
+edm::EDGetTokenT<EcalRawDataCollection> EcalRawDataCollection_;
+edm::EDGetTokenT<EcalRecHitCollection> EcalRecHitCollection_;
+edm::EDGetTokenT<L1GlobalTriggerEvmReadoutRecord> L1GtEvmReadoutRecord_;
 
 MonitorElement* meTime_[18];
 MonitorElement* meTimeMap_[18];

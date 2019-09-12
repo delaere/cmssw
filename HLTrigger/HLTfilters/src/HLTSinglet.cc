@@ -2,8 +2,6 @@
  *
  * See header file for documentation
  *
- *  $Date: 2012/02/24 13:13:47 $
- *  $Revision: 1.15 $
  *
  *  \author Martin Grunewald
  *
@@ -75,19 +73,19 @@ int getObjectType(const l1extra::L1JetParticle & candidate) {
 // constructors and destructor
 //
 template<typename T>
-HLTSinglet<T>::HLTSinglet(const edm::ParameterSet& iConfig) : HLTFilter(iConfig), 
+HLTSinglet<T>::HLTSinglet(const edm::ParameterSet& iConfig) : HLTFilter(iConfig),
   inputTag_    (iConfig.template getParameter<edm::InputTag>("inputTag")),
+  inputToken_  (consumes<std::vector<T> >(inputTag_)),
   triggerType_ (iConfig.template getParameter<int>("triggerType")),
+  min_N_    (iConfig.template getParameter<int>          ("MinN"    )),
   min_E_    (iConfig.template getParameter<double>       ("MinE"    )),
   min_Pt_   (iConfig.template getParameter<double>       ("MinPt"   )),
   min_Mass_ (iConfig.template getParameter<double>       ("MinMass" )),
-  max_Eta_  (iConfig.template getParameter<double>       ("MaxEta"  )),
-  min_N_    (iConfig.template getParameter<int>          ("MinN"    )),
-  tid_ (triggerType_)
+  max_Eta_  (iConfig.template getParameter<double>       ("MaxEta"  ))
 {
    LogDebug("") << "Input/ptcut/etacut/ncut : "
 		<< inputTag_.encode() << " "
-		<< min_E_ << " " << min_Pt_ << " " << min_Mass_ << " " 
+		<< min_E_ << " " << min_Pt_ << " " << min_Mass_ << " "
 		<< max_Eta_ << " " << min_N_ ;
 }
 
@@ -116,9 +114,9 @@ HLTSinglet<T>::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
 //
 
 // ------------ method called to produce the data  ------------
-template<typename T> 
+template<typename T>
 bool
-HLTSinglet<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct)
+HLTSinglet<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) const
 {
    using namespace std;
    using namespace edm;
@@ -141,21 +139,22 @@ HLTSinglet<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trig
 
    // get hold of collection of objects
    Handle<TCollection> objects;
-   iEvent.getByLabel (inputTag_,objects);
+   iEvent.getByToken(inputToken_,objects);
 
    // look at all objects, check cuts and add to filter object
    int n(0);
    typename TCollection::const_iterator i ( objects->begin() );
    for (; i!=objects->end(); i++) {
      if ( (i->energy() >= min_E_) &&
-	  (i->pt() >= min_Pt_) && 
-	  (i->mass() >= min_Mass_) && 
+	  (i->pt() >= min_Pt_) &&
+	  (i->mass() >= min_Mass_) &&
 	  ( (max_Eta_ < 0.0) || (std::abs(i->eta()) <= max_Eta_) ) ) {
        n++;
        ref=TRef(objects,distance(objects->begin(),i));
-       tid_=getObjectType<T>(*i);
-       if (tid_==0) tid_=triggerType_;
-       filterproduct.addObject(tid_,ref);
+       int tid = getObjectType<T>(*i);
+       if (tid == 0)
+         tid = triggerType_;
+       filterproduct.addObject(tid, ref);
      }
    }
 

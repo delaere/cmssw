@@ -5,8 +5,6 @@
 //   Description:  A class to produce the L1 mu emulator scales record in the event setup
 //                 from the OMDS database.
 //
-//   $Date: 2012/09/21 13:41:19 $
-//   $Revision: 1.3 $
 //
 //   Author :
 //   Thomas Themel

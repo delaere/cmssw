@@ -3,7 +3,6 @@
 // Package:    TrackAssociator
 // Class:      CachedTrajectory
 // 
-// $Id: CachedTrajectory.cc,v 1.31 2012/12/25 16:07:26 innocent Exp $
 //
 //
 

@@ -29,19 +29,19 @@ namespace reco { namespace tau {
 class RecoTauImpactParameterSignificancePlugin : public RecoTauModifierPlugin {
   public:
     explicit RecoTauImpactParameterSignificancePlugin(
-        const edm::ParameterSet& pset);
+						      const edm::ParameterSet& pset,edm::ConsumesCollector &&iC);
     virtual ~RecoTauImpactParameterSignificancePlugin() {}
-    void operator()(PFTau& tau) const;
-    virtual void beginEvent();
+    void operator()(PFTau& tau) const override;
+    virtual void beginEvent() override;
   private:
     RecoTauVertexAssociator vertexAssociator_;
     const TransientTrackBuilder *builder_;
 };
 
 RecoTauImpactParameterSignificancePlugin
-::RecoTauImpactParameterSignificancePlugin(const edm::ParameterSet& pset)
-  :RecoTauModifierPlugin(pset),
-  vertexAssociator_(pset.getParameter<edm::ParameterSet>("qualityCuts")){}
+::RecoTauImpactParameterSignificancePlugin(const edm::ParameterSet& pset,edm::ConsumesCollector &&iC)
+  :RecoTauModifierPlugin(pset,std::move(iC)),
+   vertexAssociator_(pset.getParameter<edm::ParameterSet>("qualityCuts"),std::move(iC)){}
 
 void RecoTauImpactParameterSignificancePlugin::beginEvent() {
   vertexAssociator_.setEvent(*evt());

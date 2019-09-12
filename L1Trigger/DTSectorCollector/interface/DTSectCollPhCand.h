@@ -3,7 +3,6 @@
 /**   \Class DTSectCollPhCand.h
  *    A Trigger Server Phi Candidate
  *
- *   $Date: 2008/06/30 13:44:28 $
  *  
  *
  *   \Authors D. Bonacorsi, S. Marcellini
@@ -76,7 +75,7 @@ class DTSectCollPhCand {
   // Const methods
 
   //! Configuration set
-  inline DTConfigSectColl* config() const { return _tsc->config(); }
+  inline const DTConfigSectColl* config() const { return _tsc->config(); }
 
   //! Return the DTTSS
   inline DTSC* tsc() const { return _tsc; }

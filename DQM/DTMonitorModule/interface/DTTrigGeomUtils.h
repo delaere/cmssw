@@ -4,8 +4,6 @@
 /*
  * \file DTTrigGeomUtils.h
  *
- * $Date: 2009/08/03 16:08:37 $
- * $Revision: 1.2 $
  * \author C. Battilana - CIEMAT
  *
 */
@@ -21,15 +19,15 @@ class DTChamberId;
 class L1MuDTChambPhDigi;
 
 class DTTrigGeomUtils {
-  
+
  public:
- 
+
   /// Constructor
   DTTrigGeomUtils(edm::ESHandle<DTGeometry> muonGeom, bool dirInDeg=true);
-  
+
   /// Destructor
   virtual ~DTTrigGeomUtils();
-  
+
   /// Compute phi range in local chamber coordinates
   void phiRange(const DTChamberId& id, float& min, float& max, int&nbins, float step=15);
 
@@ -52,7 +50,7 @@ class DTTrigGeomUtils {
   bool hasPosRF(int wh, int sec) { return wh>0 || (wh==0 && sec%4>1); };
 
  private:
-  
+
   edm::ESHandle<DTGeometry> muonGeom_;
   float  zcn_[4];
   float radToDeg_;
@@ -61,3 +59,8 @@ class DTTrigGeomUtils {
 };
 
 #endif
+
+/* Local Variables: */
+/* show-trailing-whitespace: t */
+/* truncate-lines: t */
+/* End: */

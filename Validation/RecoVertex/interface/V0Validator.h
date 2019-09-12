@@ -13,7 +13,6 @@
 //
 // Original Author:  Brian Drell
 //         Created:  Wed Feb 18 17:21:04 MST 2009
-// $Id: V0Validator.h,v 1.6 2010/02/25 20:15:42 drell Exp $
 //
 //
 
@@ -273,9 +272,14 @@ private:
 
 
   std::string theDQMRootFileName;
-  edm::InputTag k0sCollectionTag;
-  edm::InputTag lamCollectionTag;
   std::string dirName;
-
+  edm::EDGetTokenT<reco::RecoToSimCollection> recoRecoToSimCollectionToken_;
+  edm::EDGetTokenT<reco::SimToRecoCollection> recoSimToRecoCollectionToken_;
+  edm::EDGetTokenT<TrackingParticleCollection> trackingParticleCollection_Eff_Token_, trackingParticleCollectionToken_;
+  edm::EDGetTokenT< edm::View<reco::Track> > edmView_recoTrack_Token_;
+  edm::EDGetTokenT<edm::SimTrackContainer> edmSimTrackContainerToken_;
+  edm::EDGetTokenT<edm::SimVertexContainer> edmSimVertexContainerToken_;
+  edm::EDGetTokenT< std::vector<reco::Vertex> > vec_recoVertex_Token_;
+  edm::EDGetTokenT<reco::VertexCompositeCandidateCollection> recoVertexCompositeCandidateCollection_k0s_Token_, recoVertexCompositeCandidateCollection_lambda_Token_;
 };
 

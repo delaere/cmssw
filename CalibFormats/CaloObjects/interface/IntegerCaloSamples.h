@@ -12,8 +12,6 @@ event/channel, but with defined resolution.
 This class uses 32-bit bins, so users should be careful if their
 calculation implies fewer bins.
 
-$Date: 2006/03/23 18:24:51 $
-$Revision: 1.1 $
 */
 class IntegerCaloSamples {
 public:

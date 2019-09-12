@@ -6,8 +6,6 @@
  *   Description:  Dump GMT readout
 */
 //                
-//   $Date: 2010/02/11 00:12:36 $
-//   $Revision: 1.5 $
 //
 //   I. Mikulec            HEPHY Vienna
 //

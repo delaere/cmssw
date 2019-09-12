@@ -2,7 +2,6 @@
 #define SRCONDACCESS_H
 
 /*
- * $Id: EcalSRCondTools.h,v 1.3 2011/03/02 14:47:41 pgras Exp $
  */
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"

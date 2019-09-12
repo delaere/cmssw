@@ -16,7 +16,6 @@
 //
 // Original Author:  Joshua Berger
 //         Created:  Fri Jul 25 11:49:18 EDT 2008
-// $Id: CmsShowTaskTimer.h,v 1.3 2009/01/23 21:35:42 amraktad Exp $
 //
 
 // system include files

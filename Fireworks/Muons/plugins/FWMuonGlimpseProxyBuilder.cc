@@ -3,7 +3,6 @@
 // Package:     Muons
 // Class  :     FWMuonGlimpseProxyBuilder
 //
-// $Id: FWMuonGlimpseProxyBuilder.cc,v 1.2 2010/09/02 18:28:13 amraktad Exp $
 //
 
 #include "TEveScalableStraightLineSet.h"
@@ -25,7 +24,7 @@ private:
    // Disable default assignment operator
    const FWMuonGlimpseProxyBuilder& operator=( const FWMuonGlimpseProxyBuilder& );
 
-   void build( const reco::Muon& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext* );
+   void build( const reco::Muon& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext* ) override;
 };
 
 void

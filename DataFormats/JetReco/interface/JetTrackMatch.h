@@ -28,7 +28,6 @@
  *
  * \author Fedor Ratnikov, UMd
  *
- * \version   $Id: JetTrackMatch.h,v 1.2 2007/09/18 13:35:24 ratnik Exp $
  ************************************************************/
 
 #include "DataFormats/Common/interface/AssociationMap.h"

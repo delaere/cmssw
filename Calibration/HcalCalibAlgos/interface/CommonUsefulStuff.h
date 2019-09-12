@@ -1,7 +1,6 @@
 #ifndef CommonUsefulStuff_h
 #define CommonUsefulStuff_h
 
-// $Id: CommonUsefulStuff.h,v 1.3 2010/03/16 23:25:48 andrey Exp $
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"

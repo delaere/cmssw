@@ -1,4 +1,3 @@
-// $Id: TTUSectorORLogic.h,v 1.2 2009/08/09 11:11:36 aosorio Exp $
 #ifndef INTERFACE_TTUSECTORORLOGIC_H 
 #define INTERFACE_TTUSECTORORLOGIC_H 1
 

@@ -4,7 +4,7 @@
  *
  * \author Luca Lista, INFN
  *
- * \version $Id: AssociationVectorSelector.h,v 1.3 2013/02/28 00:34:12 wmtan Exp $
+ * \version $Id: AssociationVectorSelector.h,v 1.2 2010/02/20 20:55:16 wmtan Exp $
  */
 
 #include "DataFormats/Common/interface/AssociationVector.h"
@@ -12,7 +12,7 @@
 #include "FWCore/Utilities/interface/InputTag.h"
 #include "CommonTools/UtilAlgos/interface/AnySelector.h"
 
-template<typename KeyRefProd, typename CVal, 
+template<typename KeyRefProd, typename CVal,
 	 typename KeySelector = AnySelector, typename ValSelector = AnySelector>
 class AssociationVectorSelector : public edm::EDProducer {
  public:
@@ -21,7 +21,7 @@ class AssociationVectorSelector : public edm::EDProducer {
   typedef edm::AssociationVector<KeyRefProd, CVal> association_t;
   typedef typename association_t::CKey collection_t;
   void produce(edm::Event&, const edm::EventSetup&) override;
-  edm::InputTag association_;
+  edm::EDGetTokenT<association_t> associationToken_;
   KeySelector selectKey_;
   ValSelector selectVal_;
 };
@@ -34,9 +34,9 @@ class AssociationVectorSelector : public edm::EDProducer {
 
 template<typename KeyRefProd, typename CVal, typename KeySelector, typename ValSelector>
 AssociationVectorSelector<KeyRefProd, CVal, KeySelector, ValSelector>::AssociationVectorSelector(const edm::ParameterSet& cfg) :
-  association_(cfg.template getParameter<edm::InputTag>("association")),
-  selectKey_(reco::modules::make<KeySelector>(cfg)),
-  selectVal_(reco::modules::make<ValSelector>(cfg)) {
+  associationToken_(consumes<association_t>(cfg.template getParameter<edm::InputTag>("association"))),
+  selectKey_(reco::modules::make<KeySelector>(cfg, consumesCollector())),
+  selectVal_(reco::modules::make<ValSelector>(cfg, consumesCollector())) {
   std::string alias(cfg.template getParameter<std::string>("@module_label"));
   produces<collection_t>().setBranchAlias(alias);
   produces<association_t>().setBranchAlias(alias + "Association");
@@ -47,8 +47,8 @@ void AssociationVectorSelector<KeyRefProd, CVal, KeySelector, ValSelector>::prod
   using namespace edm;
   using namespace std;
   Handle<association_t> association;
-  evt.getByLabel(association_, association);
-  auto_ptr<collection_t> selected(new collection_t);  
+  evt.getByToken(associationToken_, association);
+  auto_ptr<collection_t> selected(new collection_t);
   vector<typename CVal::value_type> selectedValues;
   size_t size = association->size();
   selected->reserve(size);

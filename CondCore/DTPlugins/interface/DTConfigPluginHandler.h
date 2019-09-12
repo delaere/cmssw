@@ -5,8 +5,8 @@
  *  Description:
  *       Class to hold configuration identifier for chambers
  *
- *  $Date: 2011/06/06 17:24:05 $
- *  $Revision: 1.3 $
+ *  $Date: 2010/05/14 11:43:02 $
+ *  $Revision: 1.2 $
  *  \author Paolo Ronchese INFN Padova
  *
  */
@@ -56,9 +56,9 @@ class DTConfigPluginHandler: public DTConfigAbstractHandler {
 
   void purge();
 
-  static int maxBrickNumber;
-  static int maxStringNumber;
-  static int maxByteNumber;
+  static const int maxBrickNumber;
+  static const int maxStringNumber;
+  static const int maxByteNumber;
 
  private:
 

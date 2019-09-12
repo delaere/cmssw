@@ -13,7 +13,6 @@
 //
 // Original Author:  Eduardo Luiggi
 //         Created:  Fri Apr  4 16:37:44 CDT 2008
-// $Id: L25TauAnalyzer.h,v 1.10 2011/03/01 22:54:26 eluiggi Exp $
 //
 //
 
@@ -51,6 +50,9 @@
 #include <TFile.h>
 #include "TH1.h"
 
+using namespace edm;
+using namespace reco;
+using namespace std;
 
 class L25TauAnalyzer : public edm::EDAnalyzer {
    public:
@@ -68,12 +70,12 @@ class L25TauAnalyzer : public edm::EDAnalyzer {
       void printInfo(const reco::PFTau& thePFTau, const reco::IsolatedTauTagInfo& theTauTagInfo);
       void clearVectors();
       void initializeVectors();
-      edm::InputTag _l25JetSource;
-      edm::InputTag _l2TauInfoAssoc;
-      edm::InputTag _pfTauSource;
-      edm::InputTag _pVtxSource;
-      edm::InputTag _pfTauIsoSource;
-      edm::InputTag _pfTauMuonDiscSource;
+      edm::EDGetTokenT<IsolatedTauTagInfoCollection> _l25JetSource;
+      edm::EDGetTokenT<L2TauInfoAssociation> _l2TauInfoAssoc;
+      edm::EDGetTokenT<PFTauCollection> _pfTauSource;
+      edm::EDGetTokenT<VertexCollection> _pVtxSource;
+      edm::EDGetTokenT<PFTauDiscriminator> _pfTauIsoSource;
+      edm::EDGetTokenT<PFTauDiscriminator> _pfTauMuonDiscSource;
       math::XYZPoint theVertexPosition;
 
       bool signal_;

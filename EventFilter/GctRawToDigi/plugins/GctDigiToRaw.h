@@ -16,7 +16,6 @@
 //
 // Original Author:  Jim Brooke
 //         Created:  Wed Nov  1 11:57:10 CET 2006
-// $Id: GctDigiToRaw.h,v 1.9 2010/02/11 00:11:40 wmtan Exp $
 //
 //
 

@@ -21,7 +21,6 @@ namespace ecalMGPA {
  *  Simple container packer/unpacker for a single sample from teh MGPA electronics
  *
  *
- *  $Id: EcalMGPASample.h,v 1.7 2007/08/07 07:03:06 innocent Exp $
  */
 class EcalMGPASample {
  public:

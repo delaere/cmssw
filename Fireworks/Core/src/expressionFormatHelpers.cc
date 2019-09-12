@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Fri Aug 22 12:25:04 EDT 2008
-// $Id: expressionFormatHelpers.cc,v 1.5 2009/03/23 19:52:17 amraktad Exp $
 //
 
 // system include files

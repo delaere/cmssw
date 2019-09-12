@@ -13,7 +13,6 @@
 //
 // Original Author:  Seth COOPER
 //         Created:  Th Nov 22 5:46:22 CEST 2007
-// $Id: EcalBxOrbitNumberGrapher.cc,v 1.3 2011/10/10 09:05:21 eulisse Exp $
 //
 //
 
@@ -22,6 +21,8 @@
 using namespace cms;
 using namespace edm;
 using namespace std;
+
+#include <iostream>
 
 //
 // constants, enums and typedefs

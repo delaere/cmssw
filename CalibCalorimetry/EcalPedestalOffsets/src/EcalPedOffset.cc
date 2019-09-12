@@ -2,8 +2,6 @@
 /**
  * \file EcalPedOffset.cc
  *
- * $Date: 2013/05/30 22:33:07 $
- * $Revision: 1.18 $
  * \author P. Govoni (pietro.govoni@cernNOSPAM.ch) - originally
  * \author S. Cooper (seth.cooper@cernNOSPAM.ch)
  * Last updated: @DATE@ @AUTHOR@

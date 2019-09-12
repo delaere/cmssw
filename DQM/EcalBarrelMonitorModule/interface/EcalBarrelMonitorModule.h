@@ -4,8 +4,6 @@
 /*
  * \file EcalBarrelMonitorModule.h
  *
- * $Date: 2012/04/26 07:44:00 $
- * $Revision: 1.61 $
  * \author G. Della Ricca
  *
 */
@@ -17,6 +15,10 @@
 
 class MonitorElement;
 class DQMStore;
+
+#include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
+#include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
+#include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
 
 class EcalBarrelMonitorModule: public edm::EDAnalyzer{
 
@@ -70,10 +72,10 @@ bool isPhysics_;
 
 int ievt_;
 
-edm::InputTag EcalRawDataCollection_;
-edm::InputTag EBDigiCollection_;
-edm::InputTag EcalRecHitCollection_;
-edm::InputTag EcalTrigPrimDigiCollection_;
+edm::EDGetTokenT<EcalRawDataCollection> EcalRawDataCollection_;
+edm::EDGetTokenT<EBDigiCollection> EBDigiCollection_;
+edm::EDGetTokenT<EcalRecHitCollection> EcalRecHitCollection_;
+edm::EDGetTokenT<EcalTrigPrimDigiCollection> EcalTrigPrimDigiCollection_;
 
 bool verbose_;
 bool debug_;

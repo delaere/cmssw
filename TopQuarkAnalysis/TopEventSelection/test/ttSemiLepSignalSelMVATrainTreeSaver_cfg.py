@@ -19,22 +19,24 @@ process.maxEvents = cms.untracked.PSet(
 
 ## configure process options
 process.options = cms.untracked.PSet(
-    wantSummary = cms.untracked.bool(False)
+    allowUnscheduled = cms.untracked.bool(True),
+    wantSummary = cms.untracked.bool(True)
 )
 
 ## configure geometry & conditions
-#process.load("Configuration.StandardSequences.Geometry_cff")
 process.load("Configuration.Geometry.GeometryIdeal_cff")
-process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-
-from Configuration.AlCa.autoCond import autoCond
-process.GlobalTag.globaltag = autoCond['mc']
+from Configuration.AlCa.GlobalTag import GlobalTag
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:startup')
+process.load("Configuration.StandardSequences.MagneticField_cff")
 
 ## std sequence for pat
-process.load("PhysicsTools.PatAlgos.patSequences_cff")
-
-## std sequence for ttGenEvent
+process.load("PhysicsTools.PatAlgos.producersLayer1.patCandidates_cff")
+process.load("PhysicsTools.PatAlgos.selectionLayer1.selectedPatCandidates_cff")
+process.load("PhysicsTools.PatAlgos.cleaningLayer1.cleanPatCandidates_cff")
+process.cleanPatElectrons.checkOverlaps.muons.requireNoOverlaps = True
+process.cleanPatJets.checkOverlaps.muons.requireNoOverlaps     = True
+process.cleanPatJets.checkOverlaps.electrons.requireNoOverlaps = True
 process.load("TopQuarkAnalysis.TopEventProducers.sequences.ttGenEvent_cff")
 
 ## configure mva trainer
@@ -45,6 +47,4 @@ from TopQuarkAnalysis.TopEventSelection.TtSemiLepSignalSelMVATrainTreeSaver_cff 
 process.looper = looper
 
 ## produce pat objects and ttGenEvt and make mva training
-process.p = cms.Path(process.patDefaultSequence *
-                     process.makeGenEvt *
-                     process.saveTrainTree)
+process.p = cms.Path(process.saveTrainTree)

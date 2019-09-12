@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Fri Jan 18 10:19:19 EST 2008
-// $Id: unittest_main.cc,v 1.1 2009/03/05 22:01:53 chrjones Exp $
 //
 
 // system include files

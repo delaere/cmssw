@@ -11,8 +11,6 @@
  *  
  *  DataFormat class to hold the information for the Global Hit Validation
  *
- *  $Date: 2013/04/22 22:33:07 $
- *  $Revision: 1.4 $
  *  \author M. Strang SUNY-Buffalo
  */
 

@@ -1,6 +1,5 @@
 /* \class HLTHPDFilter
  *
- * $Id: HLTHPDFilter.cc,v 1.7 2012/01/22 23:31:48 fwyzard Exp $
  *
  * Fedor Ratnikov (UMd) May 19, 2008
  */
@@ -19,8 +18,6 @@
 
 #include "Geometry/Records/interface/IdealGeometryRecord.h"
 #include "Geometry/CaloTopology/interface/HcalTopology.h"
-
-#include "DataFormats/HcalRecHit/interface/HcalRecHitCollections.h"
 
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
@@ -84,6 +81,7 @@ HLTHPDFilter::HLTHPDFilter(const edm::ParameterSet& iConfig) :
      mRBXSpikeEnergyThreshold (iConfig.getParameter <double> ("rbxSpikeEnergy")),
      mRBXSpikeUnbalanceThreshold (iConfig.getParameter <double> ("rbxSpikeUnbalance"))
 {
+  m_theRecHitCollectionToken = consumes<HBHERecHitCollection>(mInputTag);
 }
 
 HLTHPDFilter::~HLTHPDFilter(){}
@@ -105,7 +103,7 @@ bool HLTHPDFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
   if (mHPDSpikeEnergyThreshold <= 0 && mRBXSpikeEnergyThreshold <= 0) return true; // nothing to filter
   // get hits
   edm::Handle<HBHERecHitCollection> hbhe;
-  iEvent.getByLabel(mInputTag,hbhe);
+  iEvent.getByToken(m_theRecHitCollectionToken,hbhe);
   
   // collect energies
   float hpdEnergy[4][73];

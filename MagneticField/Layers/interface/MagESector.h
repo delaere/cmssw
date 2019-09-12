@@ -5,8 +5,6 @@
  *  A sector of volumes in the endcap.
  *  One sector is composed of several layers (MagELayer)
  *
- *  $Date: 2007/02/03 16:08:50 $
- *  $Revision: 1.2 $
  *  \author N. Amapane - INFN Torino
  */
 

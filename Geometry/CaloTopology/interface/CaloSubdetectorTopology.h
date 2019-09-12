@@ -12,8 +12,7 @@
 
 /** \class CaloSubdetectorTopology
       
-$Date: 2012/12/18 09:38:07 $
-$Revision: 1.8 $
+$Revision: 1.7 $
 \author P.Meridiani INFN Roma1
 \author J. Mans - Minnesota
 */

@@ -3,8 +3,6 @@
  *   TeV muon reconstructor:
  *
  *
- *   $Date: 2013/01/06 19:17:48 $
- *   $Revision: 1.6 $
  *
  *   \author  Piotr Traczyk (SINS Warsaw)
  */
@@ -26,16 +24,6 @@
 #include "RecoMuon/TrackingTools/interface/MuonServiceProxy.h"
 #include "RecoMuon/GlobalTrackingTools/interface/GlobalMuonRefitter.h"
 
-// Input and output collection
-#include "DataFormats/TrackReco/interface/Track.h"
-#include "DataFormats/TrackReco/interface/TrackFwd.h"
-
-#include "DataFormats/MuonReco/interface/MuonTrackLinks.h"
-#include "DataFormats/MuonReco/interface/MuonFwd.h"
-#include "TrackingTools/PatternTools/interface/TrajTrackAssociation.h"
-#include "DataFormats/TrackReco/interface/TrackToTrackMap.h"
-#include "DataFormats/TrackerCommon/interface/TrackerTopology.h"
-#include "Geometry/Records/interface/IdealGeometryRecord.h"
 
 using namespace edm;
 using namespace std;
@@ -49,6 +37,8 @@ TevMuonProducer::TevMuonProducer(const ParameterSet& parameterSet) {
 
   // GLB Muon Collection Label
   theGLBCollectionLabel = parameterSet.getParameter<InputTag>("MuonCollectionLabel");
+  glbMuonsToken=consumes<reco::TrackCollection>(theGLBCollectionLabel);
+  glbMuonsTrajToken=consumes<std::vector<Trajectory> >(theGLBCollectionLabel.label());
 
   // service parameters
   ParameterSet serviceParameters = parameterSet.getParameter<ParameterSet>("ServiceParameters");
@@ -62,7 +52,8 @@ TevMuonProducer::TevMuonProducer(const ParameterSet& parameterSet) {
 
   // TrackLoader parameters
   ParameterSet trackLoaderParameters = parameterSet.getParameter<ParameterSet>("TrackLoaderParameters");
-  theTrackLoader = new MuonTrackLoader(trackLoaderParameters,theService);
+  edm::ConsumesCollector iC  = consumesCollector();
+  theTrackLoader = new MuonTrackLoader(trackLoaderParameters,iC,theService);
 
   theRefits = parameterSet.getParameter< std::vector<std::string> >("Refits");
   theRefitIndex = parameterSet.getParameter< std::vector<int> >("RefitIndex");
@@ -115,7 +106,7 @@ void TevMuonProducer::produce(Event& event, const EventSetup& eventSetup) {
 
   // Take the GLB muon container(s)
   Handle<reco::TrackCollection> glbMuons;
-  event.getByLabel(theGLBCollectionLabel,glbMuons);
+  event.getByToken(glbMuonsToken,glbMuons);
 
   Handle<vector<Trajectory> > glbMuonsTraj;
 
@@ -123,7 +114,7 @@ void TevMuonProducer::produce(Event& event, const EventSetup& eventSetup) {
 
   vector<MuonTrajectoryBuilder::TrackCand> glbTrackCands;
 
-  event.getByLabel(theGLBCollectionLabel.label(), glbMuonsTraj);
+  event.getByToken(glbMuonsTrajToken, glbMuonsTraj);
     
   const reco::TrackCollection *glbTracks = glbMuons.product();
   

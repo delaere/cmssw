@@ -16,7 +16,6 @@
 //
 // Author:      
 // Created:     Thu Sep 28 16:41:02 PDT 2006
-// $Id: MuonNumberingRecord.h,v 1.2 2008/12/19 10:22:50 fambrogl Exp $
 //
 
 #include <boost/mpl/vector.hpp>

@@ -10,7 +10,6 @@
  */
 //
 // Original Author:  Dmytro Kovalskyi
-// $Id: TimerStack.h,v 1.1 2007/04/10 06:42:57 dmytro Exp $
 
 #include "Utilities/Timing/interface/TimingReport.h"
 #include <stack>

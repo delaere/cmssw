@@ -1,7 +1,6 @@
 //
 // Original Author:  Fabian Stoeckli
 //         Created:  Tue Nov 14 13:43:02 CET 2006
-// $Id: Z2muAnalyzer.cc,v 1.6 2012/08/23 21:51:22 wdd Exp $
 //
 // Modified for PomwigInterface test for Z/gamma* -> 2mu
 // 02/2007

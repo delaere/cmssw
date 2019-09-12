@@ -1,4 +1,3 @@
-// Last commit: $Id: testSiStripGainBuilderFromDb.cc,v 1.1 2008/09/29 13:20:52 bainbrid Exp $
 
 #include "OnlineDB/SiStripESSources/test/stubs/testSiStripGainBuilderFromDb.h"
 #include "FWCore/Framework/interface/ESHandle.h"

@@ -5,8 +5,6 @@
  *  
  *  Class to fill dqm monitor elements from existing EDM file
  *
- *  $Date: 2010/01/06 14:24:50 $
- *  $Revision: 1.8 $
  *  \author M. Strang SUNY-Buffalo
  */
 
@@ -102,6 +100,7 @@ class GlobalHitsHistogrammer : public edm::EDAnalyzer
   bool doOutput;
 
   edm::InputTag GlobalHitSrc_;
+  edm::EDGetTokenT<PGlobalSimHit> GlobalHitSrc_Token_;
 
   // G4MC info
   MonitorElement *meMCRGP[2];

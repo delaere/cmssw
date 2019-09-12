@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Thu Jun  5 20:13:55 EDT 2008
-// $Id: FWProxyBuilderFactory.h,v 1.2 2010/06/02 22:40:33 chrjones Exp $
 //
 
 // system include files

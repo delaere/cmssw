@@ -2,7 +2,7 @@
                           main.cpp  -  description
                              -------------------
     begin                : Wed Oct 24 17:36:15 PDT 2001
-    copyright            : (C) 2001 by Michael Case
+    author               : Michael Case
     email                : case@ucdhep.ucdavis.edu
  ***************************************************************************/
 
@@ -37,10 +37,6 @@
 int main(int argc, char *argv[])
 {
   typedef DDCompactView::graph_type::const_adj_iterator adjl_iterator;
-
-  std::cout << "main:: initialize" << std::endl;
-
-  //  AlgoInit();
 
   // Copied from example stand-alone program in Message Logger July 18, 2007
   std::string const kProgramName = argv[0];

@@ -6,7 +6,6 @@
 //     <Notes on implementation>
 // Original Author:  M. De Mattia
 //         Created:  26/10/2010
-// $Id: SiStripDelay.cc,v 1.3 2012/09/26 18:39:46 eulisse Exp $
 
 #include "FWCore/Utilities/interface/typelookup.h"
 #include <cassert>

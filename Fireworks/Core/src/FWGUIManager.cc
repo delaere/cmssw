@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Mon Feb 11 11:06:40 EST 2008
-// $Id: FWGUIManager.cc,v 1.252 2012/07/31 22:32:18 amraktad Exp $
 
 
 //

@@ -3,7 +3,6 @@
  * db_functions.php
  *
  * All the functions used to connect to and query the DB
- * $Id: db_functions.php,v 1.8 2007/04/12 11:04:42 fra Exp $
  */
 
 require_once 'common.php';

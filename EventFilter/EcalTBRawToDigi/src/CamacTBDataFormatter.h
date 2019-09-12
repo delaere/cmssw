@@ -2,7 +2,6 @@
 #define CamacTBDataFormatter_H
 /** \class CamacTBDataFormatter
  *
- *  $Id: CamacTBDataFormatter.h,v 1.7 2010/10/12 13:11:35 eulisse Exp $
  *
  *  \author G. Franzoni
  */

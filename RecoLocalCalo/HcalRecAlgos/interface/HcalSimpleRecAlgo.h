@@ -26,8 +26,6 @@
    has the option of correcting the reconstructed time for energy-dependent
    time slew associated with the QIE.
     
-   $Date: 2013/04/26 15:49:44 $
-   $Revision: 1.18 $
    \author J. Mans - Minnesota
 */
 class HcalSimpleRecAlgo {
@@ -46,7 +44,7 @@ public:
   void setRecoParams(bool correctForTimeslew, bool correctForPulse, bool setLeakCorrection, int pileupCleaningID, float phaseNS);
 
   // ugly hack related to HB- e-dependent corrections
-  void setForData();
+  void setForData(int runnum);
   // usage of leak correction 
   void setLeakCorrection();
 
@@ -66,7 +64,7 @@ private:
   bool correctForPulse_;
   float phaseNS_;
   std::auto_ptr<HcalPulseContainmentManager> pulseCorr_;
-  bool setForData_;
+  int runnum_;  // data run numer
   bool setLeakCorrection_;
   int pileupCleaningID_;
 };

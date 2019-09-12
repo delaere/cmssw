@@ -7,7 +7,6 @@
    version: 01
    date:  28 Oct 2008
 */
-//$Id: FourVectorHLTClient.h,v 1.11 2011/06/15 16:22:47 bjk Exp $
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/Event.h"

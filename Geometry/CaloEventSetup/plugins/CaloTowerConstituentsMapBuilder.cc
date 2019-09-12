@@ -13,7 +13,6 @@
 //
 // Original Author:  Jeremiah Mans
 //         Created:  Mon Oct  3 11:35:27 CDT 2005
-// $Id: CaloTowerConstituentsMapBuilder.cc,v 1.9 2013/04/26 09:38:11 yana Exp $
 //
 //
 

@@ -13,7 +13,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Fri Jun 18 14:23:07 CDT 2010
-// $Id: FWLiteESRecordWriterAnalyzer.cc,v 1.4 2012/08/03 18:17:46 wmtan Exp $
 //
 //
 
@@ -152,11 +151,11 @@ class FWLiteESRecordWriterAnalyzer : public edm::EDAnalyzer {
 
 
    private:
-      virtual void beginJob() ;
-      virtual void analyze(const edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
-      virtual void beginRun(edm::Run const&, edm::EventSetup const&);
-      virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
+      virtual void beginJob() override ;
+      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
+      virtual void beginRun(edm::Run const&, edm::EventSetup const&) override;
+      virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
    
       void update(const edm::EventSetup&);
 

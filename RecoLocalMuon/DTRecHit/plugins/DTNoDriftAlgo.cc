@@ -1,8 +1,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2009/04/30 09:30:06 $
- *  $Revision: 1.2 $
  *  \author Martijn Mulders - CERN (martijn.mulders@cern.ch)
  *  based on DTLinearDriftAlgo
  */
@@ -18,19 +16,13 @@ using namespace std;
 using namespace edm;
 
 DTNoDriftAlgo::DTNoDriftAlgo(const ParameterSet& config) :
-  DTRecHitBaseAlgo(config) {
-
-    minTime = config.getParameter<double>("minTime");
-
-    maxTime = config.getParameter<double>("maxTime"); 
-
-    fixedDrift = config.getParameter<double>("fixedDrift");
-
-    hitResolution = config.getParameter<double>("hitResolution"); // Set to size of (half)cell 
-    // Set verbose output
-    debug = config.getUntrackedParameter<bool>("debug");
-    
-  }
+  DTRecHitBaseAlgo(config),
+  fixedDrift(config.getParameter<double>("fixedDrift")),
+  hitResolution(config.getParameter<double>("hitResolution")), // Set to size of (half)cell 
+  minTime(config.getParameter<double>("minTime")),
+  maxTime(config.getParameter<double>("maxTime")),
+  debug(config.getUntrackedParameter<bool>("debug")) // Set verbose output
+ {}
 
 
 
@@ -235,18 +227,3 @@ bool DTNoDriftAlgo::compute(const DTLayer* layer,
     return false;
   }
 }
-
-
-float DTNoDriftAlgo::fixedDrift;
-
-  
-float DTNoDriftAlgo::hitResolution;
-
-  
-float DTNoDriftAlgo::minTime;
-
-  
-float DTNoDriftAlgo::maxTime;
-
-  
-bool DTNoDriftAlgo::debug;

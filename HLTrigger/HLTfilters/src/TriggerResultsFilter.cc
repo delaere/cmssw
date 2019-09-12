@@ -2,8 +2,6 @@
  *
  * See header file for documentation
  *
- *  $Date: 2012/01/23 00:42:36 $
- *  $Revision: 1.16 $
  *
  *  Authors: Martin Grunewald, Andrea Bocci
  *
@@ -21,6 +19,7 @@
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Utilities/interface/Exception.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
+#include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 
 #include "HLTrigger/HLTcore/interface/TriggerExpressionEvaluator.h"
 #include "HLTrigger/HLTcore/interface/TriggerExpressionParser.h"
@@ -31,7 +30,7 @@
 //
 TriggerResultsFilter::TriggerResultsFilter(const edm::ParameterSet & config) :
   m_expression(0),
-  m_eventCache(config)
+  m_eventCache(config, consumesCollector())
 {
   const std::vector<std::string> & expressions = config.getParameter<std::vector<std::string> >("triggerConditions");
   parse( expressions );
@@ -40,6 +39,27 @@ TriggerResultsFilter::TriggerResultsFilter(const edm::ParameterSet & config) :
 TriggerResultsFilter::~TriggerResultsFilter()
 {
   delete m_expression;
+}
+
+void
+TriggerResultsFilter::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+  edm::ParameterSetDescription desc;
+  // # HLT results   - set to empty to ignore HLT
+  desc.add<edm::InputTag>("hltResults",edm::InputTag("TriggerResults"));
+  // # L1 GT results - set to empty to ignore L1T
+  desc.add<edm::InputTag>("l1tResults",edm::InputTag("hltGtDigis"));
+  // # use L1 mask
+  desc.add<bool>("l1tIgnoreMask",false);
+  // # read L1 technical bits from PSB#9, bypassing the prescales
+  desc.add<bool>("l1techIgnorePrescales",false);
+  // # used by the definition of the L1 mask
+  desc.add<unsigned int>("daqPartitions",0x01);
+  // # throw exception on unknown trigger names
+  desc.add<bool>("throw",true);
+  // # trigger conditions
+  std::vector<std::string> triggerConditions(1,"HLT_*");
+  desc.add<std::vector<std::string> >("triggerConditions",triggerConditions);
+  descriptions.add("triggerResultsFilter", desc);
 }
 
 void TriggerResultsFilter::parse(const std::vector<std::string> & expressions) {

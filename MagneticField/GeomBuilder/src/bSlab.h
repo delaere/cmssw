@@ -6,8 +6,6 @@
  *  In most cases, a slab is a single volume, but in few cases it consists
  *  in several volumes contiguous in phi.
  *
- *  $Date: 2007/02/03 16:18:13 $
- *  $Revision: 1.3 $
  *  \author N. Amapane - INFN Torino
  */
 

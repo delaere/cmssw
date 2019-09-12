@@ -10,7 +10,6 @@
 */
 //
 //         Created:  2009/07/22
-// $Id: BuildTrackerMap.cc,v 1.2 2012/11/27 15:55:53 speer Exp $
 //
 
 #include <sstream>
@@ -58,9 +57,9 @@ class BuildTrackerMapPlugin : public edm::EDAnalyzer
   explicit BuildTrackerMapPlugin(const edm::ParameterSet&);
   ~BuildTrackerMapPlugin();
  private:
-  virtual void beginJob();
-  virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  virtual void endJob();
+  virtual void beginJob() override;
+  virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+  virtual void endJob() override;
 
   void read(bool aMechView,
 	    std::string aFile,

@@ -25,7 +25,7 @@ namespace cond {
     public:
       ListIOVUtilities();
       ~ListIOVUtilities();
-      int execute();
+      int execute() override;
   };
 
   static const size_t sinceTillColumnSize = 20;
@@ -70,6 +70,8 @@ namespace cond {
         headerLine << std::setw(sinceTillColumnSize)<<"";
         headerLine << "  "<<std::setw(sinceTillColumnSize)<<"";
         break; 
+      case invalid:
+	break;
       }
       return headerLine.str();
   }
@@ -100,6 +102,8 @@ namespace cond {
      case userid:
        std::cout <<std::setw(sinceTillColumnSize)<< validity;
        break; 
+     case invalid:
+       break;
      }
   }
 }

@@ -1,4 +1,3 @@
-// $Id: RPCWheelMap.cc,v 1.7 2009/06/07 21:18:51 aosorio Exp $
 // Include files 
 
 

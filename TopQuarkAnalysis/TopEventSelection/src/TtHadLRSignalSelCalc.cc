@@ -1,4 +1,3 @@
-// $Id: TtHadLRSignalSelCalc.cc,v 1.3 2013/05/28 17:54:37 gartung Exp $
 // copied TtSemiLRSignalSelCalc.cc,v 1.2 2007/06/18 14:12:18 heyninck Exp 
 // for fully hadronic channel
 

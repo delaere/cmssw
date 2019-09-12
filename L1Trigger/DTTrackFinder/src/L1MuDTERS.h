@@ -9,8 +9,6 @@
  *   performed per start track segment
  *
  *
- *   $Date: 2007/03/30 09:05:31 $
- *   $Revision: 1.3 $
  *
  *   N. Neumeister            CERN EP
  */

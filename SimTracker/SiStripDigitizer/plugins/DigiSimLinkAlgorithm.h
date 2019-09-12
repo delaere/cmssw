@@ -21,8 +21,8 @@
 #include "CondFormats/SiStripObjects/interface/SiStripThreshold.h"
 #include "CondFormats/SiStripObjects/interface/SiStripBadStrip.h"
 #include "CalibFormats/SiStripObjects/interface/SiStripGain.h"
-#include "SiTrivialDigitalConverter.h"
-#include "SiGaussianTailNoiseAdder.h"
+#include "SimTracker/SiStripDigitizer/interface/SiTrivialDigitalConverter.h"
+#include "SimTracker/SiStripDigitizer/interface/SiGaussianTailNoiseAdder.h"
 #include "SiHitDigitizer.h"
 #include "DigiSimLinkPileUpSignals.h"
 #include "Geometry/CommonDetUnit/interface/GeomDetUnit.h"
@@ -99,6 +99,8 @@ class DigiSimLinkAlgorithm {
   double cosmicShift;
   double inefficiency;
   double pedOffset;
+  bool PreMixing_;
+
 
   size_t firstChannelWithSignal;
   size_t lastChannelWithSignal;

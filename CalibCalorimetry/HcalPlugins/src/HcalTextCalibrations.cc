@@ -1,6 +1,5 @@
 // -*- C++ -*-
 // Original Author:  Fedor Ratnikov
-// $Id: HcalTextCalibrations.cc,v 1.22 2012/11/12 20:42:39 dlange Exp $
 //
 //
 

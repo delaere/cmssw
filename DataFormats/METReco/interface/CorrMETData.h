@@ -1,5 +1,4 @@
 // -*- C++ -*-
-// $Id: CorrMETData.h,v 1.8 2013/03/13 23:09:52 sakuma Exp $
 #ifndef METRECO_CORR_MET_DATA_H
 #define METRECO_CORR_MET_DATA_H
 

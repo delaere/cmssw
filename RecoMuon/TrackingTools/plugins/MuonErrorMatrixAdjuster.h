@@ -9,8 +9,6 @@
  * rechit are copied into a new collection
  * track extra is also copied and error matrix are corrected by the same scale factors
  *
- * $Dates: 2007/09/04 13:28 $
- * $Revision: 1.3 $
  *
  * \author Jean-Roch Vlimant  UCSB
  * \author Finn Rebassoo      UCSB

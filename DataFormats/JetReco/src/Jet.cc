@@ -1,6 +1,5 @@
 // Jet.cc
 // Fedor Ratnikov, UMd
-// $Id: Jet.cc,v 1.29 2012/02/01 14:51:11 pandolf Exp $
 
 #include <sstream>
 #include <cmath>

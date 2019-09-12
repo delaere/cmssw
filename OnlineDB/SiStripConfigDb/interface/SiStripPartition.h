@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripPartition.h,v 1.11 2009/04/06 12:36:45 lowette Exp $
 
 #ifndef OnlineDB_SiStripConfigDb_SiStripPartition_h
 #define OnlineDB_SiStripConfigDb_SiStripPartition_h
@@ -122,7 +121,7 @@ class SiStripPartition {
 
  private:
   
-  Versions versions( std::vector<uint32_t> );
+  Versions versions( const std::vector<uint32_t>& );
 
  private:
 

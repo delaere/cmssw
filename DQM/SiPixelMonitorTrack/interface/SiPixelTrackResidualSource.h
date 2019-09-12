@@ -12,7 +12,6 @@
 //
 // Original Author: Shan-Huei Chuang
 //         Created: Fri Mar 23 18:41:42 CET 2007
-// $Id: SiPixelTrackResidualSource.h,v 1.9 2012/09/11 09:37:41 clseitz Exp $
 //
 // Updated by: Lukas Wehrli
 // for pixel offline DQM 
@@ -36,7 +35,11 @@
 #include "DataFormats/SiPixelDetId/interface/PixelBarrelName.h"
 #include "DataFormats/SiPixelDetId/interface/PixelEndcapName.h"
 #include "DataFormats/TrackReco/interface/Track.h"
+
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
+
 #include "TrackingTools/PatternTools/interface/TrajTrackAssociation.h"
+
 
 class SiPixelTrackResidualSource : public edm::EDAnalyzer {
   public:
@@ -56,6 +59,14 @@ class SiPixelTrackResidualSource : public edm::EDAnalyzer {
     edm::InputTag tracksrc_; 
     std::string ttrhbuilder_; 
     DQMStore* dbe_; 
+    edm::EDGetTokenT<reco::BeamSpot> beamSpotToken_;
+    edm::EDGetTokenT<reco::VertexCollection> offlinePrimaryVerticesToken_;
+    edm::EDGetTokenT<reco::TrackCollection> generalTracksToken_;
+    edm::EDGetTokenT<std::vector<Trajectory> > tracksrcToken_;
+    edm::EDGetTokenT<std::vector<reco::Track> > trackToken_;
+    edm::EDGetTokenT<TrajTrackAssociationCollection> trackAssociationToken_;
+    edm::EDGetTokenT<edmNew::DetSetVector<SiPixelCluster> > clustersrcToken_;
+
 
     bool debug_; 
     bool modOn; 

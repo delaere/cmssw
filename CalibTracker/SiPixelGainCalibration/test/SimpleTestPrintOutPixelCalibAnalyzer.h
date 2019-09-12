@@ -13,7 +13,6 @@
 //
 // Original Author:  Freya Blekman
 //         Created:  Mon Nov  5 16:56:35 CET 2007
-// $Id: SimpleTestPrintOutPixelCalibAnalyzer.h,v 1.2 2009/12/17 21:30:29 wmtan Exp $
 //
 //
 
@@ -47,5 +46,7 @@ private:
   virtual void endJob() ;
 
       // ----------member data ---------------------------
+  edm::EDGetTokenT<edm::DetSetVector<SiPixelCalibDigi> > tPixelCalibDigi;
+
 };
 

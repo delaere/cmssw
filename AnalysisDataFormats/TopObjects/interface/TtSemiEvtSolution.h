@@ -1,5 +1,4 @@
 //
-// $Id: TtSemiEvtSolution.h,v 1.31 2013/04/19 22:13:23 wmtan Exp $
 //
 
 #ifndef TopObjects_TtSemiEvtSolution_h

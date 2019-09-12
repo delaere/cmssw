@@ -1,8 +1,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2012/02/15 16:04:16 $
- *  $Revision: 1.9 $
  *  \author Paolo Ronchese INFN Padova
  *
  */
@@ -19,12 +17,10 @@
 #include "CondFormats/DTObjects/interface/DTKeyedConfig.h"
 
 
-#include "CondCore/DBCommon/interface/DbTransaction.h"
-
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CondCore/DBOutputService/interface/PoolDBOutputService.h"
 #include "CondCore/DBOutputService/interface/KeyedElement.h"
-#include "CondCore/IOVService/interface/KeyList.h"
+#include "CondCore/CondDB/interface/KeyList.h"
 
 #include "RelationalAccess/ISchema.h"
 #include "RelationalAccess/ITable.h"
@@ -38,11 +34,12 @@
 // C++ Headers --
 //---------------
 
+#include <iostream>
 
 //-------------------
 // Initializations --
 //-------------------
-cond::KeyList* DTKeyedConfigHandler::keyList = 0;
+cond::persistency::KeyList* DTKeyedConfigHandler::keyList = 0;
 
 //----------------
 // Constructors --
@@ -119,12 +116,10 @@ void DTKeyedConfigHandler::getNewObjects() {
 
   std::cout << "configure DbConnection" << std::endl;
   //  conn->configure( cond::CmsDefaults );
-  connection.configuration().setAuthenticationPath( onlineAuthentication );
+  connection.setAuthenticationPath( onlineAuthentication );
   connection.configure();
-  std::cout << "create DbSession" << std::endl;
-  isession = connection.createSession();
-  std::cout << "open session" << std::endl;
-  isession.open( onlineConnect );
+  std::cout << "create/open DbSession" << std::endl;
+  isession = connection.createSession( onlineConnect );
   std::cout << "start transaction" << std::endl;
   isession.transaction().start();
 
@@ -551,8 +546,8 @@ void DTKeyedConfigHandler::chkConfigList() {
     bool brickFound = false;
     try {
       keyList->load( checkedKeys );
-      const DTKeyedConfig* brickCheck = keyList->get<DTKeyedConfig>( 0 );
-      if ( brickCheck != 0 ) brickFound =
+      boost::shared_ptr<DTKeyedConfig> brickCheck = keyList->get<DTKeyedConfig>( 0 );
+      if ( brickCheck.get() ) brickFound =
                              ( brickCheck->getId() == brickConfigId );
     }
     catch ( std::exception e ) {
@@ -639,7 +634,7 @@ bool DTKeyedConfigHandler::sameConfigList(
 }
 
 
-void DTKeyedConfigHandler::setList( cond::KeyList* list ) {
+void DTKeyedConfigHandler::setList( cond::persistency::KeyList* list ) {
   keyList = list;
 }
 

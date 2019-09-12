@@ -6,7 +6,6 @@
 /**\class DIPLumiProducer DIPLumiProducer.cc RecoLuminosity/LumiProducer/src/DIPLumiProducer.cc
 Description: A essource/esproducer for lumi values from DIP via runtime logger DB
 */
-// $Id: DIPLumiProducer.cc,v 1.13 2012/04/04 10:25:50 xiezhen Exp $
 
 //#include <memory>
 //#include "boost/shared_ptr.hpp"
@@ -56,7 +55,7 @@ Description: A essource/esproducer for lumi values from DIP via runtime logger D
 #include <boost/tokenizer.hpp>
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
+#include "FWCore/Concurrency/interface/Xerces.h"
 #include <xercesc/util/XMLString.hpp>
 
 #include "boost/filesystem/path.hpp"

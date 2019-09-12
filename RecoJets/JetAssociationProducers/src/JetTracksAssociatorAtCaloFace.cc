@@ -3,7 +3,6 @@
 // Original Author:  Andrea Rizzi
 //         Created:  Wed Apr 12 11:12:49 CEST 2006
 // Accommodated for Jet Package by: Fedor Ratnikov Jul. 30, 2007
-// $Id: JetTracksAssociatorAtCaloFace.cc,v 1.6 2013/02/27 20:42:22 eulisse Exp $
 //
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 
@@ -11,22 +10,21 @@
 #include "MagneticField/Records/interface/IdealMagneticFieldRecord.h" 
 #include "TrackingTools/Records/interface/TrackingComponentsRecord.h"
 #include "FWCore/Framework/interface/Event.h"
-#include "DataFormats/Common/interface/View.h"
 #include "DataFormats/JetReco/interface/Jet.h"
 #include "DataFormats/JetReco/interface/CaloJet.h"
 #include "DataFormats/TrackReco/interface/Track.h"
-#include "DataFormats/JetReco/interface/JetTracksAssociation.h"
 
 
 
 #include "JetTracksAssociatorAtCaloFace.h"
 
 JetTracksAssociatorAtCaloFace::JetTracksAssociatorAtCaloFace(const edm::ParameterSet& fConfig)
-  : mJets (fConfig.getParameter<edm::InputTag> ("jets")),
-    mExtrapolations (fConfig.getParameter<edm::InputTag> ("extrapolations")),
-    firstRun(true),
+  : firstRun(true),
     dR_(fConfig.getParameter<double>("coneSize"))
 {
+  mJets = consumes<edm::View <reco::Jet> >(fConfig.getParameter<edm::InputTag> ("jets"));
+  mExtrapolations  = consumes<std::vector<reco::TrackExtrapolation> >(fConfig.getParameter<edm::InputTag> ("extrapolations")),
+
   produces<reco::JetTracksAssociation::Container> ();
 }
 
@@ -45,9 +43,9 @@ void JetTracksAssociatorAtCaloFace::produce(edm::Event& fEvent, const edm::Event
 
   // get stuff from Event
   edm::Handle <edm::View <reco::Jet> > jets_h;
-  fEvent.getByLabel (mJets, jets_h);
+  fEvent.getByToken (mJets, jets_h);
   edm::Handle <std::vector<reco::TrackExtrapolation> > extrapolations_h;
-  fEvent.getByLabel (mExtrapolations, extrapolations_h);
+  fEvent.getByToken (mExtrapolations, extrapolations_h);
 
   // Check to make sure we have inputs
   if ( jets_h->size() == 0 ) return;

@@ -1,4 +1,3 @@
-// $Id: TRootXTReq.cc,v 1.3 2011/01/24 17:44:21 amraktad Exp $
 
 #include "Fireworks/Core/interface/TRootXTReq.h"
 
@@ -125,7 +124,7 @@ private:
          gSystem->AddTimer(this);
       }
 
-      virtual Bool_t Notify()
+      virtual Bool_t Notify() override
       {
          gSystem->RemoveTimer(this);
          TRootXTReq::ProcessQueue();
@@ -139,7 +138,7 @@ public:
    RootSig2XTReqHandler() : TSignalHandler(kSigUser1), mTimer() { Add(); }
    virtual ~RootSig2XTReqHandler() {}
 
-   virtual Bool_t Notify()
+   virtual Bool_t Notify() override
    {
       printf("Usr1 Woof Woof in Root thread! Starting Timer.\n");
       mTimer.FireAway();

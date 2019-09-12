@@ -1,8 +1,6 @@
 /*
  * \file EERawDataTask.cc
  *
- * $Date: 2012/06/28 12:14:30 $
- * $Revision: 1.45 $
  * \author E. Di Marco
  *
 */
@@ -19,11 +17,9 @@
 #include "DQMServices/Core/interface/DQMStore.h"
 
 #include "DataFormats/FEDRawData/interface/FEDRawData.h"
-#include "DataFormats/FEDRawData/interface/FEDRawDataCollection.h"
 #include "DataFormats/FEDRawData/interface/FEDHeader.h"
 #include "DataFormats/FEDRawData/interface/FEDTrailer.h"
 #include "DataFormats/FEDRawData/interface/FEDNumbering.h"
-#include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
 #include "DataFormats/FEDRawData/src/fed_header.h"
 
 #include "DQM/EcalCommon/interface/Numbers.h"
@@ -44,8 +40,8 @@ EERawDataTask::EERawDataTask(const edm::ParameterSet& ps) {
 
   mergeRuns_ = ps.getUntrackedParameter<bool>("mergeRuns", false);
 
-  FEDRawDataCollection_ = ps.getParameter<edm::InputTag>("FEDRawDataCollection");
-  EcalRawDataCollection_ = ps.getParameter<edm::InputTag>("EcalRawDataCollection");
+  FEDRawDataCollection_ = consumes<FEDRawDataCollection>(ps.getParameter<edm::InputTag>("FEDRawDataCollection"));
+  EcalRawDataCollection_ = consumes<EcalRawDataCollection>(ps.getParameter<edm::InputTag>("EcalRawDataCollection"));
 
   meEEEventTypePreCalibrationBX_ = 0;
   meEEEventTypeCalibrationBX_ = 0;
@@ -438,7 +434,7 @@ void EERawDataTask::analyze(const edm::Event& e, const edm::EventSetup& c){
   int ECALDCC_BunchCrossing_MostFreqId = -1;
   int ECALDCC_TriggerType_MostFreqId = -1;
 
-  if ( e.getByLabel(FEDRawDataCollection_, allFedRawData) ) {
+  if ( e.getByToken(FEDRawDataCollection_, allFedRawData) ) {
 
     // GT FED data
     const FEDRawData& gtFedData = allFedRawData->FEDData(812);
@@ -475,7 +471,7 @@ void EERawDataTask::analyze(const edm::Event& e, const edm::EventSetup& c){
 
       edm::Handle<EcalRawDataCollection> dcchs;
 
-      if ( e.getByLabel(EcalRawDataCollection_, dcchs) ) {
+      if ( e.getByToken(EcalRawDataCollection_, dcchs) ) {
 
         for ( EcalRawDataCollection::const_iterator dcchItr = dcchs->begin(); dcchItr != dcchs->end(); ++dcchItr ) {
 
@@ -514,7 +510,7 @@ void EERawDataTask::analyze(const edm::Event& e, const edm::EventSetup& c){
         }
 
       } else {
-        edm::LogWarning("EERawDataTask") << EcalRawDataCollection_ << " not available";
+        edm::LogWarning("EERawDataTask") << "EcalRawDataCollection not available";
       }
 
     }
@@ -548,12 +544,12 @@ void EERawDataTask::analyze(const edm::Event& e, const edm::EventSetup& c){
     }
 
   } else {
-    edm::LogWarning("EERawDataTask") << FEDRawDataCollection_ << " not available";
+    edm::LogWarning("EERawDataTask") << "FEDRawDataCollection not available";
   }
 
   edm::Handle<EcalRawDataCollection> dcchs;
 
-  if ( e.getByLabel(EcalRawDataCollection_, dcchs) ) {
+  if ( e.getByToken(EcalRawDataCollection_, dcchs) ) {
 
     for ( EcalRawDataCollection::const_iterator dcchItr = dcchs->begin(); dcchItr != dcchs->end(); ++dcchItr ) {
 
@@ -696,7 +692,7 @@ void EERawDataTask::analyze(const edm::Event& e, const edm::EventSetup& c){
     }
 
   } else {
-    edm::LogWarning("EERawDataTask") << EcalRawDataCollection_ << " not available";
+    edm::LogWarning("EERawDataTask") << "EcalRawDataCollection not available";
   }
 
   if(errorsInEvent > 0.){

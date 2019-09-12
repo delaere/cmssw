@@ -17,6 +17,8 @@
 #include "CoralBase/Attribute.h"
 #include "CoralBase/AttributeList.h"
 
+#include <iostream>
+
 namespace cond {
   class ExportAccountUtilities : public Utilities {
     public:
@@ -24,7 +26,7 @@ namespace cond {
     ~ExportAccountUtilities();
     int exportTags( const std::vector<std::string>& tagList );
     bool getTagList( const std::string& globalTag, const std::string& accountName, std::vector<std::string>& tagList );
-    int execute();
+    int execute() override;
     DbSession m_sourceDb;
     DbSession m_destDb;
 

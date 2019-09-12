@@ -2,8 +2,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2011/02/16 12:40:30 $
- *  $Revision: 1.10 $
  *  \author L. Uplegger F. Yumiceva - Fermilab
  */
 
@@ -16,6 +14,7 @@
 #include "DataFormats/Common/interface/Handle.h"
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 
@@ -39,7 +38,7 @@ AlcaBeamSpotHarvester::AlcaBeamSpotHarvester(const edm::ParameterSet& iConfig) :
   beamSpotOutputBase_    (iConfig.getParameter<ParameterSet>("AlcaBeamSpotHarvesterParameters").getUntrackedParameter<std::string>("BeamSpotOutputBase")),
   outputrecordName_      (iConfig.getParameter<ParameterSet>("AlcaBeamSpotHarvesterParameters").getUntrackedParameter<std::string>("outputRecordName", "BeamSpotObjectsRcd")),
   sigmaZValue_           (iConfig.getParameter<ParameterSet>("AlcaBeamSpotHarvesterParameters").getUntrackedParameter<double>("SigmaZValue")),
-  theAlcaBeamSpotManager_(iConfig) {  
+  theAlcaBeamSpotManager_(iConfig, consumesCollector()) {  
 }
 
 //--------------------------------------------------------------------------------------------------

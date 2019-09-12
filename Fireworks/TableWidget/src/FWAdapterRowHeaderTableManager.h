@@ -19,7 +19,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Mon Feb  2 16:44:59 EST 2009
-// $Id: FWAdapterRowHeaderTableManager.h,v 1.1 2009/02/03 20:33:04 chrjones Exp $
 //
 
 // system include files

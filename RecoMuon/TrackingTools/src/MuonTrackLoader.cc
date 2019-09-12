@@ -3,8 +3,6 @@
  *  Class to load the product in the event
  *
 
- *  $Date: 2013/05/30 21:33:02 $
- *  $Revision: 1.90 $
 
  *  \author R. Bellan - INFN Torino <riccardo.bellan@cern.ch>
  */
@@ -43,8 +41,9 @@ using namespace edm;
 using namespace std;
 
 // constructor
-MuonTrackLoader::MuonTrackLoader(ParameterSet &parameterSet, const MuonServiceProxy *service): 
+MuonTrackLoader::MuonTrackLoader(ParameterSet &parameterSet, edm::ConsumesCollector& iC, const MuonServiceProxy *service): 
   theService(service){
+
 
   // option to do or not the smoothing step.
   // the trajectories which are passed to the track loader are supposed to be non-smoothed
@@ -57,7 +56,9 @@ MuonTrackLoader::MuonTrackLoader(ParameterSet &parameterSet, const MuonServicePr
 
   // beam spot input tag
   theBeamSpotInputTag = parameterSet.getParameter<edm::InputTag>("beamSpot");
-  
+  theBeamSpotToken = iC.consumes<reco::BeamSpot>(theBeamSpotInputTag);
+
+
   // Flag to put the trajectory into the event
   theTrajectoryFlag = parameterSet.getUntrackedParameter<bool>("PutTrajectoryIntoEvent",true);
 
@@ -137,7 +138,7 @@ MuonTrackLoader::loadTracks(const TrajectoryContainer& trajectories,
   }
   
   edm::Handle<reco::BeamSpot> beamSpot;
-  event.getByLabel(theBeamSpotInputTag, beamSpot);
+  event.getByToken(theBeamSpotToken, beamSpot);
 
   LogTrace(metname) << "Create the collection of Tracks";
   
@@ -453,7 +454,7 @@ MuonTrackLoader::loadTracks(const TrajectoryContainer& trajectories,
   LogTrace(metname) << "Create the collection of Tracks";
   
   edm::Handle<reco::BeamSpot> beamSpot;
-  event.getByLabel(theBeamSpotInputTag,beamSpot);
+  event.getByToken(theBeamSpotToken,beamSpot);
 
   reco::TrackRef::key_type trackIndex = 0;
   //  reco::TrackRef::key_type trackUpdatedIndex = 0;

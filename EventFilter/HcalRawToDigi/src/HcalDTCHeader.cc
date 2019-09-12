@@ -1,6 +1,4 @@
 /*  
- *  $Date: 2012/10/22 14:05:56 $
- *  $Revision: 1.1 $
  *  \author J. Mans -- UMD
  */
 #include "EventFilter/HcalRawToDigi/interface/HcalHTRData.h"

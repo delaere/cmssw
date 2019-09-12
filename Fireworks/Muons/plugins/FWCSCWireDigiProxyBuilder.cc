@@ -8,7 +8,6 @@
 //
 // Original Author: mccauley
 //         Created:  Sun Jan  6 23:57:00 EST 2008
-// $Id: FWCSCWireDigiProxyBuilder.cc,v 1.20 2010/10/19 09:00:59 chrjones Exp $
 //
 
 #include "TEveStraightLineSet.h"
@@ -32,7 +31,7 @@ public:
   REGISTER_PROXYBUILDER_METHODS();
 
 private:
-  virtual void build(const FWEventItem* iItem, TEveElementList* product, const FWViewContext*);
+  virtual void build(const FWEventItem* iItem, TEveElementList* product, const FWViewContext*) override;
   FWCSCWireDigiProxyBuilder(const FWCSCWireDigiProxyBuilder&);    
   const FWCSCWireDigiProxyBuilder& operator=(const FWCSCWireDigiProxyBuilder&);
 

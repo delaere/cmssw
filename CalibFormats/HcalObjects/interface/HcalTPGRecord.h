@@ -16,7 +16,6 @@
 //
 // Author:      
 // Created:     Thu Sep 14 11:54:26 CDT 2006
-// $Id: HcalTPGRecord.h,v 1.3 2012/11/12 20:47:04 dlange Exp $
 //
 
 #include "FWCore/Framework/interface/EventSetupRecordImplementation.h"

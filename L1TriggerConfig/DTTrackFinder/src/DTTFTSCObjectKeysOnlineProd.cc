@@ -13,7 +13,6 @@
 //
 // Original Author:  Werner Man-Li Sun
 //         Created:  Thu Oct  2 21:43:50 CEST 2008
-// $Id: DTTFTSCObjectKeysOnlineProd.cc,v 1.2 2009/05/25 14:05:01 wsun Exp $
 //
 //
 
@@ -34,7 +33,7 @@ class DTTFTSCObjectKeysOnlineProd : public L1ObjectKeysOnlineProdBase {
       DTTFTSCObjectKeysOnlineProd(const edm::ParameterSet&);
       ~DTTFTSCObjectKeysOnlineProd();
 
-      virtual void fillObjectKeys( ReturnType pL1TriggerKey ) ;
+      virtual void fillObjectKeys( ReturnType pL1TriggerKey ) override ;
    private:
       // ----------member data ---------------------------
 };

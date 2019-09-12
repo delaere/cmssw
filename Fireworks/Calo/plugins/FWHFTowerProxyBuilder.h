@@ -16,7 +16,6 @@
 //
 // Original Author:  
 //         Created:  Mon May 31 16:41:23 CEST 2010
-// $Id: FWHFTowerProxyBuilder.h,v 1.8 2010/09/20 15:58:18 yana Exp $
 //
 
 // system include files

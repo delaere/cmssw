@@ -1,8 +1,8 @@
 /** \file LaserBeamsBarrel.cc
  *  
  *
- *  $Date: 2011/09/16 06:25:53 $
- *  $Revision: 1.8 $
+ *  $Date: 2010/09/09 18:22:48 $
+ *  $Revision: 1.7 $
  *  \author Maarten Thomas
  */
 
@@ -16,6 +16,7 @@
 #include "globals.hh"                        // Global Constants and typedefs
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
+#include "G4SystemOfUnits.hh"
 
 LaserBeamsBarrel::LaserBeamsBarrel() :
   theParticleGun(0),

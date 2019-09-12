@@ -7,8 +7,6 @@
  *   
  * CaloTowerDetId uses DetId::Det of Calo and subdetId() of 1.
  *
- * $Date: 2008/06/25 22:14:35 $
- * $Revision: 1.6 $
  * \author J. Mans - Minnesota
  */
 class CaloTowerDetId : public DetId {

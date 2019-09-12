@@ -1,4 +1,3 @@
-// $Id: LogicTool.h,v 1.3 2009/08/09 11:11:36 aosorio Exp $
 #ifndef LOGICTOOL_H 
 #define LOGICTOOL_H 1
 

@@ -4,7 +4,6 @@
  *
  * \author 
  *
- * \version $Id: TrackResiduals.h,v 1.2 2008/05/05 22:56:59 jmuelmen Exp $
  *
  */
 #include <iostream>

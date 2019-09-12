@@ -3,8 +3,6 @@
  * dummy module  for the test of  DaqFileInputService
  *   
  * 
- * $Date: 2006/10/26 23:35:38 $
- * $Revision: 1.6 $
  * \author N. Amapane - S. Argiro'
  *
 */

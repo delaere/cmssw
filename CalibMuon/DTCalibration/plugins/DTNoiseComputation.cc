@@ -1,8 +1,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2012/01/12 15:05:33 $
- *  $Revision: 1.7 $
  *  \author G. Mila - INFN Torino
  */
 
@@ -15,7 +13,7 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Framework/interface/ESHandle.h"
-#include <FWCore/Framework/interface/MakerMacros.h>
+#include "FWCore/Framework/interface/MakerMacros.h"
 
 // Geometry
 #include "Geometry/DTGeometry/interface/DTLayer.h"
@@ -24,7 +22,7 @@
 #include "Geometry/Records/interface/MuonGeometryRecord.h"
 
 // Digis
-#include <DataFormats/DTDigi/interface/DTDigi.h>
+#include "DataFormats/DTDigi/interface/DTDigi.h"
 #include "DataFormats/DTDigi/interface/DTDigiCollection.h"
 #include "CondFormats/DataRecord/interface/DTStatusFlagRcd.h"
 #include "CondFormats/DTObjects/interface/DTStatusFlag.h"

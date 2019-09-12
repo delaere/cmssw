@@ -13,7 +13,6 @@
 //
 // Original Author:  Ursula Berthon
 //         Created:  Mon Mar 27 13:22:06 CEST 2006
-// $Id: GsfElectronMCAnalyzer.cc,v 1.51 2011/03/04 14:43:15 chamont Exp $
 //
 //
 
@@ -2018,7 +2017,7 @@ GsfElectronMCAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
 	// supercluster related distributions
 	reco::SuperClusterRef sclRef = bestGsfElectron.superCluster();
-	if (!bestGsfElectron.ecalDrivenSeed()&&bestGsfElectron.trackerDrivenSeed()) sclRef = bestGsfElectron.pflowSuperCluster();
+	if (!bestGsfElectron.ecalDrivenSeed()&&bestGsfElectron.trackerDrivenSeed()) sclRef = bestGsfElectron.parentSuperCluster();
         histSclEn_->Fill(sclRef->energy());
         double R=TMath::Sqrt(sclRef->x()*sclRef->x() + sclRef->y()*sclRef->y() +sclRef->z()*sclRef->z());
         double Rt=TMath::Sqrt(sclRef->x()*sclRef->x() + sclRef->y()*sclRef->y());
@@ -2077,7 +2076,7 @@ GsfElectronMCAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
         if (bestGsfElectron.isEE() && bestGsfElectron.ecalDrivenSeed())histSclE5x5_eg_endcaps_->Fill(bestGsfElectron.scE5x5());
         float pfEnergy=0., egEnergy=0.;
 	if (!bestGsfElectron.superCluster().isNull()) egEnergy = bestGsfElectron.superCluster()->energy();
-	if (!bestGsfElectron.pflowSuperCluster().isNull()) pfEnergy = bestGsfElectron.pflowSuperCluster()->energy();
+	if (!bestGsfElectron.parentSuperCluster().isNull()) pfEnergy = bestGsfElectron.parentSuperCluster()->energy();
 	histSclEoEtruePfVsEg->Fill(egEnergy/mcIter->p(),pfEnergy/mcIter->p());
 
 	// track related distributions

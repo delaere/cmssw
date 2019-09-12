@@ -1,5 +1,4 @@
 // -*- C++ -*-
-// $Id: FWSecVertexProxyBuilder.cc,v 1.5 2011/03/21 14:57:42 arizzi Exp $
 //
 #include <vector>
 
@@ -32,7 +31,7 @@ private:
    const FWSecVertexProxyBuilder& operator=(const FWSecVertexProxyBuilder&); // stop default
    
    // ---------- member data --------------------------------
-   void build(const reco::SecondaryVertexTagInfo& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext*);
+   void build(const reco::SecondaryVertexTagInfo& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext*) override;
 };
 
 void 

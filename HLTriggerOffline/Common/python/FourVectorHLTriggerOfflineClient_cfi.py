@@ -1,4 +1,3 @@
-## $Id: FourVectorHLTriggerOfflineClient_cfi.py,v 1.12 2010/03/01 21:25:07 wmtan Exp $
 
 import FWCore.ParameterSet.Config as cms
 

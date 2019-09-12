@@ -1,5 +1,4 @@
 /*  
- * $Id: EcalSimRawData.h,v 1.8 2007/05/15 20:57:01 nuno Exp $
  */
 
 #include "FWCore/Framework/interface/Event.h"

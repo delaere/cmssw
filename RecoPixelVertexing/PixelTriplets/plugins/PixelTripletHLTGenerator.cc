@@ -54,12 +54,16 @@ PixelTripletHLTGenerator::~PixelTripletHLTGenerator() {
 }
 
 void PixelTripletHLTGenerator::init( const HitPairGenerator & pairs,
-				     const std::vector<SeedingLayer> & layers,
 				     LayerCacheType* layerCache)
 {
   thePairGenerator = pairs.clone();
-  theLayers = layers;
   theLayerCache = layerCache;
+}
+
+void PixelTripletHLTGenerator::setSeedingLayers(SeedingLayerSetsHits::SeedingLayerSet pairLayers,
+                                                std::vector<SeedingLayerSetsHits::SeedingLayer> thirdLayers) {
+  thePairGenerator->setSeedingLayers(pairLayers);
+  theLayers = thirdLayers;
 }
 
 void PixelTripletHLTGenerator::hitTriplets(const TrackingRegion& region, 
@@ -89,6 +93,8 @@ void PixelTripletHLTGenerator::hitTriplets(const TrackingRegion& region,
 
   using NodeInfo = KDTreeNodeInfo<unsigned int>;
   std::vector<NodeInfo > layerTree; // re-used throughout
+  std::vector<unsigned int> foundNodes; // re-used thoughout
+  foundNodes.reserve(100);
 
   KDTreeLinkerAlgo<unsigned int> hitTree[size];
   float rzError[size]; //save maximum errors
@@ -96,7 +102,7 @@ void PixelTripletHLTGenerator::hitTriplets(const TrackingRegion& region,
   
   // fill the prediction vector
   for (int il=0; il!=size; ++il) {
-    thirdHitMap[il] = &(*theLayerCache)(&theLayers[il], region, ev, es);
+    thirdHitMap[il] = &(*theLayerCache)(theLayers[il], region, ev, es);
     auto const & hits = *thirdHitMap[il];
     ThirdHitRZPrediction<PixelRecoLineRZ> & pred = preds[il];
     pred.initLayer(theLayers[il].detLayer());
@@ -145,6 +151,7 @@ void PixelTripletHLTGenerator::hitTriplets(const TrackingRegion& region,
     ThirdHitPredictionFromInvParabola predictionRPhi(xi-region.origin().x(),yi-region.origin().y(),
 						     xo-region.origin().x(),yo-region.origin().y(),
 						     imppar,curv,extraHitRPhitolerance);
+
     ThirdHitPredictionFromInvParabola predictionRPhitmp(xi,yi,xo,yo,imppartmp,curv,extraHitRPhitolerance);
 
     // printf("++Constr %f %f %f %f %f %f %f\n",xi,yi,xo,yo,imppartmp,curv,extraHitRPhitolerance);     
@@ -185,12 +192,31 @@ void PixelTripletHLTGenerator::hitTriplets(const TrackingRegion& region,
 
 	// std::cout << "++R " << radius.min() << " " << radius.max()  << std::endl;
 
+	/*
 	Range rPhi1m = predictionRPhitmp(radius.max(), -1);
 	Range rPhi1p = predictionRPhitmp(radius.max(),  1);
 	Range rPhi2m = predictionRPhitmp(radius.min(), -1);
 	Range rPhi2p = predictionRPhitmp(radius.min(),  1);
 	Range rPhi1 = rPhi1m.sum(rPhi1p);
 	Range rPhi2 = rPhi2m.sum(rPhi2p);
+	
+	
+	auto rPhi1N = predictionRPhitmp(radius.max());
+	auto rPhi2N = predictionRPhitmp(radius.min());
+
+	std::cout << "VI " 
+		  << rPhi1N.first <<'/'<< rPhi1.first << ' '
+		  << rPhi1N.second <<'/'<< rPhi1.second << ' '
+		  << rPhi2N.first <<'/'<< rPhi2.first << ' '
+		  << rPhi2N.second <<'/'<< rPhi2.second
+		  << std::endl;
+	
+	*/
+
+	auto rPhi1 = predictionRPhitmp(radius.max());
+	auto rPhi2 = predictionRPhitmp(radius.min());
+
+
 	correction.correctRPhiRange(rPhi1);
 	correction.correctRPhiRange(rPhi2);
 	rPhi1.first  /= radius.max();
@@ -203,7 +229,7 @@ void PixelTripletHLTGenerator::hitTriplets(const TrackingRegion& region,
       constexpr float nSigmaRZ = std::sqrt(12.f); // ...and continue as before
       constexpr float nSigmaPhi = 3.f;
       
-      layerTree.clear(); // Now recover hits in bounding box...
+      foundNodes.clear(); // Now recover hits in bounding box...
       float prmin=phiRange.min(), prmax=phiRange.max();
       if ((prmax-prmin) > Geom::ftwoPi())
 	{ prmax=Geom::fpi(); prmin = -Geom::fpi();}
@@ -221,21 +247,21 @@ void PixelTripletHLTGenerator::hitTriplets(const TrackingRegion& region,
 	  correction.correctRZRange(regMax);
 	  if (regMax.min() < regMin.min()) { swap(regMax, regMin);}
 	  KDTreeBox phiZ(prmin, prmax, regMin.min()-nSigmaRZ*rzError[il], regMax.max()+nSigmaRZ*rzError[il]);
-	  hitTree[il].search(phiZ, layerTree);
+	  hitTree[il].search(phiZ, foundNodes);
 	}
       else
 	{
 	  KDTreeBox phiZ(prmin, prmax,
 			 rzRange.min()-regOffset-nSigmaRZ*rzError[il],
 			 rzRange.max()+regOffset+nSigmaRZ*rzError[il]);
-	  hitTree[il].search(phiZ, layerTree);
+	  hitTree[il].search(phiZ, foundNodes);
 	}
 
-      // std::cout << ip << ": " << theLayers[il].detLayer()->seqNum() << " " << layerTree.size() << " " << prmin << " " << prmax << std::endl;
+      // std::cout << ip << ": " << theLayers[il].detLayer()->seqNum() << " " << foundNodes.size() << " " << prmin << " " << prmax << std::endl;
 
 
       // int kk=0;
-      for (auto const & ih : layerTree) {
+      for (auto KDdata : foundNodes) {
 	
 	if (theMaxElement!=0 && result.size() >= theMaxElement){
 	  result.clear();
@@ -243,7 +269,6 @@ void PixelTripletHLTGenerator::hitTriplets(const TrackingRegion& region,
 	  return;
 	}
 	
-	auto KDdata = ih.data;
 	float p3_u = hits.u[KDdata]; 
 	float p3_v =  hits.v[KDdata]; 
 	float p3_phi =  hits.lphi[KDdata]; 

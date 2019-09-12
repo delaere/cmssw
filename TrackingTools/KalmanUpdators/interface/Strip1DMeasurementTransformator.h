@@ -6,8 +6,6 @@
  *  and errors in the measurement frame. The RecHits are treated as
  *  1-dimensional, the second coordinate is ignored. Ported from ORCA.
  *
- *  $Date: 2010/12/14 15:55:58 $
- *  $Revision: 1.5 $
  *  \author todorov, cerati
  */
 

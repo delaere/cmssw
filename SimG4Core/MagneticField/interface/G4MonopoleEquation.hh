@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MonopoleEquation.hh,v 1.1 2010/07/29 22:46:28 sunanda Exp $
-// GEANT4 tag $Name: V01-05-07 $
+// GEANT4 tag $Name:  $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

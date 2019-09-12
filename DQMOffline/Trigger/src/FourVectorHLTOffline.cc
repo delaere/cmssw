@@ -1,4 +1,3 @@
-// $Id: FourVectorHLTOffline.cc,v 1.106 2012/02/01 14:27:45 muzaffar Exp $
 // See header file for information. 
 #include "TMath.h"
 #include "DQMOffline/Trigger/interface/FourVectorHLTOffline.h"

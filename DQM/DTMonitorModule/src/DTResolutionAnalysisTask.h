@@ -10,8 +10,6 @@
  *  All histos are produce per Chamber
  *
  *
- *  $Date: 2012/02/17 16:05:19 $
- *  $Revision: 1.11 $
  *  \author G. Cerminara - INFN Torino
  */
 
@@ -19,6 +17,8 @@
 #include "DataFormats/MuonDetId/interface/DTSuperLayerId.h"
 #include <FWCore/Framework/interface/EDAnalyzer.h>
 #include "FWCore/Framework/interface/ESHandle.h"
+
+#include "DataFormats/DTRecHit/interface/DTRecSegment4DCollection.h"
 
 
 #include <string>
@@ -48,15 +48,15 @@ public:
 
   // Operations
   void analyze(const edm::Event& event, const edm::EventSetup& setup);
-  
- 
+
+
 protected:
 
 private:
   DQMStore* theDbe;
 
   edm::ESHandle<DTGeometry> dtGeom;
-  
+
   int prescaleFactor;
   int resetCycle;
 
@@ -64,11 +64,11 @@ private:
   u_int32_t theZHitsCut;
 
   // Lable of 4D segments in the event
-  std::string theRecHits4DLabel;
-  
+  edm::EDGetTokenT<DTRecSegment4DCollection> recHits4DToken_;
+
   // Book a set of histograms for a give chamber
   void bookHistos(DTSuperLayerId slId);
-  // Fill a set of histograms for a give chamber 
+  // Fill a set of histograms for a give chamber
   void fillHistos(DTSuperLayerId slId,
 		  float distExtr,
 		  float residual);
@@ -81,3 +81,8 @@ private:
 };
 #endif
 
+
+/* Local Variables: */
+/* show-trailing-whitespace: t */
+/* truncate-lines: t */
+/* End: */

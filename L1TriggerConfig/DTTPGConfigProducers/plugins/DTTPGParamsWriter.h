@@ -3,8 +3,6 @@
 
 /* Program to write DT TPG pedestals correction into DB
  
- *  $Date: 2010/11/12 11:04:40 $
- *  $Revision: 1.1 $
  *  \author C. Battilana - CIEMAT
  */
 

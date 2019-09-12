@@ -9,6 +9,9 @@
 
 #include "HLTrigger/HLTcore/interface/HLTFilter.h"
 
+#include "DataFormats/JetReco/interface/CaloJetCollection.h"
+#include "DataFormats/JetReco/interface/PFJetCollection.h"
+
 namespace edm {
    class ConfigurationDescriptions;
 }
@@ -24,9 +27,10 @@ class HLTJetCollectionsVBFFilter : public HLTFilter {
       explicit HLTJetCollectionsVBFFilter(const edm::ParameterSet&);
       ~HLTJetCollectionsVBFFilter();
       static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
-      virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct);
+      virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct) const override;
 
    private:
+      edm::EDGetTokenT<std::vector<edm::RefVector<std::vector<T>,T,edm::refhelper::FindUsingAdvance<std::vector<T>,T>>> > m_theJetToken;
       edm::InputTag inputTag_; // input tag identifying jet collections
       edm::InputTag originalTag_; // input tag original jet collection
       double softJetPt_;

@@ -15,7 +15,6 @@
 //
 // Original Author:  Freya Blekman
 //         Created:  Fri Sep  7 15:46:34 CEST 2007
-// $Id: PixelSLinkDataInputSource.h,v 1.10 2012/11/19 20:22:07 wmtan Exp $
 //
 //
 
@@ -60,7 +59,7 @@ private:
   uint32_t m_currenttriggernumber;
   uint32_t m_globaleventnumber;
   int32_t m_eventnumber_shift;
-  int getEventNumberFromFillWords(std::vector<uint64_t> data, uint32_t &totword);
+  int getEventNumberFromFillWords(const std::vector<uint64_t>& data, uint32_t &totword);
   std::auto_ptr<FEDRawDataCollection> buffers;
 };
 #endif

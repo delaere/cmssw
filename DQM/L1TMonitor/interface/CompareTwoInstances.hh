@@ -17,12 +17,8 @@
 //
 // Original Author:  Peter Wittich
 //         Created:  Mon Jan  8 21:11:04 CET 2007
-// $Id: CompareTwoInstances.hh,v 1.1 2007/02/20 22:49:54 wittich Exp $
-// $Log: CompareTwoInstances.hh,v $
-// Revision 1.1  2007/02/20 22:49:54  wittich
-// - templated class to facilitate comparison between data and emulation.
-//   see file for caveats.
-//
+// $Id$
+// $Log$
 //
 
 
@@ -109,8 +105,8 @@ public:
 // relevant guy.
 //    using namespace edm;
 //    Handle<L1GctEmCandCollection> p1, p2;
-//    iEvent.getByLabel(Coll1_,p1);
-//    iEvent.getByLabel(Coll2_,p2);
+//    iEvent.getByToken(Coll1Token_,p1);
+//    iEvent.getByToken(Coll2Token_,p2);
    
 //    a_(p1,p2);
 //

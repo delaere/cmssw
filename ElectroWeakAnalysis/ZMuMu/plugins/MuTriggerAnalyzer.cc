@@ -51,9 +51,9 @@ public:
   MuTriggerAnalyzer(const edm::ParameterSet& pset );
 
 private:
-  virtual void analyze(const edm::Event& event, const edm::EventSetup& setup);
-  virtual void endJob();
-  bool IsMuMatchedToHLTMu ( const reco::Muon & , std::vector<reco::Particle> ,double ,double );
+  virtual void analyze(const edm::Event& event, const edm::EventSetup& setup) override;
+  virtual void endJob() override;
+  bool IsMuMatchedToHLTMu ( const reco::Muon & , std::vector<reco::Particle>& ,double ,double );
   
   edm::InputTag trigTag_;   
   edm::InputTag  trigEv_;
@@ -76,7 +76,7 @@ private:
 
 }; 
 
-bool MuTriggerAnalyzer::IsMuMatchedToHLTMu ( const reco::Muon & mu, std::vector<reco::Particle> HLTMu , double DR, double DPtRel ) {
+bool MuTriggerAnalyzer::IsMuMatchedToHLTMu ( const reco::Muon & mu, std::vector<reco::Particle>& HLTMu , double DR, double DPtRel ) {
   size_t dim =  HLTMu.size();
   size_t nPass=0;
   

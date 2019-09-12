@@ -13,7 +13,6 @@
  * in ORCA).
  * Porting from ORCA by S. Valuev (Slava.Valuev@cern.ch), May 2006.
  *
- * $Id: CSCAnodeLCTProcessor.h,v 1.23 2012/12/05 21:14:22 khotilov Exp $
  *
  */
 

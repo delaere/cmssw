@@ -13,7 +13,6 @@
 //
 // Original Author:  Jeremiah Mans
 //         Created:  Fri Sep 15 11:49:44 CDT 2006
-// $Id: HcalTPGCoderULUT.cc,v 1.12 2012/11/12 20:44:36 dlange Exp $
 //
 //
 

@@ -1,5 +1,4 @@
 //
-// $Id: EcalTrivialObjectAnalyzer.cc,v 1.25 2012/05/18 13:20:49 fay Exp $
 // Created: 2 Mar 2006
 //          Shahram Rahatlou, University of Rome & INFN
 //

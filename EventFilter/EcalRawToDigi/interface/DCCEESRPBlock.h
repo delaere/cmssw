@@ -9,8 +9,6 @@
  *
  * \file DCCEESRPBlock.h
  *
- * $Date: 2008/12/11 18:05:56 $
- * $Revision: 1.1 $
  *
  * \author N. Almeida
  *

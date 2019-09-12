@@ -67,7 +67,7 @@ echo ""
 
 
 #retrieve
-rfmkdir -p .oO[logdir]Oo.
+rfmkdir -p .oO[logdir]Oo. >&! /dev/null
 gzip -f LOGFILE_*_.oO[name]Oo..log
 find .oO[workdir]Oo. -maxdepth 1 -name "LOGFILE*.oO[alignmentName]Oo.*" -print | xargs -I {} bash -c "rfcp {} .oO[logdir]Oo."
 
@@ -110,7 +110,8 @@ export SCRAM_ARCH=.oO[SCRAM_ARCH]Oo.
 eval `scramv1 ru -sh`
 #rfmkdir -p ${LSFWORKDIR}
 
-rfmkdir -p .oO[datadir]Oo.
+# make rfmkdir silent in case directory already exists
+rfmkdir -p .oO[datadir]Oo. >&! /dev/null
 cmsMkdir /store/caf/user/$USER/.oO[eosdir]Oo.
 
 #remove possible result file from previous runs
@@ -139,7 +140,7 @@ echo ""
 
 
 #retrieve
-rfmkdir -p .oO[logdir]Oo.
+rfmkdir -p .oO[logdir]Oo. >&! /dev/null
 gzip LOGFILE_*_.oO[name]Oo..log
 find ${LSFWORKDIR} -maxdepth 1 -name "LOGFILE*.oO[alignmentName]Oo.*" -print | xargs -I {} bash -c "rfcp {} .oO[logdir]Oo."
 
@@ -181,19 +182,23 @@ else
 fi
 echo "Working directory: $(pwd -P)"
 
-root_files=$(cmsLs -l /store/caf/user/$USER/.oO[eosdir]Oo. | awk '{print $5}' | grep ".root$" | grep -v "result.root$")
-# echo $root_files
+###############################################################################
+# download root files from eos
+root_files=$(cmsLs -l /store/caf/user/$USER/.oO[eosdir]Oo. | awk '{print $5}' \
+             | grep ".root$" | grep -v "result.root$")
 for file in ${root_files}
 do
     cmsStage -f ${file} .
     # echo ${file}
 done
 
+
 #run
 .oO[DownloadData]Oo.
 .oO[CompareAlignments]Oo.
 
 .oO[RunExtendedOfflineValidation]Oo.
+.oO[RunTrackSplitPlot]Oo.
 
 for file in $(ls -d --color=never *_result.root)
 do
@@ -239,11 +244,11 @@ rfmkdir -p .oO[datadir]Oo./ExtendedOfflineValidation_Images
 
 if [[ $HOSTNAME = lxplus[0-9]*\.cern\.ch ]] # check for interactive mode
 then
-    image_files=$(ls --color=never .oO[workdir]Oo./ExtendedOfflineValidation_Images/*ps)
+    image_files=$(ls --color=never | find .oO[workdir]Oo./ExtendedOfflineValidation_Images/ -name \*ps -o -name \*root)
     echo ${image_files}
     ls .oO[workdir]Oo./ExtendedOfflineValidation_Images
 else
-    image_files=$(ls --color=never ExtendedOfflineValidation_Images/*ps)
+    image_files=$(ls --color=never | find ExtendedOfflineValidation_Images/ -name \*ps -o -name \*root)
     echo ${image_files}
     ls ExtendedOfflineValidation_Images
 fi
@@ -272,6 +277,7 @@ void TkAlExtendedOfflineValidation()
   p.setTreeBaseDir(".oO[OfflineTreeBaseDir]Oo.");
   p.plotDMR(".oO[DMRMethod]Oo.",.oO[DMRMinimum]Oo.,".oO[DMROptions]Oo.");
   p.plotSurfaceShapes(".oO[SurfaceShapes]Oo.");
+  p.plotChi2(".oO[resultPlotFile]Oo._result.root");
 }
 """
 

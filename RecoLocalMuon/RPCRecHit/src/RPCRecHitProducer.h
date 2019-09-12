@@ -4,8 +4,6 @@
 /** \class RPCRecHitProducer
  *  Module for RPCRecHit production. 
  *  
- *  $Date: 2013/02/25 18:49:16 $
- *  $Revision: 1.7 $
  *  \author M. Maggim -- INFN Bari
  */
 
@@ -26,6 +24,8 @@
 #include "CondFormats/DataRecord/interface/RPCMaskedStripsRcd.h"
 #include "CondFormats/RPCObjects/interface/RPCDeadStrips.h"
 #include "CondFormats/DataRecord/interface/RPCDeadStripsRcd.h"
+#include "DataFormats/RPCDigi/interface/RPCDigiCollection.h"
+
 
 #include "RPCRollMask.h"
 
@@ -56,7 +56,8 @@ public:
 private:
 
   // The label to be used to retrieve RPC digis from the event
-  edm::InputTag theRPCDigiLabel;
+  edm::EDGetTokenT<RPCDigiCollection> theRPCDigiLabel;
+  //  edm::InputTag theRPCDigiLabel;
 
   // The reconstruction algorithm
   RPCRecHitBaseAlgo *theAlgo;

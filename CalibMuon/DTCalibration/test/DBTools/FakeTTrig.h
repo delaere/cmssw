@@ -8,14 +8,12 @@
  *    --- time of wire propagation
  *    --- time of fly
  *
- *  $Date: 2010/02/15 16:45:47 $
- *  $Revision: 1.5 $
  *  \author Giorgia Mila - INFN Torino
  */
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
-#include <FWCore/Framework/interface/ESHandle.h>
+#include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 namespace CLHEP {

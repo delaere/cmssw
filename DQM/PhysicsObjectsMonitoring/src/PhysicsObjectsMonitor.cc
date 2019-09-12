@@ -1,8 +1,6 @@
 /** \class PhysicsObjectsMonitor
  *  Analyzer of the StandAlone muon tracks
  *
- *  $Date: 2009/12/14 22:22:12 $
- *  $Revision: 1.9 $
  *  \author M. Mulders - CERN <martijn.mulders@cern.ch>
  *  Based on STAMuonAnalyzer by R. Bellan - INFN Torino <riccardo.bellan@cern.ch>
  */
@@ -51,7 +49,8 @@ PhysicsObjectsMonitor::PhysicsObjectsMonitor(const ParameterSet& pset){
   dbe = edm::Service<DQMStore>().operator->();
   
 
-
+  //set Token(-s)
+  theSTAMuonToken_ = consumes<reco::TrackCollection>(pset.getUntrackedParameter<string>("StandAloneTrackCollectionLabel"));
 
 }
 
@@ -110,7 +109,7 @@ void PhysicsObjectsMonitor::analyze(const Event & event, const EventSetup& event
   
   // Get the RecTrack collection from the event
   Handle<reco::TrackCollection> staTracks;
-  event.getByLabel(theSTAMuonLabel, staTracks);
+  event.getByToken(theSTAMuonToken_, staTracks);
 
   ESHandle<MagneticField> theMGField;
   eventSetup.get<IdealMagneticFieldRecord>().get(theMGField);
@@ -122,7 +121,6 @@ void PhysicsObjectsMonitor::analyze(const Event & event, const EventSetup& event
   // Get the SimTrack collection from the event
   //  if(theDataType == "SimData"){
   //  Handle<SimTrackContainer> simTracks;
-  //  event.getByLabel("g4SimHits",simTracks);
     
   //  numberOfRecTracks += staTracks->size();
 

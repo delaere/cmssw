@@ -1,4 +1,3 @@
-// $Id: OverlapChecker.cc,v 1.3 2007/09/27 13:51:55 llista Exp $
 #include "DataFormats/Candidate/interface/OverlapChecker.h"  
 #include "DataFormats/Candidate/interface/Candidate.h"
 using namespace reco;

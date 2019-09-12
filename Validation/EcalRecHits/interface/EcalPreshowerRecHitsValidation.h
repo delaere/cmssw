@@ -4,7 +4,6 @@
 /*
  * \file EcalPreshowerRecHitsValidation.h
  *
- * $Date: 2009/12/14 22:24:41 $
  * \author C. Rovelli
  *
  */
@@ -59,9 +58,9 @@ class EcalPreshowerRecHitsValidation: public edm::EDAnalyzer{
   
   DQMStore* dbe_;
 
-  edm::InputTag EEuncalibrechitCollection_;
-  edm::InputTag EErechitCollection_;
-  edm::InputTag ESrechitCollection_;
+  edm::EDGetTokenT<EEUncalibratedRecHitCollection> EEuncalibrechitCollection_token_;
+  edm::EDGetTokenT<EERecHitCollection> EErechitCollection_token_;
+  edm::EDGetTokenT<ESRecHitCollection> ESrechitCollection_token_;
   
   MonitorElement* meESRecHitsEnergy_;    
   MonitorElement* meESRecHitsEnergy_zp1st_;

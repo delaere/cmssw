@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Wed Jan 23 10:37:22 EST 2008
-// $Id: FWModelExpressionSelector.cc,v 1.14 2013/04/05 05:24:58 amraktad Exp $
 //
 
 // system include files

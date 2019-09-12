@@ -16,8 +16,6 @@
  *  idToDetUnit(), are useful when it is necessary to deal with the 
  *  extended interface of GeomDetUnit. 
  *
- *  $Date: 2007/06/05 08:38:46 $
- *  $Revision: 1.4 $
  */
 
 #include "DataFormats/DetId/interface/DetId.h"

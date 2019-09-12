@@ -13,8 +13,6 @@
 
 /** \class CSCAFEBConnectAnalysis
   *  
-  * $Date: 2006/08/02 20:17:49 $
-  * $Revision: 1.1 $
   * \author 
   */
 class CSCAFEBConnectAnalysis {

@@ -3,8 +3,6 @@
 
 /** \class HcalFlexiHardcodeGeometryLoader
  *
- * $Date: 2012/03/22 10:46:31 $
- * $Revision: 1.3 $
  * \author F.Ratnikov, UMd
 */
 

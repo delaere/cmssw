@@ -1,6 +1,5 @@
 //emacs settings:-*- mode: c++; c-basic-offset: 2; indent-tabs-mode: nil -*-
 /*
- * $Id: EcalDumpRaw.cc,v 1.11 2012/09/11 20:47:03 wdd Exp $
  *
  * Author: Ph Gras. CEA/IRFU - Saclay
  *

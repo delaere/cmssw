@@ -1,4 +1,3 @@
-// $Id: FFTGenJetCollection.h,v 1.1 2010/11/22 23:27:55 igv Exp $
 
 #ifndef DataFormats_JetReco_FFTGenJetCollection_h
 #define DataFormats_JetReco_FFTGenJetCollection_h

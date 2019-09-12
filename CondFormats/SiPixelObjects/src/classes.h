@@ -1,5 +1,5 @@
 #include "CondFormats/SiPixelObjects/interface/PixelROC.h"
-
+#include "CondFormats/SiPixelObjects/interface/SiPixelDbItem.h"
 #include "CondFormats/SiPixelObjects/interface/SiPixelFedCablingMap.h"
 #include "CondFormats/SiPixelObjects/interface/SiPixelCPEGenericErrorParm.h"
 #include "CondFormats/SiPixelObjects/interface/SiPixelPedestals.h"
@@ -16,7 +16,7 @@ template class PixelDCSObject<bool>;
 template class PixelDCSObject<float>;
 template class PixelDCSObject<CaenChannel>;
 
-namespace {
+namespace CondFormats_SiPixelObjects {
   struct dictionary {
     std::map<SiPixelFedCablingMap::Key, sipixelobjects::PixelROC> theMap; 
     std::pair<const SiPixelFedCablingMap::Key, sipixelobjects::PixelROC> theMapValueT; 
@@ -39,6 +39,7 @@ namespace {
  
     std::vector<SiPixelQuality::disabledModuleType>::iterator p9;
     std::vector<SiPixelQuality::disabledModuleType>::const_iterator p10;
+    std::vector<SiPixelDbItem> p11;
   };
 }
 

@@ -5,10 +5,9 @@
 // 
 
 //
-// Jordi Duarte Campderros (based on the Jason Slaunwhite 
+// Jordi Duarte Campderros (based on the Jason Slaunwhite
 // and Jeff Klukas coded from the HLTriggerOffline/Muon package
 //
-// $Id: HLTHiggsValidator.cc,v 1.7 2012/03/23 11:50:56 duarte Exp $
 //
 //
 
@@ -29,6 +28,14 @@ HLTHiggsValidator::HLTHiggsValidator(const edm::ParameterSet& pset) :
 	_dbe(0)
 {
 	_collections = new EVTColContainer;
+
+	//pass consumes list to the helper classes
+	for(size_t i = 0; i < _analysisnames.size() ; ++i)
+	  {
+	    HLTHiggsSubAnalysis analyzer(_pset, _analysisnames.at(i), consumesCollector());
+	    _analyzers.push_back(analyzer);
+	  }
+
 }
 
 HLTHiggsValidator::~HLTHiggsValidator()
@@ -40,14 +47,8 @@ HLTHiggsValidator::~HLTHiggsValidator()
 	}
 }
 
-
 void HLTHiggsValidator::beginRun(const edm::Run & iRun, const edm::EventSetup & iSetup) 
 {
-	for(size_t i = 0; i < _analysisnames.size() ; ++i)
-	{
-		HLTHiggsSubAnalysis analyzer(_pset, _analysisnames.at(i));
-		_analyzers.push_back(analyzer);
-	}
 	// Call the Plotter beginRun (which stores the triggers paths..:)
       	for(std::vector<HLTHiggsSubAnalysis>::iterator iter = _analyzers.begin(); 
 			iter != _analyzers.end(); ++iter) 

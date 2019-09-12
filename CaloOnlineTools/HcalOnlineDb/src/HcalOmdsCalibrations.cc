@@ -2,7 +2,6 @@
 //
 // Original Author:  Gena Kukartsev Mar 11, 2009
 // Adapted from HcalAsciiCalibrations
-// $Id: HcalOmdsCalibrations.cc,v 1.14 2012/11/12 20:49:45 dlange Exp $
 //
 
 #include <memory>

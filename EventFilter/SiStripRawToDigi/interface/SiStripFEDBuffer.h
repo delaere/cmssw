@@ -9,6 +9,8 @@
 #include <cstring>
 #include "EventFilter/SiStripRawToDigi/interface/SiStripFEDBufferComponents.h"
 
+#include "FWCore/Utilities/interface/GCC11Compatibility.h"
+
 namespace sistrip {
 
   //
@@ -16,7 +18,7 @@ namespace sistrip {
   //
 
   //class representing standard (non-spy channel) FED buffers
-  class FEDBuffer : public FEDBufferBase
+  class FEDBuffer final : public FEDBufferBase
     {
     public:
       //construct from buffer
@@ -37,7 +39,7 @@ namespace sistrip {
 
       //functions to check buffer. All return true if there is no problem.
       //minimum checks to do before using buffer
-      virtual bool doChecks() const;
+      virtual bool doChecks(bool doCRC=true) const;
   
       //additional checks to check for corrupt buffers
       //check channel lengths fit inside to buffer length
@@ -83,21 +85,24 @@ namespace sistrip {
     public:
       static FEDZSChannelUnpacker zeroSuppressedModeUnpacker(const FEDChannel& channel);
       static FEDZSChannelUnpacker zeroSuppressedLiteModeUnpacker(const FEDChannel& channel);
+      static FEDZSChannelUnpacker preMixRawModeUnpacker(const FEDChannel& channel);
       FEDZSChannelUnpacker();
       uint8_t sampleNumber() const;
       uint8_t adc() const;
+      uint16_t adcPreMix() const;
       bool hasData() const;
       FEDZSChannelUnpacker& operator ++ ();
       FEDZSChannelUnpacker& operator ++ (int);
     private:
-      //pointer to begining of FED or FE data, offset of start of channel payload in data and length of channel payload
-      FEDZSChannelUnpacker(const uint8_t* payload, const size_t channelPayloadOffset, const int16_t channelPayloadLength);
+      //pointer to beginning of FED or FE data, offset of start of channel payload in data and length of channel payload
+      FEDZSChannelUnpacker(const uint8_t* payload, const size_t channelPayloadOffset, const int16_t channelPayloadLength, const size_t offsetIncrement=1);
       void readNewClusterInfo();
       static void throwBadChannelLength(const uint16_t length);
       void throwBadClusterLength();
       static void throwUnorderedData(const uint8_t currentStrip, const uint8_t firstStripOfNewCluster);
       const uint8_t* data_;
       size_t currentOffset_;
+      size_t offsetIncrement_;
       uint8_t currentStrip_;
       uint8_t valuesLeftInCluster_;
       uint16_t channelPayloadOffset_;
@@ -204,14 +209,16 @@ namespace sistrip {
   
   inline FEDZSChannelUnpacker::FEDZSChannelUnpacker()
     : data_(NULL),
+      offsetIncrement_(1),
       valuesLeftInCluster_(0),
       channelPayloadOffset_(0),
       channelPayloadLength_(0)
     { }
 
-  inline FEDZSChannelUnpacker::FEDZSChannelUnpacker(const uint8_t* payload, const size_t channelPayloadOffset, const int16_t channelPayloadLength)
+  inline FEDZSChannelUnpacker::FEDZSChannelUnpacker(const uint8_t* payload, const size_t channelPayloadOffset, const int16_t channelPayloadLength, const size_t offsetIncrement)
     : data_(payload),
       currentOffset_(channelPayloadOffset),
+      offsetIncrement_(offsetIncrement),
       currentStrip_(0),
       valuesLeftInCluster_(0),
       channelPayloadOffset_(channelPayloadOffset),
@@ -236,6 +243,15 @@ namespace sistrip {
       return result;
     }
   
+  inline FEDZSChannelUnpacker FEDZSChannelUnpacker::preMixRawModeUnpacker(const FEDChannel& channel)
+    {
+      //CAMM - to modify more ?
+      uint16_t length = channel.length();
+      if (length & 0xF000) throwBadChannelLength(length);
+      FEDZSChannelUnpacker result(channel.data(),channel.offset()+7,length-7,2);
+      return result;
+    }
+  
   inline uint8_t FEDZSChannelUnpacker::sampleNumber() const
     {
       return currentStrip_;
@@ -244,6 +260,11 @@ namespace sistrip {
   inline uint8_t FEDZSChannelUnpacker::adc() const
     {
       return data_[currentOffset_^7];
+    }
+  
+  inline uint16_t FEDZSChannelUnpacker::adcPreMix() const
+    {
+      return ( data_[currentOffset_^7] + ((data_[(currentOffset_+1)^7]&0x03)<<8) );
     }
   
   inline bool FEDZSChannelUnpacker::hasData() const
@@ -255,10 +276,10 @@ namespace sistrip {
     {
       if (valuesLeftInCluster_) {
 	currentStrip_++;
-	currentOffset_++;
+	currentOffset_ += offsetIncrement_;
         valuesLeftInCluster_--;
       } else {
-	currentOffset_++;
+	currentOffset_ += offsetIncrement_;
 	if (hasData()) {
           const uint8_t oldStrip = currentStrip_;
           readNewClusterInfo();

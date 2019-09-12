@@ -10,7 +10,6 @@
 #include "RecoEcal/EgammaCoreTools/interface/EcalClusterFunctionBaseClass.h"
 #include "RecoEcal/EgammaCoreTools/interface/EcalClusterTools.h"
 
-#include "DataFormats/ParticleFlowReco/interface/GsfPFRecTrackFwd.h"
 #include "DataFormats/ParticleFlowReco/interface/GsfPFRecTrack.h"
 #include "DataFormats/EgammaReco/interface/BasicCluster.h"
 #include "DataFormats/EgammaReco/interface/ElectronSeed.h"
@@ -70,7 +69,9 @@ struct GsfElectronAlgo::GeneralData
      const IsolationConfiguration &,
      const EcalRecHitsConfiguration &,
      EcalClusterFunctionBaseClass * superClusterErrorFunction,
-     EcalClusterFunctionBaseClass * crackCorrectionFunction ) ;
+     EcalClusterFunctionBaseClass * crackCorrectionFunction,
+     const SoftElectronMVAEstimator::Configuration & mvaCfg ,
+     const RegressionHelper::Configuration &) ;
   ~GeneralData() ;
 
   // configurables
@@ -85,6 +86,9 @@ struct GsfElectronAlgo::GeneralData
   ElectronHcalHelper * hcalHelper, * hcalHelperPflow ;
   EcalClusterFunctionBaseClass * superClusterErrorFunction ;
   EcalClusterFunctionBaseClass * crackCorrectionFunction ;
+  SoftElectronMVAEstimator *sElectronMVAEstimator;
+  const RegressionHelper::Configuration regCfg;
+  RegressionHelper * regHelper;
  } ;
 
  GsfElectronAlgo::GeneralData::GeneralData
@@ -97,8 +101,10 @@ struct GsfElectronAlgo::GeneralData
    const IsolationConfiguration & isoConfig,
    const EcalRecHitsConfiguration & recHitsConfig,
    EcalClusterFunctionBaseClass * superClusterErrorFunc,
-   EcalClusterFunctionBaseClass * crackCorrectionFunc
- )
+   EcalClusterFunctionBaseClass * crackCorrectionFunc,
+   const SoftElectronMVAEstimator::Configuration & mvaConfig,
+   const RegressionHelper::Configuration & regConfig
+   )
  : inputCfg(inputConfig),
    strategyCfg(strategyConfig),
    cutsCfg(cutsConfig),
@@ -108,13 +114,18 @@ struct GsfElectronAlgo::GeneralData
    hcalHelper(new ElectronHcalHelper(hcalConfig)),
    hcalHelperPflow(new ElectronHcalHelper(hcalConfigPflow)),
    superClusterErrorFunction(superClusterErrorFunc),
-   crackCorrectionFunction(crackCorrectionFunc)
- {}
+   crackCorrectionFunction(crackCorrectionFunc),
+   sElectronMVAEstimator(new SoftElectronMVAEstimator(mvaConfig)),
+   regCfg(regConfig),
+   regHelper(new RegressionHelper(regConfig))
+  {}
 
 GsfElectronAlgo::GeneralData::~GeneralData()
  {
   delete hcalHelper ;
   delete hcalHelperPflow ;
+  delete sElectronMVAEstimator;
+  delete regHelper;
  }
 
 //===================================================================
@@ -191,6 +202,7 @@ struct GsfElectronAlgo::EventData
   bool originalGsfTrackCollectionRetreived ;
   edm::Handle<reco::TrackCollection> originalCtfTracks ;
   edm::Handle<reco::GsfTrackCollection> originalGsfTracks ;
+  edm::Handle<reco::VertexCollection> vertices;
 
   // isolation helpers
   ElectronTkIsolation * tkIsolation03, * tkIsolation04 ;
@@ -529,7 +541,6 @@ void GsfElectronAlgo::calculateShowerShape( const reco::SuperClusterRef & theClu
   const EcalRecHitCollection * recHits = 0 ;
   std::vector<int> recHitFlagsToBeExcluded ;
   std::vector<int> recHitSeverityToBeExcluded ;
-  const EcalSeverityLevelAlgo * severityLevelAlgo = eventSetupData_->sevLevel.product() ;
   if (detector==EcalBarrel)
    {
     recHits = eventData_->barrelRecHits.product() ;
@@ -543,15 +554,15 @@ void GsfElectronAlgo::calculateShowerShape( const reco::SuperClusterRef & theClu
     recHitSeverityToBeExcluded = generalData_->recHitsCfg.recHitSeverityToBeExcludedEndcaps ;
    }
 
-  std::vector<float> covariances = EcalClusterTools::covariances(seedCluster,recHits,topology,geometry,recHitFlagsToBeExcluded,recHitSeverityToBeExcluded,severityLevelAlgo) ;
-  std::vector<float> localCovariances = EcalClusterTools::localCovariances(seedCluster,recHits,topology,recHitFlagsToBeExcluded,recHitSeverityToBeExcluded,severityLevelAlgo) ;
+  std::vector<float> covariances = EcalClusterTools::covariances(seedCluster,recHits,topology,geometry) ;
+  std::vector<float> localCovariances = EcalClusterTools::localCovariances(seedCluster,recHits,topology) ;
   showerShape.sigmaEtaEta = sqrt(covariances[0]) ;
   showerShape.sigmaIetaIeta = sqrt(localCovariances[0]) ;
   if (!edm::isNotFinite(localCovariances[2])) showerShape.sigmaIphiIphi = sqrt(localCovariances[2]) ;
-  showerShape.e1x5 = EcalClusterTools::e1x5(seedCluster,recHits,topology,recHitFlagsToBeExcluded,recHitSeverityToBeExcluded,severityLevelAlgo)  ;
-  showerShape.e2x5Max = EcalClusterTools::e2x5Max(seedCluster,recHits,topology,recHitFlagsToBeExcluded,recHitSeverityToBeExcluded,severityLevelAlgo)  ;
-  showerShape.e5x5 = EcalClusterTools::e5x5(seedCluster,recHits,topology,recHitFlagsToBeExcluded,recHitSeverityToBeExcluded,severityLevelAlgo) ;
-  showerShape.r9 = EcalClusterTools::e3x3(seedCluster,recHits,topology,recHitFlagsToBeExcluded,recHitSeverityToBeExcluded,severityLevelAlgo)/theClus->rawEnergy() ;
+  showerShape.e1x5 = EcalClusterTools::e1x5(seedCluster,recHits,topology)  ;
+  showerShape.e2x5Max = EcalClusterTools::e2x5Max(seedCluster,recHits,topology)  ;
+  showerShape.e5x5 = EcalClusterTools::e5x5(seedCluster,recHits,topology) ;
+  showerShape.r9 = EcalClusterTools::e3x3(seedCluster,recHits,topology)/theClus->rawEnergy() ;
 
   if (pflow)
    {
@@ -586,9 +597,11 @@ GsfElectronAlgo::GsfElectronAlgo
    const IsolationConfiguration & isoCfg,
    const EcalRecHitsConfiguration & recHitsCfg,
    EcalClusterFunctionBaseClass * superClusterErrorFunction,
-   EcalClusterFunctionBaseClass * crackCorrectionFunction
+   EcalClusterFunctionBaseClass * crackCorrectionFunction,
+   const SoftElectronMVAEstimator::Configuration & mvaCfg,
+   const RegressionHelper::Configuration & regCfg
  )
- : generalData_(new GeneralData(inputCfg,strategyCfg,cutsCfg,cutsCfgPflow,hcalCfg,hcalCfgPflow,isoCfg,recHitsCfg,superClusterErrorFunction,crackCorrectionFunction)),
+   : generalData_(new GeneralData(inputCfg,strategyCfg,cutsCfg,cutsCfgPflow,hcalCfg,hcalCfgPflow,isoCfg,recHitsCfg,superClusterErrorFunction,crackCorrectionFunction,mvaCfg,regCfg)),
    eventSetupData_(new EventSetupData),
    eventData_(0), electronData_(0)
  {}
@@ -637,6 +650,9 @@ void GsfElectronAlgo::checkSetup( const edm::EventSetup & es )
 
   generalData_->hcalHelper->checkSetup(es) ;
   generalData_->hcalHelperPflow->checkSetup(es) ;
+  if(generalData_->strategyCfg.useEcalRegression || generalData_->strategyCfg.useCombinationRegression)
+    generalData_->regHelper->checkSetup(es);
+
 
   if (generalData_->superClusterErrorFunction)
    { generalData_->superClusterErrorFunction->init(es) ; }
@@ -653,6 +669,7 @@ void GsfElectronAlgo::checkSetup( const edm::EventSetup & es )
     es.get<EcalSeverityLevelAlgoRcd>().get(eventSetupData_->sevLevel);
   }
  }
+
 
 void GsfElectronAlgo::copyElectrons( GsfElectronCollection & outEle )
  {
@@ -672,21 +689,22 @@ void GsfElectronAlgo::beginEvent( edm::Event & event )
 
   // init the handles linked to the current event
   eventData_->event = &event ;
-  event.getByLabel(generalData_->inputCfg.previousGsfElectrons,eventData_->previousElectrons) ;
-  event.getByLabel(generalData_->inputCfg.pflowGsfElectronsTag,eventData_->pflowElectrons) ;
-  event.getByLabel(generalData_->inputCfg.gsfElectronCores,eventData_->coreElectrons) ;
-  event.getByLabel(generalData_->inputCfg.ctfTracks,eventData_->currentCtfTracks) ;
-  event.getByLabel(generalData_->inputCfg.barrelRecHitCollection,eventData_->barrelRecHits) ;
-  event.getByLabel(generalData_->inputCfg.endcapRecHitCollection,eventData_->endcapRecHits) ;
-  event.getByLabel(generalData_->inputCfg.hcalTowersTag,eventData_->towers) ;
-  event.getByLabel(generalData_->inputCfg.pfMVA,eventData_->pfMva) ;
-  event.getByLabel(generalData_->inputCfg.seedsTag,eventData_->seeds) ;
+  event.getByToken(generalData_->inputCfg.previousGsfElectrons,eventData_->previousElectrons) ;
+  event.getByToken(generalData_->inputCfg.pflowGsfElectronsTag,eventData_->pflowElectrons) ;
+  event.getByToken(generalData_->inputCfg.gsfElectronCores,eventData_->coreElectrons) ;
+  event.getByToken(generalData_->inputCfg.ctfTracks,eventData_->currentCtfTracks) ;
+  event.getByToken(generalData_->inputCfg.barrelRecHitCollection,eventData_->barrelRecHits) ;
+  event.getByToken(generalData_->inputCfg.endcapRecHitCollection,eventData_->endcapRecHits) ;
+  event.getByToken(generalData_->inputCfg.hcalTowersTag,eventData_->towers) ;
+  event.getByToken(generalData_->inputCfg.pfMVA,eventData_->pfMva) ;
+  event.getByToken(generalData_->inputCfg.seedsTag,eventData_->seeds) ;
+  event.getByToken(generalData_->inputCfg.vtxCollectionTag,eventData_->vertices);
   if (generalData_->strategyCfg.useGsfPfRecTracks)
-   { event.getByLabel(generalData_->inputCfg.gsfPfRecTracksTag,eventData_->gsfPfRecTracks) ; }
+   { event.getByToken(generalData_->inputCfg.gsfPfRecTracksTag,eventData_->gsfPfRecTracks) ; }
 
   // get the beamspot from the Event:
   edm::Handle<reco::BeamSpot> recoBeamSpotHandle ;
-  event.getByLabel(generalData_->inputCfg.beamSpotTag,recoBeamSpotHandle) ;
+  event.getByToken(generalData_->inputCfg.beamSpotTag,recoBeamSpotHandle) ;
   eventData_->beamspot = recoBeamSpotHandle.product() ;
 
   // prepare access to hcal data
@@ -741,9 +759,9 @@ void GsfElectronAlgo::beginEvent( edm::Event & event )
   //Fill in the Isolation Value Maps for PF and EcalDriven electrons
   std::vector<edm::InputTag> inputTagIsoVals;
   if(! generalData_->inputCfg.pfIsoVals.empty() ) {
-    inputTagIsoVals.push_back(generalData_->inputCfg.pfIsoVals.getParameter<edm::InputTag>("pfChargedHadrons"));
-    inputTagIsoVals.push_back(generalData_->inputCfg.pfIsoVals.getParameter<edm::InputTag>("pfPhotons"));
-    inputTagIsoVals.push_back(generalData_->inputCfg.pfIsoVals.getParameter<edm::InputTag>("pfNeutralHadrons"));
+    inputTagIsoVals.push_back(generalData_->inputCfg.pfIsoVals.getParameter<edm::InputTag>("pfSumChargedHadronPt"));
+    inputTagIsoVals.push_back(generalData_->inputCfg.pfIsoVals.getParameter<edm::InputTag>("pfSumPhotonEt"));
+    inputTagIsoVals.push_back(generalData_->inputCfg.pfIsoVals.getParameter<edm::InputTag>("pfSumNeutralHadronEt"));
 
     eventData_->pfIsolationValues.resize(inputTagIsoVals.size());
 
@@ -755,9 +773,9 @@ void GsfElectronAlgo::beginEvent( edm::Event & event )
 
   if(! generalData_->inputCfg.edIsoVals.empty() ) {
     inputTagIsoVals.clear();
-    inputTagIsoVals.push_back(generalData_->inputCfg.edIsoVals.getParameter<edm::InputTag>("edChargedHadrons"));
-    inputTagIsoVals.push_back(generalData_->inputCfg.edIsoVals.getParameter<edm::InputTag>("edPhotons"));
-    inputTagIsoVals.push_back(generalData_->inputCfg.edIsoVals.getParameter<edm::InputTag>("edNeutralHadrons"));
+    inputTagIsoVals.push_back(generalData_->inputCfg.edIsoVals.getParameter<edm::InputTag>("edSumChargedHadronPt"));
+    inputTagIsoVals.push_back(generalData_->inputCfg.edIsoVals.getParameter<edm::InputTag>("edSumPhotonEt"));
+    inputTagIsoVals.push_back(generalData_->inputCfg.edIsoVals.getParameter<edm::InputTag>("edSumNeutralHadronEt"));
 
     eventData_->edIsolationValues.resize(inputTagIsoVals.size());
 
@@ -904,9 +922,9 @@ void GsfElectronAlgo::addPflowInfo()
 	  reco::GsfElectronRef 
 		pfElectronRef(eventData_->pflowElectrons, pfIndex);
 	  reco::GsfElectron::PflowIsolationVariables isoVariables;
-	  isoVariables.chargedHadronIso=(*(eventData_->pfIsolationValues)[0])[pfElectronRef];
-	  isoVariables.photonIso       =(*(eventData_->pfIsolationValues)[1])[pfElectronRef];
-	  isoVariables.neutralHadronIso=(*(eventData_->pfIsolationValues)[2])[pfElectronRef];
+	  isoVariables.sumChargedHadronPt =(*(eventData_->pfIsolationValues)[0])[pfElectronRef];
+	  isoVariables.sumPhotonEt        =(*(eventData_->pfIsolationValues)[1])[pfElectronRef];
+	  isoVariables.sumNeutralHadronEt =(*(eventData_->pfIsolationValues)[2])[pfElectronRef];
 	  (*el)->setPfIsolationVariables(isoVariables);
         }
 
@@ -940,9 +958,9 @@ void GsfElectronAlgo::addPflowInfo()
 	  reco::GsfElectronRef 
 		edElectronRef(eventData_->previousElectrons, edIndex);
 	  reco::GsfElectron::PflowIsolationVariables isoVariables;
-	  isoVariables.chargedHadronIso=(*(eventData_->edIsolationValues)[0])[edElectronRef];
-	  isoVariables.photonIso       =(*(eventData_->edIsolationValues)[1])[edElectronRef];
-	  isoVariables.neutralHadronIso=(*(eventData_->edIsolationValues)[2])[edElectronRef];
+	  isoVariables.sumChargedHadronPt =(*(eventData_->edIsolationValues)[0])[edElectronRef];
+	  isoVariables.sumPhotonEt        =(*(eventData_->edIsolationValues)[1])[edElectronRef];
+	  isoVariables.sumNeutralHadronEt =(*(eventData_->edIsolationValues)[2])[edElectronRef];
 	  (*el)->setPfIsolationVariables(isoVariables);
         } 
 
@@ -955,17 +973,17 @@ void GsfElectronAlgo::addPflowInfo()
     setPflowPreselectionFlag(*el) ;
 
     // Shower Shape of pflow cluster
-    if (!((*el)->pflowSuperCluster().isNull()))
+    if (!((*el)->parentSuperCluster().isNull()))
      {
       reco::GsfElectron::ShowerShape pflowShowerShape ;
-      calculateShowerShape((*el)->pflowSuperCluster(),true,pflowShowerShape) ;
+      calculateShowerShape((*el)->parentSuperCluster(),true,pflowShowerShape) ;
       (*el)->setPfShowerShape(pflowShowerShape) ;
      }
     else if ((*el)->passingPflowPreselection())
      { edm::LogError("GsfElectronCoreProducer")<<"Preselected tracker driven GsfTrack with no associated pflow SuperCluster." ; }
 
     // PfBrem
-    SuperClusterRef sc = (*el)->pflowSuperCluster() ;
+    SuperClusterRef sc = (*el)->parentSuperCluster() ;
     if (!(sc.isNull()))
      {
 
@@ -983,7 +1001,28 @@ void GsfElectronAlgo::addPflowInfo()
  }
 
 bool GsfElectronAlgo::isPreselected( GsfElectron * ele )
- { return (ele->passingCutBasedPreselection()||ele->passingPflowPreselection()) ; }
+ {
+	float mvaValue=generalData_->sElectronMVAEstimator->mva( *(ele),*(eventData_->event));
+	bool passCutBased=ele->passingCutBasedPreselection();
+	bool passPF=ele->passingPflowPreselection();
+	if(generalData_->strategyCfg.gedElectronMode){
+		bool passmva=mvaValue>generalData_->strategyCfg.PreSelectMVA;
+		if(!ele->ecalDrivenSeed()){
+		  if(ele->pt() > generalData_->strategyCfg.MaxElePtForOnlyMVA) 
+		    return passmva && passCutBased;
+		  else
+		    return passmva;
+		}	
+		else{
+		  return passCutBased || passPF || passmva;
+		}
+	}
+	else{
+		return passCutBased || passPF;
+	}
+
+	return true; 
+ }
 
 void GsfElectronAlgo::removeNotPreselectedElectrons()
  {
@@ -999,6 +1038,7 @@ void GsfElectronAlgo::removeNotPreselectedElectrons()
    }
  }
 
+
 void GsfElectronAlgo::setCutBasedPreselectionFlag( GsfElectron * ele, const reco::BeamSpot & bs )
  {
   // default value
@@ -1007,9 +1047,11 @@ void GsfElectronAlgo::setCutBasedPreselectionFlag( GsfElectron * ele, const reco
   // kind of seeding
   bool eg = ele->core()->ecalDrivenSeed() ;
   bool pf = ele->core()->trackerDrivenSeed() && !ele->core()->ecalDrivenSeed() ;
+  bool gedMode = generalData_->strategyCfg.gedElectronMode;
   if (eg&&pf) { throw cms::Exception("GsfElectronAlgo|BothEcalAndPureTrackerDriven")<<"An electron cannot be both egamma and purely pflow" ; }
   if ((!eg)&&(!pf)) { throw cms::Exception("GsfElectronAlgo|NeitherEcalNorPureTrackerDriven")<<"An electron cannot be neither egamma nor purely pflow" ; }
-  const CutsConfiguration * cfg = (eg?&generalData_->cutsCfg:&generalData_->cutsCfgPflow) ;
+
+  const CutsConfiguration * cfg = ((eg||gedMode)?&generalData_->cutsCfg:&generalData_->cutsCfgPflow);
 
   // Et cut
   double etaValue = EleRelPoint(ele->superCluster()->position(),bs.position()).eta() ;
@@ -1114,6 +1156,40 @@ void GsfElectronAlgo::setPflowPreselectionFlag( GsfElectron * ele )
 //  if (ele->passingPflowPreselection())
 //   { LogTrace("GsfElectronAlgo") << "Mva criteria are satisfied" ; }
  }
+
+void GsfElectronAlgo::setMVAInputs(const std::map<reco::GsfTrackRef,reco::GsfElectron::MvaInput> & mvaInputs) 
+{
+  GsfElectronPtrCollection::iterator el ;
+  for
+    ( el = eventData_->electrons->begin() ;
+      el != eventData_->electrons->end() ;
+      el++ )
+    {
+      std::map<reco::GsfTrackRef,reco::GsfElectron::MvaInput>::const_iterator itcheck=mvaInputs.find((*el)->gsfTrack());
+      (*el)->setMvaInput(itcheck->second);
+    }
+}
+
+void GsfElectronAlgo::setMVAOutputs(const std::map<reco::GsfTrackRef,reco::GsfElectron::MvaOutput> & mvaOutputs)
+{
+  GsfElectronPtrCollection::iterator el ;
+  for
+    ( el = eventData_->electrons->begin() ;
+      el != eventData_->electrons->end() ;
+      el++ )
+    {
+	if(generalData_->strategyCfg.gedElectronMode==true){
+		float mvaValue=generalData_->sElectronMVAEstimator->mva( *(*el),*(eventData_->event));
+	        GsfElectron::MvaOutput mvaOutput ;
+	        mvaOutput.mva = mvaValue ;
+	        (*el)->setMvaOutput(mvaOutput);
+	}
+	else{
+		std::map<reco::GsfTrackRef,reco::GsfElectron::MvaOutput>::const_iterator itcheck=mvaOutputs.find((*el)->gsfTrack());
+                (*el)->setMvaOutput(itcheck->second);
+	}
+    }
+}
 
 void GsfElectronAlgo::createElectron()
  {
@@ -1281,6 +1357,7 @@ void GsfElectronAlgo::createElectron()
        tcMatching, tkExtra, ctfInfo,
        fiducialFlags,showerShape,
        conversionVars ) ;
+  // Will be overwritten later in the case of the regression
   ele->setCorrectedEcalEnergyError(generalData_->superClusterErrorFunction->getValue(*(ele->superCluster()),0)) ;
   ele->setP4(GsfElectron::P4_FROM_SUPER_CLUSTER,momentum,0,true) ;
 
@@ -1306,33 +1383,46 @@ void GsfElectronAlgo::createElectron()
   //====================================================
   // classification and corrections
   //====================================================
-
   // classification
   ElectronClassification theClassifier ;
   theClassifier.classify(*ele) ;
 
   // ecal energy
   ElectronEnergyCorrector theEnCorrector(generalData_->crackCorrectionFunction) ;
-  if (ele->core()->ecalDrivenSeed())
-   {
-    if (generalData_->strategyCfg.ecalDrivenEcalEnergyFromClassBasedParameterization)
-     { theEnCorrector.classBasedParameterizationEnergy(*ele,*eventData_->beamspot) ; }
-    if (generalData_->strategyCfg.ecalDrivenEcalErrorFromClassBasedParameterization)
-     { theEnCorrector.classBasedParameterizationUncertainty(*ele) ; }
-   }
-  else
-   {
-    if (generalData_->strategyCfg.pureTrackerDrivenEcalErrorFromSimpleParameterization)
-     { theEnCorrector.simpleParameterizationUncertainty(*ele) ; }
-   }
-
+  if (generalData_->strategyCfg.useEcalRegression) // new 
+    { 
+      generalData_->regHelper->applyEcalRegression(*ele,
+						   eventData_->vertices,
+						   eventData_->barrelRecHits,
+						   eventData_->endcapRecHits);
+    }
+  else  // original implementation
+    {
+      if (ele->core()->ecalDrivenSeed())
+	{
+	  if (generalData_->strategyCfg.ecalDrivenEcalEnergyFromClassBasedParameterization)
+	    { theEnCorrector.classBasedParameterizationEnergy(*ele,*eventData_->beamspot) ; }
+	  if (generalData_->strategyCfg.ecalDrivenEcalErrorFromClassBasedParameterization)
+	    { theEnCorrector.classBasedParameterizationUncertainty(*ele) ; }
+	}
+      else
+	{
+	  if (generalData_->strategyCfg.pureTrackerDrivenEcalErrorFromSimpleParameterization)
+	    { theEnCorrector.simpleParameterizationUncertainty(*ele) ; }
+	}
+    }
+  
   // momentum
+  // Keep the default correction running first. The track momentum error is computed in there
   if (ele->core()->ecalDrivenSeed())
-   {
-    ElectronMomentumCorrector theMomCorrector;
-    theMomCorrector.correct(*ele,electronData_->vtxTSOS);
-   }
-
+    {
+      ElectronMomentumCorrector theMomCorrector;
+      theMomCorrector.correct(*ele,electronData_->vtxTSOS);
+    }
+  if(generalData_->strategyCfg.useCombinationRegression)  // new 
+    {
+      generalData_->regHelper->applyCombinationRegression(*ele);
+    }
 
   //====================================================
   // now isolation variables

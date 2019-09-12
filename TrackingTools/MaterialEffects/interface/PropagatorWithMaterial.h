@@ -12,8 +12,6 @@
  *  only be included when propagating from a TrajectoryStateOnSurface.
  *  Ported from ORCA.
  *
- *  $Date: 2013/04/12 15:08:44 $
- *  $Revision: 1.17 $
  *  \author todorov, cerati
  */
 
@@ -22,8 +20,8 @@
 
 #include "TrackingTools/GeomPropagators/interface/Propagator.h"
 #include "TrackingTools/MaterialEffects/interface/MaterialEffectsUpdator.h"
-#include "MagneticField/Engine/interface/MagneticField.h"
 
+class MagneticField;
 class PropagatorWithMaterial GCC11_FINAL : public Propagator {
   
 public:

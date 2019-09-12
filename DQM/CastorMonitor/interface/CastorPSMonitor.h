@@ -17,7 +17,8 @@ public:
   ~CastorPSMonitor(); 
 
   void setup(const edm::ParameterSet& ps, DQMStore* dbe);
-  void processEvent(const CastorDigiCollection& castorDigis, const CastorDbService& conditions, std::vector<HcalGenericDetId> listEMap, int iBunch, float  PedSigmaInChannel[14][16]);
+  void beginRun(const edm::Run& iRun, const edm::EventSetup& iSetup);
+  void processEvent(const CastorDigiCollection& castorDigis, const CastorDbService& conditions, const std::vector<HcalGenericDetId>& listEMap, int iBunch, float  PedSigmaInChannel[14][16]);
   void reset();
 
 private:  

@@ -4,7 +4,6 @@
 //
 // Package:     Tracks
 // Class  :     estimate_field
-// $Id: estimate_field.h,v 1.4 2009/12/11 21:18:45 dmytro Exp $
 //
 namespace reco {
    class Track;

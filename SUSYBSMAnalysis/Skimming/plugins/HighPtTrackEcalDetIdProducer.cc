@@ -13,7 +13,6 @@
 //
 // Original Author:  Jie Chen
 //         Created:  Mon Apr 12 16:41:46 CDT 2010
-// $Id: HighPtTrackEcalDetIdProducer.cc,v 1.2 2013/02/27 22:47:59 wmtan Exp $
 //
 //
 

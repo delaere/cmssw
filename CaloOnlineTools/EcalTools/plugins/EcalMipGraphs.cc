@@ -13,7 +13,6 @@
 //
 // Original Author:  Seth COOPER
 //         Created:  Th Nov 22 5:46:22 CEST 2007
-// $Id: EcalMipGraphs.cc,v 1.12 2010/10/20 10:02:00 elmer Exp $
 //
 //
 

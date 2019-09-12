@@ -6,8 +6,6 @@
  *  Generic interpolator that is a wrapper of MagneticFieldGrid, i.e.
  *  non-specialized/optimized for each kind of grid.
  *
- *  $Date: 2011/04/16 12:47:37 $
- *  $Revision: 1.4 $
  *  \author T. Todorov
  */
 

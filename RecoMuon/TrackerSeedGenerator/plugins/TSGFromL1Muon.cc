@@ -4,7 +4,9 @@
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "DataFormats/Common/interface/Handle.h"
 #include "FWCore/Framework/interface/ESHandle.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 #include "RecoTracker/TkTrackingRegions/interface/OrderedHitsGeneratorFactory.h"
 #include "RecoTracker/TkTrackingRegions/interface/OrderedHitsGenerator.h"
@@ -46,16 +48,25 @@ template <class T> T sqr( T t) {return t*t;}
 
 
 TSGFromL1Muon::TSGFromL1Muon(const edm::ParameterSet& cfg)
-  : theConfig(cfg),theRegionProducer(0),theHitGenerator(0),theFitter(0),theFilter(0),theMerger(0)
+  : theConfig(cfg),theRegionProducer(0),theHitGenerator(0),theFitter(0),theMerger(0)
 {
   produces<L3MuonTrajectorySeedCollection>();
   theSourceTag = cfg.getParameter<edm::InputTag>("L1MuonLabel");
+
+  edm::ConsumesCollector iC = consumesCollector();
+  edm::ParameterSet filterPSet = theConfig.getParameter<edm::ParameterSet>("FilterPSet");
+  std::string  filterName = filterPSet.getParameter<std::string>("ComponentName");
+  theFilter.reset(PixelTrackFilterFactory::get()->create( filterName, filterPSet, iC));
+
+  edm::ParameterSet hitsfactoryPSet =
+      theConfig.getParameter<edm::ParameterSet>("OrderedHitsFactoryPSet");
+  std::string hitsfactoryName = hitsfactoryPSet.getParameter<std::string>("ComponentName");
+  theHitGenerator = OrderedHitsGeneratorFactory::get()->create( hitsfactoryName, hitsfactoryPSet, iC);
 }
 
 TSGFromL1Muon::~TSGFromL1Muon()
 {
   delete theMerger;
-  delete theFilter;
   delete theFitter;
   delete theHitGenerator;
   delete theRegionProducer;
@@ -66,22 +77,13 @@ void TSGFromL1Muon::beginRun(const edm::Run & run, const edm::EventSetup&es)
   edm::ParameterSet regfactoryPSet = theConfig.getParameter<edm::ParameterSet>("RegionFactoryPSet");
   std::string regfactoryName = regfactoryPSet.getParameter<std::string>("ComponentName");
   TrackingRegionProducer * p =
-    TrackingRegionProducerFactory::get()->create(regfactoryName,regfactoryPSet);
+    TrackingRegionProducerFactory::get()->create(regfactoryName,regfactoryPSet, consumesCollector());
   theRegionProducer = dynamic_cast<L1MuonRegionProducer* >(p);
-
-  edm::ParameterSet hitsfactoryPSet =
-      theConfig.getParameter<edm::ParameterSet>("OrderedHitsFactoryPSet");
-  std::string hitsfactoryName = hitsfactoryPSet.getParameter<std::string>("ComponentName");
-  theHitGenerator = OrderedHitsGeneratorFactory::get()->create( hitsfactoryName, hitsfactoryPSet);
 
   edm::ParameterSet fitterPSet = theConfig.getParameter<edm::ParameterSet>("FitterPSet");
   std::string fitterName = fitterPSet.getParameter<std::string>("ComponentName");
   PixelFitter * f = PixelFitterFactory::get()->create( fitterName, fitterPSet);
   theFitter = dynamic_cast<L1MuonPixelTrackFitter* >(f);
-
-  edm::ParameterSet filterPSet = theConfig.getParameter<edm::ParameterSet>("FilterPSet");
-  std::string  filterName = filterPSet.getParameter<std::string>("ComponentName");
-  theFilter = PixelTrackFilterFactory::get()->create( filterName, filterPSet);
 
   edm::ParameterSet cleanerPSet = theConfig.getParameter<edm::ParameterSet>("CleanerPSet");
   std::string  cleanerName = cleanerPSet.getParameter<std::string>("ComponentName");

@@ -2,8 +2,6 @@
 #define CosmicMuonTrajectoryBuilder_H
 /** \file CosmicMuonTrajectoryBuilder
  *
- *  $Date: 2010/03/05 21:43:00 $
- *  $Revision: 1.23 $
  *  \author Chang Liu  -  Purdue University
  */
 
@@ -24,6 +22,7 @@
 #include "DataFormats/DTRecHit/interface/DTRecHitCollection.h"
 #include "DataFormats/DTRecHit/interface/DTRecSegment4DCollection.h"
 #include "DataFormats/CSCRecHit/interface/CSCRecHit2DCollection.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 namespace edm {class Event; class EventSetup;}
 
@@ -41,7 +40,7 @@ class CosmicMuonTrajectoryBuilder : public MuonTrajectoryBuilder {
 public:
 
   /// Constructor 
-  CosmicMuonTrajectoryBuilder(const edm::ParameterSet&,const MuonServiceProxy* service);
+  CosmicMuonTrajectoryBuilder(const edm::ParameterSet&,const MuonServiceProxy* service,edm::ConsumesCollector& iC);
 
   /// Destructor
   virtual ~CosmicMuonTrajectoryBuilder();

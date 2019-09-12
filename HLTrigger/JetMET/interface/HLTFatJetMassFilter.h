@@ -7,6 +7,7 @@
  *
  */
 
+#include "DataFormats/HLTReco/interface/TriggerFilterObjectWithRefs.h"
 #include "DataFormats/HLTReco/interface/TriggerTypeDefs.h"
 #include "HLTrigger/HLTcore/interface/HLTFilter.h"
 
@@ -26,9 +27,10 @@ class HLTFatJetMassFilter : public HLTFilter {
       explicit HLTFatJetMassFilter(const edm::ParameterSet&);
       ~HLTFatJetMassFilter();
       static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
-      virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct);
+      virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct) const override;
 
    private:
+      edm::EDGetTokenT<std::vector<jetType>> m_theJetToken;
       edm::InputTag inputJetTag_; // input tag identifying jets
       double minMass_;
       double fatJetDeltaR_;

@@ -17,7 +17,6 @@
 //
 // Original Author:  Chris D Jones
 //         Created:  Tue Nov 22 13:03:39 EST 2005
-// $Id: SimWatcherMakerBase.h,v 1.2 2005/11/29 18:40:25 chrjones Exp $
 //
 
 // system include files

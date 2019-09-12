@@ -4,7 +4,6 @@
 //
 // Package:     Core
 // Class  :     FWFileEntry
-// $Id: FWFileEntry.h,v 1.13 2011/06/03 23:30:50 amraktad Exp $
 //
 
 // system include files

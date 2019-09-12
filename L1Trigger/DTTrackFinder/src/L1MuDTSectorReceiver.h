@@ -9,8 +9,6 @@
  *   and stores it into the Data Buffer
  *
  *
- *   $Date: 2010/09/10 12:26:35 $
- *   $Revision: 1.9 $
  *
  *   N. Neumeister            CERN EP
  *   J. Troconiz              UAM Madrid

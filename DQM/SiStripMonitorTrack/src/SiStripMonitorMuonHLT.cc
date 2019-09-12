@@ -13,7 +13,6 @@
 //
 // Original Author:  Eric Chabert
 //         Created:  Wed Sep 23 17:26:42 CEST 2009
-// $Id: SiStripMonitorMuonHLT.cc,v 1.16 2013/01/03 19:04:38 wmtan Exp $
 //
 
 #include "DQM/SiStripMonitorTrack/interface/SiStripMonitorMuonHLT.h"
@@ -42,6 +41,10 @@ SiStripMonitorMuonHLT::SiStripMonitorMuonHLT (const edm::ParameterSet & iConfig)
   l3collectionTag_ = parameters_.getUntrackedParameter < edm::InputTag > ("l3MuonTag",edm::InputTag("hltL3MuonCandidates"));
   TrackCollectionTag_ = parameters_.getUntrackedParameter < edm::InputTag > ("trackCollectionTag",edm::InputTag("hltL3TkTracksFromL2"));
   //////////////////////////
+  clusterCollectionToken_ = consumes<edm::LazyGetter < SiStripCluster > >(clusterCollectionTag_);
+  l3collectionToken_      = consumes<reco::RecoChargedCandidateCollection>(l3collectionTag_);
+  TrackCollectionToken_   = consumes<reco::TrackCollection>(TrackCollectionTag_); 
+
 
   HistoNumber = 35;
 
@@ -116,18 +119,6 @@ float SiStripMonitorMuonHLT::GetPhiWeight(std::string label, GlobalPoint clustgp
 void
 SiStripMonitorMuonHLT::analyze (const edm::Event & iEvent, const edm::EventSetup & iSetup)
 {
-
-
-#ifdef THIS_IS_AN_EVENT_EXAMPLE
-  Handle < ExampleData > pIn;
-  iEvent.getByLabel ("example", pIn);
-#endif
-
-#ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
-  ESHandle < SetupData > pSetup;
-  iSetup.get < SetupRecord > ().get (pSetup);
-#endif
-
   if (!dbe_)
     return;
   counterEvt_++;
@@ -147,19 +138,22 @@ SiStripMonitorMuonHLT::analyze (const edm::Event & iEvent, const edm::EventSetup
   //Access to L3MuonCand
   edm::Handle < reco::RecoChargedCandidateCollection > l3mucands;
   bool accessToL3Muons = true;
-  iEvent.getByLabel (l3collectionTag_, l3mucands);
+  //  iEvent.getByLabel (l3collectionTag_, l3mucands);
+  iEvent.getByToken (l3collectionToken_, l3mucands);
   reco::RecoChargedCandidateCollection::const_iterator cand;
 
   //Access to clusters
   edm::Handle < edm::LazyGetter < SiStripCluster > >clusters;
   bool accessToClusters = true;
-  iEvent.getByLabel (clusterCollectionTag_, clusters);
+  //  iEvent.getByLabel (clusterCollectionTag_, clusters);
+  iEvent.getByToken (clusterCollectionToken_, clusters);
   edm::LazyGetter < SiStripCluster >::record_iterator clust;
  
   //Access to Tracks
   edm::Handle<reco::TrackCollection > trackCollection;
   bool accessToTracks = true;
-  iEvent.getByLabel (TrackCollectionTag_, trackCollection);
+  //  iEvent.getByLabel (TrackCollectionTag_, trackCollection);
+  iEvent.getByToken (TrackCollectionToken_, trackCollection);
   reco::TrackCollection::const_iterator track;
    /////////////////////////////////////////////////////
 
@@ -639,7 +633,7 @@ SiStripMonitorMuonHLT::createMEs (const edm::EventSetup & es)
 
 
 void
-SiStripMonitorMuonHLT::GeometryFromTrackGeom (std::vector<DetId> Dets,const TrackerGeometry & theTracker, const edm::EventSetup& es,
+SiStripMonitorMuonHLT::GeometryFromTrackGeom (const std::vector<DetId>& Dets,const TrackerGeometry & theTracker, const edm::EventSetup& es,
                                               std::map< std::string,std::vector<float> > & m_PhiStripMod_Eta,std::map< std::string,std::vector<float> > & m_PhiStripMod_Nb){
 
   //Retrieve tracker topology from geometry
@@ -651,7 +645,7 @@ SiStripMonitorMuonHLT::GeometryFromTrackGeom (std::vector<DetId> Dets,const Trac
 
   //Loop over DetIds
   //-----------------------------------------
-  for(std::vector<DetId>::iterator detid_iterator =  Dets.begin(); detid_iterator!=Dets.end(); ++detid_iterator){
+  for(std::vector<DetId>::const_iterator detid_iterator =  Dets.begin(); detid_iterator!=Dets.end(); ++detid_iterator){
     uint32_t detid = (*detid_iterator)();
 
     if ( (*detid_iterator).null() == true) break;
@@ -829,14 +823,14 @@ SiStripMonitorMuonHLT::GeometryFromTrackGeom (std::vector<DetId> Dets,const Trac
 
 
 void
-SiStripMonitorMuonHLT::Normalizer (std::vector<DetId> Dets,const TrackerGeometry & theTracker){
+SiStripMonitorMuonHLT::Normalizer (const std::vector<DetId>& Dets,const TrackerGeometry & theTracker){
   
   
   std::vector<std::string> v_LabelHisto;
 
   //Loop over DetIds
   //-----------------------------------------
-  for(std::vector<DetId>::iterator detid_iterator =  Dets.begin(); detid_iterator!=Dets.end(); detid_iterator++){
+  for(std::vector<DetId>::const_iterator detid_iterator =  Dets.begin(); detid_iterator!=Dets.end(); detid_iterator++){
     uint32_t detid = (*detid_iterator)();
     
     if ( (*detid_iterator).null() == true) break;
@@ -1240,7 +1234,7 @@ SiStripMonitorMuonHLT::Normalizer (std::vector<DetId> Dets,const TrackerGeometry
 
 
 void
-SiStripMonitorMuonHLT::PrintNormalization (std::vector<std::string> v_LabelHisto)
+SiStripMonitorMuonHLT::PrintNormalization (const std::vector<std::string>& v_LabelHisto)
 {
   std::vector <TH1F *> h_ModNorm_Eta;
   std::vector <TH1F *> h_ModNorm_Phi;

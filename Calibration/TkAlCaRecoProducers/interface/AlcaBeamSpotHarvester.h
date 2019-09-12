@@ -4,8 +4,6 @@
 /** \class AlcaBeamSpotHarvester
  *  No description available.
  *
- *  $Date: 2011/02/16 12:40:30 $
- *  $Revision: 1.6 $
  *  \author L. Uplegger F. Yumiceva - Fermilab
  */
 #include "FWCore/Framework/interface/EDAnalyzer.h"

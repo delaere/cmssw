@@ -7,7 +7,6 @@
 // Package:    PatCandidates
 // Class:      pat::TriggerCondition
 //
-// $Id: TriggerCondition.h,v 1.2 2013/06/11 13:24:49 vadler Exp $
 //
 /**
   \class    pat::TriggerCondition TriggerCondition.h "DataFormats/PatCandidates/interface/TriggerCondition.h"
@@ -18,7 +17,6 @@
    https://twiki.cern.ch/twiki/bin/view/CMS/SWGuidePATTrigger#TriggerCondition
 
   \author   Volker Adler
-  \version  $Id: TriggerCondition.h,v 1.2 2013/06/11 13:24:49 vadler Exp $
 */
 
 

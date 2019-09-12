@@ -10,8 +10,6 @@
  *
  * Based on CSCMotherboard code
  *
- * $Date: 2012/12/05 21:14:22 $
- * $Revision: 1.2 $
  *
  */
 

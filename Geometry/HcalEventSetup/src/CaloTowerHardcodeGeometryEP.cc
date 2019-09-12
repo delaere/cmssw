@@ -13,7 +13,6 @@
 //
 // Original Author:  Jeremiah Mans
 //         Created:  Mon Oct  3 11:35:27 CDT 2005
-// $Id: CaloTowerHardcodeGeometryEP.cc,v 1.7 2012/10/10 15:35:07 yana Exp $
 //
 //
 

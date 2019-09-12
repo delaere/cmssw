@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones, Matevz Tadel, Alja Mrak-Tadel
 //         Created:  Thu Mar 18 14:12:00 CET 2010
-// $Id: FWProxyBuilderBase.cc,v 1.32 2010/10/29 10:42:02 amraktad Exp $
 //
 
 // system include files

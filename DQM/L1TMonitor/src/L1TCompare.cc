@@ -1,13 +1,7 @@
 /*
  * \file L1TCompare.cc
- * $Id: L1TCompare.cc,v 1.14 2009/11/19 14:36:48 puigh Exp $
  * \author P. Wittich
  * \brief Compare different parts of the trigger chain (e.g., RCT-GCT )
- * $Log: L1TCompare.cc,v $
- * Revision 1.14  2009/11/19 14:36:48  puigh
- * modify beginJob
- *
- * Revision 1.13  2008/03/20 19:38:25  berryhil
  *
  *
  * organized message logger
@@ -63,21 +57,6 @@
 
 #include "DQM/L1TMonitor/interface/L1TCompare.h"
 
-// GCT and RCT data formats
-#include "DataFormats/L1GlobalCaloTrigger/interface/L1GctCollections.h"
-#include "DataFormats/L1CaloTrigger/interface/L1CaloCollections.h"
-#include "DataFormats/L1CaloTrigger/interface/L1CaloRegionDetId.h"
-
-// L1Extra
-#include "DataFormats/L1Trigger/interface/L1EmParticleFwd.h"
-#include "DataFormats/L1Trigger/interface/L1JetParticleFwd.h"
-#include "DataFormats/L1Trigger/interface/L1EtMissParticleFwd.h"
-
-// Ecal
-#include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
-
-#include "DQMServices/Core/interface/DQMStore.h"
-
 // stl
 #include <algorithm>
 
@@ -116,9 +95,12 @@ const float TPETAMAX = 32.5;
 
 
 L1TCompare::L1TCompare(const ParameterSet & ps) :
-  rctSource_( ps.getParameter< InputTag >("rctSource") )
+   rctSourceEm_token_( consumes<L1CaloEmCollection>(ps.getParameter< InputTag >("rctSource") ))
+  ,rctSourceRctEmRgn_token_( consumes<L1CaloRegionCollection>(ps.getParameter< InputTag >("rctSource") ))
+  ,rctSource_( ps.getParameter< InputTag >("rctSource") )
   ,gctSource_( ps.getParameter< InputTag >("gctSource") )
   ,ecalTpgSource_(ps.getParameter<edm::InputTag>("ecalTpgSource"))
+  ,ecalTpgSource_token_(consumes<EcalTrigPrimDigiCollection>(ps.getParameter<edm::InputTag>("ecalTpgSource")))
 
 {
 
@@ -154,7 +136,14 @@ L1TCompare::L1TCompare(const ParameterSet & ps) :
     dbe->setCurrentFolder("L1T/Compare");
   }
 
+  //set Token(-s)
+  edm::InputTag gctCenJetsTag_(gctSource_.label(),"cenJets");
+  edm::InputTag gctIsoEmCandsTag_(gctSource_.label(), "isoEm");
+  edm::InputTag gctNonIsoEmCandsTag_(gctSource_.label(), "nonIsoEm");
 
+  gctCenJetsToken_ = consumes<L1GctJetCandCollection>(gctCenJetsTag_);
+  gctIsoEmCandsToken_ = consumes<L1GctEmCandCollection>(gctIsoEmCandsTag_);
+  gctNonIsoEmCandsToken_ = consumes<L1GctEmCandCollection>(gctNonIsoEmCandsTag_);
 }
 
 L1TCompare::~L1TCompare()
@@ -163,13 +152,12 @@ L1TCompare::~L1TCompare()
 
 void L1TCompare::beginJob(void)
 {
-
   nev_ = 0;
+}
 
-  // get hold of back-end interface
-  DQMStore *dbe = 0;
-  dbe = Service < DQMStore > ().operator->();
 
+void L1TCompare::beginRun(edm::Run const& iRun, edm::EventSetup const& iSetup) 
+{
   if (dbe) {
     dbe->setCurrentFolder("L1T/Compare");
     dbe->rmdir("L1T/Compare");
@@ -246,7 +234,6 @@ void L1TCompare::beginJob(void)
     ecalTpgRctLeadingEmPhi_->setAxisTitle(std::string("rct"), 1);
     ecalTpgRctLeadingEmPhi_->setAxisTitle(std::string("ecal tp"), 2);
   }
-
 }
 
 
@@ -287,7 +274,7 @@ void L1TCompare::analyze(const Event & e, const EventSetup & c)
   edm::Handle <L1GctEmCandCollection> gctNonIsoEmCands;
 
   
-  e.getByLabel(rctSource_,em);
+  e.getByToken(rctSourceEm_token_,em);
   
   if (!em.isValid()) {
     edm::LogInfo("DataNotFound") << "can't find L1CaloEmCollection with label "
@@ -296,7 +283,7 @@ void L1TCompare::analyze(const Event & e, const EventSetup & c)
   }
 
   
-  e.getByLabel(rctSource_,rctEmRgn);
+  e.getByToken(rctSourceRctEmRgn_token_,rctEmRgn);
   
   if (!rctEmRgn.isValid()) {
     edm::LogInfo("DataNotFound") << "can't find "
@@ -305,10 +292,9 @@ void L1TCompare::analyze(const Event & e, const EventSetup & c)
     return;
   }
 
-  
-  e.getByLabel(gctSource_.label(),"cenJets", gctCenJets);
-  e.getByLabel(gctSource_.label(), "isoEm", gctIsoEmCands);
-  e.getByLabel(gctSource_.label(), "nonIsoEm", gctNonIsoEmCands);
+  e.getByToken(gctCenJetsToken_, gctCenJets);
+  e.getByToken(gctIsoEmCandsToken_, gctIsoEmCands);
+  e.getByToken(gctNonIsoEmCandsToken_, gctNonIsoEmCands);
   
   if (!gctCenJets.isValid()) {
     std::cerr << "L1TGCT: could not find one of the classes?" << std::endl;
@@ -416,7 +402,7 @@ void L1TCompare::analyze(const Event & e, const EventSetup & c)
 
   // ECAL TPG's to RCT EM 
   edm::Handle < EcalTrigPrimDigiCollection > eTP;
-  e.getByLabel(ecalTpgSource_,eTP);
+  e.getByToken(ecalTpgSource_token_,eTP);
   
   if (!eTP.isValid()) {
     edm::LogInfo("DataNotFound") 

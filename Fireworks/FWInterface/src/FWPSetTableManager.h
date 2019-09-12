@@ -16,7 +16,6 @@
 //
 // Original Author:  
 //         Created:  Mon Feb 28 17:06:50 CET 2011
-// $Id: FWPSetTableManager.h,v 1.11 2012/09/08 06:13:57 amraktad Exp $
 //
 
 // system include files

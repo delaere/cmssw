@@ -4,8 +4,6 @@
 /** \class DTROChainCoding
  *  A class for handling the DT Read-out chain.
  *
- *  $Date: 2007/02/14 15:52:13 $
- *  $Revision: 1.4 $
  *  \author M. Zanetti - INFN Padova
  */
 

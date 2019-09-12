@@ -1,7 +1,5 @@
 
 /** \file HLTHiggsPlotter.cc
- *  $Date: 2013/06/05 13:50:24 $
- *  $Revision: 1.8 $
  */
 
 

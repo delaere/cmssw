@@ -73,20 +73,21 @@ namespace sistrip {
     //set min length to 2 for ZSLite, 7 for ZS and 3 for raw
     uint16_t minLength;
     switch (readoutMode()) {
-      case READOUT_MODE_ZERO_SUPPRESSED:
-        minLength = 7;
-        break;
-      case READOUT_MODE_ZERO_SUPPRESSED_LITE:
-        minLength = 2;
-        break;
-      default:
-        minLength = 3;
-        break;
+    case READOUT_MODE_ZERO_SUPPRESSED:
+      minLength = 7;
+      break;
+    case READOUT_MODE_ZERO_SUPPRESSED_LITE:
+    case READOUT_MODE_PREMIX_RAW:
+      minLength = 2;
+      break;
+    default:
+      minLength = 3;
+      break;
     }
     size_t offsetBeginningOfChannel = 0;
     for (size_t i = 0; i < FEDCH_PER_FED; i++) {
       //if FE unit is not enabled then skip rest of FE unit adding NULL pointers
-      if ( !(fePresent(i/FEDCH_PER_FEUNIT) && feEnabled(i/FEDCH_PER_FEUNIT)) ) {
+      if unlikely( !(fePresent(i/FEDCH_PER_FEUNIT) && feEnabled(i/FEDCH_PER_FEUNIT)) ) {
 	channels_.insert(channels_.end(),size_t(FEDCH_PER_FEUNIT),FEDChannel(payloadPointer_,0,0));
 	i += FEDCH_PER_FEUNIT-1;
 	validChannels_ += FEDCH_PER_FEUNIT;
@@ -94,7 +95,7 @@ namespace sistrip {
       }
       //if FE unit is enabled
       //check that channel length bytes fit into buffer
-      if (offsetBeginningOfChannel+1 >= payloadLength_) {
+      if unlikely(offsetBeginningOfChannel+1 >= payloadLength_) {
 	std::ostringstream ss;
         SiStripFedKey key(0,i/FEDCH_PER_FEUNIT,i%FEDCH_PER_FEUNIT);
         ss << "Channel " << uint16_t(i) << " (FE unit " << key.feUnit() << " channel " << key.feChan() << " according to external numbering scheme)" 
@@ -103,11 +104,13 @@ namespace sistrip {
            << "Payload length is " << uint16_t(payloadLength_) << ". ";
         throw cms::Exception("FEDBuffer") << ss.str();
       }
+
       channels_.push_back(FEDChannel(payloadPointer_,offsetBeginningOfChannel));
       //get length and check that whole channel fits into buffer
       uint16_t channelLength = channels_.back().length();
+
       //check that the channel length is long enough to contain the header
-      if (channelLength < minLength) {
+      if unlikely(channelLength < minLength) {
         SiStripFedKey key(0,i/FEDCH_PER_FEUNIT,i%FEDCH_PER_FEUNIT);
         std::ostringstream ss;
         ss << "Channel " << uint16_t(i) << " (FE unit " << key.feUnit() << " channel " << key.feChan() << " according to external numbering scheme)"
@@ -117,7 +120,7 @@ namespace sistrip {
            << "Min length is " << uint16_t(minLength) << ". ";
         throw cms::Exception("FEDBuffer") << ss.str();
       }
-      if (offsetBeginningOfChannel+channelLength > payloadLength_) {
+      if unlikely(offsetBeginningOfChannel+channelLength > payloadLength_) {
         SiStripFedKey key(0,i/FEDCH_PER_FEUNIT,i%FEDCH_PER_FEUNIT);
 	std::ostringstream ss;
         ss << "Channel " << uint16_t(i) << " (FE unit " << key.feUnit() << " channel " << key.feChan() << " according to external numbering scheme)" 
@@ -126,6 +129,7 @@ namespace sistrip {
            << "Payload length is " << uint16_t(payloadLength_) << ". ";
         throw cms::Exception("FEDBuffer") << ss.str();
       }
+
       validChannels_++;
       const size_t offsetEndOfChannel = offsetBeginningOfChannel+channelLength;
       //add padding if necessary and calculate offset for begining of next channel
@@ -148,14 +152,14 @@ namespace sistrip {
              (this->readoutMode() == sistrip::READOUT_MODE_SCOPE || checkStatusBits(internalFEDChannelNum)) );
   }
 
-  bool FEDBuffer::doChecks() const
+  bool FEDBuffer::doChecks(bool doCRC) const
   {
     //check that all channels were unpacked properly
     if (validChannels_ != FEDCH_PER_FED) return false;
     //do checks from base class
     if (!FEDBufferBase::doChecks()) return false;
     //check CRC
-    if (!checkCRC()) return false;
+    if (doCRC  &&  !checkCRC()) return false;
     return true;
   }
 
@@ -391,6 +395,7 @@ namespace sistrip {
       return PACKET_CODE_ZERO_SUPPRESSED;
       break;
     case READOUT_MODE_ZERO_SUPPRESSED_LITE:
+    case READOUT_MODE_PREMIX_RAW:
     case READOUT_MODE_SPY:
     case READOUT_MODE_INVALID:
     default:

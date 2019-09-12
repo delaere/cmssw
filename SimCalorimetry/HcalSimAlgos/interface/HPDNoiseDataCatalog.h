@@ -5,7 +5,6 @@
 // Object to store HPD instance name and noise rate for the instance
 // Project: HPD noise library
 // Author: F.Ratnikov UMd, Jan. 15, 2008
-// $Id: HPDNoiseDataCatalog.h,v 1.4 2008/08/04 22:07:08 fedor Exp $
 // --------------------------------------------------------
 
 #include <iostream>

@@ -6,8 +6,6 @@
 //			all the input data the GMT receives (CSC, RPC, DT, GCT)
 //
 //                
-//   $Date: 2007/04/12 13:21:14 $
-//   $Revision: 1.3 $
 //
 //   Author :
 //   Tobias Noebauer                 HEPHY Vienna

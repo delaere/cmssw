@@ -3,31 +3,35 @@
 
 /** \class HLTMuonL1RegionalFilter
  *
- *  
+ *
  *  This filter cuts on MinPt and Quality in specified eta regions
  *
- *  $Date: 2012/01/21 14:57:04 $
- *  $Revision: 1.4 $
  *
  *  \author Cristina Botta, Zoltan Gecse
  *
  */
 
 #include "HLTrigger/HLTcore/interface/HLTFilter.h"
+namespace edm {
+  class ConfigurationDescriptions;
+}
 
 class HLTMuonL1RegionalFilter : public HLTFilter {
 
   public:
     explicit HLTMuonL1RegionalFilter(const edm::ParameterSet&);
     ~HLTMuonL1RegionalFilter();
-    virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct);
+    static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
+    virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct) const override;
 
   private:
     /// input tag identifying the product containing muons
-    edm::InputTag candTag_;
+    edm::InputTag                                       candTag_;
+    edm::EDGetTokenT<l1extra::L1MuonParticleCollection> candToken_;
 
     /// input tag identifying the product containing refs to muons passing the previous level
-    edm::InputTag previousCandTag_;
+    edm::InputTag                                          previousCandTag_;
+    edm::EDGetTokenT<trigger::TriggerFilterObjectWithRefs> previousCandToken_;
 
     /// the vector of eta region boundaries; note: # of boundaries = # of regions + 1
     std::vector<double> etaBoundaries_;
@@ -53,7 +57,7 @@ class HLTMuonL1RegionalFilter : public HLTFilter {
     /// the eight lowest order or least significant bits correspond to the qulity codes above;
     /// if a bit is 1, that code is accepted, otherwise not;
     /// example: 11101000 accepts qualities 3, 5, 6, 7
-    /// 
+    ///
     /// the vector of quality bit masks, one for each eta region
     std::vector<int> qualityBitMasks_;
 

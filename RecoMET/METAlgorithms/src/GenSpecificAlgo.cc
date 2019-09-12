@@ -5,7 +5,6 @@
 // 
 // Original Authors:  R. Cavanaugh (taken from F.Ratnikov, UMd)
 //          Created:  June 6, 2006
-// $Id: GenSpecificAlgo.cc,v 1.11 2013/05/03 18:53:44 salee Exp $
 //
 //
 //____________________________________________________________________________||
@@ -69,7 +68,6 @@ void GenSpecificAlgo::fillCommonMETData(CommonMETData *met, edm::Handle<edm::Vie
   met->mez   = -sum_ez;
   met->met   = sqrt( sum_ex*sum_ex + sum_ey*sum_ey );
   met->sumet = sum_et;
-  met->phi   = atan2( -sum_ey, -sum_ex );
 }
 
 //____________________________________________________________________________||

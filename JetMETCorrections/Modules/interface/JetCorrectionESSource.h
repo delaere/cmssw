@@ -4,7 +4,6 @@
 //
 // Original Author:  Fedor Ratnikov
 // Created:  Dec. 28, 2006 (originally JetCorrectionService, renamed in 2011)
-// $Id: JetCorrectionESSource.h,v 1.2 2011/11/08 19:36:17 srappocc Exp $
 //
 
 #include "boost/shared_ptr.hpp"

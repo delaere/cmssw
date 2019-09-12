@@ -1,4 +1,3 @@
-// Last commit: $Id: examples_SiStripFecKey.cc,v 1.2 2010/01/07 11:20:41 lowette Exp $
 
 #include "DataFormats/SiStripCommon/test/plugins/examples_SiStripFecKey.h"
 #include "FWCore/Framework/interface/Event.h" 

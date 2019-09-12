@@ -1,7 +1,6 @@
 //
 // Author:      Domenico Giordano
 // Created:     Wed Sep 26 17:42:12 CEST 2007
-// $Id: SiStripQuality.cc,v 1.23 2013/01/22 17:03:17 chrjones Exp $
 //
 #include "FWCore/Utilities/interface/typelookup.h"
 #include "CalibFormats/SiStripObjects/interface/SiStripQuality.h"
@@ -157,8 +156,9 @@ void SiStripQuality::add(const RunInfo *runInfo)
 
   if( !allFedsEmpty || useEmptyRunInfo_ ) {
     // Take the list of active feds from fedCabling
-    std::vector<uint16_t> activeFedsFromCabling = SiStripDetCabling_->fedCabling()->feds();
+    auto ids = SiStripDetCabling_->fedCabling()->fedIds();
 
+    std::vector<uint16_t> activeFedsFromCabling(ids.begin(), ids.end());
     // Take the list of active feds from RunInfo
     std::vector<int> activeFedsFromRunInfo;
     // Take only Tracker feds (remove all non Tracker)
@@ -181,7 +181,8 @@ void SiStripQuality::add(const RunInfo *runInfo)
                         activeFedsFromRunInfo.begin(), activeFedsFromRunInfo.end(),
                         std::back_inserter(differentFeds));
 
-    printActiveFedsInfo(activeFedsFromCabling, activeFedsFromRunInfo, differentFeds, printDebug_);
+    // IGNORE for time being.
+    //printActiveFedsInfo(activeFedsFromCabling, activeFedsFromRunInfo, differentFeds, printDebug_);
 
     // Feds in the differentFeds vector are now to be turned off as they are off according to RunInfo
     // but were not off in cabling and thus are still active for the SiStripQuality.
@@ -635,7 +636,7 @@ bool SiStripQuality::IsStripBad(const Range& range, const short& strip) const
   SiStripBadStrip::data fs;
   for(SiStripBadStrip::ContainerIterator it=range.first;it!=range.second;++it){
     fs=decode(*it);
-    if ( fs.firstStrip<=strip && strip<fs.firstStrip+fs.range ){
+    if ( (fs.firstStrip<=strip)  & (strip<fs.firstStrip+fs.range) ){
       result=true;
       break;
     }      
@@ -768,8 +769,8 @@ void SiStripQuality::turnOffFeds(const std::vector<int> & fedsList, const bool t
 
   std::vector<int>::const_iterator fedIdIt = fedsList.begin();
   for( ; fedIdIt != fedsList.end(); ++fedIdIt ) {
-    std::vector<FedChannelConnection>::const_iterator fedChIt = SiStripDetCabling_->fedCabling()->connections( *fedIdIt ).begin();
-    for( ; fedChIt != SiStripDetCabling_->fedCabling()->connections( *fedIdIt ).end(); ++fedChIt ) {
+    std::vector<FedChannelConnection>::const_iterator fedChIt = SiStripDetCabling_->fedCabling()->fedConnections( *fedIdIt ).begin();
+    for( ; fedChIt != SiStripDetCabling_->fedCabling()->fedConnections( *fedIdIt ).end(); ++fedChIt ) {
       uint32_t detId = fedChIt->detId();
       if (detId == 0 || detId == 0xFFFFFFFF) continue;
       uint16_t apvPairNumber = fedChIt->apvPairNumber();

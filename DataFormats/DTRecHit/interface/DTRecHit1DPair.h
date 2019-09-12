@@ -12,8 +12,6 @@
  *  method. The position is the average of the theLeftHit and theRightHit hits, namely the
  *  wire position.
  *
- *  $Date: 2006/04/05 16:43:55 $
- *  $Revision: 1.4 $
  *  \author S. Lacaprara & G. Cerminara
  */
 

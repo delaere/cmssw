@@ -13,7 +13,6 @@ Implementation:
 //
 // Original Author:  Giovanni FRANZONI
 //         Created:  Tue Jan 22 13:55:00 CET 2008
-// $Id: EcalFEDWithCRCErrorProducer.cc,v 1.5 2010/10/05 13:39:30 vlimant Exp $
 //
 //
 
@@ -50,7 +49,7 @@ public:
   ~EcalFEDWithCRCErrorProducer();
   
 private:
-  virtual void produce(edm::Event&, const edm::EventSetup&);
+  virtual void produce(edm::Event&, const edm::EventSetup&) override;
   
   // ----------member data ---------------------------
   

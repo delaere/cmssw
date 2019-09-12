@@ -16,7 +16,6 @@
 //
 // Original Author:  
 //         Created:  Wed Jan  4 20:34:22 CET 2012
-// $Id: FWGeometryTableManager.h,v 1.10 2012/05/10 23:57:52 amraktad Exp $
 //
 
 #include "Fireworks/Core/interface/FWGeometryTableManagerBase.h"

@@ -9,7 +9,6 @@
 
 /** \class EBDataFrame
       
-$Id: EBDataFrame.h,v 1.7 2010/02/08 14:21:22 ferriff Exp $
 */
 class EBDataFrame : public EcalDataFrame 
 {

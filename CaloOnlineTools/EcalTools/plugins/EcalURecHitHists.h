@@ -13,7 +13,6 @@
 //
 // Original Author:  Seth COOPER
 //         Created:  Th Nov 22 5:46:22 CEST 2007
-// $Id: EcalURecHitHists.h,v 1.5 2010/01/04 15:07:40 ferriff Exp $
 //
 //
 

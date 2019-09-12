@@ -16,7 +16,7 @@
 //
 // Original Author:  
 //         Created:  Thu Sep 17 14:20:56 CEST 2009
-// $Id: MuonsGrabber.h,v 1.1 2009/09/23 11:01:55 fruboes Exp $
+// $Id$
 //
 
 // system include files
@@ -31,7 +31,7 @@
 #include <map>
 #include <vector>
 
-//#include <xercesc/util/PlatformUtils.hpp>
+//#include "FWCore/Concurrency/interface/Xerces.h"
 //#include <xercesc/util/XMLString.hpp>
 #include <xercesc/dom/DOM.hpp>
 //#include <xercesc/framework/LocalFileFormatTarget.hpp>

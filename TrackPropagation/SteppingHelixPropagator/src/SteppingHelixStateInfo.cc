@@ -1,15 +1,12 @@
 /** \class SteppingHelixStateInfo
  *  Implementation part of the stepping helix propagator state data structure
  *
- *  $Date: 2009/09/08 20:44:32 $
- *  $Revision: 1.13 $
  *  \author Vyacheslav Krutelyov (slava77)
  */
 
 //
 // Original Author:  Vyacheslav Krutelyov
 //         Created:  Wed Jan  3 16:01:24 CST 2007
-// $Id: SteppingHelixStateInfo.cc,v 1.13 2009/09/08 20:44:32 slava77 Exp $
 //
 //
 

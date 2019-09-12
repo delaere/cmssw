@@ -1,6 +1,3 @@
-// Last commit: $Id: test_FedCablingBuilder.cc,v 1.7 2013/05/30 21:52:09 gartung Exp $
-// Latest tag:  $Name: V05-01-06 $
-// Location:    $Source: /local/reps/CMSSW/CMSSW/OnlineDB/SiStripESSources/test/stubs/test_FedCablingBuilder.cc,v $
 
 #include "OnlineDB/SiStripESSources/test/stubs/test_FedCablingBuilder.h"
 #include "FWCore/Framework/interface/ESHandle.h"

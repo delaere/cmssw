@@ -13,7 +13,7 @@
 //
 // Original Author:  Luiz Mundim Filho
 //         Created:  Thu Mar 12 14:45:44 CET 2009
-// $Id: CastorDumpConditions.cc,v 1.2 2012/11/14 13:55:13 mundim Exp $
+// $Id: CastorDumpConditions.cc,v 1.1 2011/05/09 19:38:47 mundim Exp $
 //
 //
 
@@ -62,8 +62,8 @@ class CastorDumpConditions : public edm::EDAnalyzer {
       std::string file_prefix;
       std::vector<std::string> mDumpRequest;
       virtual void beginJob(const edm::EventSetup&) ;
-      virtual void analyze(const edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
+      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
 
       // ----------member data ---------------------------
 };

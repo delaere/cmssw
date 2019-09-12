@@ -1,6 +1,5 @@
 //
 // Original Author:  Fedor Ratnikov Dec 27, 2006
-// $Id: JetCorrector.cc,v 1.8 2011/04/28 14:05:22 kkousour Exp $
 //
 // Generic interface for JetCorrection services
 //

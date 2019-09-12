@@ -15,7 +15,6 @@
 //
 // Original Author:  Gregory Heath
 //         Created:  Thu Mar  1 15:10:47 CET 2007
-// $Id: L1GctConfigProducers.h,v 1.11 2011/01/03 21:22:00 jbrooke Exp $
 //
 //
 

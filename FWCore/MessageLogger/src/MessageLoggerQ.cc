@@ -60,7 +60,7 @@ namespace {
             
       // ---------- member functions ---------------------------
       virtual
-      void  runCommand(edm::MessageLoggerQ::OpCode  opcode, void * operand);
+      void  runCommand(edm::MessageLoggerQ::OpCode  opcode, void * operand) override;
       
    private:
       StandAloneScribe(const StandAloneScribe&); // stop default
@@ -94,7 +94,6 @@ namespace {
             delete errorobj_p;
             break;
          }
-         case edm::MessageLoggerQ::JOBREPORT:
          case edm::MessageLoggerQ::JOBMODE:
          case edm::MessageLoggerQ::GROUP_STATS:
 	 {
@@ -132,7 +131,7 @@ MessageLoggerQ::~MessageLoggerQ()
 MessageLoggerQ *
   MessageLoggerQ::instance()
 {
-  static MessageLoggerQ queue;
+  [[cms::thread_safe]] static MessageLoggerQ queue;
   return &queue;
 }  // MessageLoggerQ::instance()
 
@@ -212,12 +211,6 @@ void
 }  // MessageLoggerQ::SUM()
 
 void
-  MessageLoggerQ::MLqJOB( std::string * j )
-{
-  simpleCommand (JOBREPORT, static_cast<void *>(j)); 
-}  // MessageLoggerQ::JOB()
-
-void
   MessageLoggerQ::MLqMOD( std::string * jm )
 {
   simpleCommand (JOBMODE, static_cast<void *>(jm)); 
@@ -254,10 +247,10 @@ bool
 }  // MessageLoggerQ::handshaked(op)
 
 // change Log 13:
-edm::ELseverityLevel MessageLoggerQ::threshold ("WARNING");
+edm::ELseverityLevel MessageLoggerQ::threshold (edm::ELseverityLevel::ELsev_warning);
 std::set<std::string> MessageLoggerQ::squelchSet;
-void MessageLoggerQ::standAloneThreshold(std::string const & severity) {
-  threshold = edm::ELseverityLevel(severity);  
+void MessageLoggerQ::standAloneThreshold(edm::ELseverityLevel const& severity) {
+  threshold = severity;
 }
 void MessageLoggerQ::squelch(std::string const & category) {
   squelchSet.insert(category);  

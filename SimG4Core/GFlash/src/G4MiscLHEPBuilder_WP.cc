@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT4 tag $Name: V04-05-02 $
+// GEANT4 tag $Name: V04-05-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,6 +45,8 @@
 #include "G4ProcessManager.hh"
 
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
+
+using namespace CLHEP;
 
 G4MiscLHEPBuilder_WP::G4MiscLHEPBuilder_WP(): wasActivated(false)
 {

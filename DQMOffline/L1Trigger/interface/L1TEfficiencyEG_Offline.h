@@ -1,11 +1,9 @@
 #ifndef DQMOFFLINE_L1TRIGGER_L1TEFFICIENCYEG_OFFLINE_H
 #define DQMOFFLINE_L1TRIGGER_L1TEFFICIENCYEG_OFFLINE_H
 
-/*
+/**
  * \file L1TEfficiencyEG.h
  *
- * $Date: 2012/11/22 17:10:18 $
- * $Revision: 1.1 $
  * \author J. Pela
  *
  */

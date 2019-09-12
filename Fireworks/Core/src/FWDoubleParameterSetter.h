@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Mon Mar 10 11:22:26 CDT 2008
-// $Id: FWDoubleParameterSetter.h,v 1.6 2011/02/15 18:32:34 amraktad Exp $
 //
 
 // system include files

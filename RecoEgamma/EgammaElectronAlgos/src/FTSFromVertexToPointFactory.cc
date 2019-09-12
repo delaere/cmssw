@@ -13,20 +13,20 @@
 //
 // Original Author:  Ursula Berthon, Claude Charlot
 //         Created:  Mon Mar 27 13:22:06 CEST 2006
-// $Id: FTSFromVertexToPointFactory.cc,v 1.6 2011/03/21 17:10:32 innocent Exp $
 //
 //
 #include "RecoEgamma/EgammaElectronAlgos/interface/FTSFromVertexToPointFactory.h"
 #include "MagneticField/Engine/interface/MagneticField.h"
 
 
-FreeTrajectoryState FTSFromVertexToPointFactory::operator()(const MagneticField *magField, const GlobalPoint& xmeas,  
-                                                            const GlobalPoint& xvert, 
-                                                            float momentum, 
-							    TrackCharge charge)
+FreeTrajectoryState FTSFromVertexToPointFactory::get( MagneticField const & magField, 
+                                                      GlobalPoint const & xmeas, 
+                                                      GlobalPoint const & xvert, 
+                                                      float momentum, 
+                                                      TrackCharge charge )
 {
-  double BInTesla = magField->inTesla(xmeas).z();
-  GlobalVector xdiff = xmeas -xvert;
+  double BInTesla = magField.inTesla(xmeas).z();
+  GlobalVector xdiff = xmeas - xvert;
   double theta = xdiff.theta();
   double phi= xdiff.phi();
   double pt = momentum*sin(theta);
@@ -43,16 +43,10 @@ FreeTrajectoryState FTSFromVertexToPointFactory::operator()(const MagneticField 
   double pyNew =  -sa*pxOld + ca*pyOld;
   GlobalVector pNew(pxNew, pyNew, pz);  
 
-  GlobalTrajectoryParameters gp(xmeas, pNew, charge, magField);
+  GlobalTrajectoryParameters gp(xmeas, pNew, charge, & magField);
   
   AlgebraicSymMatrix55 C = AlgebraicMatrixID();
   FreeTrajectoryState VertexToPoint(gp,CurvilinearTrajectoryError(C));
 
   return VertexToPoint;
 }
-
-
-
-
-
-

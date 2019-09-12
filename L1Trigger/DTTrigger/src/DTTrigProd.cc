@@ -4,8 +4,6 @@
  *     Main EDProducer for the DTTPG
  *
  *
- *   $Date: 2013/02/26 16:52:48 $
- *   $Revision: 1.20 $
  *
  *   \author C. Battilana
  *

@@ -3,9 +3,6 @@
 /** \class ConversionTrackCandidateProducer
  **  
  **
- **  $Id: ConversionTrackCandidateProducer.h,v 1.19 2013/02/27 20:33:00 eulisse Exp $ 
- **  $Date: 2013/02/27 20:33:00 $ 
- **  $Revision: 1.19 $
  **  \author Nancy Marinelli, U. of Notre Dame, US
  **
  ***/
@@ -33,6 +30,7 @@
 #include "RecoCaloTools/MetaCollections/interface/CaloRecHitMetaCollections.h"
 #include "RecoLocalCalo/EcalRecAlgos/interface/EcalSeverityLevelAlgoRcd.h"
 #include "RecoLocalCalo/EcalRecAlgos/interface/EcalSeverityLevelAlgo.h"
+#include "TrackingTools/PatternTools/interface/TrajectoryBuilder.h"
 
 class OutInConversionSeedFinder;
 class InOutConversionSeedFinder;
@@ -65,14 +63,14 @@ class ConversionTrackCandidateProducer : public edm::EDProducer {
   std::string OutInTrackSuperClusterAssociationCollection_;
   std::string InOutTrackSuperClusterAssociationCollection_;
   
-  edm::InputTag bcBarrelCollection_;
-  edm::InputTag bcEndcapCollection_;
-  edm::InputTag scHybridBarrelProducer_;
-  edm::InputTag scIslandEndcapProducer_;
+  edm::EDGetTokenT<edm::View<reco::CaloCluster> > bcBarrelCollection_;
+  edm::EDGetTokenT<edm::View<reco::CaloCluster> > bcEndcapCollection_;
+  edm::EDGetTokenT<edm::View<reco::CaloCluster> > scHybridBarrelProducer_;
+  edm::EDGetTokenT<edm::View<reco::CaloCluster> > scIslandEndcapProducer_;
   edm::ParameterSet conf_;
-  edm::InputTag hcalTowers_;
-  edm::InputTag barrelecalCollection_;
-  edm::InputTag endcapecalCollection_;
+  edm::EDGetTokenT<CaloTowerCollection> hcalTowers_;
+  edm::EDGetTokenT<EcalRecHitCollection> barrelecalCollection_;
+  edm::EDGetTokenT<EcalRecHitCollection> endcapecalCollection_;
  
   double hOverEConeSize_;
   double maxHOverE_;
@@ -95,6 +93,9 @@ class ConversionTrackCandidateProducer : public edm::EDProducer {
 
 
   edm::ESHandle<CaloGeometry> theCaloGeom_;  
+
+  std::string                      trajectoryBuilderName_;
+  edm::ESHandle<TrajectoryBuilder> theTrajectoryBuilder_;
 
   const NavigationSchool*     theNavigationSchool_;
   OutInConversionSeedFinder*  theOutInSeedFinder_;

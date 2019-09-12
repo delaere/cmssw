@@ -1,6 +1,5 @@
 #include "RecoTauTag/RecoTau/interface/TauDiscriminationProducerBase.h"
 
-#include "RecoTauTag/TauTagTools/interface/PFTauQualityCutWrapper.h"
 #include "FWCore/Utilities/interface/InputTag.h"
 
 /* class CaloRecoTauDiscriminationByDeltaE
@@ -27,8 +26,8 @@ class CaloRecoTauDiscriminationByDeltaE : public CaloTauDiscriminationProducerBa
 
       	~CaloRecoTauDiscriminationByDeltaE(){}
 
-	void beginEvent(const edm::Event&, const edm::EventSetup&);
-	double discriminate(const reco::CaloTauRef&);
+	void beginEvent(const edm::Event&, const edm::EventSetup&) override;
+	double discriminate(const reco::CaloTauRef&) override;
 
     private:
 	double DeltaE(const CaloTauRef&);

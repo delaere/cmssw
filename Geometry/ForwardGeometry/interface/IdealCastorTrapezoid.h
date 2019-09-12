@@ -26,8 +26,7 @@
   
   Total: 6+3 parameters 
   
-  $Date: 2011/09/27 09:15:30 $
-  $Revision: 1.13 $
+  $Revision: 1.12 $
   \author P. Katsas - UoA
   */
 class IdealCastorTrapezoid: public CaloCellGeometry 

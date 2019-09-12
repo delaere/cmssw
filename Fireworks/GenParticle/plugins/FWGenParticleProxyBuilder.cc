@@ -14,7 +14,6 @@
 //
 // Original Author:
 //         Created:  Thu Dec  6 18:01:21 PST 2007
-// $Id: FWGenParticleProxyBuilder.cc,v 1.8 2012/12/02 09:09:13 amraktad Exp $
 // 
 
 #include "TEveTrack.h"
@@ -40,7 +39,7 @@ private:
 
    const FWGenParticleProxyBuilder& operator=(const FWGenParticleProxyBuilder&); // stop default
    
-   void build(const reco::GenParticle& iData, unsigned int iIndex,TEveElement& oItemHolder, const FWViewContext*);
+   void build(const reco::GenParticle& iData, unsigned int iIndex,TEveElement& oItemHolder, const FWViewContext*) override;
 
 };
 

@@ -8,7 +8,6 @@
 //
 // Author:      Marcello Maggi
 // Created:     Wed Nov  2 12:09:10 CET 2011
-// $Id: RPCCompDetId.cc,v 1.4 2012/02/04 23:27:47 eulisse Exp $
 #include <iostream>
 #include <sstream>
 #include <iomanip>

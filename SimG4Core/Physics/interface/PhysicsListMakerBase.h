@@ -17,7 +17,6 @@
 //
 // Original Author:  Chris D Jones
 //         Created:  Tue Nov 22 13:03:39 EST 2005
-// $Id: PhysicsListMakerBase.h,v 1.4 2010/07/29 22:40:22 sunanda Exp $
 //
 
 // system include files

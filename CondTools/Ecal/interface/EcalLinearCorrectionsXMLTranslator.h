@@ -3,7 +3,7 @@
    and vice versa   
 
    \author Stefano ARGIRO
-   \version $Id: EcalLinearCorrectionsXMLTranslator.h,v 1.2 2013/03/07 15:10:37 fra Exp $
+   \version $Id: EcalLinearCorrectionsXMLTranslator.h,v 1.1 2012/11/21 17:01:39 fra Exp $
    \date 20 Jun 2008
 */
 #ifndef __EcalLinearCorrectionsXMLTranslator_h_
@@ -17,13 +17,13 @@
 #include <xercesc/dom/DOMNode.hpp>
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
+#include "FWCore/Concurrency/interface/Xerces.h"
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/sax/SAXException.hpp>
 #include <xercesc/framework/LocalFileFormatTarget.hpp>
 
 static const char CVSId__EcalLinearCorrectionsXMLTranslator[] = 
-"$Id: EcalLinearCorrectionsXMLTranslator.h,v 1.2 2013/03/07 15:10:37 fra Exp $";
+"$Id: EcalLinearCorrectionsXMLTranslator.h,v 1.2 2012/05/12 15:33:28 fra Exp $";
 
 class EcalLinearCorrectionsXMLTranslator {
 

@@ -6,8 +6,8 @@
  *       Class to hold drift tubes TTrigs
  *             ( SL by SL time offsets )
  *
- *  $Date: 2010/01/20 18:20:08 $
- *  $Revision: 1.9 $
+ *  $Date: 2008/12/11 09:44:53 $
+ *  $Revision: 1.8 $
  *  \author Paolo Ronchese INFN Padova
  *
  */
@@ -30,6 +30,9 @@
 //---------------
 #include <string>
 #include <vector>
+#if !defined(__CINT__) && !defined(__MAKECINT__) && !defined(__REFLEX__)
+#include <atomic>
+#endif
 
 //              ---------------------
 //              -- Class Interface --
@@ -178,13 +181,28 @@ class DTTtrig {
   const_iterator end() const;
 
  private:
+#if !defined(__CINT__) && !defined(__MAKECINT__) && !defined(__REFLEX__)
+  // copy-ctor
+  DTTtrig(const DTTtrig& src) = delete;
+  // copy assignment operator
+  DTTtrig& operator=(const DTTtrig& rhs) = delete;
+#else
+  // copy-ctor
+  DTTtrig(const DTTtrig& src);
+  // copy assignment operator
+  DTTtrig& operator=(const DTTtrig& rhs);
+#endif
 
   std::string dataVersion;
   float nsPerCount;
 
   std::vector< std::pair<DTTtrigId,DTTtrigData> > dataList;
 
-  DTBufferTree<int,int>* dBuf;
+#if !defined(__CINT__) && !defined(__MAKECINT__) && !defined(__REFLEX__)
+  mutable std::atomic<DTBufferTree<int,int>*> dBuf;
+#else
+  mutable DTBufferTree<int,int>* dBuf;
+#endif
 
   /// read and store full content
   void cacheMap() const;

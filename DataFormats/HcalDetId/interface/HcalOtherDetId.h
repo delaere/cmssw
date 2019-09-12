@@ -17,8 +17,6 @@ Packing:
 [24:20] Other subdet id
 [19:0]  Available for use
 
-$Date: 2007/07/31 15:20:09 $
-$Revision: 1.2 $
 \author J. Mans - Minnesota
 */
 class HcalOtherDetId : public DetId {

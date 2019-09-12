@@ -11,7 +11,6 @@
 //
 // Original Author:
 //         Created:  Sun Jan  6 23:57:00 EST 2008
-// $Id: FWElectronDetailView.h,v 1.22 2011/02/28 10:32:01 amraktad Exp $
 //
 
 // user include files

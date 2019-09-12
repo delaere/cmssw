@@ -12,12 +12,10 @@
 */
 // Original Author:  Keti Kaadze
 //         Created:  Thu Jun 21 08:59:42 CDT 2007
-// $Id: EnergyScaleAnalyzer.cc,v 1.7 2009/12/14 22:24:36 wmtan Exp $
 //
 
 //#include "RecoEcal/EnergyScaleAnalyzer/interface/EnergyScaleAnalyzer.h"
 #include "Validation/EcalClusters/interface/EnergyScaleAnalyzer.h"
-#include "RecoEcal/EgammaClusterProducers/interface/PreshowerAnalyzer.h"
 #include "RecoEcal/EgammaClusterProducers/interface/PreshowerClusterProducer.h"
 
 //Framework

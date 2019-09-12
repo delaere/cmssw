@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripConfigDb.cc,v 1.76 2009/04/06 16:57:28 lowette Exp $
 
 #include "OnlineDB/SiStripConfigDb/interface/SiStripConfigDb.h"
 #include "DataFormats/SiStripCommon/interface/SiStripConstants.h"

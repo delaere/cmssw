@@ -1,8 +1,7 @@
-// @(#)root/hist:$Id: LEPBandPlot.cc,v 1.4 2009/05/15 09:55:59 dpiparo Exp $
 // Author: Danilo.Piparo@cern.ch   01/06/2008
 
-#include "assert.h"
-#include "math.h"
+#include <cassert>
+#include <cmath>
 
 #if (defined (STANDALONE) or defined (__CINT__) )
    #include "LEPBandPlot.h"

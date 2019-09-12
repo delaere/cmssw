@@ -13,7 +13,6 @@
 //
 // Original Author:  Sridhara Dasu
 //         Created:  Mon Jul 16 23:48:35 CEST 2007
-// $Id: L1RCTParametersTester.cc,v 1.3 2009/05/06 18:16:26 efron Exp $
 //
 //
 // user include files
@@ -33,7 +32,9 @@
 #include "FWCore/PluginManager/interface/ModuleDef.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 
+#include <iostream>
 
+#include <iostream>
 
 using std::cout;
 using std::endl;
@@ -45,7 +46,7 @@ class L1RCTParametersTester : public edm::EDAnalyzer {
 public:
   explicit L1RCTParametersTester(const edm::ParameterSet&) {}
   virtual  ~L1RCTParametersTester() {}
-      virtual void analyze(const edm::Event&, const edm::EventSetup&);  
+      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;  
 
 };
 

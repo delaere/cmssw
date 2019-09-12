@@ -5,8 +5,6 @@
  *
  *  base class for all DQM monitor sources
  *
- *  $Date: 2010/02/24 19:08:54 $
- *  $Revision: 1.6 $
  *  \author A.Apresyan Caltech
  */
 

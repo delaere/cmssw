@@ -10,8 +10,6 @@
  *
  * \file DCCEEEventBlock.h
  *
- * $Date: 2012/08/06 21:51:35 $
- * $Revision: 1.4 $
  *
  * \author N. Almeida
  *

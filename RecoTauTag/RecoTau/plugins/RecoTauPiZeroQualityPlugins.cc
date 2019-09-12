@@ -7,7 +7,6 @@
  * expression.  A string cut can additionally be applied.  The PiZeros
  * that fail the cut will be associated with a default value.
  *
- * $Id $
  *
  */
 
@@ -23,7 +22,7 @@ class RecoTauPiZeroStringQuality : public RecoTauPiZeroQualityPlugin {
   public:
     explicit RecoTauPiZeroStringQuality(const edm::ParameterSet&);
     ~RecoTauPiZeroStringQuality() {}
-    double operator()(const RecoTauPiZero&) const;
+    double operator()(const RecoTauPiZero&) const override;
   private:
     const StringCutObjectSelector<RecoTauPiZero> selector_;
     const StringObjectFunction<RecoTauPiZero> function_;

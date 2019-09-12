@@ -4,8 +4,6 @@
  *  L1 Global Muon Trigger Sorter.
 */
 //
-//   $Date: 2007/03/23 18:51:35 $
-//   $Revision: 1.2 $
 //
 //   Author :
 //   N. Neumeister            CERN EP

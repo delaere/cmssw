@@ -13,7 +13,6 @@
 //
 // Original Author:  Loic Quertenmont inspired from the SiStripLorentzAngleDepESProducer 
 //         Created:  07/03/2013
-// $Id: SiStripBackPlaneCorrectionDepESProducer.cc,v 1.1 2013/03/15 11:24:03 querten Exp $
 //
 //
 

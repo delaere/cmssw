@@ -7,8 +7,6 @@
 
 /** \class CaloTowerHardcodeGeometryLoader
   *  
-  * $Date: 2012/08/15 14:52:43 $
-  * $Revision: 1.6 $
   * \author J. Mans - Minnesota
   */
 class CaloTowerHardcodeGeometryLoader {

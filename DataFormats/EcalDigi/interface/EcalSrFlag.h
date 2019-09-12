@@ -1,5 +1,4 @@
 // -*- Mode: C++; c-basic-offset: 2; indent-tabs-mode: t; tab-width: 8; -*-
-//$Id: EcalSrFlag.h,v 1.5 2009/10/22 13:06:37 ferriff Exp $
 
 #ifndef ECALSRFLAG
 #define ECALSRFLAG

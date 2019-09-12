@@ -10,6 +10,7 @@
 #include "FWCore/Utilities/interface/ProductKindOfType.h"
 #include "DataFormats/Provenance/interface/ModuleDescription.h"
 #include "DataFormats/Provenance/interface/ProductHolderIndexHelper.h"
+#include "DataFormats/Common/interface/FunctorHandleExceptionFactory.h"
 #include "FWCore/Framework/interface/EDConsumerBase.h"
 
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
@@ -20,7 +21,9 @@ namespace edm {
 	ModuleDescription const& md)  :
     //putProducts_(),
     principal_(pcpl),
-    md_(md) {
+    md_(md),
+    consumer_(nullptr)
+  {
   }
 
   PrincipalGetAdapter::~PrincipalGetAdapter() {
@@ -28,7 +31,7 @@ namespace edm {
 
 
   void
-  principal_get_adapter_detail::deleter::operator()(std::pair<WrapperOwningHolder, ConstBranchDescription const*> const p) const {
+  principal_get_adapter_detail::deleter::operator()(std::pair<WrapperOwningHolder, BranchDescription const*> const p) const {
     WrapperOwningHolder* edp = const_cast<WrapperOwningHolder*>(&p.first);
     edp->reset();
   }
@@ -99,24 +102,28 @@ namespace edm {
     << "() was called.\n"
     << "The index of the token was "<<token.index()<<".\n";
   }
-
+  
   BasicHandle
   PrincipalGetAdapter::makeFailToGetException(KindOfType kindOfType,
                                               TypeID const& productType,
                                               EDGetToken token) const {
     EDConsumerBase::Labels labels;
     consumer_->labelsForToken(token,labels);
-    boost::shared_ptr<cms::Exception> exception(new Exception(errors::ProductNotFound));
-    if (kindOfType == PRODUCT_TYPE) {
-      *exception << "Principal::getByToken: Found zero products matching all criteria\nLooking for type: " << productType << "\n"
-      << "Looking for module label: " << labels.module << "\n" << "Looking for productInstanceName: " << labels.productInstance << "\n"
-      << (0==labels.process[0] ? "" : "Looking for process: ") << labels.process << "\n";
-    } else {
-      *exception << "Principal::getByToken: Found zero products matching all criteria\nLooking for a container with elements of type: " << productType << "\n"
-      << "Looking for module label: " << labels.module << "\n" << "Looking for productInstanceName: " << labels.productInstance << "\n"
-      << (0==labels.process[0] ? "" : "Looking for process: ") << labels.process << "\n";
-    }
-    return BasicHandle(exception);
+    //no need to copy memory since the exception will no occur after the
+    // const char* have been deleted
+    return BasicHandle(makeHandleExceptionFactory([labels,kindOfType,productType]()->std::shared_ptr<cms::Exception> {
+      std::shared_ptr<cms::Exception> exception(std::make_shared<Exception>(errors::ProductNotFound));
+      if (kindOfType == PRODUCT_TYPE) {
+        *exception << "Principal::getByToken: Found zero products matching all criteria\nLooking for type: " << productType << "\n"
+        << "Looking for module label: " << labels.module << "\n" << "Looking for productInstanceName: " << labels.productInstance << "\n"
+        << (0==labels.process[0] ? "" : "Looking for process: ") << labels.process << "\n";
+      } else {
+        *exception << "Principal::getByToken: Found zero products matching all criteria\nLooking for a container with elements of type: " << productType << "\n"
+        << "Looking for module label: " << labels.module << "\n" << "Looking for productInstanceName: " << labels.productInstance << "\n"
+        << (0==labels.process[0] ? "" : "Looking for process: ") << labels.process << "\n";
+      }
+      return exception;
+    }));
   }
 
   void
@@ -140,21 +147,26 @@ namespace edm {
 
   BasicHandle
   PrincipalGetAdapter::getByLabel_(TypeID const& typeID,
-                                   InputTag const& tag) const {
-    return principal_.getByLabel(PRODUCT_TYPE, typeID, tag);
+                                   InputTag const& tag,
+                                   ModuleCallingContext const* mcc) const {
+    return principal_.getByLabel(PRODUCT_TYPE, typeID, tag, consumer_, mcc);
   }
 
   BasicHandle
   PrincipalGetAdapter::getByLabel_(TypeID const& typeID,
                                    std::string const& label,
   	                           std::string const& instance,
-  	                           std::string const& process) const {
-    return principal_.getByLabel(PRODUCT_TYPE, typeID, label, instance, process);
+  	                           std::string const& process,
+                                   ModuleCallingContext const* mcc) const {
+    return principal_.getByLabel(PRODUCT_TYPE, typeID, label, instance, process, consumer_, mcc);
   }
   
   BasicHandle
-  PrincipalGetAdapter::getByToken_(TypeID const& id, KindOfType kindOfType, EDGetToken token) const {
-    ProductHolderIndex index = consumer_->indexFrom(token,InEvent,id);
+  PrincipalGetAdapter::getByToken_(TypeID const& id, KindOfType kindOfType, EDGetToken token,
+                                   ModuleCallingContext const* mcc) const {
+    ProductHolderIndexAndSkipBit indexAndBit = consumer_->indexFrom(token,branchType(),id);
+    ProductHolderIndex index = indexAndBit.productHolderIndex();
+    bool skipCurrentProcess = indexAndBit.skipCurrentProcess();
     if( unlikely(index == ProductHolderIndexInvalid)) {
       return makeFailToGetException(kindOfType,id,token);
     } else if( unlikely(index == ProductHolderIndexAmbiguous)) {
@@ -162,7 +174,7 @@ namespace edm {
       throwAmbiguousException(id, token);
     }
     bool ambiguous = false;
-    BasicHandle h = principal_.getByToken(kindOfType,id,index, token.willSkipCurrentProcess(), ambiguous);
+    BasicHandle h = principal_.getByToken(kindOfType, id, index, skipCurrentProcess, ambiguous, mcc);
     if (ambiguous) {
       // This deals with ambiguities where the process is not specified
       throwAmbiguousException(id, token);
@@ -174,26 +186,32 @@ namespace edm {
 
   BasicHandle
   PrincipalGetAdapter::getMatchingSequenceByLabel_(TypeID const& typeID,
-                                                   InputTag const& tag) const {
-    return principal_.getByLabel(ELEMENT_TYPE, typeID, tag);    
+                                                   InputTag const& tag,
+                                                   ModuleCallingContext const* mcc) const {
+    return principal_.getByLabel(ELEMENT_TYPE, typeID, tag, consumer_, mcc);
   }
 
   BasicHandle
   PrincipalGetAdapter::getMatchingSequenceByLabel_(TypeID const& typeID,
                                                    std::string const& label,
                                                    std::string const& instance,
-                                                   std::string const& process) const {
-    return principal_.getByLabel(ELEMENT_TYPE,
-                                 typeID,
-                                 label,
-                                 instance,
-                                 process);
+                                                   std::string const& process,
+                                                   ModuleCallingContext const* mcc) const {
+    auto h= principal_.getByLabel(ELEMENT_TYPE,
+                                  typeID,
+                                  label,
+                                  instance,
+                                  process,
+                                  consumer_,
+                                  mcc);
+    return h;
   }
 
   void
   PrincipalGetAdapter::getManyByType_(TypeID const& tid,
-		  BasicHandleVec& results) const {
-    principal_.getManyByType(tid, results);
+                                      BasicHandleVec& results,
+                                      ModuleCallingContext const* mcc) const {
+    principal_.getManyByType(tid, results, consumer_, mcc);
   }
 
   ProcessHistory const&
@@ -201,9 +219,9 @@ namespace edm {
     return principal_.processHistory();
   }
 
-  ConstBranchDescription const&
+  BranchDescription const&
   PrincipalGetAdapter::getBranchDescription(TypeID const& type,
-				     std::string const& productInstanceName) const {
+                                            std::string const& productInstanceName) const {
     ProductHolderIndexHelper const& productHolderIndexHelper = principal_.productLookup();
     ProductHolderIndex index = productHolderIndexHelper.index(PRODUCT_TYPE, type, md_.moduleLabel().c_str(),productInstanceName.c_str(), md_.processName().c_str());
     if(index == ProductHolderIndexInvalid) {
@@ -219,7 +237,7 @@ namespace edm {
 	<< principal_.productRegistry()
 	<< '\n';
     }
-    ProductHolderBase const*  phb = principal_.getProductByIndex(index, false, false);
+    ProductHolderBase const*  phb = principal_.getProductHolderByIndex(index);
     assert(phb != nullptr);
     return phb->branchDescription();
   }

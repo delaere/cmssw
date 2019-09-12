@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Thu Dec  4 19:28:07 EST 2008
-// $Id: FWMuonProxyBuilder.cc,v 1.13 2010/08/19 13:39:17 yana Exp $
 //
 
 #include "Fireworks/Core/interface/FWSimpleProxyBuilderTemplate.h"
@@ -30,10 +29,10 @@ private:
    const FWMuonProxyBuilder& operator=( const FWMuonProxyBuilder& );
 
 
-   virtual void build( const reco::Muon& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext* );
+   virtual void build( const reco::Muon& iData, unsigned int iIndex, TEveElement& oItemHolder, const FWViewContext* ) override;
 
    virtual void localModelChanges( const FWModelId& iId, TEveElement* iCompound,
-                                   FWViewType::EType viewType, const FWViewContext* vc );
+                                   FWViewType::EType viewType, const FWViewContext* vc ) override;
 
    mutable FWMuonBuilder m_builder;
 };

@@ -8,7 +8,6 @@
 //
 // Original Author:  Joshua Berger
 //         Created:  Mon Jun 23 15:48:11 EDT 2008
-// $Id: CmsShowEDI.cc,v 1.51 2013/04/05 22:39:44 amraktad Exp $
 //
 
 // system include files

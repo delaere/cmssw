@@ -4,8 +4,6 @@
 /** \class DTTTrigOffsetCalibration
  *  No description available.
  *
- *  $Date: 2010/11/16 19:06:59 $
- *  $Revision: 1.4 $
  *  \author A. Vilela Pereira
  */
 

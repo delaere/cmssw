@@ -2,10 +2,8 @@
  *
  * See header file for documentation
  *
- *  $Date: 2012/02/12 12:21:02 $
 
 
- *  $Revision: 1.6 $
  *
  *  \author Jacopo Bernardini
  *
@@ -16,10 +14,8 @@
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/Math/interface/deltaPhi.h"
 #include "DataFormats/Common/interface/RefToBase.h"
-#include "DataFormats/JetReco/interface/CaloJetCollection.h"
-#include "DataFormats/BTauReco/interface/JetTag.h"
-#include "DataFormats/HLTReco/interface/TriggerFilterObjectWithRefs.h"
 #include "HLTrigger/JetMET/interface/HLTJetSortedVBFFilter.h"
+
 #include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 #include "FWCore/ParameterSet/interface/ParameterSetDescription.h"
 
@@ -45,6 +41,8 @@ HLTJetSortedVBFFilter<T>::HLTJetSortedVBFFilter(const edm::ParameterSet& iConfig
  ,value_       (iConfig.getParameter<std::string>  ("value"       ))
  ,triggerType_ (iConfig.getParameter<int>          ("triggerType" ))
 {
+  m_theJetsToken = consumes<std::vector<T>>(inputJets_);
+  m_theJetTagsToken = consumes<reco::JetTagCollection>(inputJetTags_);
 }
 
 
@@ -77,18 +75,18 @@ HLTJetSortedVBFFilter<T>::fillDescriptions(edm::ConfigurationDescriptions& descr
 
 // ------------ method called to produce the data  ------------
 template<typename T>
-bool 
-HLTJetSortedVBFFilter<T>::hltFilter(edm::Event& event, const edm::EventSetup& setup,trigger::TriggerFilterObjectWithRefs& filterproduct)
+bool
+HLTJetSortedVBFFilter<T>::hltFilter(edm::Event& event, const edm::EventSetup& setup,trigger::TriggerFilterObjectWithRefs& filterproduct) const
 {
 
-     using namespace std;
+   using namespace std;
    using namespace edm;
    using namespace reco;
    using namespace trigger;
 
    typedef vector<T> TCollection;
    typedef Ref<TCollection> TRef;
-     
+
    bool accept(false);
 
    if (saveTags()) filterproduct.addCollectionTag(inputJets_);
@@ -98,7 +96,7 @@ HLTJetSortedVBFFilter<T>::hltFilter(edm::Event& event, const edm::EventSetup& se
    vector<TRef> jetRefs(nMax);
 
    Handle<TCollection> jets;
-   event.getByLabel(inputJets_,jets);
+   event.getByToken(m_theJetsToken,jets);
    Handle<JetTagCollection> jetTags;
 
    unsigned int nJet=0;
@@ -130,7 +128,7 @@ HLTJetSortedVBFFilter<T>::hltFilter(edm::Event& event, const edm::EventSetup& se
      b2 = jetRefs[1]->p4();
      q2 = jetRefs[0]->p4();
    } else {
-     event.getByLabel(inputJetTags_,jetTags);
+     event.getByToken(m_theJetTagsToken,jetTags);
      if (jetTags->size()<nMax) return false;
      for (JetTagCollection::const_iterator jet = jetTags->begin(); (jet!=jetTags->end()&&nJet<nMax); ++jet) {
        if (value_=="second") {
@@ -157,8 +155,8 @@ HLTJetSortedVBFFilter<T>::hltFilter(edm::Event& event, const edm::EventSetup& se
    double ptsqq_bs   = (q1+q2).Pt();
    double ptsbb_bs   = (b1+b2).Pt();
    double signeta    = q1.Eta()*q2.Eta();
-   
-   if ( 
+
+   if (
 	(mqq_bs     > mqq_    ) &&
 	(deltaetaqq > detaqq_ ) &&
 	(deltaetabb < detabb_ ) &&

@@ -18,7 +18,6 @@ RCT.
 //
 // Original Author:  pts/65
 //         Created:  Fri Nov 23 12:08:31 CET 2007
-// $Id: MaskedRctInputDigiProducer.h,v 1.2 2010/01/07 11:10:03 bachtis Exp $
 //
 //
 

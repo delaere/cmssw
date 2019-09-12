@@ -4,14 +4,12 @@
 /** \class ProduceFakeDB
  *  Class which produce fake DB of ttrig,t0,vdrift
  *
- *  $Date: 2010/01/19 09:51:31 $
- *  $Revision: 1.2 $
  *  \author S. Bolognesi - INFN Torino
  */
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
-#include <FWCore/Framework/interface/ESHandle.h>
+#include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 #include <string>

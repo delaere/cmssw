@@ -12,7 +12,6 @@
 //
 // Original Author:  Piotr Traczyk, CERN
 //         Created:  Mon Mar 16 12:27:22 CET 2009
-// $Id: MuonTimingProducer.cc,v 1.6 2010/04/15 12:34:30 ptraczyk Exp $
 //
 //
 
@@ -48,10 +47,10 @@ MuonTimingProducer::MuonTimingProducer(const edm::ParameterSet& iConfig)
    produces<reco::MuonTimeExtraMap>("csc");
 
    m_muonCollection = iConfig.getParameter<edm::InputTag>("MuonCollection");
-
+   muonToken_ = consumes<reco::MuonCollection>(m_muonCollection);
    // Load parameters for the TimingFiller
    edm::ParameterSet fillerParameters = iConfig.getParameter<edm::ParameterSet>("TimingFillerParameters");
-   theTimingFiller_ = new MuonTimingFiller(fillerParameters);
+   theTimingFiller_ = new MuonTimingFiller(fillerParameters,consumesCollector());
 }
 
 
@@ -88,7 +87,7 @@ MuonTimingProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   reco::MuonTimeExtraMap::Filler fillerCSC(*muonTimeMapCSC);
   
   edm::Handle<reco::MuonCollection> muons; 
-  iEvent.getByLabel(m_muonCollection, muons);
+  iEvent.getByToken(muonToken_, muons);
 
   unsigned int nMuons = muons->size();
   

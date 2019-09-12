@@ -1,4 +1,3 @@
-// @(#)root/eve:$Id: geom_core_parts.C,v 1.2 2010/11/29 15:01:11 matevz Exp $
 // Author: Matevz Tadel
 
 // Shows CMS tracker, calo and muon system.

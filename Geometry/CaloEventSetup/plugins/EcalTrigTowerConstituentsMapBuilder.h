@@ -12,7 +12,6 @@
 */
 //
 // Original Author:  Paolo Meridiani
-// $Id: EcalTrigTowerConstituentsMapBuilder.h,v 1.1 2007/04/15 23:16:28 wmtan Exp $
 //
 //
 

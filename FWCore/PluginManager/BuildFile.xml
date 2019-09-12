@@ -1,6 +1,6 @@
 <use   name="boost"/>
+<use   name="tbb"/>
 <use   name="boost_filesystem"/>
-<use   name="rootrflx"/>
 <use   name="FWCore/Utilities"/>
 <export>
   <lib   name="1"/>

@@ -1,11 +1,11 @@
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 #include "FWCore/Sources/interface/DaqProvenanceHelper.h"
 
 #include "DataFormats/Provenance/interface/BranchChildren.h"
 #include "DataFormats/Provenance/interface/BranchIDList.h"
-#include "DataFormats/Provenance/interface/ProcessConfigurationRegistry.h"
 #include "DataFormats/Provenance/interface/ProcessHistory.h"
 #include "DataFormats/Provenance/interface/ProcessHistoryRegistry.h"
 #include "DataFormats/Provenance/interface/ProductRegistry.h"
@@ -74,22 +74,18 @@ namespace edm {
   }
 
   ProcessHistoryID
-  DaqProvenanceHelper::daqInit(ProductRegistry& productRegistry) const {
+  DaqProvenanceHelper::daqInit(ProductRegistry& productRegistry, ProcessHistoryRegistry& processHistoryRegistry) const {
     // Now we need to set all the metadata
     // Add the product to the product registry  
-    productRegistry.copyProduct(constBranchDescription_.me());
+    productRegistry.copyProduct(constBranchDescription_);
 
     // Insert an entry for this process in the process history registry
     ProcessHistory ph;
     ph.emplace_back(constBranchDescription_.processName(), processParameterSet_.id(), getReleaseVersion(), getPassID());
-    ProcessConfiguration const& pc = ph.data().back();
-    ProcessHistoryRegistry::instance()->insertMapped(ph);
-
-    // Insert an entry for this process in the process configuration registry
-    ProcessConfigurationRegistry::instance()->insertMapped(pc);
+    processHistoryRegistry.registerProcessHistory(ph);
 
     // Save the process history ID for use every event.
-    return ph.id();
+    return ph.setProcessHistoryID();
   }
 
   bool
@@ -104,6 +100,7 @@ namespace edm {
 
   void
   DaqProvenanceHelper::fixMetaData(std::vector<ProcessConfiguration>& pcv, std::vector<ProcessHistory>& phv) {
+    phv.push_back(ProcessHistory()); // For new processHistory, containing only processConfiguration_
     std::vector<ProcessConfiguration> newPCs;
     for(auto const& pc : pcv) {
        if(pc.processName() == oldProcessName_) {
@@ -118,7 +115,7 @@ namespace edm {
     // update existing process histories
     for(auto& ph : phv) {
       for(auto const& newPC : newPCs) {
-        if(matchProcesses(newPC, ph)) {
+        if(ph.empty() || matchProcesses(newPC, ph)) {
           ProcessHistoryID oldPHID = ph.id();
           ph.push_front(newPC);
           ProcessHistoryID newPHID = ph.id();

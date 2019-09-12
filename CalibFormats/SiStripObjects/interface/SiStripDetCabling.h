@@ -10,7 +10,6 @@
 */
 // Original Author:  dkcira
 //         Created:  Wed Mar 22 12:24:20 CET 2006
-// $Id: SiStripDetCabling.h,v 1.10 2011/09/16 13:49:22 demattia Exp $
 #include "CondFormats/SiStripObjects/interface/SiStripFedCabling.h"
 #include "CondFormats/SiStripObjects/interface/FedChannelConnection.h"
 #include <boost/cstdint.hpp>
@@ -59,6 +58,8 @@ class SiStripDetCabling
   uint32_t detectedNumber(const std::string & subDet, const uint16_t layer) const { return detNumber(subDet, layer, 1); }
   uint32_t undetectedNumber(const std::string & subDet, const uint16_t layer) const { return detNumber(subDet, layer, 2); }
   inline const SiStripFedCabling * fedCabling() const {return fedCabling_;}
+
+  std::map< uint32_t, std::vector<int> > const & connected() const { return connected_;}
 
  private:
   SiStripDetCabling(const SiStripDetCabling&); // stop default

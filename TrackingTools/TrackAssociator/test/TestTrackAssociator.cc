@@ -13,7 +13,6 @@
 //
 // Original Author:  Dmytro Kovalskyi
 //         Created:  Fri Apr 21 10:59:41 PDT 2006
-// $Id: TestTrackAssociator.cc,v 1.23 2009/09/06 16:39:12 dmytro Exp $
 //
 //
 

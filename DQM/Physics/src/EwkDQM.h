@@ -6,13 +6,11 @@
  *
  *  DQM offline for SMP V+Jets
  *
- *  $Date: 2012/06/28 10:29:38 $
- *  $Revision: 1.12 $
  *  \author Valentina Gori, University of Firenze
  */
 
 
-#include "FWCore/Framework/interface/Frameworkfwd.h"   
+#include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 
 // Trigger stuff
@@ -20,7 +18,11 @@
 #include "HLTrigger/HLTcore/interface/HLTConfigProvider.h"
 
 #include "DataFormats/EgammaCandidates/interface/Electron.h"
+#include "DataFormats/EgammaCandidates/interface/GsfElectronFwd.h"
+#include "DataFormats/MuonReco/interface/MuonFwd.h"
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
 
+namespace reco {class Jet; class MET;}
 class DQMStore;
 class MonitorElement;
 
@@ -29,10 +31,10 @@ class EwkDQM : public edm::EDAnalyzer {
 
   /// Constructor
   EwkDQM(const edm::ParameterSet&);
-  
+
   /// Destructor
   virtual ~EwkDQM();
-  
+
   /// Inizialize parameters for histo binning
   void beginJob();
 
@@ -50,7 +52,7 @@ class EwkDQM : public edm::EDAnalyzer {
  private:
 
   // ----------member data ---------------------------
-  
+
   DQMStore* theDbe;
   // Switch for verbosity
   std::string logTraceName;
@@ -62,14 +64,15 @@ class EwkDQM : public edm::EDAnalyzer {
   // Variables from config file
   std::vector<std::string>   theElecTriggerPathToPass_;
   std::vector<std::string>   theMuonTriggerPathToPass_;
-  //std::vector<std::string> eleTrigPathNames_;
-  //std::vector<std::string> muTrigPathNames_;
-  edm::InputTag theTriggerResultsCollection_;
-  edm::InputTag theMuonCollectionLabel_;
-  edm::InputTag theElectronCollectionLabel_;
-  //edm::InputTag theCaloJetCollectionLabel;
   edm::InputTag thePFJetCollectionLabel_;
   edm::InputTag theCaloMETCollectionLabel_;
+  edm::InputTag theTriggerResultsCollection_;
+  edm::EDGetTokenT<edm::TriggerResults> theTriggerResultsToken_;
+  edm::EDGetTokenT<reco::MuonCollection> theMuonCollectionLabel_;
+  edm::EDGetTokenT<reco::GsfElectronCollection> theElectronCollectionLabel_;
+  edm::EDGetTokenT<edm::View<reco::Jet> > thePFJetCollectionToken_;
+  edm::EDGetTokenT<edm::View<reco::MET> > theCaloMETCollectionToken_;
+  edm::EDGetTokenT<reco::VertexCollection> theVertexToken_;
 
   double eJetMin_;
 
@@ -118,3 +121,8 @@ class EwkDQM : public edm::EDAnalyzer {
   MonitorElement* h_ee_invMass;
 };
 #endif
+
+// Local Variables:
+// show-trailing-whitespace: t
+// truncate-lines: t
+// End:

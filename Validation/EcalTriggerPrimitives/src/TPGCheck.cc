@@ -13,8 +13,6 @@
 //
 // Original Author:  Muriel Cerutti
 //         Created:  Thu Oct 26 10:47:17 CEST 2006
-// $Id: TPGCheck.cc,v 1.3 2009/12/18 20:45:11 wmtan Exp $
-// $Id: TPGCheck.cc,v 1.3 2009/12/18 20:45:11 wmtan Exp $
 //
 
 
@@ -51,9 +49,9 @@ class TPGCheck : public edm::EDAnalyzer {
 
 
    private:
-      virtual void beginJob() ;
-      virtual void analyze(const edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
+      virtual void beginJob() override ;
+      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
 
       // ----------member data ---------------------------
       TH1I *ecal_et_[2];
@@ -64,6 +62,8 @@ class TPGCheck : public edm::EDAnalyzer {
       std::string label_;
       std::string producer_;
       std::vector<std::string> ecal_parts_;
+  // fix for consumes
+      edm::EDGetTokenT<EcalTrigPrimDigiCollection> ecal_tp_token_;
 };
 
 //
@@ -96,7 +96,7 @@ TPGCheck::TPGCheck(const edm::ParameterSet& iConfig)
   
   label_= iConfig.getParameter<std::string>("Label");
   producer_= iConfig.getParameter<std::string>("Producer");
-  
+  ecal_tp_token_ = consumes<EcalTrigPrimDigiCollection> (edm::InputTag(label_,producer_));
 }
 
 
@@ -123,7 +123,7 @@ TPGCheck::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   
   // Get input
   edm::Handle<EcalTrigPrimDigiCollection> tp;
-  iEvent.getByLabel(label_,producer_,tp);
+  iEvent.getByToken(ecal_tp_token_,tp);
   for (unsigned int i=0;i<tp.product()->size();i++) {  
     EcalTriggerPrimitiveDigi d=(*(tp.product()))[i]; 
     int subdet=d.id().subDet()-1;

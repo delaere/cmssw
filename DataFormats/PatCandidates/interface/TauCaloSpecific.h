@@ -1,5 +1,4 @@
 //
-// $Id: TauCaloSpecific.h,v 1.3 2011/07/21 16:42:41 veelken Exp $
 //
 
 #ifndef DataFormats_PatCandidates_Tau_CaloSpecific_h
@@ -10,7 +9,6 @@
   \brief    Structure to hold information specific to a CaloTau inside a pat::Tau
 
   \author   Giovanni Petrucciani
-  \version  $Id: TauCaloSpecific.h,v 1.3 2011/07/21 16:42:41 veelken Exp $
 */
 
 #include "DataFormats/TauReco/interface/CaloTau.h"

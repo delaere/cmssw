@@ -17,24 +17,17 @@ pixelPairStepClusters = cms.EDProducer("TrackClusterRemover",
 )
 
 # SEEDING LAYERS
-pixelPairStepSeedLayers = cms.ESProducer("SeedingLayersESProducer",
-    ComponentName = cms.string('pixelPairStepSeedLayers'),
+pixelPairStepSeedLayers = cms.EDProducer("SeedingLayersEDProducer",
     layerList = cms.vstring('BPix1+BPix2', 'BPix1+BPix3', 'BPix2+BPix3', 
         'BPix1+FPix1_pos', 'BPix1+FPix1_neg', 
         'BPix2+FPix1_pos', 'BPix2+FPix1_neg', 
         'FPix1_pos+FPix2_pos', 'FPix1_neg+FPix2_neg'),
     BPix = cms.PSet(
-        useErrorsFromParam = cms.bool(True),
-        hitErrorRPhi = cms.double(0.0027),
-        hitErrorRZ = cms.double(0.006),
         TTRHBuilder = cms.string('TTRHBuilderWithoutAngle4PixelPairs'),
         HitProducer = cms.string('siPixelRecHits'),
         skipClusters = cms.InputTag('pixelPairStepClusters')
     ),
     FPix = cms.PSet(
-        useErrorsFromParam = cms.bool(True),
-        hitErrorRPhi = cms.double(0.0051),
-        hitErrorRZ = cms.double(0.0036),
         TTRHBuilder = cms.string('TTRHBuilderWithoutAngle4PixelPairs'),
         HitProducer = cms.string('siPixelRecHits'),
         skipClusters = cms.InputTag('pixelPairStepClusters')
@@ -47,7 +40,7 @@ pixelPairStepSeeds = RecoTracker.TkSeedGenerator.GlobalSeedsFromPairsWithVertice
 pixelPairStepSeeds.RegionFactoryPSet.RegionPSet.ptMin = 0.6
 pixelPairStepSeeds.RegionFactoryPSet.RegionPSet.originRadius = 0.015
 pixelPairStepSeeds.RegionFactoryPSet.RegionPSet.fixedError = 0.03
-pixelPairStepSeeds.OrderedHitsFactoryPSet.SeedingLayers = cms.string('pixelPairStepSeedLayers')
+pixelPairStepSeeds.OrderedHitsFactoryPSet.SeedingLayers = cms.InputTag('pixelPairStepSeedLayers')
 
 pixelPairStepSeeds.SeedComparitorPSet = cms.PSet(
         ComponentName = cms.string('PixelClusterShapeSeedComparitor'),
@@ -80,7 +73,6 @@ pixelPairStepTrajectoryBuilder = RecoTracker.CkfPattern.GroupedCkfTrajectoryBuil
     ComponentName = 'pixelPairStepTrajectoryBuilder',
     MeasurementTrackerName = '',
     trajectoryFilterName = 'pixelPairStepTrajectoryFilter',
-    clustersToSkip = cms.InputTag('pixelPairStepClusters'),
     maxCand = 3,
     estimator = cms.string('pixelPairStepChi2Est'),
     maxDPhiForLooperReconstruction = cms.double(2.0),
@@ -91,6 +83,7 @@ pixelPairStepTrajectoryBuilder = RecoTracker.CkfPattern.GroupedCkfTrajectoryBuil
 import RecoTracker.CkfPattern.CkfTrackCandidates_cfi
 pixelPairStepTrackCandidates = RecoTracker.CkfPattern.CkfTrackCandidates_cfi.ckfTrackCandidates.clone(
     src = cms.InputTag('pixelPairStepSeeds'),
+    clustersToSkip = cms.InputTag('pixelPairStepClusters'),
     TrajectoryBuilder = 'pixelPairStepTrajectoryBuilder',
     ### these two parameters are relevant only for the CachingSeedCleanerBySharedInput
     numHitsForSeedCleaner = cms.int32(50),
@@ -131,6 +124,7 @@ pixelPairStepSelector = RecoTracker.FinalTrackSelectors.multiTrackSelector_cfi.m
 
 # Final sequence
 PixelPairStep = cms.Sequence(pixelPairStepClusters*
+                         pixelPairStepSeedLayers*
                          pixelPairStepSeeds*
                          pixelPairStepTrackCandidates*
                          pixelPairStepTracks*

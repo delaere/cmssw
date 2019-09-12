@@ -3,9 +3,6 @@
 /** \class EcalRecalibRecHitProducer
  *   produce ECAL rechits from uncalibrated rechits
  *
- *  $Id: EcalRecalibRecHitProducer.h,v 1.3 2012/03/06 23:53:34 ferriff Exp $
- *  $Date: 2012/03/06 23:53:34 $
- *  $Revision: 1.3 $
  *  \author Federico Ferri, University of Milano Bicocca and INFN
  *
  **/
@@ -16,8 +13,10 @@
 #include "FWCore/Framework/interface/EventSetup.h"
 
 #include "RecoLocalCalo/EcalRecAlgos/interface/EcalRecHitAbsAlgo.h"
+#include "DataFormats/EcalRecHit/interface/EcalRecHitCollections.h"
 
-// forward declaration
+
+
 class EcalRecalibRecHitProducer : public edm::EDProducer {
 
         public:
@@ -27,8 +26,11 @@ class EcalRecalibRecHitProducer : public edm::EDProducer {
 
         private:
 
-                edm::InputTag EBRecHitCollection_; // secondary name given to collection of EB uncalib rechits
-                edm::InputTag EERecHitCollection_; // secondary name given to collection of EE uncalib rechits
+		edm::InputTag EBRecHitCollection_;
+		edm::InputTag EERecHitCollection_;
+		edm::EDGetTokenT<EBRecHitCollection> EBRecHitToken_;
+		edm::EDGetTokenT<EERecHitCollection> EERecHitToken_;
+		  
                 std::string EBRecalibRecHitCollection_; // secondary name to be given to EB collection of hits
                 std::string EERecalibRecHitCollection_; // secondary name to be given to EE collection of hits
 

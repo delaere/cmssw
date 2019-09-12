@@ -5,7 +5,6 @@
  *
  * Trigger from DT chamber
  *  
- *  $Date: 2009/04/03 13:53:46 $
  *
  * \author FRC
  *

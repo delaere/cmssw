@@ -13,7 +13,6 @@
 //
 // Original Author:  Ursula Berthon
 //         Created:  Mon Mar 27 13:22:06 CEST 2006
-// $Id: DQMAnalyzer.cc,v 1.6 2012/09/13 20:08:31 wdd Exp $
 //
 //
 
@@ -697,7 +696,7 @@ DQMAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     reco::SuperClusterRef sclRef = gsfIter->superCluster() ;
     // ALREADY DONE IN GSF ELECTRON CORE
     //    if (!gsfIter->ecalDrivenSeed()&&gsfIter->trackerDrivenSeed())
-    //      sclRef = gsfIter->pflowSuperCluster() ;
+    //      sclRef = gsfIter->parentSuperCluster() ;
     histSclEn_->Fill(sclRef->energy());
     double R=TMath::Sqrt(sclRef->x()*sclRef->x() + sclRef->y()*sclRef->y() +sclRef->z()*sclRef->z());
     double Rt=TMath::Sqrt(sclRef->x()*sclRef->x() + sclRef->y()*sclRef->y());

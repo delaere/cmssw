@@ -5,8 +5,6 @@
 //   Description: GMT Eta Projection Unit
 //
 //
-//   $Date: 2007/04/10 09:59:19 $
-//   $Revision: 1.4 $
 //
 //   Author :
 //   H. Sakulin                CERN EP 

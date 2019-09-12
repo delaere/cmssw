@@ -1,4 +1,3 @@
-// $Id: TTUGlobalSignal.cc,v 1.2 2009/05/16 19:43:32 aosorio Exp $
 // Include files 
 
 

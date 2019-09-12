@@ -2,6 +2,7 @@
 #include "TrackingTools/KalmanUpdators/interface/EtaPhiMeasurementEstimator.h"
 #include "RecoTracker/Record/interface/CkfComponentsRecord.h"
 #include "RecoTracker/MeasurementDet/interface/MeasurementTracker.h"
+#include "RecoTracker/MeasurementDet/interface/MeasurementTrackerEvent.h"
 
 #include "TrackingTools/MeasurementDet/interface/LayerMeasurements.h"
 #include "TrackingTools/PatternTools/interface/TrajectoryMeasurement.h"
@@ -27,6 +28,21 @@ TrackingRegion::Hits CosmicTrackingRegion::hits(const edm::Event& ev,
 						const edm::EventSetup& es,
 						const  ctfseeding::SeedingLayer* layer) const
 {
+  return hits_(ev, es, *layer);
+}
+
+TrackingRegion::Hits CosmicTrackingRegion::hits(const edm::Event& ev,
+						const edm::EventSetup& es,
+						const SeedingLayerSetsHits::SeedingLayer& layer) const
+{
+  return hits_(ev, es, layer);
+}
+
+template <typename T>
+TrackingRegion::Hits CosmicTrackingRegion::hits_(const edm::Event& ev,
+						const edm::EventSetup& es,
+						const T& layer) const
+{
 
   //get and name collections
   //++++++++++++++++++++++++
@@ -35,8 +51,8 @@ TrackingRegion::Hits CosmicTrackingRegion::hits(const edm::Event& ev,
   TrackingRegion::Hits result;
 
   //detector layer
-  const DetLayer * detLayer = layer->detLayer();
-  LogDebug("CosmicTrackingRegion") << "Looking at hits on subdet/layer " << layer->name();
+  const DetLayer * detLayer = layer.detLayer();
+  LogDebug("CosmicTrackingRegion") << "Looking at hits on subdet/layer " << layer.name();
   EtaPhiMeasurementEstimator est(0.3,0.3);
 
   //magnetic field
@@ -100,8 +116,9 @@ TrackingRegion::Hits CosmicTrackingRegion::hits(const edm::Event& ev,
   edm::ESHandle<MeasurementTracker> measurementTrackerESH;
   es.get<CkfComponentsRecord>().get(measurementTrackerName_,measurementTrackerESH);
   const MeasurementTracker * measurementTracker = measurementTrackerESH.product(); 
-  measurementTracker->update(ev);
-  LayerMeasurements lm(measurementTracker);
+  edm::Handle<MeasurementTrackerEvent> mte;
+  ev.getByLabel(edm::InputTag("MeasurementTrackerEvent"), mte);
+  LayerMeasurements lm(*measurementTracker, *mte);
   vector<TrajectoryMeasurement> meas = lm.measurements(*detLayer, tsos, prop, est);
   LogDebug("CosmicTrackingRegion") << "Number of Trajectory measurements = " << meas.size()
 				   <<" but the last one is always an invalid hit, by construction.";

@@ -7,8 +7,6 @@
  *  containing information about various sub-systems in global coordinates 
  *  with full geometry
  *
- *  $Date: 2013/05/28 18:03:30 $
- *  $Revision: 1.12 $
  *  \author M. Strang SUNY-Buffalo
  */
 
@@ -191,6 +189,14 @@ class GlobalRecHitsAnalyzer : public edm::EDAnalyzer
   edm::InputTag ECalEESrc_;
   edm::InputTag ECalUncalEESrc_;
   edm::InputTag ECalESSrc_;
+  edm::EDGetTokenT<EBRecHitCollection> ECalEBSrc_Token_;
+  edm::EDGetTokenT<EERecHitCollection> ECalEESrc_Token_;
+  edm::EDGetTokenT<ESRecHitCollection> ECalESSrc_Token_;
+  edm::EDGetTokenT<EBUncalibratedRecHitCollection> ECalUncalEBSrc_Token_;
+  edm::EDGetTokenT<EEUncalibratedRecHitCollection> ECalUncalEESrc_Token_;
+  edm::EDGetTokenT<CrossingFrame<PCaloHit>> EBHits_Token_;
+  edm::EDGetTokenT<CrossingFrame<PCaloHit>> EEHits_Token_;
+  edm::EDGetTokenT<CrossingFrame<PCaloHit>> ESHits_Token_;
 
   // HCal info
 
@@ -198,6 +204,7 @@ class GlobalRecHitsAnalyzer : public edm::EDAnalyzer
   MonitorElement *mehHcalRes[4];
 
   edm::InputTag HCalSrc_;
+  edm::EDGetTokenT<edm::PCaloHitContainer> HCalSrc_Token_;
 
   // Tracker info
   // SiStrip
@@ -207,6 +214,7 @@ class GlobalRecHitsAnalyzer : public edm::EDAnalyzer
   MonitorElement *mehSiStripResY[19];
 
   edm::InputTag SiStripSrc_;
+  edm::EDGetTokenT<SiStripMatchedRecHit2DCollection> SiStripSrc_Token_;
 
   std::vector<PSimHit> matched;
   std::pair<LocalPoint,LocalVector> 
@@ -222,6 +230,7 @@ class GlobalRecHitsAnalyzer : public edm::EDAnalyzer
   MonitorElement *mehSiPixelResY[7];
 
   edm::InputTag SiPxlSrc_;
+  edm::EDGetTokenT<SiPixelRecHitCollection> SiPxlSrc_Token_;
 
   // Muon info
   // DT
@@ -235,6 +244,8 @@ class GlobalRecHitsAnalyzer : public edm::EDAnalyzer
 
   edm::InputTag MuDTSrc_;
   edm::InputTag MuDTSimSrc_;
+  edm::EDGetTokenT<DTRecHitCollection> MuDTSrc_Token_;
+  edm::EDGetTokenT<edm::PSimHitContainer> MuDTSimSrc_Token_;
 
   // Return a map between DTRecHit1DPair and wireId
   std::map<DTWireId, std::vector<DTRecHit1DPair> >
@@ -270,6 +281,8 @@ class GlobalRecHitsAnalyzer : public edm::EDAnalyzer
   //Defined above....
 
   edm::InputTag MuCSCSrc_;
+  edm::EDGetTokenT<CSCRecHit2DCollection> MuCSCSrc_Token_;
+  edm::EDGetTokenT<CrossingFrame<PSimHit>> MuCSCHits_Token_;
 
   std::map<int, edm::PSimHitContainer> theMap;
   void plotResolution(const PSimHit &simHit, const CSCRecHit2D &recHit,
@@ -281,6 +294,8 @@ class GlobalRecHitsAnalyzer : public edm::EDAnalyzer
 
   edm::InputTag MuRPCSrc_;
   edm::InputTag MuRPCSimSrc_;
+  edm::EDGetTokenT<RPCRecHitCollection> MuRPCSrc_Token_;
+  edm::EDGetTokenT<edm::PSimHitContainer> MuRPCSimSrc_Token_;
 
   // private statistics information
   unsigned int count;

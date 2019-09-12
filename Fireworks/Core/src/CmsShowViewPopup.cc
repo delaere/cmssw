@@ -8,7 +8,6 @@
 //
 // Original Author:
 //         Created:  Wed Jun 25 15:15:04 EDT 2008
-// $Id: CmsShowViewPopup.cc,v 1.35 2013/04/24 20:55:45 amraktad Exp $
 //
 
 // system include files

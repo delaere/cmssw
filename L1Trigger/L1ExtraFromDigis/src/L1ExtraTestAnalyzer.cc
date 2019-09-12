@@ -10,7 +10,6 @@
 //
 // Original Author:  Werner Sun
 //         Created:  Fri Jul 28 14:22:31 EDT 2006
-// $Id: L1ExtraTestAnalyzer.cc,v 1.4 2010/02/11 00:12:51 wmtan Exp $
 //
 //
 
@@ -57,7 +56,7 @@ class L1ExtraTestAnalyzer : public edm::EDAnalyzer {
       ~L1ExtraTestAnalyzer();
 
 
-      virtual void analyze(const edm::Event&, const edm::EventSetup&);
+      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
    private:
       // ----------member data ---------------------------
 

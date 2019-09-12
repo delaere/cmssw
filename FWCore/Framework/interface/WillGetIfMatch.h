@@ -11,42 +11,44 @@ See comments in the file GetterOfProducts.h.
 */
 
 #include <functional>
+#include "FWCore/Utilities/interface/InputTag.h"
+#include "FWCore/Utilities/interface/EDGetToken.h"
 
 namespace edm {
 
   class BranchDescription;
+  class EDConsumerBase;
 
-  template<typename T, typename M>
+  template<typename T>
   class WillGetIfMatch {
   public:
 
     template <typename U>
-    WillGetIfMatch(U const& match, M* module):
+    WillGetIfMatch(U const& match, EDConsumerBase* module):
       match_(match),
       module_(module) {
     }
     
-    bool operator()(BranchDescription const& branchDescription) {
+    EDGetTokenT<T>  operator()(BranchDescription const& branchDescription) {
       if (match_(branchDescription)){
-
-        // We plan to implement a call to a function that
-        // registers the products a module will get, but
-        // this has not been implemented yet. This is
-        // where that function would get called when it
-        // is implemented, automatically registering
-        // the gets for the module. (Creating a place to call
-        // this function is the main reason for the existence
-        // of this class).
-        // module_->template willGet<T>(edm::makeInputTag(branchDescription));
-
-        return true;
+        auto transition = branchDescription.branchType();
+        edm::InputTag tag{branchDescription.moduleLabel(),
+                          branchDescription.productInstanceName(),
+                          branchDescription.processName()};
+        if(transition == edm::InEvent) {
+          return module_->template consumes<T>(tag);
+        } else if(transition == edm::InLumi) {
+          return module_->template consumes<T,edm::InLumi>(tag);
+        } else if(transition == edm::InRun) {
+          return module_->template consumes<T,edm::InRun>(tag);
+        }
       }
-      return false;
+      return EDGetTokenT<T>{};
     }
     
   private:
     std::function<bool(BranchDescription const&)> match_;
-    M* module_;    
+    EDConsumerBase* module_;
   };
 }
 #endif

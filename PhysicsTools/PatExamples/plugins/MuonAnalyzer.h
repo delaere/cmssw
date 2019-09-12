@@ -4,13 +4,13 @@
 /** \class ExampleMuonAnalyzer
  *  Analyzer of the muon objects
  *
- *  $Date: 2009/11/06 10:06:22 $
- *  $Revision: 1.4 $
  *  \author R. Bellan - CERN <riccardo.bellan@cern.ch>
  */
 
 // Base Class Headers
 #include "FWCore/Framework/interface/EDAnalyzer.h"
+
+#include "DataFormats/PatCandidates/interface/Muon.h"
 
 namespace edm {
   class ParameterSet;
@@ -39,7 +39,7 @@ public:
 protected:
 
 private:
-  std::string theMuonLabel;
+  edm::EDGetTokenT<pat::MuonCollection> theMuonToken;
 
   // Histograms
   TH1I *hNMuons;

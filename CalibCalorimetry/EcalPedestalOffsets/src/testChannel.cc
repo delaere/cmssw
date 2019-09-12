@@ -1,8 +1,6 @@
 /**
  * \file testChannel.cc
  *
- * $Date: 2010/01/04 15:06:29 $
- * $Revision: 1.11 $
  * \author P. Govoni (pietro.govoni@cernNOSPAM.ch)
  *
 */

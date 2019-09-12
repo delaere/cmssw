@@ -5,7 +5,6 @@
 //
 // Package:     Electrons
 // Class  :     FWHCalTowerDetailView
-// $Id: FWCaloTowerDetailView.h,v 1.2 2010/05/25 14:42:03 dmytro Exp $
 //
 
 // user include files

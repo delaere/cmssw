@@ -2,7 +2,6 @@
 // Author:  Jan Heyninck
 // Created: Tue Apr  3 17:33:23 PDT 2007
 //
-// $Id: TtSemiLRJetCombCalc.cc,v 1.5 2013/05/28 17:57:05 gartung Exp $
 //
 #include "TopQuarkAnalysis/TopJetCombination/interface/TtSemiLRJetCombCalc.h"
 

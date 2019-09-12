@@ -1,7 +1,5 @@
 /** \file
  *
- *  $Date: 2011/06/22 23:53:24 $
- *  $Revision: 1.43 $
  *  \author A. Tumanov - Rice
  *  But long, long ago...
  */

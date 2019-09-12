@@ -7,7 +7,6 @@
 
  author: Francisco Yumiceva, Fermilab (yumiceva@fnal.gov)
 
- version $Id: BeamSpot.cc,v 1.13 2012/10/19 07:48:45 innocent Exp $
 
  ________________________________________________________________**/
 

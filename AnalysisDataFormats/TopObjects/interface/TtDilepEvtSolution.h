@@ -1,5 +1,4 @@
 //
-// $Id: TtDilepEvtSolution.h,v 1.23 2013/04/19 22:13:23 wmtan Exp $
 //
 
 #ifndef TopObjects_TtDilepEvtSolution_h

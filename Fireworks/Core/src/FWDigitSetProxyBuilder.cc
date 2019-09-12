@@ -8,7 +8,6 @@
 //
 // Original Author:  Alja Mrak-Tadel
 //         Created:  Tue Oct 19 12:00:50 CEST 2010
-// $Id: FWDigitSetProxyBuilder.cc,v 1.4 2012/06/18 23:56:21 amraktad Exp $
 //
 
 // system include files
@@ -32,12 +31,12 @@ public:
    FWSecondarySelectableSelector(const TEveSecondarySelectable::SelectionSet_t& s, const FWEventItem* i): m_selected(s), m_item(i) {}
    ~FWSecondarySelectableSelector() {}
 
-   virtual void doSelect()
+   virtual void doSelect() override
    {
       syncSelection();
    }
 
-   virtual void doUnselect()
+   virtual void doUnselect() override
    { 
       syncSelection(); 
    }

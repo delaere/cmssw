@@ -8,6 +8,9 @@
  */
 
 #include "HLTrigger/HLTcore/interface/HLTFilter.h"
+#include "DataFormats/METReco/interface/METFwd.h"
+#include "DataFormats/METReco/interface/MET.h"
+#include "DataFormats/METReco/interface/METCollection.h"
 
 namespace edm {
    class ConfigurationDescriptions;
@@ -24,9 +27,10 @@ class HLTMhtFilter : public HLTFilter {
       explicit HLTMhtFilter(const edm::ParameterSet&);
       ~HLTMhtFilter();
       static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
-      virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct);
+      virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct) const override;
 
    private:
+      edm::EDGetTokenT<reco::METCollection> m_theMhtToken;
       edm::InputTag inputMhtTag_; // input tag identifying mht
       double minMht_;
 };

@@ -4,9 +4,6 @@
 /** \class EcalRecHitWorkerRecover
   *  Algorithms to recover dead channels
   *
-  *  $Id: EcalRecHitWorkerRecover.h,v 1.12 2013/05/28 15:25:58 gartung Exp $
-  *  $Date: 2013/05/28 15:25:58 $
-  *  $Revision: 1.12 $
   */
 
 #include "RecoLocalCalo/EcalRecProducers/interface/EcalRecHitWorkerBaseClass.h"
@@ -26,10 +23,13 @@
 #include "CalibCalorimetry/EcalTPGTools/interface/EcalTPGScale.h"
 #include "CalibCalorimetry/EcalLaserCorrection/interface/EcalLaserDbService.h"
 #include "CalibCalorimetry/EcalTPGTools/interface/EcalTPGScale.h"
+#include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
+
+
 
 class EcalRecHitWorkerRecover : public EcalRecHitWorkerBaseClass {
         public: 
-                EcalRecHitWorkerRecover(const edm::ParameterSet&);
+                EcalRecHitWorkerRecover(const edm::ParameterSet&, edm::ConsumesCollector& c);
                 virtual ~EcalRecHitWorkerRecover() {};
 
                 void set(const edm::EventSetup& es);
@@ -72,7 +72,7 @@ class EcalRecHitWorkerRecover : public EcalRecHitWorkerBaseClass {
 
                 // dead FE
                 EcalTPGScale ecalScale_;
-                edm::InputTag tpDigiCollection_;
+                edm::EDGetTokenT<EcalTrigPrimDigiCollection> tpDigiToken_;
                 edm::ESHandle< EcalElectronicsMapping > pEcalMapping_;
                 const EcalElectronicsMapping *ecalMapping_;
 		double logWarningEtThreshold_EB_FE_;

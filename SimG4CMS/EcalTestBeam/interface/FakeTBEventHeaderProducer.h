@@ -3,7 +3,6 @@
 /*
  * \file FakeTBEventHeaderProducer.h
  *
- * $Id: FakeTBEventHeaderProducer.h,v 1.5 2011/05/20 17:17:34 wmtan Exp $
  *
  * Mimic the event header information
  * for the test beam simulation 

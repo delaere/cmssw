@@ -16,7 +16,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Thu Oct 23 13:05:30 EDT 2008
-// $Id: FWCustomIconsButton.h,v 1.6 2009/11/29 15:56:33 amraktad Exp $
 //
 
 // system include files

@@ -15,7 +15,6 @@
 // Modified by Eduardo Luiggi
 //
 //         Created:  Tue Oct 31 10:52:41 CET 2006
-// $Id: JetVertexAssociation.cc,v 1.8 2011/05/20 17:17:28 wmtan Exp $
 //
 //
 

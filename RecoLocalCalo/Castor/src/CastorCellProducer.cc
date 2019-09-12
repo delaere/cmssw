@@ -13,7 +13,6 @@
 //
 // Original Author:  Hans Van Haevermaet, Benoit Roland
 //         Created:  Wed Jul  9 14:00:40 CEST 2008
-// $Id: CastorCellProducer.cc,v 1.7 2010/07/06 16:45:54 hvanhaev Exp $
 //
 //
 
@@ -48,15 +47,15 @@ class CastorCellProducer : public edm::EDProducer {
       ~CastorCellProducer();
 
    private:
-      virtual void beginJob() ;
-      virtual void produce(edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
+      virtual void beginJob() override ;
+      virtual void produce(edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
       
       // member data
       typedef math::XYZPointD Point;
       typedef ROOT::Math::RhoZPhiPoint CellPoint;
       typedef std::vector<reco::CastorCell> CastorCellCollection;
-      std::string input_;
+      edm::EDGetTokenT<CastorRecHitCollection> tok_input_;
 };
 
 //
@@ -73,9 +72,9 @@ const double MYR2D = 180/M_PI;
 // constructor and destructor
 //
 
-CastorCellProducer::CastorCellProducer(const edm::ParameterSet& iConfig) :
-  input_(iConfig.getUntrackedParameter<std::string>("inputprocess","castorreco"))
+CastorCellProducer::CastorCellProducer(const edm::ParameterSet& iConfig) 
 {
+  tok_input_ = consumes<CastorRecHitCollection>(edm::InputTag(iConfig.getUntrackedParameter<std::string>("inputprocess","castorreco")));
   // register your products
   produces<CastorCellCollection>();
   // now do what ever other initialization is needed
@@ -104,7 +103,7 @@ void CastorCellProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
   // Produce CastorCells from CastorRecHits
 
   edm::Handle<CastorRecHitCollection> InputRecHits;
-  iEvent.getByLabel(input_, InputRecHits);
+  iEvent.getByToken(tok_input_, InputRecHits);
     
   std::auto_ptr<CastorCellCollection> OutputCells (new CastorCellCollection);
    

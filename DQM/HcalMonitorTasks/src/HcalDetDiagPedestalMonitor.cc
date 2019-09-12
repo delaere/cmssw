@@ -13,7 +13,6 @@
 //
 // Original Author:  Dmitry Vishnevskiy,591 R-013,+41227674265,
 //         Created:  Tue Mar  9 12:59:18 CET 2010
-// $Id: HcalDetDiagPedestalMonitor.cc,v 1.21 2012/08/30 21:48:48 wdd Exp $
 //
 //
 // user include files
@@ -149,13 +148,18 @@ class HcalDetDiagPedestalMonitor : public HcalBaseDQMonitor {
 
       const HcalElectronicsMap  *emap;
       edm::InputTag inputLabelDigi_;
-      edm::InputTag  inputLabelRawData_;
 
-      void beginRun(const edm::Run& run, const edm::EventSetup& c);  
-      void endRun(const edm::Run& run, const edm::EventSetup& c);
-      void beginLuminosityBlock(const edm::LuminosityBlock& lumiSeg,const edm::EventSetup& c) ;
-      void endLuminosityBlock(const edm::LuminosityBlock& lumiSeg,const edm::EventSetup& c);
-      void analyze(const edm::Event&, const edm::EventSetup&);
+    edm::EDGetTokenT<HBHEDigiCollection> tok_hbhe_;
+    edm::EDGetTokenT<HODigiCollection> tok_ho_;
+    edm::EDGetTokenT<HFDigiCollection> tok_hf_;
+    edm::EDGetTokenT<FEDRawDataCollection> tok_raw_;
+    edm::EDGetTokenT<HcalTBTriggerData> tok_tb_;
+
+      void beginRun(const edm::Run& run, const edm::EventSetup& c) override;  
+      void endRun(const edm::Run& run, const edm::EventSetup& c) override;
+      void beginLuminosityBlock(const edm::LuminosityBlock& lumiSeg,const edm::EventSetup& c) override ;
+      void endLuminosityBlock(const edm::LuminosityBlock& lumiSeg,const edm::EventSetup& c) override;
+      void analyze(const edm::Event&, const edm::EventSetup&) override;
 
       int         ievt_;
       int         run_number;
@@ -236,12 +240,10 @@ class HcalDetDiagPedestalMonitor : public HcalBaseDQMonitor {
 
       std::map<unsigned int, int> KnownBadCells_;
 
-      edm::InputTag hcalTBTriggerDataTag_;
 };
 
-HcalDetDiagPedestalMonitor::HcalDetDiagPedestalMonitor(const edm::ParameterSet& iConfig) :
-  hcalTBTriggerDataTag_(iConfig.getParameter<edm::InputTag>("hcalTBTriggerDataTag"))
-{
+HcalDetDiagPedestalMonitor::HcalDetDiagPedestalMonitor(const edm::ParameterSet& iConfig) {
+
   ievt_=-1;
   emap=0;
   dataset_seq_number=1;
@@ -252,7 +254,6 @@ HcalDetDiagPedestalMonitor::HcalDetDiagPedestalMonitor(const edm::ParameterSet& 
   createHTMLonly=false;
   nTS_HBHE=nTS_HO=nTS_HF=0;
   inputLabelDigi_    = iConfig.getUntrackedParameter<edm::InputTag>("digiLabel");
-  inputLabelRawData_ = iConfig.getUntrackedParameter<edm::InputTag>("rawDataLabel");
   ReferenceData    = iConfig.getUntrackedParameter<std::string>("PedestalReferenceData" ,"");
   OutputFilePath   = iConfig.getUntrackedParameter<std::string>("OutputFilePath", "");
   DatasetName      = iConfig.getUntrackedParameter<std::string>("PedestalDatasetName", "");
@@ -277,7 +278,16 @@ HcalDetDiagPedestalMonitor::HcalDetDiagPedestalMonitor(const edm::ParameterSet& 
   HORmsTreshold    = iConfig.getUntrackedParameter<double>("HORmsPedestalTreshold"  , 0.3);
   HFMeanTreshold   = iConfig.getUntrackedParameter<double>("HFMeanPedestalTreshold" , 0.2);
   HFRmsTreshold    = iConfig.getUntrackedParameter<double>("HFRmsPedestalTreshold"  , 0.3);
+
+  // register for data access
+  tok_hbhe_ = consumes<HBHEDigiCollection>(inputLabelDigi_);
+  tok_ho_ = consumes<HODigiCollection>(inputLabelDigi_);
+   tok_hf_ = consumes<HFDigiCollection>(inputLabelDigi_);
+  tok_raw_ = consumes<FEDRawDataCollection>(iConfig.getUntrackedParameter<edm::InputTag>("rawDataLabel"));
+  tok_tb_ = consumes<HcalTBTriggerData>(iConfig.getParameter<edm::InputTag>("hcalTBTriggerDataTag"));
+
 }
+
 HcalDetDiagPedestalMonitor::~HcalDetDiagPedestalMonitor(){}
 
 void HcalDetDiagPedestalMonitor::beginRun(const edm::Run& run, const edm::EventSetup& c){
@@ -439,7 +449,7 @@ static int  lastPEDorbit,nChecksPED;
    
    // for local runs 
    edm::Handle<HcalTBTriggerData> trigger_data;
-   iEvent.getByLabel(hcalTBTriggerDataTag_, trigger_data);
+   iEvent.getByToken(tok_tb_, trigger_data);
    if(trigger_data.isValid()){
      if((trigger_data->triggerWord())==5) PedestalEvent=true;
        LocalRun=true;
@@ -469,7 +479,7 @@ static int  lastPEDorbit,nChecksPED;
    int calibType = -1 ;
    if(LocalRun==false){
        edm::Handle<FEDRawDataCollection> rawdata;
-       iEvent.getByLabel(inputLabelRawData_,rawdata);
+       iEvent.getByToken(tok_raw_,rawdata);
        //checking FEDs for calibration information
        for (int i=FEDNumbering::MINHCALFEDID;i<=FEDNumbering::MAXHCALFEDID; i++){
          const FEDRawData& fedData = rawdata->FEDData(i) ;
@@ -486,7 +496,7 @@ static int  lastPEDorbit,nChecksPED;
    run_number=iEvent.id().run();
 
    edm::Handle<HBHEDigiCollection> hbhe; 
-   iEvent.getByLabel(inputLabelDigi_,hbhe);
+   iEvent.getByToken(tok_hbhe_,hbhe);
    if(hbhe.isValid()){
 	 if(hbhe->size()<30 && calibType==hc_Pedestal){
              ievt_--;
@@ -507,7 +517,7 @@ static int  lastPEDorbit,nChecksPED;
          }   
    }
    edm::Handle<HODigiCollection> ho; 
-   iEvent.getByLabel(inputLabelDigi_,ho);
+   iEvent.getByToken(tok_ho_,ho);
    if(ho.isValid()){
          for(HODigiCollection::const_iterator digi=ho->begin();digi!=ho->end();digi++){
              eta=digi->id().ieta(); phi=digi->id().iphi(); depth=digi->id().depth(); nTS=digi->size();
@@ -518,7 +528,7 @@ static int  lastPEDorbit,nChecksPED;
          }   
    }
    edm::Handle<HFDigiCollection> hf;
-   iEvent.getByLabel(inputLabelDigi_,hf);
+   iEvent.getByToken(tok_hf_,hf);
    if(hf.isValid()){
          for(HFDigiCollection::const_iterator digi=hf->begin();digi!=hf->end();digi++){
              eta=digi->id().ieta(); phi=digi->id().iphi(); depth=digi->id().depth(); nTS=digi->size();
@@ -1027,7 +1037,7 @@ char   Subdet[10],str[500];
       }
       printf("%s\n",str);
       std::string xmlName=str;
-      ofstream xmlFile;
+      std::ofstream xmlFile;
       xmlFile.open(xmlName.c_str());
 
       xmlFile<<"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";

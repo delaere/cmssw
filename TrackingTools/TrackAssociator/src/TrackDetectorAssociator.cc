@@ -13,7 +13,6 @@
 //
 // Original Author:  Dmytro Kovalskyi
 //         Created:  Fri Apr 21 10:59:41 PDT 2006
-// $Id: TrackDetectorAssociator.cc,v 1.51 2012/09/20 15:06:07 wdd Exp $
 //
 //
 

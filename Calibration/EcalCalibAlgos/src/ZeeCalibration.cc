@@ -48,7 +48,6 @@
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
-#include "FWCore/Framework/interface/CachedProducts.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "FWCore/Framework/interface/TriggerNamesService.h"
 
@@ -2171,7 +2170,7 @@ double ZeeCalibration::getEtaCorrection(const reco::GsfElectron* ele){
   return correction;                                                                                                                                              
 }
 
-std::pair<DetId, double> ZeeCalibration::getHottestDetId(std::vector<std::pair< DetId,float > > mySCRecHits, const EBRecHitCollection* ebhits, const EERecHitCollection* eehits){
+std::pair<DetId, double> ZeeCalibration::getHottestDetId(const std::vector<std::pair< DetId,float > >& mySCRecHits, const EBRecHitCollection* ebhits, const EERecHitCollection* eehits){
   
 
   double maxEnergy = -9999.;
@@ -2380,7 +2379,7 @@ void ZeeCalibration::printStatistics(){
   
   
   
-  ofstream fout("ZeeStatistics.txt");
+  std::ofstream fout("ZeeStatistics.txt");
   
   if(!fout) {
     std::cout << "Cannot open output file.\n";

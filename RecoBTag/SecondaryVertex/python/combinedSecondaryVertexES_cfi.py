@@ -11,3 +11,26 @@ combinedSecondaryVertex = cms.ESProducer("CombinedSecondaryVertexESProducer",
 		'CombinedSVNoVertex'),
 	categoryVariableName = cms.string('vertexCategory')
 )
+
+combinedSecondaryVertexV1 = cms.ESProducer("CombinedSecondaryVertexESProducer",
+	combinedSecondaryVertexCommon,
+	useCategories = cms.bool(True),
+	calibrationRecords = cms.vstring(
+		'CombinedSVRetrainRecoVertex', 
+		'CombinedSVRetrainPseudoVertex', 
+		'CombinedSVRetrainNoVertex'),
+	categoryVariableName = cms.string('vertexCategory')
+)
+
+combinedSecondaryVertexV2 = cms.ESProducer("CombinedSecondaryVertexESProducerV2",
+	combinedSecondaryVertexCommon,
+	useCategories = cms.bool(True),
+	calibrationRecords = cms.vstring(
+		'CombinedSVMVARecoVertex', 
+		'CombinedSVMVAPseudoVertex', 
+		'CombinedSVMVANoVertex'),
+	categoryVariableName = cms.string('vertexCategory')
+)
+combinedSecondaryVertexV2.trackSelection.qualityClass = cms.string('any')
+combinedSecondaryVertexV2.trackPseudoSelection.qualityClass = cms.string('any')
+combinedSecondaryVertexV2.trackMultiplicityMin = cms.uint32(2)

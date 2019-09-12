@@ -5,7 +5,6 @@
  *
  *
  *
- *    $Date: 2008/09/05 16:03:44 $
  *
  *    \author D. Bonacorsi, S. Marcellini
  */
@@ -75,7 +74,7 @@ class DTSectColl : public DTSCPhCache, public DTSCThCache  {
   inline DTTSTheta* getTSTheta(int istat) const { return _tstheta[istat-1]; }
 
   //!Configuration
-  inline DTConfigSectColl* config() const { return _config; }
+  inline const DTConfigSectColl* config() const { return _config; }
 
   // non-const methods
 
@@ -183,7 +182,7 @@ class DTSectColl : public DTSCPhCache, public DTSCThCache  {
  private:
 
   // Configuration
-  DTConfigSectColl* _config;
+  const DTConfigSectColl* _config;
 
   // SC Id
   DTSectCollId _sectcollid;

@@ -5,8 +5,6 @@
  *
  * Digi for CLCT trigger primitives. 
  *
- * $Date: 2010/06/15 13:40:07 $
- * $Revision: 1.14 $
  *
  * \author N. Terentiev, CMU
  */

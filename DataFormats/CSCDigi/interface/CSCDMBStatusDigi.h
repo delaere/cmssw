@@ -5,8 +5,6 @@
  *
  *  Digi for CSC DMB info available in DDU
  *  
- *  $Date: 2009/05/14 01:39:55 $
- *  $Revision: 1.7 $
  *
  */
 

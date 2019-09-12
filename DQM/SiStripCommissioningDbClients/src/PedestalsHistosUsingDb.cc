@@ -1,4 +1,3 @@
-// Last commit: $Id: PedestalsHistosUsingDb.cc,v 1.27 2010/04/21 14:26:28 dstrom Exp $
 
 #include "DQM/SiStripCommissioningDbClients/interface/PedestalsHistosUsingDb.h"
 #include "CondFormats/SiStripObjects/interface/PedestalsAnalysis.h"
@@ -94,7 +93,7 @@ void PedestalsHistosUsingDb::update( SiStripConfigDb::FedDescriptionsRange feds 
     for ( uint16_t ichan = 0; ichan < sistrip::FEDCH_PER_FED; ichan++ ) {
 
       // Build FED and FEC keys
-      const FedChannelConnection& conn = cabling()->connection( (*ifed)->getFedId(), ichan );
+      const FedChannelConnection& conn = cabling()->fedConnection( (*ifed)->getFedId(), ichan );
       if ( conn.fecCrate() == sistrip::invalid_ ||
            conn.fecSlot() == sistrip::invalid_ ||
            conn.fecRing() == sistrip::invalid_ ||

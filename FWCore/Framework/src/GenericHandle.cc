@@ -16,11 +16,11 @@
 #include "FWCore/Framework/interface/GenericHandle.h"
 
 namespace edm {
-void convert_handle(BasicHandle const& orig,
+void convert_handle(BasicHandle && orig,
                     Handle<GenericObject>& result)
 {
   if(orig.failedToGet()) {
-    result.setWhyFailed(orig.whyFailed());
+    result.setWhyFailedFactory(orig.whyFailedFactory());
     return;
   }
   WrapperHolder originalWrap = orig.wrapperHolder();
@@ -52,9 +52,9 @@ edm::Event::getByLabel<GenericObject>(std::string const& label,
                                       std::string const& productInstanceName,
                                       Handle<GenericObject>& result) const
 {
-  BasicHandle bh = provRecorder_.getByLabel_(TypeID(result.type().typeInfo()), label, productInstanceName, std::string());
-  convert_handle(bh, result);  // throws on conversion error
-  if(!bh.failedToGet()) {
+  BasicHandle bh = provRecorder_.getByLabel_(TypeID(result.type().typeInfo()), label, productInstanceName, std::string(), moduleCallingContext_);
+  convert_handle(std::move(bh), result);  // throws on conversion error
+  if(!result.failedToGet()) {
     addToGotBranchIDs(*bh.provenance());
     return true;
   }
@@ -69,9 +69,9 @@ edm::Event::getByLabel<GenericObject>(edm::InputTag const& tag,
   if (tag.process().empty()) {
     return this->getByLabel(tag.label(), tag.instance(), result);
   } else {
-    BasicHandle bh = provRecorder_.getByLabel_(TypeID(result.type().typeInfo()), tag.label(), tag.instance(),tag.process());
-    convert_handle(bh, result);  // throws on conversion error
-    if(!bh.failedToGet()) {
+    BasicHandle bh = provRecorder_.getByLabel_(TypeID(result.type().typeInfo()), tag.label(), tag.instance(),tag.process(), moduleCallingContext_);
+    convert_handle(std::move(bh), result);  // throws on conversion error
+    if(!result.failedToGet()) {
       addToGotBranchIDs(*bh.provenance());
       return true;
     }

@@ -2,8 +2,6 @@
  *  
  *  See header file for description of class
  *
- *  $Date: 2011/09/12 09:11:30 $
- *  $Revision: 1.9 $
  *  \author M. Strang SUNY-Buffalo
  */
 
@@ -42,6 +40,8 @@ GlobalDigisHistogrammer::GlobalDigisHistogrammer(const edm::ParameterSet& iPSet)
   //MuCSCStripSrc_ = iPSet.getParameter<edm::InputTag>("MuCSCStripSrc");
   //MuCSCWireSrc_ = iPSet.getParameter<edm::InputTag>("MuCSCWireSrc");
 
+  //fix for consumes
+  GlobalDigisSrc_Token_ = consumes<PGlobalDigi>(iPSet.getParameter<edm::InputTag>("GlobalDigisSrc"));
   // use value of first digit to determine default output level (inclusive)
   // 0 is none, 1 is basic, 2 is fill output, 3 is gather output
   verbosity %= 10;
@@ -416,7 +416,7 @@ void GlobalDigisHistogrammer::analyze(const edm::Event& iEvent,
       getAllProvenances = false;
     }
 edm::Handle<PGlobalDigi> srcGlobalDigis;
-  iEvent.getByLabel(GlobalDigisSrc_,srcGlobalDigis);
+  iEvent.getByToken(GlobalDigisSrc_Token_,srcGlobalDigis);
   if (!srcGlobalDigis.isValid()) {
     edm::LogWarning(MsgLoggerCat)
       << "Unable to find PGlobalDigis in event!";

@@ -5,8 +5,6 @@
 //   Description: PHI Track Segment 
 //
 //
-//   $Date: 2012/07/31 12:06:20 $
-//   $Revision: 1.4 $
 //
 //   Author :
 //   N. Neumeister            CERN EP 

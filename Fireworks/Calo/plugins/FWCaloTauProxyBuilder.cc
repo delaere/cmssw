@@ -8,7 +8,6 @@
 //
 // Original Author:
 //         Created:  Sun Jan  6 23:57:00 EST 2008
-// $Id: FWCaloTauProxyBuilder.cc,v 1.17 2012/03/23 00:08:29 amraktad Exp $
 //
 
 // system include files

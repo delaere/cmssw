@@ -14,12 +14,12 @@
 //
 // Original Author:  Werner Man-Li Sun
 //         Created:  Tue Sep 16 22:43:22 CEST 2008
-// $Id: L1RCTChannelMaskOnlineProd.cc,v 1.3 2012/06/11 18:21:04 wmtan Exp $
 //
 //
 
 
 // system include files
+#include <iostream>
 
 // user include files
 #include "CondTools/L1Trigger/interface/L1ConfigOnlineProdBase.h"
@@ -41,7 +41,7 @@ class L1RCTChannelMaskOnlineProd :
     : L1ConfigOnlineProdBase< L1RCTChannelMaskRcd, L1RCTChannelMask > (iConfig) {}
   ~L1RCTChannelMaskOnlineProd() {}
   
-  virtual boost::shared_ptr< L1RCTChannelMask > newObject(const std::string& objectKey ) ;
+  virtual boost::shared_ptr< L1RCTChannelMask > newObject(const std::string& objectKey ) override ;
 
 
    private:

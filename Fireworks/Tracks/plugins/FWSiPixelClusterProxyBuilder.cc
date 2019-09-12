@@ -7,7 +7,6 @@
 //
 // Original Author:
 //         Created:  Thu Dec  6 18:01:21 PST 2007
-// $Id: FWSiPixelClusterProxyBuilder.cc,v 1.17 2010/09/07 15:46:48 yana Exp $
 //
 
 #include "TEvePointSet.h"
@@ -34,7 +33,7 @@ private:
   // Disable default assignment operator
   const FWSiPixelClusterProxyBuilder& operator=( const FWSiPixelClusterProxyBuilder& );
 
-  virtual void build( const FWEventItem* iItem, TEveElementList* product, const FWViewContext* );
+  virtual void build( const FWEventItem* iItem, TEveElementList* product, const FWViewContext* ) override;
 };
 
 void

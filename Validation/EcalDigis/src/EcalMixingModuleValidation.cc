@@ -1,8 +1,6 @@
 /*
  * \file EcalMixingModuleValidation.cc
  *
- * $Date: 2010/03/29 01:30:40 $
- * $Revision: 1.26 $
  * \author F. Cossutti
  *
 */
@@ -14,19 +12,27 @@
 #include "CalibCalorimetry/EcalTrivialCondModules/interface/EcalTrivialConditionRetriever.h"
 #include "Geometry/Records/interface/CaloGeometryRecord.h"
 #include "DataFormats/EcalDigi/interface/EcalDataFrame.h"
-#include "DQMServices/Core/interface/DQMStore.h"
-#include "DQMServices/Core/interface/MonitorElement.h"
-
-//using namespace cms;
-//using namespace edm;
-//using namespace std;
 
 EcalMixingModuleValidation::EcalMixingModuleValidation(const edm::ParameterSet& ps):
-  HepMCLabel(ps.getParameter<std::string>("moduleLabelMC")),
-  hitsProducer_(ps.getParameter<std::string>("hitsProducer")),
-  EBdigiCollection_(ps.getParameter<edm::InputTag>("EBdigiCollection")),
-  EEdigiCollection_(ps.getParameter<edm::InputTag>("EEdigiCollection")),
-  ESdigiCollection_(ps.getParameter<edm::InputTag>("ESdigiCollection")){
+  HepMCToken_( consumes<edm::HepMCProduct>( edm::InputTag( ps.getParameter<std::string>( "moduleLabelMC" ) ) ) ),
+  EBdigiCollectionToken_( consumes<EBDigiCollection>( ps.getParameter<edm::InputTag>( "EBdigiCollection" ) ) ),
+  EEdigiCollectionToken_( consumes<EEDigiCollection>( ps.getParameter<edm::InputTag>( "EEdigiCollection" ) ) ),
+  ESdigiCollectionToken_( consumes<ESDigiCollection>( ps.getParameter<edm::InputTag>( "ESdigiCollection" ) ) ),
+  crossingFramePCaloHitEBToken_( consumes< CrossingFrame<PCaloHit> >( edm::InputTag( std::string( "mix" )
+										   , ps.getParameter<std::string>( "hitsProducer" ) + std::string( "EcalHitsEB" )
+										   )
+								    )
+			       ),
+  crossingFramePCaloHitEEToken_( consumes< CrossingFrame<PCaloHit> >( edm::InputTag( std::string( "mix" )
+										   , ps.getParameter<std::string>( "hitsProducer" ) + std::string( "EcalHitsEE" )
+										   )
+								    )
+			       ),
+  crossingFramePCaloHitESToken_( consumes< CrossingFrame<PCaloHit> >( edm::InputTag( std::string( "mix" )
+										   , ps.getParameter<std::string>( "hitsProducer" ) + std::string( "EcalHitsES" )
+										   )
+								    )
+			       ) {
 
 
   // needed for MixingModule checks
@@ -312,7 +318,7 @@ void EcalMixingModuleValidation::analyze(edm::Event const & e, edm::EventSetup c
 
   
   bool skipMC = false;
-  e.getByLabel(HepMCLabel, MCEvt);
+  e.getByToken( HepMCToken_, MCEvt );
   if (!MCEvt.isValid()) { skipMC = true; }
 
   const EBDigiCollection* EBdigis =0;
@@ -320,7 +326,7 @@ void EcalMixingModuleValidation::analyze(edm::Event const & e, edm::EventSetup c
   const ESDigiCollection* ESdigis =0;
 
   bool isBarrel = true;
-  e.getByLabel( EBdigiCollection_, EcalDigiEB );
+  e.getByToken( EBdigiCollectionToken_, EcalDigiEB );
   if (EcalDigiEB.isValid()) { 
     EBdigis = EcalDigiEB.product();
     LogDebug("DigiInfo") << "total # EBdigis: " << EBdigis->size() ;
@@ -330,7 +336,7 @@ void EcalMixingModuleValidation::analyze(edm::Event const & e, edm::EventSetup c
   }
 
   bool isEndcap = true;
-  e.getByLabel( EEdigiCollection_, EcalDigiEE );
+  e.getByToken( EEdigiCollectionToken_, EcalDigiEE );
   if (EcalDigiEE.isValid()) {
     EEdigis = EcalDigiEE.product();
     LogDebug("DigiInfo") << "total # EEdigis: " << EEdigis->size() ;
@@ -340,7 +346,7 @@ void EcalMixingModuleValidation::analyze(edm::Event const & e, edm::EventSetup c
   }
 
   bool isPreshower = true;
-  e.getByLabel( ESdigiCollection_, EcalDigiES );
+  e.getByToken( ESdigiCollectionToken_, EcalDigiES );
   if (EcalDigiES.isValid()) {
     ESdigis = EcalDigiES.product();
     LogDebug("DigiInfo") << "total # ESdigis: " << ESdigis->size() ;
@@ -369,8 +375,7 @@ void EcalMixingModuleValidation::analyze(edm::Event const & e, edm::EventSetup c
 
   if ( isBarrel ) {
 
-    const std::string barrelHitsName(hitsProducer_+"EcalHitsEB");
-    e.getByLabel("mix",barrelHitsName,crossingFrame);
+    e.getByToken( crossingFramePCaloHitEBToken_, crossingFrame );
     std::auto_ptr<MixCollection<PCaloHit> > 
       barrelHits (new MixCollection<PCaloHit>(crossingFrame.product ()));
     
@@ -471,8 +476,7 @@ void EcalMixingModuleValidation::analyze(edm::Event const & e, edm::EventSetup c
 
   if ( isEndcap ) {
 
-    const std::string endcapHitsName(hitsProducer_+"EcalHitsEE");
-    e.getByLabel("mix",endcapHitsName,crossingFrame);
+    e.getByToken( crossingFramePCaloHitEEToken_, crossingFrame );
     std::auto_ptr<MixCollection<PCaloHit> > 
       endcapHits (new MixCollection<PCaloHit>(crossingFrame.product ()));
     
@@ -567,8 +571,7 @@ void EcalMixingModuleValidation::analyze(edm::Event const & e, edm::EventSetup c
 
   if ( isPreshower) {
 
-    const std::string preshowerHitsName(hitsProducer_+"EcalHitsES");
-    e.getByLabel("mix",preshowerHitsName,crossingFrame);
+    e.getByToken(crossingFramePCaloHitESToken_, crossingFrame );
     std::auto_ptr<MixCollection<PCaloHit> > 
       preshowerHits (new MixCollection<PCaloHit>(crossingFrame.product ()));
     

@@ -90,7 +90,7 @@ TProfile2D** RunHistogramManager::makeTProfile2D(const char* name, const char* t
 void  RunHistogramManager::beginRun(const edm::Run&  iRun) {
 
   edm::Service<TFileService> tfserv;
-  beginRun(iRun,*tfserv);
+  beginRun(iRun, tfserv->tFileDirectory());
 
 }
 
@@ -100,17 +100,21 @@ void  RunHistogramManager::beginRun(const edm::Run& iRun, TFileDirectory& subdir
     beginRun(iRun.run(),subdir);
   }
   else {
+    unsigned int fillnum = 0;
+
     edm::Handle<edm::ConditionsInRunBlock> cirb;
     iRun.getByLabel("conditionsInEdm",cirb);
 
-    beginRun(cirb->lhcFillNumber,subdir);
+    if(!cirb.failedToGet() && cirb.isValid()) fillnum=cirb->lhcFillNumber;
+
+    beginRun(fillnum,subdir);
   }
 }
 
 void  RunHistogramManager::beginRun(const unsigned int irun) {
 
   edm::Service<TFileService> tfserv;
-  beginRun(irun,*tfserv);
+  beginRun(irun, tfserv->tFileDirectory());
 
 }
 

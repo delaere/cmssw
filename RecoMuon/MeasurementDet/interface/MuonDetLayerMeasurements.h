@@ -4,8 +4,6 @@
 /** \class MuonDetLayerMeasurements
  *  The class to access recHits and TrajectoryMeasurements from DetLayer.  
  *
- *  $Date: 2012/05/29 08:23:55 $
- *  $Revision: 1.21 $
  *  \author C. Liu, R. Bellan, N. Amapane
  *
  */
@@ -22,6 +20,9 @@
 #include "DataFormats/RPCRecHit/interface/RPCRecHitCollection.h"
 #include "DataFormats/RPCRecHit/interface/RPCRecHitCollection.h"
 #include "FWCore/Utilities/interface/InputTag.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
+
+
 
 #include <vector>
 
@@ -42,9 +43,11 @@ class MuonDetLayerMeasurements {
   MuonDetLayerMeasurements(edm::InputTag dtlabel,
 			   edm::InputTag csclabel,
 			   edm::InputTag rpclabel,
+			   edm::ConsumesCollector& iC,
 			   bool enableDT = true,
 			   bool enableCSC = true,
-			   bool enableRPC = true);
+			   bool enableRPC = true
+			    );
   
   virtual ~MuonDetLayerMeasurements();
   
@@ -119,9 +122,11 @@ class MuonDetLayerMeasurements {
   /// check that the event is set, and throw otherwise
   void checkEvent() const;
 
-  edm::InputTag theDTRecHitLabel;
-  edm::InputTag theCSCRecHitLabel;
-  edm::InputTag theRPCRecHitLabel;
+
+  edm::EDGetTokenT<DTRecSegment4DCollection> dtToken_;
+  edm::EDGetTokenT<CSCSegmentCollection> cscToken_;
+  edm::EDGetTokenT<RPCRecHitCollection> rpcToken_;
+
 
   bool enableDTMeasurement;
   bool enableCSCMeasurement;
@@ -137,16 +142,12 @@ class MuonDetLayerMeasurements {
   void checkRPCRecHits();
 
   // keeps track of which event the cache holds
-  edm::EventID theDTEventID;
-  edm::EventID theCSCEventID;
-  edm::EventID theRPCEventID;
+  edm::Event::CacheIdentifier_t theDTEventCacheID;
+  edm::Event::CacheIdentifier_t theCSCEventCacheID;
+  edm::Event::CacheIdentifier_t theRPCEventCacheID;
 
   const edm::Event* theEvent;   
 
-  // strings to uniquely identify current process
-  std::string theDTCheckName;
-  std::string theRPCCheckName;
-  std::string theCSCCheckName;
 };
 #endif
 

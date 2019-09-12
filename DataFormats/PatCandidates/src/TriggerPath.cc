@@ -1,5 +1,4 @@
 //
-// $Id: TriggerPath.cc,v 1.7 2011/05/24 15:56:25 vadler Exp $
 //
 
 

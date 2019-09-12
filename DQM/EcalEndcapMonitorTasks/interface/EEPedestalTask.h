@@ -4,8 +4,6 @@
 /*
  * \file EEPedestalTask.h
  *
- * $Date: 2012/04/27 13:46:13 $
- * $Revision: 1.16 $
  * \author G. Della Ricca
  *
 */
@@ -13,6 +11,9 @@
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "DataFormats/EcalRawData/interface/EcalRawDataCollections.h"
+#include "DataFormats/EcalDigi/interface/EcalDigiCollections.h"
 
 class MonitorElement;
 class DQMStore;
@@ -65,9 +66,9 @@ bool enableCleanup_;
 
 bool mergeRuns_;
 
-edm::InputTag EcalRawDataCollection_;
-edm::InputTag EEDigiCollection_;
-edm::InputTag EcalPnDiodeDigiCollection_;
+edm::EDGetTokenT<EcalRawDataCollection> EcalRawDataCollection_;
+edm::EDGetTokenT<EEDigiCollection> EEDigiCollection_;
+edm::EDGetTokenT<EcalPnDiodeDigiCollection> EcalPnDiodeDigiCollection_;
 std::vector<int> MGPAGains_;
 std::vector<int> MGPAGainsPN_;
 

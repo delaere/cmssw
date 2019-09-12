@@ -44,7 +44,8 @@ namespace edm
   }  
 
 
-  void DataMixingPileupCopy::addPileupInfo(const EventPrincipal *ep, unsigned int eventNr) {
+  void DataMixingPileupCopy::addPileupInfo(const EventPrincipal *ep, unsigned int eventNr,
+                                           ModuleCallingContext const* mcc) {
   
     LogDebug("DataMixingPileupCopy") <<"\n===============> adding pileup Info from event  "<<ep->id();
 
@@ -53,7 +54,7 @@ namespace edm
     // Pileup info first
 
     boost::shared_ptr<Wrapper< std::vector<PileupSummaryInfo> >  const> PileupInfoPTR =
-      getProductByTag<std::vector<PileupSummaryInfo>>(*ep,PileupInfoInputTag_ );
+      getProductByTag<std::vector<PileupSummaryInfo>>(*ep,PileupInfoInputTag_, mcc);
 
     if(PileupInfoPTR ) {
 
@@ -66,11 +67,15 @@ namespace edm
     // Playback
 
     boost::shared_ptr<Wrapper<CrossingFramePlaybackInfoExtended>  const> PlaybackPTR =
-      getProductByTag<CrossingFramePlaybackInfoExtended>(*ep,CFPlaybackInputTag_ );
+      getProductByTag<CrossingFramePlaybackInfoExtended>(*ep,CFPlaybackInputTag_, mcc);
+
+    FoundPlayback_ = false;
 
     if(PlaybackPTR ) {
 
       CrossingFramePlaybackStorage_ = *(PlaybackPTR->product()) ;
+
+      FoundPlayback_ = true;
 
     }
 
@@ -88,17 +93,22 @@ namespace edm
 
     }
 
-    std::vector<std::vector<edm::EventID> > IdVect; 
+    if(FoundPlayback_ ) {
 
-    CrossingFramePlaybackStorage_.getEventStartInfo(IdVect, 0);
+      std::vector<std::vector<edm::EventID> > IdVect; 
 
-    std::auto_ptr< CrossingFramePlaybackInfoExtended  > CFPlaybackInfo( new CrossingFramePlaybackInfoExtended(0, IdVect.size(), 1 ));
+      CrossingFramePlaybackStorage_.getEventStartInfo(IdVect, 0);
 
-    CFPlaybackInfo->setEventStartInfo(IdVect, 0);
+      std::auto_ptr< CrossingFramePlaybackInfoExtended  > CFPlaybackInfo( new CrossingFramePlaybackInfoExtended(0, IdVect.size(), 1 ));
 
+      CFPlaybackInfo->setEventStartInfo(IdVect, 0);
+
+      e.put(CFPlaybackInfo);
+
+    }
 
     e.put(PSIVector);
-    e.put(CFPlaybackInfo);
+
 
     // clear local storage after this event
     PileupSummaryStorage_.clear();

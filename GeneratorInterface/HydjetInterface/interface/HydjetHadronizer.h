@@ -1,7 +1,6 @@
 #ifndef HydjetHadronizer_h
 #define HydjetHadronizer_h
 
-// $Id: HydjetHadronizer.h,v 1.10 2013/05/23 14:40:17 gartung Exp $
 
 /** \class HydjetHadronizer
 *

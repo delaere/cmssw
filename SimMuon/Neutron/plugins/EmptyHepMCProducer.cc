@@ -14,7 +14,6 @@
 //
 // Original Author:  Vadim Khotilovich
 //         Created:  Mon Aug 09 19:11:42 CST 2010
-// $Id: EmptyHepMCProducer.cc,v 1.1 2010/08/20 00:28:11 khotilov Exp $
 //
 //
 
@@ -37,9 +36,9 @@ public:
   ~EmptyHepMCProducer() {};
 
 private:
-  virtual void beginJob();
-  virtual void produce(edm::Event&, const edm::EventSetup&);
-  virtual void endJob();
+  virtual void beginJob() override;
+  virtual void produce(edm::Event&, const edm::EventSetup&) override;
+  virtual void endJob() override;
 
 };
 

@@ -1,7 +1,5 @@
 /** \file
  *
- *  $Date: 2012/09/13 14:53:55 $
- *  $Revision: 1.13 $
  *  \author S. Argiro - N. Amapane - M. Zanetti 
  * FRC 060906
  */

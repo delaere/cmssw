@@ -1,7 +1,5 @@
 /** \file
  * 
- *  $Date: 2010/03/03 15:53:20 $
- *  $Revision: 1.7 $
  *
  * \author N. Amapane - INFN Torino
  */

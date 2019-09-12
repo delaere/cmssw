@@ -13,7 +13,6 @@
 //
 // Original Author:  Vincenzo Chiochia & Andrew York
 //         Created:  
-// $Id: SiPixelClusterSource.cc,v 1.29 2010/11/19 13:39:23 eulisse Exp $
 //
 //
 // Updated by: Lukas Wehrli
@@ -62,6 +61,9 @@ SiPixelClusterSource::SiPixelClusterSource(const edm::ParameterSet& iConfig) :
 {
    theDMBE = edm::Service<DQMStore>().operator->();
    LogInfo ("PixelDQM") << "SiPixelClusterSource::SiPixelClusterSource: Got DQM BackEnd interface"<<endl;
+
+   //set Token(-s)
+   srcToken_ = consumes<edmNew::DetSetVector<SiPixelCluster> >(conf_.getParameter<edm::InputTag>("src"));
 }
 
 
@@ -155,7 +157,7 @@ void SiPixelClusterSource::analyze(const edm::Event& iEvent, const edm::EventSet
   
   // get input data
   edm::Handle< edmNew::DetSetVector<SiPixelCluster> >  input;
-  iEvent.getByLabel( src_, input );
+  iEvent.getByToken(srcToken_, input);
 
   edm::ESHandle<TrackerGeometry> pDD;
   iSetup.get<TrackerDigiGeometryRecord> ().get (pDD);

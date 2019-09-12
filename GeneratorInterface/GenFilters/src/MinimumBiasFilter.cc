@@ -1,7 +1,6 @@
 //
 // Original Author:  Filippo Ambroglini
 //         Created:  Fri Sep 29 17:10:41 CEST 2006
-// $Id: MinimumBiasFilter.cc,v 1.3 2009/05/25 13:53:23 fabiocos Exp $
 //
 //
 // system include files

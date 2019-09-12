@@ -13,7 +13,6 @@ Implementation:
 //
 // Original Author:  Yetkin Yilmaz
 //         Created:  Thu Aug 13 08:39:51 EDT 2009
-// $Id: GenHIEventProducer.cc,v 1.7 2010/08/18 16:45:26 yilmaz Exp $
 //
 //
 
@@ -52,7 +51,7 @@ class GenHIEventProducer : public edm::EDProducer {
         ~GenHIEventProducer();
 
     private:
-        virtual void produce(edm::Event&, const edm::EventSetup&);
+        virtual void produce(edm::Event&, const edm::EventSetup&) override;
         std::vector<std::string> hepmcSrc_;
         edm::ESHandle < ParticleDataTable > pdt;
 

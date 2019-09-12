@@ -7,8 +7,6 @@
  *  This class is an HLTFilter (-> EDFilter) returning always the same
  *  configurable Boolean value (good for tests)
  *
- *  $Date: 2012/01/22 22:15:43 $
- *  $Revision: 1.4 $
  *
  *  \author Martin Grunewald
  *

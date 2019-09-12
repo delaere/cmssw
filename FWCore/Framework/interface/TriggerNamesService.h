@@ -6,7 +6,6 @@
 
  Original Author:  Jim Kowalkowski 26-01-06
 
- $Id: TriggerNamesService.h,v 1.11 2011/12/02 08:33:02 fwyzard Exp $
 
  This service makes the trigger names available.  They are provided
  in the same order that the pass/fail status of these triggers is
@@ -116,13 +115,6 @@ namespace edm {
 	}
       }
 
-      void loadPosMap(PosMap& posmap, Strings const& names) {
-        size_type const n(names.size());
-	for (size_type i = 0; i != n; ++i) {
-	  posmap[names[i]] = i;
-	}
-      }
-      
       std::string const& getProcessName() const { return process_name_; }
       bool wantSummary() const { return wantSummary_; }
 
@@ -130,6 +122,13 @@ namespace edm {
       edm::ParameterSet const& getTriggerPSet() const { return trigger_pset_; }
 
     private:
+
+      void loadPosMap(PosMap& posmap, Strings const& names) {
+        size_type const n(names.size());
+	for (size_type i = 0; i != n; ++i) {
+	  posmap[names[i]] = i;
+	}
+      }
 
       edm::ParameterSet trigger_pset_;
 

@@ -1,5 +1,4 @@
 //
-// $Id: StEvtSolution.cc,v 1.11 2008/11/14 19:20:51 rwolf Exp $
 //
 
 #include "FWCore/MessageLogger/interface/MessageLogger.h"

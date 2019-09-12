@@ -16,7 +16,6 @@
 //
 // Original Author:  Aruna Nayak
 //         Created:  Thu Aug 23 11:37:45 CEST 2007
-// $Id: Zto2lFilter.h,v 1.2 2009/12/15 10:29:32 fabiocos Exp $
 //
 //
 

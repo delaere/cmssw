@@ -9,7 +9,6 @@
  *
  * \author Luca Lista, INFN
  *
- * \version $Id: TrackExtra.h,v 1.30 2011/08/03 09:53:09 vlimant Exp $
  *
  */
 #include <Rtypes.h>

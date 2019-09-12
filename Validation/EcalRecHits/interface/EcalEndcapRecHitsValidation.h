@@ -4,7 +4,6 @@
 /*
  * \file EcalEndcapRecHitsValidation.h
  *
- * $Date: 2009/12/14 22:24:41 $
  * \author C. Rovelli
  *
 */
@@ -62,8 +61,9 @@ private:
  
  DQMStore* dbe_;
 
- edm::InputTag EEdigiCollection_;
- edm::InputTag EEuncalibrechitCollection_;
+ // fix for consumes
+ edm::EDGetTokenT< EEDigiCollection > EEdigiCollection_token_;
+ edm::EDGetTokenT< EEUncalibratedRecHitCollection > EEuncalibrechitCollection_token_;
 
  MonitorElement* meEEUncalibRecHitsOccupancyPlus_;     
  MonitorElement* meEEUncalibRecHitsOccupancyMinus_;     

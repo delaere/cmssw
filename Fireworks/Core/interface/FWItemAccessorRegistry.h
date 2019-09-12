@@ -18,7 +18,6 @@
 //
 // Original Author:  Giulio Eulisse 
 //         Created:  Thu Feb 18 00:00:00 EDT 2010
-// $Id: FWItemAccessorRegistry.h,v 1.2 2010/03/01 09:43:01 eulisse Exp $
 //
 
 // system include files

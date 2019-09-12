@@ -13,7 +13,6 @@
 //
 // Original Author:  Jean-Roch Vlimant,40 3-A28,+41227671209,
 //         Created:  Fri Jan  6 14:49:42 CET 2012
-// $Id: BeamProfile2DB.cc,v 1.2 2013/02/27 18:41:07 wmtan Exp $
 //
 //
 
@@ -48,9 +47,9 @@ class BeamProfile2DB : public edm::EDAnalyzer {
 
 
    private:
-      virtual void beginJob() ;
+      virtual void beginJob() override ;
       virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
-      virtual void endJob() ;
+      virtual void endJob() override ;
 
       // ----------member data ---------------------------
   edm::ParameterSet config_;

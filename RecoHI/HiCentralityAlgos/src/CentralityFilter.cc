@@ -13,7 +13,6 @@
 //
 // Original Author:  Yetkin Yilmaz,32 4-A08,+41227673039,
 //         Created:  Tue Jun 29 12:19:49 CEST 2010
-// $Id: CentralityFilter.cc,v 1.5 2010/11/04 09:25:57 yilmaz Exp $
 //
 //
 
@@ -42,9 +41,9 @@ class CentralityFilter : public edm::EDFilter {
       ~CentralityFilter();
 
    private:
-      virtual void beginJob() ;
-      virtual bool filter(edm::Event&, const edm::EventSetup&);
-      virtual void endJob() ;
+      virtual void beginJob() override ;
+      virtual bool filter(edm::Event&, const edm::EventSetup&) override;
+      virtual void endJob() override ;
       
       // ----------member data ---------------------------
    CentralityProvider * centrality_;

@@ -1,6 +1,4 @@
 /*
- *  $Date: 2009/05/25 07:16:08 $
- *  $Revision: 1.3 $
  *  \author G. Bevilacqua, N. Amapane - INFN Torino
  */
 

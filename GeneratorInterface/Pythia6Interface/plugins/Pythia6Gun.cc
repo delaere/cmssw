@@ -1,6 +1,4 @@
 /*
- *  $Date: 2013/03/01 22:23:10 $
- *  $Revision: 1.20 $
  *  \author Julia Yarba
  */
 

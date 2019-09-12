@@ -4,8 +4,6 @@
 /** \class MuonTrackValidator
  *  Class that produces histograms to validate Muon Track Reconstruction performances
  *
- *  $Date: 2011/02/22 18:28:59 $
- *  $Revision: 1.5 $
  */
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
@@ -13,6 +11,7 @@
 
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/GsfTrackReco/interface/GsfTrack.h"
+#include "DataFormats/RecoCandidate/interface/TrackAssociation.h"
 
 class MuonTrackValidator : public edm::EDAnalyzer, protected MuonTrackValidatorBase {
  public:
@@ -49,6 +48,16 @@ class MuonTrackValidator : public edm::EDAnalyzer, protected MuonTrackValidatorB
     // dump cfg parameters
     edm::LogVerbatim("MuonTrackValidator") << "constructing  MuonTrackValidator: " << pset.dump();
     
+    // Declare consumes (also for the base class)
+    bsSrc_Token = consumes<reco::BeamSpot>(bsSrc);
+    tp_effic_Token = consumes<TrackingParticleCollection>(label_tp_effic);
+    tp_fake_Token = consumes<TrackingParticleCollection>(label_tp_fake);
+    for (unsigned int www=0;www<label.size();www++){
+      track_Collection_Token.push_back(consumes<edm::View<reco::Track> >(label[www]));
+    }
+    simToRecoCollection_Token = consumes<reco::SimToRecoCollection>(associatormap);
+    recoToSimCollection_Token = consumes<reco::RecoToSimCollection>(associatormap);
+
     MABH = false;
     if (!UseAssociators) {
       // flag MuonAssociatorByHits
@@ -137,6 +146,8 @@ private:
  private:
   std::string dirName_;
   edm::InputTag associatormap;
+  edm::EDGetTokenT<reco::SimToRecoCollection> simToRecoCollection_Token;
+  edm::EDGetTokenT<reco::RecoToSimCollection> recoToSimCollection_Token;
   bool UseAssociators;
   double minPhi, maxPhi;
   int nintPhi;

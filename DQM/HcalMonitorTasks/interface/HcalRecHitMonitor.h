@@ -9,8 +9,6 @@
 
 /** \class HcalRecHitMonitor
   *
-  * $Date: 2012/11/12 20:52:11 $
-  * $Revision: 1.53 $
   * \author J. Temple - Univ. of Maryland
   */
 
@@ -230,8 +228,14 @@ class HcalRecHitMonitor: public HcalBaseDQMonitor {
   bool setupDone_;
   
   edm::InputTag hbheRechitLabel_, hoRechitLabel_, hfRechitLabel_;
-  edm::InputTag l1gtLabel_;
+  edm::InputTag l1gtLabel_;  // no associated access
   edm::InputTag hltresultsLabel_;
+
+  edm::EDGetTokenT<HBHERecHitCollection> tok_hbhe_;
+  edm::EDGetTokenT<HORecHitCollection> tok_ho_;
+  edm::EDGetTokenT<HFRecHitCollection> tok_hf_;
+  edm::EDGetTokenT<edm::TriggerResults> tok_trigger_;
+
   std::vector <std::string> HcalHLTBits_;
   std::vector <std::string> MinBiasHLTBits_;
 };

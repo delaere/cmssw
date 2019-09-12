@@ -1,14 +1,11 @@
-// $Id: MonitorXMLParser.cc,v 1.9 2011/09/15 21:00:17 yiiyama Exp $
 
 /*!
   \file MonitorXMLParser.cc
   \brief monitor db xml elements parsing tool
   \author B. Gobbo
-  \version $Revision: 1.9 $
-  \date $Date: 2011/09/15 21:00:17 $
 */
 
-#include <xercesc/util/PlatformUtils.hpp>
+#include "FWCore/Concurrency/interface/Xerces.h"
 
 #include <xercesc/dom/DOMDocument.hpp>
 #include <xercesc/dom/DOMNodeList.hpp>
@@ -22,7 +19,7 @@ MonitorXMLParser::MonitorXMLParser( const std::string& fromFile ) {
 
   try{
 
-    xercesc::XMLPlatformUtils::Initialize();
+    cms::concurrency::xercesInitialize();
 
   }catch( xercesc::XMLException& e ){
 
@@ -47,7 +44,7 @@ MonitorXMLParser::MonitorXMLParser( const std::string& fromFile ) {
 MonitorXMLParser::~MonitorXMLParser() throw() {
 
   try{
-    xercesc::XMLPlatformUtils::Terminate();
+    cms::concurrency::xercesTerminate();
   } catch ( xercesc::XMLException& e ){
     char* message = xercesc::XMLString::transcode( e.getMessage() );
     std::cerr << "XML toolkit teardown error: " << message << std::endl;

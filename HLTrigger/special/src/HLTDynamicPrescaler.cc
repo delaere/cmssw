@@ -3,13 +3,14 @@
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
+#include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 
 class HLTDynamicPrescaler : public edm::EDFilter {
 public:
   explicit HLTDynamicPrescaler(edm::ParameterSet const & configuration);
   ~HLTDynamicPrescaler();
-
-  bool filter(edm::Event & event, edm::EventSetup const & setup);
+  static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
+  bool filter(edm::Event & event, edm::EventSetup const & setup) override;
 
 private:
   unsigned int m_count;     // event counter
@@ -22,6 +23,13 @@ HLTDynamicPrescaler::HLTDynamicPrescaler(edm::ParameterSet const & configuration
 }
 
 HLTDynamicPrescaler::~HLTDynamicPrescaler() {
+}
+
+void
+HLTDynamicPrescaler::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+  edm::ParameterSetDescription desc;
+  desc.add<bool>("saveTags",false);
+  descriptions.add("hltDynamicPrescaler",desc);
 }
 
 bool HLTDynamicPrescaler::filter(edm::Event & event, edm::EventSetup const & setup) {

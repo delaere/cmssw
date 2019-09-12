@@ -2,7 +2,7 @@
  *  TrackQuality.cc
  *
  *  Created by Christophe Saout on 9/25/08.
- *  Copyright 2007 __MyCompanyName__. All rights reserved.
+ *  2007 __MyCompanyName__. 
  *
  */
 
@@ -68,7 +68,7 @@ struct MatchedHit
                simTrackId == other.simTrackId;
     }
 };
-
+  /*
 static bool operator < (const MatchedHit &hit, DetId detId)
 {
     return hit.detId < detId;
@@ -77,6 +77,7 @@ static bool operator < (DetId detId, const MatchedHit &hit)
 {
     return detId < hit.detId;
 }
+  */
 }
 
 typedef std::pair<TrackQuality::Layer::SubDet, short int> DetLayer;
@@ -229,7 +230,8 @@ void TrackQuality::evaluate(SimParticleTrail const &spt,
 
     std::vector<MatchedHit>::size_type size = matchedHits.size();
 
-#warning "This file has been modified just to get it to compile without any regard as to whether it still functions as intended"
+    //#warning "This file has been modified just to get it to compile without any regard as to whether it still functions as intended"
+    // This warning is disabled because there is no anymore PSimHit vector associated with TrackingParticle
 #ifdef REMOVED_JUST_TO_GET_IT_TO_COMPILE__THIS_CODE_NEEDS_TO_BE_CHECKED
     // now iterate over simulated hits and compare (tracks in chain first)
     for (SimParticleTrail::const_iterator track = spt.begin();

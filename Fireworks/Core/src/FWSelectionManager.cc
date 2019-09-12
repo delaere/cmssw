@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Fri Jan 18 14:40:51 EST 2008
-// $Id: FWSelectionManager.cc,v 1.12 2012/09/21 09:26:26 eulisse Exp $
 //
 
 // system include files

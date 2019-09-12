@@ -1,8 +1,6 @@
 #ifndef HI_MixEvtVtxGenerator_H
 #define HI_MixEvtVtxGenerator_H
 /*
-*   $Date: 2013/04/18 21:57:33 $
-*   $Revision: 1.7 $
 */
 #include "FWCore/PluginManager/interface/ModuleDef.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
@@ -41,7 +39,7 @@ class MixEvtVtxGenerator : public edm::EDProducer
   explicit MixEvtVtxGenerator( const edm::ParameterSet& );
   virtual ~MixEvtVtxGenerator();
   
-  virtual void produce( edm::Event&, const edm::EventSetup& );
+  virtual void produce( edm::Event&, const edm::EventSetup& ) override;
   
   virtual HepMC::FourVector* getVertex(edm::Event&);
   virtual HepMC::FourVector* getRecVertex(edm::Event&);

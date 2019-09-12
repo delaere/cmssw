@@ -55,12 +55,12 @@ unsigned int nGammas(const PFTau& tau) {
 template<typename T>
 class RecoTauObjectEmbedder : public RecoTauModifierPlugin {
   public:
-    explicit RecoTauObjectEmbedder(const edm::ParameterSet &pset)
-        :RecoTauModifierPlugin(pset),
+  explicit RecoTauObjectEmbedder(const edm::ParameterSet &pset, edm::ConsumesCollector &&iC)
+    :RecoTauModifierPlugin(pset,std::move(iC)),
         jetMatchSrc_(pset.getParameter<edm::InputTag>("jetTruthMatch")) {}
     virtual ~RecoTauObjectEmbedder() {}
-    virtual void operator()(PFTau&) const;
-    virtual void beginEvent();
+    virtual void operator()(PFTau&) const override;
+    virtual void beginEvent() override;
   private:
     edm::InputTag jetMatchSrc_;
     edm::Handle<edm::Association<T> > jetMatch_;

@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Tue Dec  2 14:17:03 EST 2008
-// $Id: FWConversionProxyBuilder.cc,v 1.1 2011/02/25 19:31:15 fgolf Exp $
 //
 #include "TEveCompound.h"
 #include "TEveLine.h"
@@ -38,8 +37,8 @@ public:
    FWConversionProxyBuilder() ;
    virtual ~FWConversionProxyBuilder();
 
-   virtual bool haveSingleProduct() const { return false; }
-   virtual void cleanLocal();
+   virtual bool haveSingleProduct() const override { return false; }
+   virtual void cleanLocal() override;
 
    REGISTER_PROXYBUILDER_METHODS();
 
@@ -47,7 +46,7 @@ private:
    FWConversionProxyBuilder( const FWConversionProxyBuilder& ); // stop default
    const FWConversionProxyBuilder& operator=( const FWConversionProxyBuilder& ); // stop default
   
-   virtual void buildViewType(const reco::Conversion& iData, unsigned int iIndex, TEveElement& oItemHolder, FWViewType::EType type , const FWViewContext*);
+   virtual void buildViewType(const reco::Conversion& iData, unsigned int iIndex, TEveElement& oItemHolder, FWViewType::EType type , const FWViewContext*) override;
 
    TEveElementList* requestCommon();
 

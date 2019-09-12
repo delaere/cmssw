@@ -1,4 +1,5 @@
 #include "SimCalorimetry/EcalSelectiveReadoutProducers/interface/EcalSelectiveReadoutProducer.h"
+#include "FWCore/Common/interface/Provenance.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "Geometry/Records/interface/CaloGeometryRecord.h"
@@ -12,6 +13,7 @@
 
 #include <memory>
 #include <fstream>
+#include <atomic>
 
 
 using namespace std;
@@ -63,6 +65,9 @@ EcalSelectiveReadoutProducer::EcalSelectiveReadoutProducer(const edm::ParameterS
     produces<EESrFlagCollection>(eeSrFlagCollection_);
   }
 
+  useFullReadout_ = false;
+  useFullReadout_ = params.getParameter<bool>("UseFullReadout");
+
   theGeometry = 0;
   theTriggerTowerMap = 0;
   theElecMap = 0;
@@ -80,7 +85,13 @@ EcalSelectiveReadoutProducer::produce(edm::Event& event, const edm::EventSetup& 
   if(useCondDb_){
     //getting selective readout configuration:
     edm::ESHandle<EcalSRSettings> hSr;
-    eventSetup.get<EcalSRSettingsRcd>().get(hSr);
+
+    if(useFullReadout_){
+      eventSetup.get<EcalSRSettingsRcd>().get("fullReadout",hSr);
+    }
+    else{
+      eventSetup.get<EcalSRSettingsRcd>().get(hSr);
+    }
     settings_ = hSr.product();
   }
   
@@ -294,13 +305,13 @@ void EcalSelectiveReadoutProducer::checkWeights(const edm::Event& evt,
 						const edm::ProductID& noZsDigiId) const{
   const vector<float> & weights = settings_->dccNormalizedWeights_[0]; //params_.getParameter<vector<double> >("dccNormalizedWeights");
   int nFIRTaps = EcalSelectiveReadoutSuppressor::getFIRTapCount();
-  static bool warnWeightCnt = true;
-  if((int)weights.size() > nFIRTaps && warnWeightCnt){
+  static std::atomic<bool> warnWeightCnt{true};
+  bool expected = true;
+  if((int)weights.size() > nFIRTaps && warnWeightCnt.compare_exchange_strong(expected,false,std::memory_order_acq_rel)){
       edm::LogWarning("Configuration") << "The list of DCC zero suppression FIR "
 	"weights given in parameter dccNormalizedWeights is longer "
 	"than the expected depth of the FIR filter :(" << nFIRTaps << "). "
 	"The last weights will be discarded.";
-      warnWeightCnt = false; //it's not needed to repeat the warning.
   }
 
   if(weights.size()>0){
@@ -339,7 +350,7 @@ EcalSelectiveReadoutProducer::getBinOfMax(const edm::Event& evt,
 					  int& binOfMax) const{
   bool rc;
   const edm::Provenance p=evt.getProvenance(noZsDigiId);
-  edm::ParameterSet result = getParameterSet(p.psetID());
+  const edm::ParameterSet& result = parameterSet(p);
   vector<string> ebDigiParamList = result.getParameterNames();
   string bofm("binOfMaximum");
   if(find(ebDigiParamList.begin(), ebDigiParamList.end(), bofm)

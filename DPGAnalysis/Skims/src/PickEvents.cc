@@ -13,7 +13,7 @@
 //
 // Original Author:  Michael Henry Schmitt
 //         Created:  Mon Sep 15 19:36:37 CEST 2008
-// $Id: PickEvents.cc,v 1.5 2013/02/27 20:17:14 wmtan Exp $
+// $Id: PickEvents.cc,v 1.4 2010/08/07 14:55:55 wmtan Exp $
 //         Modified: 27/03/2009 Luca Malgeri
 //                   reading external file, defining selection syntax
 //
@@ -49,9 +49,9 @@ class PickEvents : public edm::EDFilter {
       ~PickEvents();
 
    private:
-      virtual void beginJob() ;
+      virtual void beginJob() override ;
       virtual bool filter(edm::Event&, const edm::EventSetup&) override;
-      virtual void endJob() ;
+      virtual void endJob() override ;
 
   std::string listrunevents_; 
   std::string listruneventsinpath_; 
@@ -130,7 +130,7 @@ PickEvents::beginJob()
   nEventsSelected = 0;
 
   // open file listevent file
-  ifstream listfile;
+  std::ifstream listfile;
   listfile.open(listrunevents_.c_str());
   if (listfile.is_open())
     {

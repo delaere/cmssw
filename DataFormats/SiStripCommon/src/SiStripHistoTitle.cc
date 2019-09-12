@@ -1,4 +1,3 @@
-// Last commit: $Id: SiStripHistoTitle.cc,v 1.8 2012/07/04 19:04:52 eulisse Exp $
 
 #include "DataFormats/SiStripCommon/interface/SiStripHistoTitle.h"
 #include "DataFormats/SiStripCommon/interface/SiStripKey.h"

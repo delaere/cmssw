@@ -40,7 +40,10 @@ class DigiAccumulatorMixMod;
 class PileUpEventPrincipal;
 
 namespace edm {
+  class AdjusterBase;
+  class ConsumesCollector;
   class MixingWorkerBase;
+  class ModuleCallingContext;
 
   class MixingModule : public BMixingModule {
     public:
@@ -79,15 +82,17 @@ namespace edm {
       virtual void checkSignal(const edm::Event &e);
       virtual void addSignals(const edm::Event &e, const edm::EventSetup& es); 
       virtual void doPileUp(edm::Event &e, const edm::EventSetup& es);
-      void pileAllWorkers(EventPrincipal const& ep, int bcr, int id, int& offset,
+      void pileAllWorkers(EventPrincipal const& ep, ModuleCallingContext const*, int bcr, int id, int& offset,
 			  const edm::EventSetup& setup);
-      void createDigiAccumulators( const edm::ParameterSet& mixingPSet ) ;
+      void createDigiAccumulators(const edm::ParameterSet& mixingPSet, edm::ConsumesCollector& iC);
 
       InputTag inputTagPlayback_;
       bool mixProdStep2_;
       bool mixProdStep1_;
       CrossingFramePlaybackInfoExtended *playbackInfo_;
 
+      std::vector<AdjusterBase *> adjusters_;
+      std::vector<AdjusterBase *> adjustersObjects_;
       std::vector<MixingWorkerBase *> workers_;
       std::vector<MixingWorkerBase *> workersObjects_;
       std::vector<std::string> wantedBranches_;

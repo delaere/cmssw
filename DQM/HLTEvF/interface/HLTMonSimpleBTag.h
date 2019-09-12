@@ -16,7 +16,6 @@ Implementation:
 //
 // Original Author:  Freya Blekman (fblekman)
 //         Created:  Fri Mar 11 13:20:18 CET 2011
-// $Id: HLTMonSimpleBTag.h,v 1.3 2011/03/25 16:10:43 fblekman Exp $
 //
 //
 
@@ -92,6 +91,9 @@ private:
   int theHLTOutputType;
   edm::InputTag triggerSummaryLabel_;
   edm::InputTag triggerResultLabel_;
+
+  //define Token(-s)
+  edm::EDGetTokenT<trigger::TriggerEvent> triggerSummaryToken_;
 
   // helper class to store the data
   class PathInfo {

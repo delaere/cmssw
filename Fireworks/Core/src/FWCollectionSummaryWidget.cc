@@ -8,7 +8,6 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Sat Feb 14 10:02:32 CST 2009
-// $Id: FWCollectionSummaryWidget.cc,v 1.24 2010/06/18 10:17:15 yana Exp $
 //
 
 // system include files
@@ -67,7 +66,7 @@ namespace {
          fMBottom = -3;
       }
       
-      void DoRedraw();
+      void DoRedraw() override;
    };
    
    void BorderlessTextButton::DoRedraw() {

@@ -1,4 +1,3 @@
-// $Id: TtHadLRJetCombObservables.cc,v 1.2 2008/02/17 11:27:55 rwolf Exp $
 
 #include "TopQuarkAnalysis/TopJetCombination/interface/TtHadLRJetCombObservables.h"
 

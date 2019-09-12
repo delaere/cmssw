@@ -3,8 +3,6 @@
 
 /** \class TrackerSeedCleaner
  *  Seeds Cleaner based on direction
- *  $Date: 2010/02/16 17:08:46 $
- *  $Revision: 1.4 $
     \author A. Grelli -  Purdue University, Pavia University
  */ 
 
@@ -21,6 +19,7 @@
 #include "RecoTracker/TkTrackingRegions/interface/RectangularEtaPhiTrackingRegion.h"
 #include "RecoMuon/TrackerSeedGenerator/interface/RedundantSeedCleaner.h"
 #include "DataFormats/BeamSpot/interface/BeamSpot.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 class MuonServiceProxy;
 class TSGFromL2Muon;
@@ -38,12 +37,13 @@ public:
 
   typedef std::vector<TrajectorySeed> tkSeeds;
   /// constructor  
-  TrackerSeedCleaner(const edm::ParameterSet& pset) : theProxyService(0),theEvent(0) {
+  TrackerSeedCleaner(const edm::ParameterSet& pset,edm::ConsumesCollector& iC) : theProxyService(0),theEvent(0) {
                    builderName_ = pset.getParameter<std::string>("TTRHBuilder");
                    theBeamSpotTag = pset.getParameter<edm::InputTag>("beamSpot");
                    useDirection_Cleaner = pset.getParameter<bool>("directionCleaner");
                    usePt_Cleaner = pset.getParameter<bool>("ptCleaner");
                    cleanBySharedHits = pset.getParameter<bool>("cleanerFromSharedHits");
+		   beamspotToken_ = iC.consumes<reco::BeamSpot>(theBeamSpotTag);
   }
 
   ///intizialization
@@ -63,7 +63,7 @@ private:
 
   edm::InputTag theBeamSpotTag; //beam spot
   edm::Handle<reco::BeamSpot> bsHandle_;
-
+  edm::EDGetTokenT<reco::BeamSpot> beamspotToken_;
   RedundantSeedCleaner * theRedundantCleaner;
 
   std::string builderName_;

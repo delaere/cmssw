@@ -8,6 +8,7 @@
 #include <cmath>
 
 // user include files
+#include "FWCore/Utilities/interface/EDGetToken.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
@@ -102,10 +103,10 @@ class SiStripMonitorMuonHLT : public edm::EDAnalyzer {
       //methods needed for normalisation
       float GetEtaWeight(std::string label, GlobalPoint gp);
       float GetPhiWeight(std::string label, GlobalPoint gp);
-      void GeometryFromTrackGeom (std::vector<DetId> Dets,const TrackerGeometry & theTracker, const edm::EventSetup& iSetup,
+      void GeometryFromTrackGeom (const std::vector<DetId>& Dets,const TrackerGeometry & theTracker, const edm::EventSetup& iSetup,
                                   std::map<std::string,std::vector<float> > & m_PhiStripMod_Eta,std::map<std::string,std::vector<float> > & m_PhiStripMod_Nb);
-      void Normalizer (std::vector<DetId> Dets,const TrackerGeometry & theTracker);
-      void PrintNormalization (std::vector<std::string> v_LabelHisto);
+      void Normalizer (const std::vector<DetId>& Dets,const TrackerGeometry & theTracker);
+      void PrintNormalization (const std::vector<std::string>& v_LabelHisto);
 
       // ----------member data ---------------------------
 
@@ -130,6 +131,12 @@ class SiStripMonitorMuonHLT : public edm::EDAnalyzer {
       edm::InputTag clusterCollectionTag_;
       edm::InputTag l3collectionTag_;
       edm::InputTag TrackCollectionTag_;
+
+      edm::EDGetTokenT<edm::LazyGetter < SiStripCluster > > clusterCollectionToken_;
+      edm::EDGetTokenT<reco::RecoChargedCandidateCollection> l3collectionToken_;
+      edm::EDGetTokenT<reco::TrackCollection> TrackCollectionToken_;
+
+
 
       int HistoNumber; //nof layers in Tracker = 34 
       TkDetMap* tkdetmap_;

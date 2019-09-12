@@ -13,7 +13,6 @@
 //
 // Original Author:  Seth COOPER
 //         Created:  Th Aug 28 5:46:22 CEST 2007
-// $Id: EcalDisplaysByEvent.cc,v 1.6 2011/10/10 09:05:21 eulisse Exp $
 //
 //
 

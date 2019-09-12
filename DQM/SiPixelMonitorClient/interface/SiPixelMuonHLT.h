@@ -17,7 +17,6 @@
 //
 // Original Author:  Dan Duggan
 //         Created:
-// $Id: SiPixelMuonHLT.h,v 1.3 2011/05/20 17:17:24 wmtan Exp $
 //
 //////////////////////////////////////////////////////////
 
@@ -144,6 +143,10 @@
        std::map<int, MonitorElement*> MEContainerOnTrackEndcapPhi;
        std::map<int, MonitorElement*> MEContainerOnTrackEndcapN;
 
+       //define Token(-s)
+       edm::EDGetTokenT<edmNew::DetSetVector<SiPixelCluster> > clustersToken_;
+       edm::EDGetTokenT<edmNew::DetSetVector<SiPixelRecHit> > rechitsToken_;
+       edm::EDGetTokenT<reco::RecoChargedCandidateCollection> l3MuonCollectionToken_;
  };
 
 #endif

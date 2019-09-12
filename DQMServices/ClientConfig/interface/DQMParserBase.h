@@ -6,15 +6,13 @@
  *  Base class for Parsers used by DQM
  *
  *
- *  $Date: 2011/06/16 03:07:27 $
- *  $Revision: 1.6 $
  *  \author Ilaria Segoni
   */
 
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/dom/DOMCharacterData.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
+#include "FWCore/Concurrency/interface/Xerces.h"
 #include <xercesc/framework/LocalFileFormatTarget.hpp>
 #include <xercesc/util/XMLUni.hpp>
 #include <xercesc/util/XMLURL.hpp>

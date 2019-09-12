@@ -9,7 +9,6 @@
 //
 // Author:	Christophe Saout <christophe.saout@cern.ch>
 // Created:     Sat Apr 24 15:18 CEST 2007
-// $Id: VarProcessor.h,v 1.11 2013/05/23 17:02:16 gartung Exp $
 //
 
 #include <algorithm>

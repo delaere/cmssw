@@ -9,6 +9,9 @@
 
 #include "DataFormats/HLTReco/interface/TriggerTypeDefs.h"
 #include "HLTrigger/HLTcore/interface/HLTFilter.h"
+#include "DataFormats/HLTReco/interface/TriggerFilterObjectWithRefs.h"
+#include "DataFormats/TrackReco/interface/Track.h"
+#include "DataFormats/TrackReco/interface/TrackFwd.h"
 
 namespace edm {
    class ConfigurationDescriptions;
@@ -25,9 +28,11 @@ class HLTMhtHtFilter : public HLTFilter {
       explicit HLTMhtHtFilter(const edm::ParameterSet&);
       ~HLTMhtHtFilter();
       static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
-      virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct);
+      virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct) const override;
 
    private:
+      edm::EDGetTokenT<std::vector<T>> m_theObjectToken;
+      edm::EDGetTokenT<reco::TrackCollection> m_theTrackToken;
       const edm::InputTag       inputJetTag_;   // input tag identifying jets
       const edm::InputTag       inputTracksTag_;
       const std::vector<double> minPtJet_;
@@ -45,7 +50,7 @@ class HLTMhtHtFilter : public HLTFilter {
                                                 //----mode = 4 for HT only
                                                 //----mode = 5 for HT and AlphaT cross trigger (ALWAYS uses jet ET, not pT)
       const bool                usePt_;
-      const bool                useTracks_; 
+      const bool                useTracks_;
       int   triggerType_;
 };
 

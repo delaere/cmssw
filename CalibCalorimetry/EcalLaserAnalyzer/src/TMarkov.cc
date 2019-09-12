@@ -1,14 +1,13 @@
 /* 
  *  \class TMarkov
  *
- *  $Date: 2012/02/09 10:08:10 $
  *  \author: Patrice Verrecchia - CEA/Saclay
  */
 
 #include <CalibCalorimetry/EcalLaserAnalyzer/interface/TMarkov.h>
 
 #include <iostream>
-#include "math.h"
+#include <cmath>
 
 //ClassImp(TMarkov)
 

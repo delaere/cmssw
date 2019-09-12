@@ -1,8 +1,6 @@
 /*
  *  See header file for a description of this class.
  *
- *  $Date: 2006/02/22 13:12:04 $
- *  $Revision: 1.4 $
  *  \author N. Amapane, R. Bellan - INFN Torino
  */
 

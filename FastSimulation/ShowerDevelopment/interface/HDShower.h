@@ -17,7 +17,7 @@
 
 class EcalHitMaker;
 class HcalHitMaker;
-class RandomEngine;
+class RandomEngineAndDistribution;
 class DQMStore;
 
 class HDShower 
@@ -32,12 +32,13 @@ class HDShower
   typedef std::vector<Step> Steps;
   typedef Steps::const_iterator step_iterator;
 
-  HDShower(const RandomEngine* engine,
+  HDShower(const RandomEngineAndDistribution* engine,
 	   HDShowerParametrization* myParam,
 	   EcalHitMaker* myGrid, 
 	   HcalHitMaker* myHcalHitMaker,
 	   int onECAL, 
 	   double epart,
+	   double pmip,
            DQMStore * const dbeIn);
 
   int getmip() {return mip;}
@@ -126,7 +127,7 @@ class HDShower
   double hcalDepthFactor;
 
   // Famos Random Engine
-  const RandomEngine* random;
+  const RandomEngineAndDistribution* random;
   
   //DQM for distribution histos
   DQMStore * dbe;

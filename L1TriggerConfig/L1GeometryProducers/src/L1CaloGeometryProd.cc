@@ -13,7 +13,6 @@
 //
 // Original Author:  Werner Sun
 //         Created:  Tue Oct 24 00:00:00 EDT 2006
-// $Id: L1CaloGeometryProd.cc,v 1.4 2009/09/28 23:02:20 wsun Exp $
 //
 //
 
