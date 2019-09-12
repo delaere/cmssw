@@ -1,0 +1,140 @@
+import FWCore.ParameterSet.Config as cms
+
+process = cms.Process("CPEana")
+
+# initialize MessageLogger and output report
+process.load("FWCore.MessageLogger.MessageLogger_cfi")
+process.MessageLogger.cerr.threshold = 'INFO'
+process.MessageLogger.categories.append('CPEana')
+process.MessageLogger.cerr.INFO = cms.untracked.PSet(
+        limit = cms.untracked.int32(-1)
+        )
+process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
+
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(200) )
+
+process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/746/00000/A4207BF7-65B0-4944-9F8B-CE87514E8789.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/702/00000/0E475106-5927-4348-B7E6-75E2C5DD48E4.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/701/00000/DA7BA9C8-EA1D-1442-88A2-84738F3149BD.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/700/00000/52C7F57A-B11A-EA4F-81E2-595452957C0A.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/698/00000/2B4ACDCF-F09D-734F-88C8-600847DF9226.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/681/00000/233A2C2F-6DCE-7B44-A6F6-83DB562472FA.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/648/00000/F078262D-8D2A-1743-9E7E-5443F65C2A28.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/645/00000/32E9ACC9-ABEF-6947-8FD4-4236D169F827.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/620/00000/EBB02D72-06BD-FA4B-BD3B-5597744B1B15.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/619/00000/879BB92D-1FC7-2946-AE5D-7779FA560A5C.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/597/00000/337C4ED7-2E17-7248-88B8-FA6367D9D908.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/577/00000/F4EA0942-C3B0-6D4B-B729-C384ACE232F4.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/574/00000/B9833E6B-6863-C542-B923-C527B99DCFB3.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/554/00000/862AEC8F-1D71-B446-A754-8CBFA085A0E1.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/550/00000/95719EF3-E0EA-8847-A6DA-60962E684D1D.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/497/00000/54B81AFE-79CD-6F4F-BF56-3D053E9EAB41.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/495/00000/2CB65DCA-4EBA-B94D-BD88-645E4DDCD0AC.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/493/00000/3FF751DD-664A-2B42-A112-23AE53595E46.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/467/00000/43B379B4-28C3-7B4E-B4C5-5A6B32CAB189.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/466/00000/1206D510-D2A8-384C-922E-A755B17889E9.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/463/00000/899C9AF6-118E-A14E-8D83-A6967835BC96.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/449/00000/6D6DBE5E-7C8F-CB40-803D-46999FF1D8CF.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/394/00000/AF60E8EB-C371-3A49-A5E4-7F2844B02E98.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/338/00000/9E379C4E-D1C6-E34D-A9B9-1ABA14EC5CF7.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/326/00000/9EDC550A-903E-6546-AB20-5E0A9B39331E.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/320/00000/3EA70CC4-A7E4-B64A-8F73-379971171508.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/314/00000/B8D29E56-C8CC-8F4A-9BA8-91B3B7DBDEBA.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/743/00000/ACE3C223-8A24-1644-A189-F92B52AEFA6B.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/699/00000/D02E4D48-3684-FD47-93F2-A8CB357DEF30.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/697/00000/869308A9-A9E2-274D-971E-8FDB09F453F5.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/696/00000/952B847C-3B4C-804B-8B70-96400CBCFCF6.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/695/00000/4EAC9DFE-90A4-C647-A64E-77239102EF1F.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/688/00000/965A4209-8AE0-FF45-A9D5-2AB4934CB1D9.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/684/00000/4631C77D-829F-544E-BCA0-B5D52DF999B1.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/682/00000/A6C49A72-5126-D146-A483-12BB8D20DA61.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/680/00000/CC43ED83-6F70-FB42-9BBD-14A7A2093C0C.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/657/00000/7FF233EE-9C09-E843-8479-8E6BFF94F8A6.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/654/00000/B0C72392-B50F-2644-99AD-3C6844727F94.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/653/00000/66C9DE34-2825-7445-96AE-D92D0D946544.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/647/00000/74C02CE2-5A0D-934E-914A-225B93447264.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/646/00000/89807E98-04B7-C749-AD8A-79D50A9CC93A.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/644/00000/9206CC1E-8B2C-984B-B409-E13D4B735EAF.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/643/00000/FEBFD7AD-D06B-6240-B5B8-3B2A093AABC7.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/642/00000/C0969D4B-669B-A446-A4B4-0556EF182D1D.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/639/00000/A7C85A6D-40D1-874D-B64A-1B67646F2926.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/637/00000/269820E2-E8C0-2E45-A8C6-214B2CB008ED.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/631/00000/701F3E79-129B-1D47-AA26-2B77942DE1CE.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/627/00000/C7F02292-F827-D545-9580-3690D83F7232.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/622/00000/44BE3932-969E-CF46-92BE-55E33CD20952.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/621/00000/BB3E0FC5-1C35-7D4E-8524-15EECA2B0FAF.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/618/00000/F794A158-B96F-F443-AE5F-DD25CB7E8C9B.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/617/00000/4172A162-FEFD-604B-861B-B06EFBB08A75.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/616/00000/C99CD961-46C7-F240-B129-E674FA5327B6.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/615/00000/B9F0C984-D614-9B47-8850-397BAB61426B.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/607/00000/8189CC63-0E45-6C43-AAAB-22FF36DB8831.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/606/00000/F43D6265-CC2E-4843-A4AC-8A7C72B371E1.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/604/00000/E7ACD12E-016C-8144-90F9-E21FFBE53F88.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/594/00000/09B84E35-5C27-7045-85D4-DF9E2AF60F9E.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/593/00000/75994DCF-109A-EE45-9C78-62C6117F2592.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/590/00000/0D6F360C-CAFF-D64B-8578-C14A761D3E6C.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/589/00000/A0859B1C-75A6-AF40-9748-F7C7B35FE1A3.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/588/00000/9E637574-41CE-0347-9B34-03D1C9F5C815.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/587/00000/340324F7-C582-2D45-9C37-297E9AB03CE1.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/578/00000/B0F8CF01-525A-2A42-9141-AC952FE86B56.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/575/00000/13775474-2F52-464D-BFD7-657010B12D65.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/565/00000/E50C7AEB-E63C-1D4B-8B34-4FBE26C72EC4.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/562/00000/A379A6C1-50D3-D94C-A80B-ACD3CEAC84E8.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/556/00000/BC788C96-582A-FE40-A17A-FCFD8F6BB1F7.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/553/00000/B028ACB6-452B-EA43-A775-BE2F058F5EE1.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/552/00000/2BE93BB2-B12A-D54D-98B7-6BDA726997CA.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/543/00000/19359279-1BEA-5D44-B7A3-397DB2321C67.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/531/00000/AAC6710B-3462-8F44-8B2F-EF037CC31887.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/530/00000/DD579A45-999A-A84F-A07E-D149BDCEB7C0.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/529/00000/F1C88886-B986-7E4D-A3AD-6044423DEDE6.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/526/00000/E19BC354-DE7D-3B4B-84E4-980DA84AB7B7.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/525/00000/8D9F4F5B-233F-324C-B06F-30A2B98E8E47.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/524/00000/0353D337-4DC9-0F44-A6BD-B3782A97EB49.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/523/00000/410EB4E9-B5B7-2F4A-B653-D86F2CCBB8D5.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/522/00000/86B62541-3ACF-8348-917C-B233954213CD.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/519/00000/3587588A-14CF-4D47-8B60-6B36CD418A20.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/506/00000/DC655906-1C56-3943-8519-343AA6241774.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/503/00000/042039F0-C16B-6646-AAA0-BF6FD5A1040A.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/501/00000/31CD22C4-3BF1-DE46-A8F6-9E6BBE1E7EB3.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/500/00000/DFFCEEAE-01FC-1A44-ABED-8AD2F7FA07BA.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/496/00000/BCD1BB08-A97F-6743-83D1-EA63F88C7CB0.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/494/00000/DECEB34E-7205-7E43-8CE7-4D2939F7044D.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/486/00000/1F8FC45C-F5F4-7E47-95FC-E85402CD3CC2.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/484/00000/7316F08B-93EA-EB44-92FB-3A146E699A91.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/477/00000/4DCA3186-E695-4D42-B9C1-F6C624E57CD8.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/476/00000/40988E63-7E06-1747-8766-61DD247B983D.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/473/00000/1FCE0C58-F0DA-0F41-A607-EE12918C3F00.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/470/00000/04A41BDD-79C1-A64E-A183-262CC7D1AA6B.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/469/00000/942F2376-05AA-2D4F-840E-87A7BA2C7CD1.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/463/00000/11231442-EA32-7D40-906C-2C040E1305D3.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/461/00000/C384CB94-9E95-9849-9F24-7321D50D5E7B.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/460/00000/6BD4EB78-E76C-5F4A-90F7-762AB299FC38.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/458/00000/01AEFE5D-DD74-BD43-AE74-2560FCCECF30.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/426/00000/0FF01964-6184-634C-B40E-BEC85476D97C.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/420/00000/F225B470-4D84-4146-B43F-8B7444BF2A56.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/419/00000/2BF501FC-00EA-9A41-A6F1-091FB96A6014.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/418/00000/F65D341E-C7B3-B74A-B45D-509F947AA827.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/416/00000/5905E573-30D9-CD46-A8DC-405C2E2FBB87.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/414/00000/3E452DE4-8BD3-CE42-A954-7760C1673174.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/413/00000/B34DF8C2-DF3F-4B49-BE33-CD7EE6A8614E.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/410/00000/6DD13762-8C3B-7743-B50C-D97283FFB5BC.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/396/00000/4AAFC68C-DC8D-F849-873E-AEE851A9501C.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/395/00000/F647D291-5112-7C4D-8322-D750FECCE4EB.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/327/00000/2FA88505-B7AE-134D-88FD-40A303E6F807.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/324/00000/62F68655-F74B-9546-B92E-69B83747AD8D.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/318/00000/1369FD53-4FA5-6241-A5CA-5C23BFA541BB.root',
+  '/store/data/Run2018E/MinimumBias/ALCARECO/TkAlMinBias-PromptReco-v1/000/325/317/00000/7E508D98-1275-D041-A7C9-2AE99B4BCE1D.root'
+                                                                           )
+                           )
+
+process.demo = cms.EDAnalyzer('CPEanalyzer',
+                                         minTracks=cms.untracked.uint32(0),
+                                         tracks = cms.untracked.InputTag("ALCARECOTkAlMinBias","")
+                             )
+
+process.TFileService = cms.Service("TFileService",
+                                       fileName = cms.string('histodemo.root')
+                                  )
+
+process.p = cms.Path(process.demo)
