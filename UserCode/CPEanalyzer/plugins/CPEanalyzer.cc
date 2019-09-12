@@ -11,8 +11,8 @@
      [Notes on implementation]
 */
 //
-// Original Author:  Christophe Delaer√e
-//         Created:  Thu, 12 Sep 2019 12:36:13 GMT
+// Original Author:  Christophe Delaere
+//         Created:  Thu, 12 Sep 2019 13:51:00 GMT
 //
 //
 
@@ -31,6 +31,9 @@
  #include "FWCore/Utilities/interface/InputTag.h"
  #include "DataFormats/TrackReco/interface/Track.h"
  #include "DataFormats/TrackReco/interface/TrackFwd.h"
+ #include "FWCore/ServiceRegistry/interface/Service.h"
+ #include "CommonTools/UtilAlgos/interface/TFileService.h"
+ #include "TH1.h"
 //
 // class declaration
 //
@@ -58,6 +61,7 @@ class CPEanalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 
       // ----------member data ---------------------------
       edm::EDGetTokenT<TrackCollection> tracksToken_;  //used to select what tracks to read from configuration file
+       TH1I * histo;
 };
 
 //
@@ -77,6 +81,9 @@ CPEanalyzer::CPEanalyzer(const edm::ParameterSet& iConfig)
 
 {
    //now do what ever initialization is needed
+   usesResource("TFileService");
+   edm::Service<TFileService> fs;
+   histo = fs->make<TH1I>("charge" , "Charges" , 2 , -1 , 1 );
 
 }
 
@@ -103,6 +110,7 @@ CPEanalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    for(const auto& track : iEvent.get(tracksToken_) ) {
       // do something with track parameters, e.g, plot the charge.
       // int charge = track.charge();
+       histo->Fill( track.charge() );
    }
 
 #ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
