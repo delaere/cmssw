@@ -83,7 +83,7 @@ CPEanalyzer::CPEanalyzer(const edm::ParameterSet& iConfig)
    //now do what ever initialization is needed
    usesResource("TFileService");
    edm::Service<TFileService> fs;
-   histo = fs->make<TH1I>("charge" , "Charges" , 2 , -1 , 1 );
+   histo = fs->make<TH1I>("charge" , "Charges" , 3 , -1 , 2 );
 
 }
 
