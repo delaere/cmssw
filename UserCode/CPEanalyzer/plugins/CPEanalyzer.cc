@@ -5,10 +5,10 @@
 //
 /**\class CPEanalyzer CPEanalyzer.cc UserCode/CPEanalyzer/plugins/CPEanalyzer.cc
 
- Description: [one line class summary]
+ Description: CPE analysis (resolution param, etc.)
 
  Implementation:
-     [Notes on implementation]
+     Used for DPG studies
 */
 //
 // Original Author:  Christophe Delaere
@@ -19,6 +19,7 @@
 
 // system include files
 #include <memory>
+#include <iostream>
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -28,12 +29,13 @@
 #include "FWCore/Framework/interface/MakerMacros.h"
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
- #include "FWCore/Utilities/interface/InputTag.h"
- #include "DataFormats/TrackReco/interface/Track.h"
- #include "DataFormats/TrackReco/interface/TrackFwd.h"
- #include "FWCore/ServiceRegistry/interface/Service.h"
- #include "CommonTools/UtilAlgos/interface/TFileService.h"
- #include "TH1.h"
+#include "FWCore/Utilities/interface/InputTag.h"
+#include "DataFormats/TrackReco/interface/Track.h"
+#include "DataFormats/TrackReco/interface/TrackFwd.h"
+#include "TrackingTools/PatternTools/interface/Trajectory.h"
+#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+#include "TH1.h"
 //
 // class declaration
 //
@@ -45,6 +47,7 @@
 
 
 using reco::TrackCollection;
+typedef std::vector<Trajectory> TrajectoryCollection;
 
 class CPEanalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
    public:
@@ -61,7 +64,8 @@ class CPEanalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 
       // ----------member data ---------------------------
       edm::EDGetTokenT<TrackCollection> tracksToken_;  //used to select what tracks to read from configuration file
-       TH1I * histo;
+      edm::EDGetTokenT<TrajectoryCollection> trajsToken_;  //used to select what trajectories to read from configuration file
+      TH1I * histo;
 };
 
 //
@@ -77,7 +81,8 @@ class CPEanalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 //
 CPEanalyzer::CPEanalyzer(const edm::ParameterSet& iConfig)
  :
-  tracksToken_(consumes<TrackCollection>(iConfig.getUntrackedParameter<edm::InputTag>("tracks")))
+  tracksToken_(consumes<TrackCollection>(iConfig.getUntrackedParameter<edm::InputTag>("tracks"))),
+  trajsToken_(consumes<TrajectoryCollection>(iConfig.getUntrackedParameter<edm::InputTag>("trajectories")))
 
 {
    //now do what ever initialization is needed
@@ -107,10 +112,18 @@ CPEanalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
    using namespace edm;
 
+   //TODO move from tracks to trajectories
+
    for(const auto& track : iEvent.get(tracksToken_) ) {
       // do something with track parameters, e.g, plot the charge.
       // int charge = track.charge();
        histo->Fill( track.charge() );
+   }
+
+   for(const auto& traj : iEvent.get(trajsToken_) ) {
+      // do something with track parameters, e.g, plot the charge.
+      // int charge = track.charge();
+      std::cout << traj.foundHits() << std::endl;
    }
 
 #ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
