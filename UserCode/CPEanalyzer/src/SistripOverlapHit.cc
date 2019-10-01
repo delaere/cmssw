@@ -1,4 +1,5 @@
 #include "UserCode/CPEanalyzer/interface/SistripOverlapHit.h"
+#include <math.h> 
 
 SiStripOverlapHit::SiStripOverlapHit(TrajectoryMeasurement const& measA, TrajectoryMeasurement const& measB) {
   // check which hit is closer to the IP
@@ -27,13 +28,14 @@ TrajectoryStateOnSurface const& SiStripOverlapHit::trajectoryStateOnSurface(unsi
 }
 
 double SiStripOverlapHit::getTrackLocalAngle(unsigned int hit) const {
-  //TODO check if it is barePhi or bareTheta... we need the angle along the precise coordinate (that goes to 0 for high Pt).
-  return hit? trajectoryStateOnSurface(hit-1).localDirection().barePhi() : (trajectoryStateOnSurface(0).localDirection().barePhi()+trajectoryStateOnSurface(1).localDirection().barePhi())/2.;
+  
+  // since x is the precise coordinate and z is pointing out, we want the angle between z and x
+  return hit? atan(trajectoryStateOnSurface(hit-1).localDirection().x()/trajectoryStateOnSurface(hit-1).localDirection().z()) : (getTrackLocalAngle(1)+getTrackLocalAngle(2))/2.;
 }
 
 double SiStripOverlapHit::offset(unsigned int hit) const {
   assert(hit<2);
-  //TODO check if it is x or y... we need the precise direction and it can be checked with the error...
+  // x is the precise coordinate
   return this->hit(hit)->localPosition().x()-trajectoryStateOnSurface(hit,false).localPosition().x();
 }
 
@@ -42,8 +44,12 @@ double SiStripOverlapHit::shift() const {
   return offset(0)-offset(1);
 }
 
-double SiStripOverlapHit::distance() const {
-  return (hitA()->globalPosition().basicVector()  - hitB()->globalPosition().basicVector()).mag();
+double SiStripOverlapHit::distance(bool fromTrajectory) const {
+  if(fromTrajectory) {
+    return (trajectoryStateOnSurface(0,true).globalPosition().basicVector() - trajectoryStateOnSurface(1,true).globalPosition().basicVector()).mag();
+  } else {
+    return (hitA()->globalPosition().basicVector()  - hitB()->globalPosition().basicVector()).mag();
+  }
 }
 
 GlobalPoint SiStripOverlapHit::position() const{

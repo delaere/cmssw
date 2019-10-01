@@ -49,7 +49,7 @@ public:
   // distance between the two hits in the "trajectory frame"
   double shift() const;
   // absolute global distance between the hits (useful to debug pair finding)
-  double distance() const;
+  double distance(bool fromTrajectory=false) const; 
   // global position (averaged over the two hits)
   GlobalPoint position() const;
   

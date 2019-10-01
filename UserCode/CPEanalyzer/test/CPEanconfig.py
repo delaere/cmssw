@@ -53,7 +53,8 @@ process.myRefittedTracks.Fitter = 'FlexibleKFFittingSmoother'
 process.CPEanalysis = cms.EDAnalyzer('CPEanalyzer',
                                          minTracks=cms.untracked.uint32(0),
                                          tracks = cms.untracked.InputTag("ALCARECOSiStripCalMinBias",""),
-                                         trajectories = cms.untracked.InputTag('myRefittedTracks')
+                                         trajectories = cms.untracked.InputTag('myRefittedTracks'),
+                                         association = cms.untracked.InputTag('myRefittedTracks')
                              )
 
 ### TFileService: output histogram or ntuple
