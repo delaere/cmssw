@@ -4,5 +4,6 @@
 <use name="DataFormats/TrackReco"/>
 <use name="TrackingTools/PatternTools"/>
 <use name="TrackingTools/DetLayers"/>
+<use name="UserCode/CPEanalyzer"/>
 <flags EDM_PLUGIN="1"/>
  <use name="CommonTools/UtilAlgos"/>

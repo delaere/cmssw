@@ -41,3 +41,12 @@ double SiStripOverlapHit::shift() const {
   // so this is the double difference 
   return offset(0)-offset(1);
 }
+
+double SiStripOverlapHit::distance() const {
+  return (hitA()->globalPosition().basicVector()  - hitB()->globalPosition().basicVector()).mag();
+}
+
+GlobalPoint SiStripOverlapHit::position() const{
+  auto vector = (hitA()->globalPosition().basicVector()+hitB()->globalPosition().basicVector())/2.;
+  return GlobalPoint(vector);
+}

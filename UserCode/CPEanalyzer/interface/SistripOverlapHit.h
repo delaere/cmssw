@@ -15,6 +15,8 @@
 //         Created:  Fri, 20 Sep 2019 14:45:00 GMT
 //
 //
+#ifndef _USERCODE_CPEANALYZER_SISTRIPOVERLAPI_HIT_H_
+#define _USERCODE_CPEANALYZER_SISTRIPOVERLAPI_HIT_H_
 
 #include "TrackingTools/PatternTools/interface/Trajectory.h"
 #include "TrackingTools/PatternTools/interface/TrajectoryMeasurement.h"
@@ -46,8 +48,14 @@ public:
   double offset(unsigned int hit) const;
   // distance between the two hits in the "trajectory frame"
   double shift() const;
+  // absolute global distance between the hits (useful to debug pair finding)
+  double distance() const;
+  // global position (averaged over the two hits)
+  GlobalPoint position() const;
   
 private:
   TrajectoryMeasurement measA_;
   TrajectoryMeasurement measB_;  
 };
+
+#endif
