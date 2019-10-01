@@ -28,7 +28,7 @@ process.MessageLogger.cerr.INFO = cms.untracked.PSet(
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
 ### Events and data source
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20) )
 process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(
   '/store/express/Run2018D/StreamExpress/ALCARECO/SiStripCalMinBias-Express-v1/000/321/305/00001/FE4CA4CC-77A0-E811-A85E-FA163E0CB594.root'
                                                                            )
