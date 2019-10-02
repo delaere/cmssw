@@ -75,6 +75,8 @@ class CPEanalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
       virtual void beginJob() override;
       virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
       virtual void endJob() override;
+      
+      static bool goodMeasurement(TrajectoryMeasurement const& m);
 
       // ----------member data ---------------------------
       edm::EDGetTokenT<TrackCollection> tracksToken_;  //used to select what tracks to read from configuration file
@@ -150,31 +152,29 @@ CPEanalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
      // loop on measurements
      for (auto it = traj.measurements().begin(); it != traj.measurements().end();  ++it ) {
        auto& meas = *it;
-       
+
        // only OT measurements on valid hits (not glued det)
-       if(meas.recHit()->geographicalId().subdetId()<3) continue; // (not IT)
-       if((meas.recHit()->rawId()&0x3)==0) continue; // (not glued det)
-       if(meas.recHit()->getType()!=0) continue; // (only valid hits)
+       if(!goodMeasurement(meas)) continue;
        
        // restrict the search for compatible hits in the same layer (measurements are sorted by layer)
        auto layerRangeEnd = it+1;
        for(; layerRangeEnd<traj.measurements().end(); ++layerRangeEnd) { 
          if(layerRangeEnd->layer()->seqNum() != meas.layer()->seqNum()) break;
        }
-       
+
        // now look for a matching hit in that range.
-       auto meas2it = std::find_if(it+1,layerRangeEnd,[meas](const TrajectoryMeasurement & m) -> bool { return (m.recHit()->rawId()&0x3) == (meas.recHit()->rawId()&0x3); });
-       
+       auto meas2it = std::find_if(it+1,layerRangeEnd,[meas](const TrajectoryMeasurement & m) -> bool { return goodMeasurement(m) && (m.recHit()->rawId()&0x3) == (meas.recHit()->rawId()&0x3); });
+
        // check if we found something, build a pair object and add to vector
        if(meas2it != layerRangeEnd) {
          auto& meas2 = *meas2it;
          hitpairs.push_back(SiStripOverlapHit(meas,meas2));
-       }
+       }  
      }
    }
 
    // some track quantities...
-   
+       //   std::cout << "at line " << __LINE__ << std::endl;
    // At this stage we will have a vector of pairs of measurement. Fill a ntuple and some histograms.
    for(const auto& pair : hitpairs) {
      treeBranches_.x = pair.position().x();
@@ -223,6 +223,13 @@ CPEanalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //ParameterSetDescription desc;
   //desc.addUntracked<edm::InputTag>("tracks","ctfWithMaterialTracks");
   //descriptions.addDefault(desc);
+}
+
+bool CPEanalyzer::goodMeasurement(TrajectoryMeasurement const& m) {
+  return m.recHit()->isValid() &&                         // valid
+        m.recHit()->geographicalId().subdetId()>2 &&      // not IT
+        (m.recHit()->rawId()&0x3)!=0 &&                   // not glued DetLayer
+        m.recHit()->getType()==0 ;                        // only valid hits (redundant?)
 }
 
 //define this as a plug-in
