@@ -19,6 +19,7 @@
 // system include files
 #include <memory>
 #include <iostream>
+#include <algorithm> 
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -37,6 +38,12 @@
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "TrackingTools/DetLayers/interface/DetLayer.h"
 #include "UserCode/CPEanalyzer/interface/SistripOverlapHit.h"
+#include "DataFormats/Common/interface/DetSetVector.h"
+#include "DataFormats/SiStripCluster/interface/SiStripCluster.h"
+#include "RecoLocalTracker/Records/interface/TkStripCPERecord.h"
+#include "RecoLocalTracker/ClusterParameterEstimator/interface/StripClusterParameterEstimator.h"
+#include "Geometry/TrackerGeometryBuilder/interface/StripGeomDetUnit.h"
+#include "Geometry/TrackerGeometryBuilder/interface/TrackerGeometry.h"
 
 #include "TH1.h"
 #include "TTree.h"
@@ -54,13 +61,25 @@
 using reco::TrackCollection;
 typedef std::vector<Trajectory> TrajectoryCollection;
 
-struct CPEtree {
+struct CPEBranch {
   float x,y,z;
   float distance, mdistance, shift, offsetA, offsetB, angle;
+  float x1r,x2r,x1m,x2m;
 };
 
-struct TrackTree {
+struct TrackBranch {
   float px,py,pz,pt,eta,phi,charge;
+};
+
+//TODO add a geometry branch. subdet, layer, detids, etc.
+struct GeometryBranch {
+  int subdet, moduleGeometry, stereo, layer, side, ring;
+  int detid;
+};
+
+struct ClusterBranch {
+  int strips[11];
+  int size;
 };
 
 class CPEanalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
@@ -82,9 +101,17 @@ class CPEanalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
       edm::EDGetTokenT<TrackCollection> tracksToken_;  //used to select what tracks to read from configuration file
       edm::EDGetTokenT<TrajectoryCollection> trajsToken_;  //used to select what trajectories to read from configuration file
       edm::EDGetTokenT<TrajTrackAssociationCollection> tjTagToken_; //association map between tracks and trajectories
+      edm::EDGetTokenT<edmNew::DetSetVector<SiStripCluster> > clusToken_; //clusters
+      edm::ESInputTag cpeTag_;
+      edm::ESHandle<StripClusterParameterEstimator> parameterestimator_; //CPE
+      edm::ESHandle<TrackerGeometry> tracker_; //tracker geometry
       TTree* tree_;
-      CPEtree treeBranches_;
-      TrackTree trackBranches_;
+      CPEBranch treeBranches_;
+      TrackBranch trackBranches_;
+      GeometryBranch geom1Branches_;
+      GeometryBranch geom2Branches_;
+      ClusterBranch cluster1Branches_;
+      ClusterBranch cluster2Branches_;
       
 };
 
@@ -103,16 +130,21 @@ CPEanalyzer::CPEanalyzer(const edm::ParameterSet& iConfig)
  :
   tracksToken_(consumes<TrackCollection>(iConfig.getUntrackedParameter<edm::InputTag>("tracks"))),
   trajsToken_(consumes<TrajectoryCollection>(iConfig.getUntrackedParameter<edm::InputTag>("trajectories"))),
-  tjTagToken_(consumes<TrajTrackAssociationCollection>(iConfig.getUntrackedParameter<edm::InputTag>("association")))
-
+  tjTagToken_(consumes<TrajTrackAssociationCollection>(iConfig.getUntrackedParameter<edm::InputTag>("association"))),
+  clusToken_(consumes<edmNew::DetSetVector<SiStripCluster> >(iConfig.getUntrackedParameter<edm::InputTag>("clusters"))),
+  cpeTag_(iConfig.getParameter<edm::ESInputTag>("StripCPE"))
 {
    //now do what ever initialization is needed
    usesResource("TFileService");
    edm::Service<TFileService> fs;
    //histo = fs->make<TH1I>("charge" , "Charges" , 3 , -1 , 2 );
    tree_ = fs->make<TTree>("CPEanalysis","CPE analysis tree");
-   tree_->Branch("Overlaps", &treeBranches_,"x:y:z:distance:mdistance:shift:offsetA:offsetB:angle");
+   tree_->Branch("Overlaps", &treeBranches_,"x:y:z:distance:mdistance:shift:offsetA:offsetB:angle:x1r:x2r:x1m:x2m");
    tree_->Branch("Tracks", &trackBranches_,"px:py:pz:pt:eta:phi:charge");
+   tree_->Branch("Cluster1", &cluster1Branches_,"strips[11]/I:size/I");
+   tree_->Branch("Cluster2", &cluster2Branches_,"strips[11]/I:size/I");
+   tree_->Branch("Geom1", &geom1Branches_, "subdet/I:moduleGeometry/I:stereo/I:layer/I:side/I:ring/I:detid/I");
+   tree_->Branch("Geom2", &geom2Branches_, "subdet/I:moduleGeometry/I:stereo/I:layer/I:side/I:ring/I:detid/I");
 }
 
 
@@ -135,6 +167,11 @@ CPEanalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
    using namespace edm;
    
+   // load the CPE enfine and geometry
+   iSetup.get<TkStripCPERecord>().get(cpeTag_, parameterestimator_);
+   iSetup.get<TrackerDigiGeometryRecord>().get(tracker_);
+   
+   // prepare the output   
    std::vector<SiStripOverlapHit> hitpairs;
      
    // loop on trajectories and tracks
@@ -172,9 +209,11 @@ CPEanalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
        }  
      }
    }
+   
+   // load clusters
+   Handle<edmNew::DetSetVector<SiStripCluster> > clusters;
+   iEvent.getByToken(clusToken_, clusters);
 
-   // some track quantities...
-       //   std::cout << "at line " << __LINE__ << std::endl;
    // At this stage we will have a vector of pairs of measurement. Fill a ntuple and some histograms.
    for(const auto& pair : hitpairs) {
      treeBranches_.x = pair.position().x();
@@ -186,14 +225,63 @@ CPEanalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
      treeBranches_.offsetA = pair.offset(0);
      treeBranches_.offsetB = pair.offset(1);
      treeBranches_.angle = pair.getTrackLocalAngle(0);
-     tree_->Fill();
+     treeBranches_.x1r = pair.hitA()->localPosition().x();
+     treeBranches_.x1m = pair.trajectoryStateOnSurface(0,false).localPosition().x();
+     treeBranches_.x2r = pair.hitB()->localPosition().x();
+     treeBranches_.x2m = pair.trajectoryStateOnSurface(1,false).localPosition().x();
+     
+     // load the clusters for the detectors
+     auto detset1 = (*clusters)[pair.hitA()->rawId()];
+     auto detset2 = (*clusters)[pair.hitB()->rawId()];
+     
+     // look for the proper cluster
+     const GeomDetUnit* du = tracker_->idToDetUnit(pair.hitA()->rawId());
+     auto cluster1 = std::min_element(detset1.begin(),detset1.end(),[du,this](SiStripCluster const& cl1,  SiStripCluster const& cl2) { 
+       return (fabs( parameterestimator_->localParameters(cl1, *du).first.x() - treeBranches_.x1r) <
+               fabs( parameterestimator_->localParameters(cl2, *du).first.x() - treeBranches_.x1r) );
+     });
+     auto cluster2 = std::min_element(detset2.begin(),detset2.end(),[du,this](SiStripCluster const& cl1,  SiStripCluster const& cl2) { 
+       return (fabs( parameterestimator_->localParameters(cl1, *du).first.x() - treeBranches_.x2r) <
+               fabs( parameterestimator_->localParameters(cl2, *du).first.x() - treeBranches_.x2r) );
+     });
+     
+     // store the amplitudes centered around the maximum
+     auto amplitudes1 = cluster1->amplitudes();
+     auto amplitudes2 = cluster2->amplitudes();
+     auto max1 = std::max_element(amplitudes1.begin(),amplitudes1.end());
+     auto max2 = std::max_element(amplitudes2.begin(),amplitudes2.end());
+     for(unsigned int i=0;i<11;++i) {
+       cluster1Branches_.strips[i]=0.;
+       cluster2Branches_.strips[i]=0.;
+     }
+     unsigned int cnt = 0;
+     for(auto& a = max1; a != amplitudes1.end(); ++a) {
+       cluster1Branches_.strips[5+cnt] = *a;
+       cnt++;
+       if(cnt==6) break;
+     }
+     cnt=0;
+     for(auto& a = max1; a >= amplitudes1.begin(); --a) {
+       cluster1Branches_.strips[5-cnt] = *a;
+       cnt++;
+       if(cnt==6) break;
+     }
+     cnt = 0;
+     for(auto& a = max2; a != amplitudes2.end(); ++a) {
+       cluster2Branches_.strips[5+cnt] = *a;
+       cnt++;
+       if(cnt==6) break;
+     }
+     cnt=0;
+     for(auto& a = max2; a >= amplitudes2.begin(); --a) {
+       cluster2Branches_.strips[5-cnt] = *a;
+       cnt++;
+       if(cnt==6) break;
+     }
+     
+     tree_->Fill(); // we fill one entry per overlap, to track info is multiplicated
    }
    
-   
-#ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
-   ESHandle<SetupData> pSetup;
-   iSetup.get<SetupRecord>().get(pSetup);
-#endif
 }
 
 
@@ -209,6 +297,7 @@ CPEanalyzer::endJob()
 {
 }
 
+//TODO update this
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void
 CPEanalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {

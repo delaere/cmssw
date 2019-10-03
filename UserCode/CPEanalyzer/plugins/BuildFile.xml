@@ -5,5 +5,9 @@
 <use name="TrackingTools/PatternTools"/>
 <use name="TrackingTools/DetLayers"/>
 <use name="UserCode/CPEanalyzer"/>
+<use name="DataFormats/SiStripCluster"/>
+<use name="RecoLocalTracker/Records"/>
+<use name="RecoLocalTracker/ClusterParameterEstimator"/>
+<use name="Geometry/TrackerGeometryBuilder"/>
 <flags EDM_PLUGIN="1"/>
  <use name="CommonTools/UtilAlgos"/>

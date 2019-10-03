@@ -28,7 +28,7 @@ process.MessageLogger.cerr.INFO = cms.untracked.PSet(
 process.options   = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 
 ### Events and data source
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10) )
 process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(
   '/store/express/Run2018D/StreamExpress/ALCARECO/SiStripCalMinBias-Express-v1/000/321/305/00001/FE4CA4CC-77A0-E811-A85E-FA163E0CB594.root'
                                                                            )
@@ -54,7 +54,9 @@ process.CPEanalysis = cms.EDAnalyzer('CPEanalyzer',
                                          minTracks=cms.untracked.uint32(0),
                                          tracks = cms.untracked.InputTag("ALCARECOSiStripCalMinBias",""),
                                          trajectories = cms.untracked.InputTag('myRefittedTracks'),
-                                         association = cms.untracked.InputTag('myRefittedTracks')
+                                         association = cms.untracked.InputTag('myRefittedTracks'),
+                                         clusters = cms.untracked.InputTag('ALCARECOSiStripCalMinBias'),
+                                         StripCPE = cms.ESInputTag('StripCPEfromTrackAngleESProducer:StripCPEfromTrackAngle')
                              )
 
 ### TFileService: output histogram or ntuple
