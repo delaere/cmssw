@@ -44,6 +44,8 @@
 #include "RecoLocalTracker/ClusterParameterEstimator/interface/StripClusterParameterEstimator.h"
 #include "Geometry/TrackerGeometryBuilder/interface/StripGeomDetUnit.h"
 #include "Geometry/TrackerGeometryBuilder/interface/TrackerGeometry.h"
+#include "Geometry/Records/interface/TrackerTopologyRcd.h"
+#include "DataFormats/TrackerCommon/interface/TrackerTopology.h"
 
 #include "TH1.h"
 #include "TTree.h"
@@ -71,7 +73,6 @@ struct TrackBranch {
   float px,py,pz,pt,eta,phi,charge;
 };
 
-//TODO add a geometry branch. subdet, layer, detids, etc.
 struct GeometryBranch {
   int subdet, moduleGeometry, stereo, layer, side, ring;
   int detid;
@@ -105,6 +106,7 @@ class CPEanalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
       edm::ESInputTag cpeTag_;
       edm::ESHandle<StripClusterParameterEstimator> parameterestimator_; //CPE
       edm::ESHandle<TrackerGeometry> tracker_; //tracker geometry
+      edm::ESHandle<TrackerTopology> topology_; //tracker topology
       TTree* tree_;
       CPEBranch treeBranches_;
       TrackBranch trackBranches_;
@@ -216,6 +218,10 @@ CPEanalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
    // At this stage we will have a vector of pairs of measurement. Fill a ntuple and some histograms.
    for(const auto& pair : hitpairs) {
+     
+     //TODO basically everything below is done twice. -> can be factorized.
+     
+     // store generic information about the pair
      treeBranches_.x = pair.position().x();
      treeBranches_.y = pair.position().y();
      treeBranches_.z = pair.position().z();
@@ -254,34 +260,61 @@ CPEanalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
        cluster1Branches_.strips[i]=0.;
        cluster2Branches_.strips[i]=0.;
      }
-     unsigned int cnt = 0;
-     for(auto& a = max1; a != amplitudes1.end(); ++a) {
-       cluster1Branches_.strips[5+cnt] = *a;
+     cluster1Branches_.size = amplitudes1.size();
+     cluster2Branches_.size = amplitudes2.size();
+
+     int cnt = 0;
+     int offset = 5-(max1-amplitudes1.begin());
+     for(auto& s : amplitudes1) {
+       if((offset+cnt)>=0 && (offset+cnt)<11) {
+         cluster1Branches_.strips[offset+cnt] = s;
+       }
        cnt++;
-       if(cnt==6) break;
-     }
-     cnt=0;
-     for(auto& a = max1; a >= amplitudes1.begin(); --a) {
-       cluster1Branches_.strips[5-cnt] = *a;
-       cnt++;
-       if(cnt==6) break;
      }
      cnt = 0;
-     for(auto& a = max2; a != amplitudes2.end(); ++a) {
-       cluster2Branches_.strips[5+cnt] = *a;
+     offset = 5-(max2-amplitudes2.begin());
+     for(auto& s : amplitudes2) {
+       if((offset+cnt)>=0 && (offset+cnt)<11) {
+         cluster2Branches_.strips[offset+cnt] = s;
+       }
        cnt++;
-       if(cnt==6) break;
      }
-     cnt=0;
-     for(auto& a = max2; a >= amplitudes2.begin(); --a) {
-       cluster2Branches_.strips[5-cnt] = *a;
-       cnt++;
-       if(cnt==6) break;
+
+     // store information about the geometry (for both sensors)
+     iSetup.get<TrackerTopologyRcd>().get(topology_);
+     const TrackerTopology* const tTopo = topology_.product();
+     DetId detid1 = pair.hitA()->geographicalId();
+     DetId detid2 = pair.hitB()->geographicalId();
+     geom1Branches_.detid = detid1.rawId();
+     geom2Branches_.detid = detid2.rawId();
+     geom1Branches_.subdet = detid1.subdetId();
+     geom2Branches_.subdet = detid2.subdetId();
+     geom1Branches_.moduleGeometry = tTopo->moduleGeometry(detid1);
+     geom2Branches_.moduleGeometry = tTopo->moduleGeometry(detid2);
+     geom1Branches_.stereo = tTopo->isStereo(detid1);
+     geom2Branches_.stereo = tTopo->isStereo(detid2);
+     geom1Branches_.layer = tTopo->layer(detid1);
+     geom2Branches_.layer = tTopo->layer(detid2);
+     geom1Branches_.side = tTopo->side(detid1);
+     geom2Branches_.side = tTopo->side(detid2);
+     if(geom1Branches_.subdet==StripSubdetector::TID) {
+       geom1Branches_.ring = tTopo->tidRing(detid1);
+     } else if (geom1Branches_.subdet==StripSubdetector::TEC) {
+       geom1Branches_.ring = tTopo->tecRing(detid1);
+     } else {
+       geom1Branches_.ring = 0;
      }
-     
+     if(geom2Branches_.subdet==StripSubdetector::TID) {
+       geom2Branches_.ring = tTopo->tidRing(detid2);
+     } else if (geom2Branches_.subdet==StripSubdetector::TEC) {
+       geom2Branches_.ring = tTopo->tecRing(detid2);
+     } else {
+       geom2Branches_.ring = 0;
+     }
+
+     //fill the tree.
      tree_->Fill(); // we fill one entry per overlap, to track info is multiplicated
    }
-   
 }
 
 
