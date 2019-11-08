@@ -66,7 +66,7 @@ typedef std::vector<Trajectory> TrajectoryCollection;
 struct CPEBranch {
   float x,y,z;
   float distance, mdistance, shift, offsetA, offsetB, angle;
-  float x1r,x2r,x1m,x2m;
+  float x1r,x2r,x1m,x2m,y1m,y2m;
 };
 
 struct TrackBranch {
@@ -80,7 +80,8 @@ struct GeometryBranch {
 
 struct ClusterBranch {
   int strips[11];
-  int size;
+  int size, firstStrip;
+  float barycenter;
 };
 
 class CPEanalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
@@ -141,10 +142,10 @@ CPEanalyzer::CPEanalyzer(const edm::ParameterSet& iConfig)
    edm::Service<TFileService> fs;
    //histo = fs->make<TH1I>("charge" , "Charges" , 3 , -1 , 2 );
    tree_ = fs->make<TTree>("CPEanalysis","CPE analysis tree");
-   tree_->Branch("Overlaps", &treeBranches_,"x:y:z:distance:mdistance:shift:offsetA:offsetB:angle:x1r:x2r:x1m:x2m");
+   tree_->Branch("Overlaps", &treeBranches_,"x:y:z:distance:mdistance:shift:offsetA:offsetB:angle:x1r:x2r:x1m:x2m:y1m:y2m");
    tree_->Branch("Tracks", &trackBranches_,"px:py:pz:pt:eta:phi:charge");
-   tree_->Branch("Cluster1", &cluster1Branches_,"strips[11]/I:size/I");
-   tree_->Branch("Cluster2", &cluster2Branches_,"strips[11]/I:size/I");
+   tree_->Branch("Cluster1", &cluster1Branches_,"strips[11]/I:size/I:firstStrip/I:barycenter/F");
+   tree_->Branch("Cluster2", &cluster2Branches_,"strips[11]/I:size/I:firstStrip/I:barycenter/F");
    tree_->Branch("Geom1", &geom1Branches_, "subdet/I:moduleGeometry/I:stereo/I:layer/I:side/I:ring/I:detid/I");
    tree_->Branch("Geom2", &geom2Branches_, "subdet/I:moduleGeometry/I:stereo/I:layer/I:side/I:ring/I:detid/I");
 }
@@ -233,8 +234,10 @@ CPEanalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
      treeBranches_.angle = pair.getTrackLocalAngle(0);
      treeBranches_.x1r = pair.hitA()->localPosition().x();
      treeBranches_.x1m = pair.trajectoryStateOnSurface(0,false).localPosition().x();
+     treeBranches_.y1m = pair.trajectoryStateOnSurface(0,false).localPosition().y();
      treeBranches_.x2r = pair.hitB()->localPosition().x();
      treeBranches_.x2m = pair.trajectoryStateOnSurface(1,false).localPosition().x();
+     treeBranches_.y2m = pair.trajectoryStateOnSurface(1,false).localPosition().y();
      
      // load the clusters for the detectors
      auto detset1 = (*clusters)[pair.hitA()->rawId()];
@@ -262,6 +265,10 @@ CPEanalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
      }
      cluster1Branches_.size = amplitudes1.size();
      cluster2Branches_.size = amplitudes2.size();
+     cluster1Branches_.firstStrip = cluster1->firstStrip();
+     cluster1Branches_.barycenter = cluster1->barycenter();
+     cluster2Branches_.firstStrip = cluster2->firstStrip();
+     cluster2Branches_.barycenter = cluster2->barycenter();
 
      int cnt = 0;
      int offset = 5-(max1-amplitudes1.begin());
