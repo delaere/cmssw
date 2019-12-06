@@ -75,6 +75,7 @@ struct TrackBranch {
 
 struct GeometryBranch {
   int subdet, moduleGeometry, stereo, layer, side, ring;
+  float pitch;
   int detid;
 };
 
@@ -146,8 +147,8 @@ CPEanalyzer::CPEanalyzer(const edm::ParameterSet& iConfig)
    tree_->Branch("Tracks", &trackBranches_,"px:py:pz:pt:eta:phi:charge");
    tree_->Branch("Cluster1", &cluster1Branches_,"strips[11]/I:size/I:firstStrip/I:barycenter/F");
    tree_->Branch("Cluster2", &cluster2Branches_,"strips[11]/I:size/I:firstStrip/I:barycenter/F");
-   tree_->Branch("Geom1", &geom1Branches_, "subdet/I:moduleGeometry/I:stereo/I:layer/I:side/I:ring/I:detid/I");
-   tree_->Branch("Geom2", &geom2Branches_, "subdet/I:moduleGeometry/I:stereo/I:layer/I:side/I:ring/I:detid/I");
+   tree_->Branch("Geom1", &geom1Branches_, "subdet/I:moduleGeometry/I:stereo/I:layer/I:side/I:ring/I:pitch/F:detid/I");
+   tree_->Branch("Geom2", &geom2Branches_, "subdet/I:moduleGeometry/I:stereo/I:layer/I:side/I:ring/I:pitch/F:detid/I");
 }
 
 
@@ -244,11 +245,13 @@ CPEanalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
      auto detset2 = (*clusters)[pair.hitB()->rawId()];
      
      // look for the proper cluster
-     const GeomDetUnit* du = tracker_->idToDetUnit(pair.hitA()->rawId());
+     const GeomDetUnit* du;
+     du = tracker_->idToDetUnit(pair.hitA()->rawId());
      auto cluster1 = std::min_element(detset1.begin(),detset1.end(),[du,this](SiStripCluster const& cl1,  SiStripCluster const& cl2) { 
        return (fabs( parameterestimator_->localParameters(cl1, *du).first.x() - treeBranches_.x1r) <
                fabs( parameterestimator_->localParameters(cl2, *du).first.x() - treeBranches_.x1r) );
      });
+     du = tracker_->idToDetUnit(pair.hitB()->rawId());
      auto cluster2 = std::min_element(detset2.begin(),detset2.end(),[du,this](SiStripCluster const& cl1,  SiStripCluster const& cl2) { 
        return (fabs( parameterestimator_->localParameters(cl1, *du).first.x() - treeBranches_.x2r) <
                fabs( parameterestimator_->localParameters(cl2, *du).first.x() - treeBranches_.x2r) );
@@ -319,6 +322,12 @@ CPEanalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
        geom2Branches_.ring = 0;
      }
 
+     const StripGeomDetUnit* theStripDet;
+     theStripDet = dynamic_cast<const StripGeomDetUnit*>(tracker_->idToDetUnit(pair.hitA()->rawId()));
+     geom1Branches_.pitch = theStripDet->specificTopology().localPitch(pair.trajectoryStateOnSurface(0,false).localPosition());
+     theStripDet = dynamic_cast<const StripGeomDetUnit*>(tracker_->idToDetUnit(pair.hitB()->rawId()));
+     geom2Branches_.pitch = theStripDet->specificTopology().localPitch(pair.trajectoryStateOnSurface(1,false).localPosition()); 
+     
      //fill the tree.
      tree_->Fill(); // we fill one entry per overlap, to track info is multiplicated
    }
